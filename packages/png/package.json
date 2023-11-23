@@ -1,0 +1,22 @@
+{
+  "name": "@cf-wasm/png",
+  "version": "0.1.1",
+  "description": "A simple wasm png encoder/decoder module for cloudflare workers",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "png_bg.wasm",
+    "png_bg.wasm.d.ts"
+  ],
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

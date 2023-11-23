@@ -1,0 +1,8 @@
+# node modules
+node_modules
+
+# static
+public
+
+# wrangler
+.wrangler

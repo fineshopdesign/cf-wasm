@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "lib": ["esnext"],
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "strict": true,
+      "resolveJsonModule": true,
+      "allowJs": true,
+      "checkJs": false,
+      "noEmit": true,
+      "isolatedModules": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true,
+      "baseUrl": ".",
+      "typeRoots": [
+        "./node_modules/@types",
+        "./node_modules/@cloudflare/workers-types"
+      ]
+    },
+    "exclude": ["node_modules"]
+  }
+  
