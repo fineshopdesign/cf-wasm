@@ -1,0 +1,14 @@
+{
+	"extends": ["./tsconfig.json"],
+	"compilerOptions": {
+		"module": "CommonJS"
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"__tests__",
+		"src/workers",
+		"src/next",
+		"src/esm"
+	]
+}
