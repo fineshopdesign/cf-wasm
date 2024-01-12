@@ -1,6 +1,6 @@
 {
 	"name": "@cf-wasm/png",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
 	"license": "MIT",
 	"files": [

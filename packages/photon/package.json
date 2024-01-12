@@ -1,6 +1,6 @@
 {
 	"name": "@cf-wasm/photon",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Photon library for Cloudflare workers",
 	"license": "Apache-2.0",
 	"collaborators": [
