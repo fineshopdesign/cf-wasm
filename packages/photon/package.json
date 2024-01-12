@@ -1,0 +1,65 @@
+{
+	"name": "@cf-wasm/photon",
+	"version": "0.1.4",
+	"description": "Photon library for Cloudflare workers",
+	"license": "Apache-2.0",
+	"collaborators": [
+		"Silvia O'Dwyer <silviaodwyerdev@gmail.com>"
+	],
+	"repository": "fineshopdesign/cf-wasm",
+	"bugs": "https://github.com/fineshopdesign/cf-wasm/issues",
+	"homepage": "https://silvia-odwyer.github.io/photon/",
+	"files": [
+		"dist/",
+		"lib/",
+		"typings/**/*.d.ts",
+		"typings/**/*.d.ts.map"
+	],
+	"exports": {
+		"./next": {
+			"default": {
+				"import": "./dist/next/index.js",
+				"types": "./typings/next/index.d.ts"
+			}
+		},
+		"./node": {
+			"default": {
+				"import": "./dist/cjs/index.js",
+				"types": "./typings/cjs/index.d.ts"
+			}
+		},
+		"./workers": {
+			"default": {
+				"import": "./dist/workers/index.js",
+				"types": "./typings/workers/index.d.ts"
+			}
+		},
+		".": {
+			"default": {
+				"types": "./dist/workers/index.d.ts",
+				"default": "./dist/workers/index.js"
+			}
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"next": [
+				"./typings/next/index.d.ts"
+			],
+			"node": [
+				"./typings/cjs/index.d.ts"
+			],
+			"workers": [
+				"./typings/workers/index.d.ts"
+			],
+			"*": [
+				"./typings/workers/index.d.ts"
+			]
+		}
+	},
+	"scripts": {
+		"remove:files": "rm -f lib/package.json lib/LICENSE lib/LICENSE.md lib/.gitignore",
+		"build:wasm": "wasm-pack build ./crate --out-dir ../lib --target web && npm run remove:files",
+		"build": "tsc && tsc -p ./tsconfig.cjs.json"
+	}
+}

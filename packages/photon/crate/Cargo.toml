@@ -1,0 +1,83 @@
+[package]
+name = "photon"
+description = "High-performance image processing library for native use and the web"
+license = "Apache-2.0"
+version = "0.3.2"
+authors = ["Silvia O'Dwyer <silviaodwyerdev@gmail.com>"]
+categories = ["wasm", "multimedia"]
+repository = "https://github.com/silvia-odwyer/photon"
+edition = "2021"
+exclude = [
+    "examples/input_images/*"
+]
+homepage = "https://silvia-odwyer.github.io/photon/"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+image = { version = "0.23.12", default-features = false, features = ["gif", "jpeg", "ico", "png", "pnm", "tga", "tiff", "webp", "bmp", "hdr", "dxt", "dds", "farbfeld"] }
+palette="0.6.1"
+rand="0.7.2"
+imageproc = { version = "0.22.0", default-features = false }
+rusttype="0.9.2"
+base64="0.13.0"
+time="0.3.21"
+wasm-bindgen = { version = "=0.2.85", optional = true }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+js-sys = { version = "0.3.62", optional = true }
+node-sys = { version = "0.4.2", optional = true }
+perlin2d = "0.2.6"
+
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.7", optional = true }
+
+# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
+# compared to the default allocator's ~10K. It is slower than the default
+# allocator, however.
+wee_alloc = { version = "0.4.2", optional = true }
+
+[dev-dependencies]
+time="0.3.21"
+criterion = "0.3"
+
+[[bench]]
+name = "photon_benchmark"
+harness = false
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-O3", "--enable-mutable-globals"]
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Document",
+  "Element",
+  "HtmlElement",
+  "Node",
+  "Window",
+  "CanvasRenderingContext2d",
+  "ImageData",
+  "HtmlCanvasElement",
+  "HtmlImageElement",
+  "console",
+  'CssStyleDeclaration',
+  'EventTarget',
+  "Blob"
+]
+optional = true
+
+[features]
+default = ["enable_wasm"]
+enable_wasm = [
+  "wasm-bindgen",
+  "web-sys",
+  "js-sys",
+  "node-sys",
+  "console_error_panic_hook"
+]

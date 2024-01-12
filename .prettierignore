@@ -1,0 +1,16 @@
+# production
+dist/
+packages/*/lib/
+
+# dependencies
+node_modules/
+package-lock.json
+
+# wrangler
+.wrangler/
+
+# markdown
+*.md
+
+# cache
+packages/*/crate/target/

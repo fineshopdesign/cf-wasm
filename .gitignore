@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+
+# production
+build
+dist
+
+# cloudflare
+.wrangler
+.dev.vars
+
+# misc
+.DS_Store
+
+# ignore
+.ignore
+
+# cert
+.cert
+
+# debugs
+npm-debug.log
+yarn-error.log
+yarn.lock
+.yarnclean
+
+# private
+*.log
+*.key
+*.crt
