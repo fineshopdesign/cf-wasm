@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"lib": ["ESNext"],
+		"moduleResolution": "Node",
+		"declaration": true,
+		"declarationMap": true,
+		"incremental": true,
+		"esModuleInterop": true,
+		"strict": true,
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"checkJs": false,
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"types": ["@types/node"]
+	},
+	"exclude": ["node_modules"]
+}

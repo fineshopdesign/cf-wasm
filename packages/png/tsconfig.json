@@ -1,0 +1,15 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ESNext",
+		"lib": ["ESNext", "WebWorker"],
+		"baseUrl": ".",
+		"outDir": "dist",
+		"rootDir": "src",
+		"declarationDir": "typings",
+		"tsBuildInfoFile": "typings/tsconfig.tsbuildinfo"
+	},
+	"include": ["src/**/*.ts", "src/**/*.js", "declarations.d.ts"],
+	"exclude": ["node_modules", "dist", "__tests__", "src/cjs"]
+}

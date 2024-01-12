@@ -1,0 +1,6 @@
+# production
+typings/
+dist/
+
+# cache
+crate/target/

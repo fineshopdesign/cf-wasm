@@ -1,0 +1,15 @@
+{
+	"extends": ["./tsconfig.json"],
+	"compilerOptions": {
+		"module": "CommonJS",
+		"lib": ["ESNext", "WebWorker", "DOM"]
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"__tests__",
+		"src/workers",
+		"src/next",
+		"src/esm"
+	]
+}
