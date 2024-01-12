@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.6
+
+### Patch Changes
+
+- [`9974c5b`](https://github.com/fineshopdesign/cf-wasm/commit/9974c5b4366c7fd882e6b10545305b1ddb01fb9a) Thanks [@fineshop](https://github.com/fineshop)! - Implemented npm package signing using GitHub Actions
+
 ## 0.1.5
 
 ### Patch Changes
