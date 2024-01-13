@@ -1,4 +1,4 @@
-import { encode as wasmEncode, decode as wasmDecode } from "../lib/png";
+import { encode as wasmEncode, decode as wasmDecode } from "./lib/png";
 
 export const ColorType = {
 	Grayscale: 0,
@@ -84,10 +84,10 @@ export const decode = (image: Uint8Array) => {
 	};
 };
 
-export { default, initSync } from "../lib/png";
+export { default, initSync } from "./lib/png";
 export type {
 	DecodeResult,
 	SyncInitInput,
 	InitInput,
 	InitOutput
-} from "../lib/png";
+} from "./lib/png";

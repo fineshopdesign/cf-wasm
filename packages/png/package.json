@@ -4,10 +4,7 @@
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
 	"license": "MIT",
 	"files": [
-		"dist/",
-		"lib/",
-		"typings/**/*.d.ts",
-		"typings/**/*.d.ts.map"
+		"dist/"
 	],
 	"repository": "fineshopdesign/cf-wasm",
 	"bugs": "https://github.com/fineshopdesign/cf-wasm/issues",
@@ -15,48 +12,51 @@
 	"exports": {
 		"./next": {
 			"default": {
-				"import": "./dist/next/index.js",
-				"types": "./typings/next/index.d.ts"
+				"import": "./dist/edge/next/index.js",
+				"types": "./dist/edge/next/index.d.js"
 			}
 		},
 		"./node": {
 			"default": {
-				"import": "./dist/cjs/index.js",
-				"types": "./typings/cjs/index.d.ts"
+				"require": "./dist/node/cjs/index.js",
+				"import": "./dist/node/cjs/index.js",
+				"types": "./dist/node/cjs/index.d.js"
 			}
 		},
 		"./workers": {
 			"default": {
-				"import": "./dist/workers/index.js",
-				"types": "./typings/workers/index.d.ts"
+				"import": "./dist/edge/workers/index.js",
+				"types": "./dist/edge/workers/index.d.js"
 			}
 		},
 		".": {
 			"default": {
-				"types": "./dist/workers/index.d.ts",
-				"default": "./dist/workers/index.js"
+				"import": "./dist/edge/workers/index.js",
+				"types": "./dist/edge/workers/index.d.js",
+				"default": "./dist/edge/workers/index.js"
 			}
 		}
 	},
 	"typesVersions": {
 		"*": {
 			"next": [
-				"./typings/next/index.d.ts"
+				"./dist/edge/next/index.d.js"
 			],
 			"node": [
-				"./typings/cjs/index.d.ts"
+				"./dist/node/cjs/index.d.js"
 			],
 			"workers": [
-				"./typings/workers/index.d.ts"
+				"./dist/edge/workers/index.d.js"
 			],
 			"*": [
-				"./typings/workers/index.d.ts"
+				"./dist/edge/workers/index.d.js"
 			]
 		}
 	},
 	"scripts": {
-		"remove:files": "rm -f lib/package.json lib/LICENSE lib/LICENSE.md lib/.gitignore",
-		"build:wasm": "wasm-pack build ./crate --out-dir ../lib --target web && npm run remove:files",
-		"build": "tsc && tsc -p ./tsconfig.cjs.json"
+		"remove:files": "rm -f src/lib/package.json src/lib/LICENSE src/lib/LICENSE.md src/lib/.gitignore",
+		"build:wasm": "wasm-pack build ./crate --out-dir ../src/lib --target web && npm run remove:files",
+		"build": "tsc && tsc -p ./tsconfig.cjs.json",
+		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/"
 	}
 }
