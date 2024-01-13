@@ -1,5 +1,11 @@
 # @cf-wasm/png
 
+## 0.1.7
+
+### Patch Changes
+
+- [`2fc9286`](https://github.com/fineshopdesign/cf-wasm/commit/2fc92860d612421444a87bff3334da68870a16aa) Thanks [@fineshop](https://github.com/fineshop)! - Fix support for node js
+
 ## 0.1.6
 
 ### Patch Changes
