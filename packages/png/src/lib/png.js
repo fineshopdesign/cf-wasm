@@ -273,7 +273,7 @@ function initSync(module) {
 
 	// ! Needed to remove these lines in order to make it work on next.js
 	// if (!(module instanceof WebAssembly.Module)) {
-	// 	module = new WebAssembly.Module(module);
+	//     module = new WebAssembly.Module(module);
 	// }
 
 	const instance = new WebAssembly.Instance(module, imports);
@@ -284,9 +284,10 @@ function initSync(module) {
 async function __wbg_init(input) {
 	if (wasm !== undefined) return wasm;
 
-	if (typeof input === "undefined") {
-		input = new URL("png_bg.wasm", import.meta.url);
-	}
+	// ! Needed to remove it for Common JS
+	// if (typeof input === "undefined") {
+	// 	input = new URL("png_bg.wasm", import.meta.url);
+	// }
 	const imports = __wbg_get_imports();
 
 	if (
