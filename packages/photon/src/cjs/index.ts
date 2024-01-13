@@ -1,15 +1,14 @@
 import path from "path";
 import fs from "fs";
-import { initSync } from "../../lib/photon";
+import initAsync, { initSync } from "../lib/photon";
 
 const wasmBinaries = fs.readFileSync(
-	path.resolve(__dirname, "../../lib/photon")
+	path.resolve(__dirname, "../lib/photon_bg.wasm")
 );
 
 const MODULE = new WebAssembly.Module(wasmBinaries);
 
 initSync(MODULE);
 
-export { default } from "../../lib/photon";
-export { MODULE };
-export * from "../../lib/photon";
+export { initAsync, MODULE };
+export * from "../lib/photon";
