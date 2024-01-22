@@ -1,6 +1,6 @@
 # png
 
-A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node using wasm.
+A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.
 
 ## Installation
 

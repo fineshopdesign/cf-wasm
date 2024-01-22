@@ -3,7 +3,7 @@ const path = require("path");
 /** @type {import("eslint-define-config").ESLintConfig} */
 const eslintConfig = {
 	root: true,
-	extends: ["../../.eslintrc.cjs"],
+	extends: [path.resolve(__dirname, "../../.eslintrc.cjs")],
 	ignorePatterns: [
 		// production
 		"dist/",
