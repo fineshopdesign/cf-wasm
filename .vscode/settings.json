@@ -16,5 +16,12 @@
 	},
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"editor.formatOnSave": true,
-	"cSpell.words": ["fineshopdesign", "Kumar", "O'Dwyer", "tsbuildinfo"]
+	"cSpell.words": [
+		"copyfiles",
+		"fineshopdesign",
+		"Kumar",
+		"O'Dwyer",
+		"postbuild",
+		"tsbuildinfo"
+	]
 }
