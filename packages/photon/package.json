@@ -16,26 +16,26 @@
 		"./next": {
 			"default": {
 				"import": "./dist/edge/next/index.js",
-				"types": "./dist/edge/next/index.d.js"
+				"types": "./dist/edge/next/index.d.ts"
 			}
 		},
 		"./node": {
 			"default": {
 				"require": "./dist/node/cjs/index.js",
 				"import": "./dist/node/cjs/index.js",
-				"types": "./dist/node/cjs/index.d.js"
+				"types": "./dist/node/cjs/index.d.ts"
 			}
 		},
 		"./workers": {
 			"default": {
 				"import": "./dist/edge/workers/index.js",
-				"types": "./dist/edge/workers/index.d.js"
+				"types": "./dist/edge/workers/index.d.ts"
 			}
 		},
 		".": {
 			"default": {
 				"import": "./dist/edge/workers/index.js",
-				"types": "./dist/edge/workers/index.d.js",
+				"types": "./dist/edge/workers/index.d.ts",
 				"default": "./dist/edge/workers/index.js"
 			}
 		}
@@ -43,16 +43,16 @@
 	"typesVersions": {
 		"*": {
 			"next": [
-				"./dist/edge/next/index.d.js"
+				"./dist/edge/next/index.d.ts"
 			],
 			"node": [
-				"./dist/node/cjs/index.d.js"
+				"./dist/node/cjs/index.d.ts"
 			],
 			"workers": [
-				"./dist/edge/workers/index.d.js"
+				"./dist/edge/workers/index.d.ts"
 			],
 			"*": [
-				"./dist/edge/workers/index.d.js"
+				"./dist/edge/workers/index.d.ts"
 			]
 		}
 	},
