@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.8
+
+### Patch Changes
+
+- [`1218209`](https://github.com/fineshopdesign/cf-wasm/commit/12182097289df26d4b653af80b447db2a0a58b30) Thanks [@fineshop](https://github.com/fineshop)! - This patch fixes invalid exports for type declarations
+
 ## 0.1.7
 
 ### Patch Changes
