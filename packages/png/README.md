@@ -6,7 +6,7 @@ A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Nod
 
 Install the package by running the following command in terminal:
 
-```sell
+```shell
 npm install @cf-wasm/png
 ```
 
@@ -23,45 +23,53 @@ npm install @cf-wasm/png
 
 Example for Cloudflare Workers:
 
-```js
+```ts
 import * as photon from "@cf-wasm/photon";
 import * as png from "@cf-wasm/png";
 
-const worker = {
- async fetch() {
-  const imageUrl = "https://avatars.githubusercontent.com/u/314135";
+export type Env = Readonly<{}>;
 
-  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
-  const imageBytes = new Uint8Array(imageBuffer);
+const worker: ExportedHandler<Env> = {
+  async fetch() {
+    // url of image to fetch
+    const imageUrl = "https://avatars.githubusercontent.com/u/314135";
 
-  const inputImage = photon.PhotonImage.new_from_byteslice(imageBytes);
+    // fetch image and get the Uint8Array instance
+    const inputBytes = await fetch(imageUrl)
+      .then((res) => res.arrayBuffer())
+      .then((buffer) => new Uint8Array(buffer));
 
-  // resizing using photon
-  const outputImage = photon.resize(
-   inputImage,
-   inputImage.get_width() * 0.5,
-   inputImage.get_height() * 0.5,
-   1
-  );
+    // create a photon instance
+    const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
 
-  // encoding using png
-  const outputPng = png.encode(
-   outputImage.get_raw_pixels(),
-   outputImage.get_width(),
-   outputImage.get_height()
-  );
+    // resize image using photon
+    const outputImage = photon.resize(
+      inputImage,
+      inputImage.get_width() * 0.5,
+      inputImage.get_height() * 0.5,
+      1
+    );
 
-  const imageResponse = new Response(outputPng, {
-   headers: {
-    "Content-Type": "image/png"
-   }
-  });
+    // encode using png
+    const outputBytes = png.encode(
+     outputImage.get_raw_pixels(),
+     outputImage.get_width(),
+     outputImage.get_height()
+    );;
 
-  inputImage.free();
-  outputImage.free();
+    // create a Response instance
+    const imageResponse = new Response(outputBytes, {
+      headers: {
+        "Content-Type": "image/png"
+      }
+    });
 
-  return imageResponse;
- }
+    // call free() method to free memory
+    inputImage.free();
+    outputImage.free();
+
+    return imageResponse;
+  }
 };
 
 export default worker;

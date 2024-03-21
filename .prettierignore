@@ -1,16 +1,26 @@
-# production
-dist/
-packages/*/lib/
-
 # dependencies
 node_modules/
 package-lock.json
 
+# production
+dist/
+typings/
+packages/**/*/lib/
+
+# crate
+packages/**/*/crate/
+
+# cache
+packages/**/*/crate/target/
+
 # wrangler
 .wrangler/
+
+# turbo
+.turbo/
 
 # markdown
 *.md
 
-# cache
-packages/*/crate/target/
+# yml
+*.yml

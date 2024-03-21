@@ -37,20 +37,25 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
       - name: Use pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ matrix.pnpm-version }}
+
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+
       - name: Install dependencies
         run: npm install
         if: ${{ inputs.skipInstallBuild != 'yes' }}
+
       - name: Build
         run: npm run build
         if: ${{ inputs.skipInstallBuild != 'yes' }}
+
       - name: Run after build
         run: /bin/bash -c "${{ inputs.afterBuild }}"
