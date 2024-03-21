@@ -1,6 +1,6 @@
 {
 	"name": "@cf-wasm/png",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
 	"license": "MIT",
 	"repository": "fineshopdesign/cf-wasm",

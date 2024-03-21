@@ -1,5 +1,11 @@
 # @cf-wasm/png
 
+## 0.1.9
+
+### Patch Changes
+
+- [`9f57cd2`](https://github.com/fineshopdesign/cf-wasm/commit/9f57cd256b7a9c761804324ef490fdaf983ed67b) Thanks [@fineshop](https://github.com/fineshop)! - add get_bytes_webp (photon)
+
 ## 0.1.8
 
 ### Patch Changes
