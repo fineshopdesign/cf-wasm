@@ -3,13 +3,30 @@
 	"version": "0.1.8",
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
 	"license": "MIT",
-	"files": [
-		"dist/"
-	],
 	"repository": "fineshopdesign/cf-wasm",
 	"bugs": "https://github.com/fineshopdesign/cf-wasm/issues",
 	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png",
+	"scripts": {
+		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
+		"format": "prettier --write --ignore-path ../../.prettierignore .",
+		"prewasm:build": "rimraf src/lib",
+		"wasm:build": "wasm-pack build ./crate --out-dir ../src/lib --target web",
+		"postwasm:build": "rimraf -g src/lib/{package.json,LICENSE,LICENSE.md,README,README.md,.gitignore} && node scripts/postwasm.cjs",
+		"prebuild": "rimraf dist",
+		"build": "tsc && tsc -p ./tsconfig.cjs.json",
+		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/"
+	},
+	"files": [
+		"dist/"
+	],
 	"exports": {
+		".": {
+			"default": {
+				"import": "./dist/edge/workers/index.js",
+				"types": "./dist/edge/workers/index.d.ts",
+				"default": "./dist/edge/workers/index.js"
+			}
+		},
 		"./next": {
 			"default": {
 				"import": "./dist/edge/next/index.js",
@@ -28,13 +45,6 @@
 				"import": "./dist/edge/workers/index.js",
 				"types": "./dist/edge/workers/index.d.ts"
 			}
-		},
-		".": {
-			"default": {
-				"import": "./dist/edge/workers/index.js",
-				"types": "./dist/edge/workers/index.d.ts",
-				"default": "./dist/edge/workers/index.js"
-			}
 		}
 	},
 	"typesVersions": {
@@ -52,11 +62,5 @@
 				"./dist/edge/workers/index.d.ts"
 			]
 		}
-	},
-	"scripts": {
-		"remove:files": "rm -f src/lib/package.json src/lib/LICENSE src/lib/LICENSE.md src/lib/.gitignore",
-		"build:wasm": "wasm-pack build ./crate --out-dir ../src/lib --target web && npm run remove:files",
-		"build": "tsc && tsc -p ./tsconfig.cjs.json",
-		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/"
 	}
 }

@@ -1,6 +1,6 @@
 # Cloudflare WASM Modules
 
-A collection of wasm packages those works on Cloudflare workers.
+A collection of WASM packages those work on Cloudflare Workers.
 
 ## Packages
 

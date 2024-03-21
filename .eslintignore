@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# production
+dist/
+typings/
+lib/
+
+# crate
+crate/
+
+# static
+public/
+
+# wrangler
+.wrangler/
+
+# turbo
+.turbo/

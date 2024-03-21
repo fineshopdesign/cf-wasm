@@ -28,12 +28,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install changeset CLI
         run: npm i -g @changesets/cli@$(node -p "require('./package.json').devDependencies['@changesets/cli']")
+
       - name: Ensure that a changelog is added
         run: npx changeset status --since=origin/main
 
