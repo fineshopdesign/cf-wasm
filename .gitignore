@@ -9,11 +9,14 @@ dist
 .wrangler
 .dev.vars
 
-# misc
-.DS_Store
+# turbo
+.turbo
 
 # ignore
 .ignore
+
+# misc
+.DS_Store
 
 # cert
 .cert

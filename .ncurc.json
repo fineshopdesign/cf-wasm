@@ -1,0 +1,7 @@
+{
+	"root": true,
+	"upgrade": true,
+	"reject": ["/^@cf-wasm\\/.*$/"],
+	"workspaces": true,
+	"install": "always"
+}
