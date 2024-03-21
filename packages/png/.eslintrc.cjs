@@ -4,20 +4,23 @@ const path = require("path");
 const eslintConfig = {
 	root: true,
 	extends: [path.resolve(__dirname, "../../.eslintrc.cjs")],
-	ignorePatterns: [
-		// production
-		"dist/",
-		"lib/",
-		"typings/",
-		// crate
-		"crate/"
-	],
 	settings: {
 		"import/resolver": {
 			typescript: {
 				project: [path.resolve(__dirname, "tsconfig.json")]
 			}
 		}
+	},
+	rules: {
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				devDependencies: [path.resolve(__dirname, "scripts/**/*")],
+				includeInternal: false,
+				includeTypes: false,
+				packageDir: [__dirname, path.resolve(__dirname, "../..")]
+			}
+		]
 	},
 	overrides: [
 		{
@@ -31,17 +34,13 @@ const eslintConfig = {
 			}
 		},
 		{
-			files: ["src/**/*.ts"],
+			files: ["**/*.ts"],
 			parserOptions: {
 				project: [path.resolve(__dirname, "tsconfig.json")]
 			}
 		},
 		{
 			files: ["src/cjs/**/*.ts"],
-			extends: [
-				"plugin:@typescript-eslint/recommended",
-				"plugin:@typescript-eslint/recommended-requiring-type-checking"
-			],
 			parserOptions: {
 				project: [path.resolve(__dirname, "tsconfig.cjs.json")]
 			}

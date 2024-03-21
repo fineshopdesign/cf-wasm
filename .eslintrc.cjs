@@ -1,28 +1,6 @@
 /** @type {import("eslint-define-config").ESLintConfig} */
 const eslintConfig = {
 	root: true,
-	ignorePatterns: [
-		// node modules
-		"node_modules/",
-		// static
-		"public/",
-		// wrangler
-		".wrangler/"
-	],
-	env: {
-		browser: false,
-		node: true,
-		es2022: true
-	},
-	parser: "@typescript-eslint/parser",
-	parserOptions: {
-		ecmaFeatures: {
-			jsx: true
-		},
-		ecmaVersion: 2022,
-		sourceType: "module"
-	},
-	plugins: ["@typescript-eslint", "prettier"],
 	extends: [
 		"airbnb-base",
 		"plugin:import/errors",
@@ -30,6 +8,20 @@ const eslintConfig = {
 		"plugin:import/typescript",
 		"prettier"
 	],
+	plugins: ["prettier", "import"],
+	env: {
+		browser: false,
+		node: true,
+		es2022: true
+	},
+	parser: "@typescript-eslint/parser",
+	parserOptions: {
+		ecmaVersion: 2022,
+		sourceType: "module",
+		ecmaFeatures: {
+			jsx: true
+		}
+	},
 	settings: {
 		"import/extensions": [".js", ".ts", ".jsx", ".tsx"],
 		"import/parsers": {
@@ -39,9 +31,7 @@ const eslintConfig = {
 			node: {
 				extensions: [".js", ".ts", ".jsx", ".tsx"]
 			},
-			typescript: {
-				project: ["tsconfig.json"]
-			}
+			typescript: {}
 		}
 	},
 	rules: {
@@ -71,14 +61,12 @@ const eslintConfig = {
 	},
 	overrides: [
 		{
-			files: ["*.ts", "*.tsx"],
+			files: ["**/*.ts", "**/*.tsx"],
 			extends: [
 				"plugin:@typescript-eslint/recommended",
 				"plugin:@typescript-eslint/recommended-requiring-type-checking"
 			],
-			parserOptions: {
-				project: ["tsconfig.json"]
-			}
+			plugins: ["@typescript-eslint"]
 		}
 	]
 };
