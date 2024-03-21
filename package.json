@@ -11,12 +11,13 @@
 	},
 	"scripts": {
 		"upgrade": "ncu",
+		"lint": "turbo run lint",
+		"format": "turbo run format",
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"start": "turbo run start",
-		"lint": "turbo run lint",
-		"format": "turbo run format",
 		"clean": "turbo run clean",
+		"test": "echo \"Currently no tests!\"",
 		"publish-packages": "npm run build && changeset publish"
 	},
 	"devDependencies": {
