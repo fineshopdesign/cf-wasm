@@ -1,5 +1,5 @@
-const path = require("path");
-const fs = require("fs-extra");
+import path from "path";
+import fs from "fs";
 
 const file = path.resolve(__dirname, "../src/lib/photon_rs.js");
 
@@ -17,11 +17,11 @@ const modifiedScript = originalScript
 	)
 	.replace(
 		`if (typeof input === 'undefined') {
-        input = new URL('photon_rs_bg.wasm', import.meta.url);
+        input = new URL('png_bg.wasm', import.meta.url);
     }`,
 		`//! Needed to remove these lines in order to make it work on node.js
     // if (typeof input === 'undefined') {
-    //     input = new URL('photon_rs_bg.wasm', import.meta.url);
+    //     input = new URL('png_bg.wasm', import.meta.url);
     // }`
 	);
 

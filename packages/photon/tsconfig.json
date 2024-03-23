@@ -22,6 +22,6 @@
 		"outDir": "dist/edge",
 		"tsBuildInfoFile": "dist/edge/tsconfig.tsbuildinfo"
 	},
-	"include": ["src/**/*.ts", "src/**/*.js", "declarations.d.ts"],
-	"exclude": ["node_modules", "dist", "__tests__", "src/cjs"]
+	"include": ["src", "declarations.d.ts"],
+	"exclude": ["node_modules", "dist", "scripts", "vitest", "src/cjs"]
 }

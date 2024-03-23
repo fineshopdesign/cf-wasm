@@ -8,7 +8,7 @@
 	"exclude": [
 		"node_modules",
 		"dist",
-		"__tests__",
+		"vitest",
 		"src/workers",
 		"src/next",
 		"src/esm"
