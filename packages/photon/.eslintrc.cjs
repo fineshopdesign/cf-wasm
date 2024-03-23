@@ -15,7 +15,10 @@ const eslintConfig = {
 		"import/no-extraneous-dependencies": [
 			"error",
 			{
-				devDependencies: [path.resolve(__dirname, "scripts/**/*")],
+				devDependencies: [
+					path.resolve(__dirname, "scripts/**/*"),
+					path.resolve(__dirname, "vitest/**/*")
+				],
 				includeInternal: false,
 				includeTypes: false,
 				packageDir: [__dirname, path.resolve(__dirname, "../..")]
@@ -23,16 +26,6 @@ const eslintConfig = {
 		]
 	},
 	overrides: [
-		{
-			files: ["src/cjs/**/*.js", "src/cjs/**/*.ts"],
-			settings: {
-				"import/resolver": {
-					typescript: {
-						project: [path.resolve(__dirname, "tsconfig.cjs.json")]
-					}
-				}
-			}
-		},
 		{
 			files: ["**/*.ts"],
 			parserOptions: {
@@ -43,6 +36,39 @@ const eslintConfig = {
 			files: ["src/cjs/**/*.ts"],
 			parserOptions: {
 				project: [path.resolve(__dirname, "tsconfig.cjs.json")]
+			},
+			settings: {
+				"import/resolver": {
+					typescript: {
+						project: [path.resolve(__dirname, "tsconfig.cjs.json")]
+					}
+				}
+			}
+		},
+		{
+			files: ["scripts/**/*.ts"],
+			parserOptions: {
+				project: [path.resolve(__dirname, "scripts/tsconfig.json")]
+			},
+			settings: {
+				"import/resolver": {
+					typescript: {
+						project: [path.resolve(__dirname, "scripts/tsconfig.json")]
+					}
+				}
+			}
+		},
+		{
+			files: ["vitest/**/*.ts"],
+			parserOptions: {
+				project: [path.resolve(__dirname, "vitest/tsconfig.json")]
+			},
+			settings: {
+				"import/resolver": {
+					typescript: {
+						project: [path.resolve(__dirname, "vitest/tsconfig.json")]
+					}
+				}
 			}
 		}
 	]

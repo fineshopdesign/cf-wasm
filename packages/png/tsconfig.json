@@ -23,5 +23,5 @@
 		"tsBuildInfoFile": "dist/edge/tsconfig.tsbuildinfo"
 	},
 	"include": ["src/**/*.ts", "src/**/*.js", "declarations.d.ts"],
-	"exclude": ["node_modules", "dist", "__tests__", "src/cjs"]
+	"exclude": ["node_modules", "dist", "vitest", "src/cjs"]
 }

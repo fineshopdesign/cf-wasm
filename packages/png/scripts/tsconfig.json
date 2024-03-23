@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "CommonJS",
+		"moduleResolution": "Node",
+		"allowJs": true,
+		"declaration": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": "."
+	},
+	"include": ["**/*.ts", "**/*.d.ts"],
+	"exclude": ["node_modules"]
+}
