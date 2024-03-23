@@ -17,7 +17,7 @@
 		"dev": "turbo run dev",
 		"start": "turbo run start",
 		"clean": "turbo run clean",
-		"test": "echo \"Currently no tests!\"",
+		"test": "turbo run test",
 		"publish-packages": "npm run build && changeset publish"
 	},
 	"devDependencies": {
@@ -40,7 +40,9 @@
 		"npm-check-updates": "^16.14.17",
 		"prettier": "^3.2.5",
 		"rimraf": "^5.0.5",
-		"turbo": "^1.12.5",
-		"typescript": "^5.4.3"
+		"ts-node": "^10.9.2",
+		"turbo": "^1.13.0",
+		"typescript": "^5.4.3",
+		"vitest": "^1.4.0"
 	}
 }

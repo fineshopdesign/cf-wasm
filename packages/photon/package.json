@@ -15,10 +15,12 @@
 		"crate:download": "fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
 		"prewasm:build": "rimraf src/lib",
 		"wasm:build": "wasm-pack build ./crate --out-dir ../src/lib --target web",
-		"postwasm:build": "rimraf -g src/lib/{package.json,LICENSE,LICENSE.md,README,README.md,.gitignore} && node scripts/postwasm.cjs",
+		"postwasm:build": "rimraf -g src/lib/{package.json,LICENSE,LICENSE.md,README,README.md,.gitignore} && ts-node scripts/postwasm.ts",
 		"prebuild": "rimraf dist",
 		"build": "tsc && tsc -p ./tsconfig.cjs.json",
-		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/"
+		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/",
+		"test": "vitest run --config vitest/vitest.config.ts",
+		"clean": "rimraf dist"
 	},
 	"files": [
 		"dist/"
