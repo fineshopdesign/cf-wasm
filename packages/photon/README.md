@@ -7,7 +7,7 @@ Forked at [a2cefcb](https://github.com/silvia-odwyer/photon/commit/a2cefcb3bf31b
 
 Install the package by running the following command in terminal:
 
-```sell
+```shell
 npm install @cf-wasm/photon
 ```
 
@@ -34,7 +34,7 @@ import * as photon from "@cf-wasm/photon";
 
 export type Env = Readonly<{}>;
 
-const worker: ExportedHandler<Env> = {
+const workers: ExportedHandler<Env> = {
   async fetch() {
     // url of image to fetch
     const imageUrl = "https://avatars.githubusercontent.com/u/314135";
@@ -62,22 +62,20 @@ const worker: ExportedHandler<Env> = {
     // png  : outputImage.get_bytes();
     // jpeg : outputImage.get_bytes_jpeg(quality);
 
-    // create a Response instance
-    const imageResponse = new Response(outputBytes, {
-      headers: {
-        "Content-Type": "image/webp"
-      }
-    });
-
     // call free() method to free memory
     inputImage.free();
     outputImage.free();
 
-    return imageResponse;
+    // return the Response instance
+    return new Response(outputBytes, {
+      headers: {
+        "Content-Type": "image/webp"
+      }
+    });
   }
 };
 
-export default worker;
+export default workers;
 
 ```
 
@@ -144,6 +142,7 @@ import * as photon from "@cf-wasm/photon/next";
 
 export const config = {
   runtime: "edge",
+  // see https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
   unstable_allowDynamic: ["**/node_modules/@cf-wasm/photon/**/*.js"]
 };
 
