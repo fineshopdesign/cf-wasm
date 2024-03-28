@@ -1,5 +1,12 @@
 # @cf-wasm/png
 
+## 0.1.10
+
+### Patch Changes
+
+- [`41369f0`](https://github.com/fineshopdesign/cf-wasm/commit/41369f0682c0f1dcdb35bd28d845dd9db6aafe06) Thanks [@fineshop](https://github.com/fineshop)! - docs(photon): added examples for Next.js
+  docs(png): added examples for Next.js
+
 ## 0.1.9
 
 ### Patch Changes
