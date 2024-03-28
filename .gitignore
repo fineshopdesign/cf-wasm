@@ -15,6 +15,10 @@ dist
 # ignore
 .ignore
 
+# Environment variables
+actions.env
+secrets.env
+
 # misc
 .DS_Store
 

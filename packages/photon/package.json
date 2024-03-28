@@ -1,14 +1,21 @@
 {
 	"name": "@cf-wasm/photon",
 	"version": "0.1.9",
+	"private": false,
 	"description": "Photon library for Cloudflare workers",
 	"license": "Apache-2.0",
 	"collaborators": [
 		"Silvia O'Dwyer <silviaodwyerdev@gmail.com>"
 	],
-	"repository": "fineshopdesign/cf-wasm",
-	"bugs": "https://github.com/fineshopdesign/cf-wasm/issues",
-	"homepage": "https://silvia-odwyer.github.io/photon/",
+	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/photon#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fineshopdesign/cf-wasm",
+		"directory": "packages/photon"
+	},
+	"bugs": {
+		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
+	},
 	"scripts": {
 		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
@@ -23,8 +30,10 @@
 		"clean": "rimraf dist"
 	},
 	"files": [
-		"dist/"
+		"dist"
 	],
+	"main": "./dist/edge/workers/index.js",
+	"types": "./dist/edge/workers/index.d.ts",
 	"exports": {
 		".": {
 			"default": {
