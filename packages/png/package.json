@@ -1,11 +1,18 @@
 {
 	"name": "@cf-wasm/png",
 	"version": "0.1.9",
+	"private": false,
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
 	"license": "MIT",
-	"repository": "fineshopdesign/cf-wasm",
-	"bugs": "https://github.com/fineshopdesign/cf-wasm/issues",
-	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png",
+	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fineshopdesign/cf-wasm",
+		"directory": "packages/png"
+	},
+	"bugs": {
+		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
+	},
 	"scripts": {
 		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
@@ -19,8 +26,10 @@
 		"clean": "rimraf dist"
 	},
 	"files": [
-		"dist/"
+		"dist"
 	],
+	"main": "./dist/edge/workers/index.js",
+	"types": "./dist/edge/workers/index.d.ts",
 	"exports": {
 		".": {
 			"default": {
