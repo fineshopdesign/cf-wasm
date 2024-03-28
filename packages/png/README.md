@@ -19,6 +19,36 @@ npm install @cf-wasm/png
 - CJS (file base):  
   `import * as png from "@cf-wasm/png/node"';`
 
+## API
+
+### png.encode
+
+The `png.encode` function encodes an input `Uint8Array` representing an image into a PNG format.
+
+```ts
+const encode: (
+  image: Uint8Array,
+  width: number,
+  height: number,
+  options?: EncodeOptions
+) => Uint8Array
+```
+
+### png.decode
+
+The `png.decode` function decodes an input `Uint8Array` representing a PNG image.
+
+```ts
+const decode: (image: Uint8Array) => {
+    image: Uint8Array;
+    width: number;
+    height: number;
+    colorType: number;
+    bitDepth: number;
+    lineSize: number;
+}
+```
+
 ## Examples
 
 Here are some examples for using this library.
