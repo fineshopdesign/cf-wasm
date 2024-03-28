@@ -43,6 +43,7 @@
 		"ts-node": "^10.9.2",
 		"turbo": "^1.13.0",
 		"typescript": "^5.4.3",
-		"vitest": "^1.4.0"
+		"vitest": "^1.4.0",
+		"wasm-pack": "^0.12.1"
 	}
 }
