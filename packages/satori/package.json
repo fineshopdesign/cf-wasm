@@ -1,0 +1,86 @@
+{
+	"name": "@cf-wasm/satori",
+	"version": "0.0.0",
+	"private": false,
+	"description": "Enlightened library to convert HTML and CSS to SVG.",
+	"license": "MPL-2.0",
+	"author": {
+		"name": "Shu Ding",
+		"email": "g@shud.in"
+	},
+	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/satori#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fineshopdesign/cf-wasm",
+		"directory": "packages/satori"
+	},
+	"bugs": {
+		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
+	},
+	"scripts": {
+		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
+		"format": "prettier --write --ignore-path ../../.prettierignore .",
+		"prebuild": "npm run clean && node scripts/getwasm.mjs",
+		"build": "tsc && tsc -p ./tsconfig.cjs.json",
+		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/esm/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/cjs/",
+		"test": "vitest run",
+		"clean": "rimraf dist"
+	},
+	"files": [
+		"dist"
+	],
+	"main": "./dist/esm/workers/index.js",
+	"types": "./dist/esm/workers/index.d.ts",
+	"exports": {
+		".": {
+			"default": {
+				"import": "./dist/esm/workers/index.js",
+				"types": "./dist/esm/workers/index.d.ts",
+				"default": "./dist/esm/workers/index.js"
+			}
+		},
+		"./next": {
+			"default": {
+				"import": "./dist/esm/next/index.js",
+				"types": "./dist/esm/next/index.d.ts"
+			}
+		},
+		"./node": {
+			"default": {
+				"require": "./dist/cjs/node/index.js",
+				"import": "./dist/cjs/node/index.js",
+				"types": "./dist/cjs/node/index.d.ts"
+			}
+		},
+		"./workers": {
+			"default": {
+				"import": "./dist/esm/workers/index.js",
+				"types": "./dist/esm/workers/index.d.ts",
+				"default": "./dist/esm/workers/index.js"
+			}
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"next": [
+				"./dist/esm/next/index.d.ts"
+			],
+			"node": [
+				"./dist/cjs/node/index.d.ts"
+			],
+			"workers": [
+				"./dist/esm/workers/index.d.ts"
+			],
+			"*": [
+				"./dist/esm/workers/index.d.ts"
+			]
+		}
+	},
+	"dependencies": {
+		"satori": "^0.10.13",
+		"yoga-wasm-web": "^0.3.3"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.73"
+	}
+}

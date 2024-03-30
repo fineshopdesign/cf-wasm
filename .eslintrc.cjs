@@ -1,3 +1,5 @@
+const path = require("path");
+
 /** @type {import("eslint-define-config").ESLintConfig} */
 const eslintConfig = {
 	root: true,
@@ -66,7 +68,10 @@ const eslintConfig = {
 				"plugin:@typescript-eslint/recommended",
 				"plugin:@typescript-eslint/recommended-requiring-type-checking"
 			],
-			plugins: ["@typescript-eslint"]
+			plugins: ["@typescript-eslint"],
+			parserOptions: {
+				project: [path.join(__dirname, "tsconfig.eslint.json")]
+			}
 		}
 	]
 };
