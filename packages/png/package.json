@@ -16,61 +16,59 @@
 	"scripts": {
 		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"prewasm:build": "rimraf src/lib",
-		"wasm:build": "wasm-pack build ./crate --out-dir ../src/lib --target web",
-		"postwasm:build": "rimraf -g src/lib/{package.json,LICENSE,LICENSE.md,README,README.md,.gitignore} && ts-node scripts/postwasm.ts",
-		"prebuild": "rimraf dist",
-		"build": "tsc && tsc -p ./tsconfig.cjs.json",
-		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/edge/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/node/",
-		"test": "vitest run --config vitest/vitest.config.ts",
+		"wasm:build": "node scripts/buildwasm.mjs",
+		"build": "npm run clean && tsc && tsc -p ./tsconfig.cjs.json",
+		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/esm/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/cjs/",
+		"test": "vitest run",
 		"clean": "rimraf dist"
 	},
 	"files": [
 		"dist"
 	],
-	"main": "./dist/edge/workers/index.js",
-	"types": "./dist/edge/workers/index.d.ts",
+	"main": "./dist/esm/workers/index.js",
+	"types": "./dist/esm/workers/index.d.ts",
 	"exports": {
 		".": {
 			"default": {
-				"import": "./dist/edge/workers/index.js",
-				"types": "./dist/edge/workers/index.d.ts",
-				"default": "./dist/edge/workers/index.js"
+				"import": "./dist/esm/workers/index.js",
+				"types": "./dist/esm/workers/index.d.ts",
+				"default": "./dist/esm/workers/index.js"
 			}
 		},
 		"./next": {
 			"default": {
-				"import": "./dist/edge/next/index.js",
-				"types": "./dist/edge/next/index.d.ts"
+				"import": "./dist/esm/next/index.js",
+				"types": "./dist/esm/next/index.d.ts"
 			}
 		},
 		"./node": {
 			"default": {
-				"require": "./dist/node/cjs/index.js",
-				"import": "./dist/node/cjs/index.js",
-				"types": "./dist/node/cjs/index.d.ts"
+				"require": "./dist/cjs/node/index.js",
+				"import": "./dist/cjs/node/index.js",
+				"types": "./dist/cjs/node/index.d.ts"
 			}
 		},
 		"./workers": {
 			"default": {
-				"import": "./dist/edge/workers/index.js",
-				"types": "./dist/edge/workers/index.d.ts"
+				"import": "./dist/esm/workers/index.js",
+				"types": "./dist/esm/workers/index.d.ts",
+				"default": "./dist/esm/workers/index.js"
 			}
 		}
 	},
 	"typesVersions": {
 		"*": {
 			"next": [
-				"./dist/edge/next/index.d.ts"
+				"./dist/esm/next/index.d.ts"
 			],
 			"node": [
-				"./dist/node/cjs/index.d.ts"
+				"./dist/cjs/node/index.d.ts"
 			],
 			"workers": [
-				"./dist/edge/workers/index.d.ts"
+				"./dist/esm/workers/index.d.ts"
 			],
 			"*": [
-				"./dist/edge/workers/index.d.ts"
+				"./dist/esm/workers/index.d.ts"
 			]
 		}
 	}

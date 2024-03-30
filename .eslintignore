@@ -4,10 +4,6 @@ node_modules/
 # production
 dist/
 typings/
-lib/
-
-# crate
-crate/
 
 # static
 public/

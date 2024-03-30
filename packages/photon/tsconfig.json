@@ -1,11 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"lib": ["ESNext", "WebWorker"],
+		"target": "ES2020",
+		"module": "ES2022",
+		"lib": ["ES2022", "WebWorker"],
 		"moduleResolution": "Node",
 		"declaration": true,
-		"declarationMap": true,
 		"incremental": true,
 		"esModuleInterop": true,
 		"strict": true,
@@ -18,10 +17,14 @@
 		"skipLibCheck": true,
 		"baseUrl": ".",
 		"types": ["@types/node"],
-		"rootDir": "src",
-		"outDir": "dist/edge",
-		"tsBuildInfoFile": "dist/edge/tsconfig.tsbuildinfo"
+		"outDir": "dist/esm"
 	},
-	"include": ["src", "declarations.d.ts"],
-	"exclude": ["node_modules", "dist", "scripts", "vitest", "src/cjs"]
+	"include": ["**/*.ts", "src", "declarations.d.ts"],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"vitest.config.ts",
+		"__tests__",
+		"src/node"
+	]
 }
