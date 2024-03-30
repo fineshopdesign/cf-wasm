@@ -1,9 +1,9 @@
 ---
-"@cf-wasm/photon": minor
-"@cf-wasm/png": minor
-"@cf-wasm/og": minor
-"@cf-wasm/resvg": minor
-"@cf-wasm/satori": minor
+"@cf-wasm/photon": patch
+"@cf-wasm/png": patch
+"@cf-wasm/og": patch
+"@cf-wasm/resvg": patch
+"@cf-wasm/satori": patch
 ---
 
 chore(photon): update build process
