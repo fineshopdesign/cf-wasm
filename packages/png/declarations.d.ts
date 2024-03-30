@@ -1,9 +1,9 @@
 declare module "*.wasm" {
-	const content: never;
+	const content: WebAssembly.Module;
 	export default content;
 }
 
 declare module "*.wasm?module" {
-	const content: never;
+	const content: WebAssembly.Module;
 	export default content;
 }

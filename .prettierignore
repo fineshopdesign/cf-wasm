@@ -5,13 +5,11 @@ package-lock.json
 # production
 dist/
 typings/
-packages/**/*/lib/
+packages/photon/src/lib/
+packages/png/src/lib/
 
 # crate
 packages/**/*/crate/
-
-# cache
-packages/**/*/crate/target/
 
 # wrangler
 .wrangler/
