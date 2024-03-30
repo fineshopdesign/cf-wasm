@@ -2,13 +2,13 @@
 	"extends": ["./tsconfig.json"],
 	"compilerOptions": {
 		"module": "CommonJS",
-		"outDir": "dist/node",
-		"tsBuildInfoFile": "dist/node/tsconfig.tsbuildinfo"
+		"outDir": "dist/cjs"
 	},
 	"exclude": [
 		"node_modules",
 		"dist",
-		"vitest",
+		"vitest.config.ts",
+		"__tests__",
 		"src/workers",
 		"src/next",
 		"src/esm"

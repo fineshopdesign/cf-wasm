@@ -23,11 +23,18 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"editor.formatOnSave": true,
 	"cSpell.words": [
+		"blobmoji",
+		"buildwasm",
 		"copyfiles",
 		"fineshopdesign",
+		"getwasm",
 		"Kumar",
+		"noto",
 		"O'Dwyer",
+		"openmoji",
 		"postbuild",
-		"tsbuildinfo"
+		"resvg",
+		"tsbuildinfo",
+		"workerd"
 	]
 }
