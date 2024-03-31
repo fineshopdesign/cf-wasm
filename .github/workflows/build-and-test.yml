@@ -12,5 +12,5 @@ jobs:
     name: 🔎 Typecheck and test
     uses: ./.github/workflows/build-reusable.yml
     with:
-      afterBuild: npm run test # pnpm typecheck && pnpm test
+      afterBuild: pnpm run test # pnpm typecheck && pnpm test
     secrets: inherit
