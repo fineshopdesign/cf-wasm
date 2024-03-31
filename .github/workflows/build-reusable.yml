@@ -38,16 +38,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Use pnpm ${{ matrix.pnpm-version }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
+
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-
-      - name: Use pnpm ${{ matrix.pnpm-version }}
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm-version }}
 
       - name: Install dependencies
         run: pnpm install
