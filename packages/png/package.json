@@ -14,10 +14,10 @@
 		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
 	},
 	"scripts": {
-		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
+		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
 		"wasm:build": "node scripts/buildwasm.mjs",
-		"build": "npm run clean && tsc && tsc -p ./tsconfig.cjs.json",
+		"build": "pnpm run clean && tsc && tsc -p ./tsconfig.cjs.json",
 		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/esm/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/cjs/",
 		"test": "vitest run",
 		"clean": "rimraf dist"
