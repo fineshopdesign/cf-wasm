@@ -38,23 +38,23 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Use pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm-version }}
-
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: pnpm
+
+      - name: Use pnpm ${{ matrix.pnpm-version }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
         if: ${{ inputs.skipInstallBuild != 'yes' }}
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
         if: ${{ inputs.skipInstallBuild != 'yes' }}
 
       - name: Run after build

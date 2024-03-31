@@ -37,29 +37,29 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Use pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm-version }}
-
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: pnpm
+
+      - name: Use pnpm ${{ matrix.pnpm-version }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
 
       - name: Update npm
         run: npm i -g npm@10
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Publish to NPM
         uses: changesets/action@v1
         with:
           commit: "chore(packages): publish packages"
           title: "chore(packages): publish packages"
-          publish: npm run publish-packages
+          publish: pnpm run publish-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

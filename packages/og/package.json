@@ -14,9 +14,9 @@
 		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
 	},
 	"scripts": {
-		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
+		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"prebuild": "npm run clean",
+		"prebuild": "pnpm run clean",
 		"build": "tsc && tsc -p ./tsconfig.cjs.json",
 		"postbuild": "copyfiles -u 1 ./src/lib/*.bin ./dist/esm/ && copyfiles -u 1 ./src/lib/*.bin ./dist/cjs/",
 		"test": "vitest run",
@@ -73,8 +73,8 @@
 		}
 	},
 	"dependencies": {
-		"@cf-wasm/resvg": "^0.0.0",
-		"@cf-wasm/satori": "^0.0.0"
+		"@cf-wasm/resvg": "workspace:*",
+		"@cf-wasm/satori": "workspace:*"
 	},
 	"devDependencies": {
 		"react": "^18.2.0"

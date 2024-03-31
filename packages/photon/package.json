@@ -17,7 +17,7 @@
 		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
 	},
 	"scripts": {
-		"lint": "DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
+		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
 		"crate:download": "fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
 		"wasm:build": "node scripts/buildwasm.mjs",
