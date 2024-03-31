@@ -3,6 +3,15 @@
 	"version": "0.0.0",
 	"private": false,
 	"description": "Enlightened library to convert HTML and CSS to SVG.",
+	"keywords": [
+		"HTML",
+		"JSX",
+		"SVG",
+		"converter",
+		"renderer",
+		"wasm",
+		"cloudflare-workers"
+	],
 	"license": "MPL-2.0",
 	"author": {
 		"name": "Shu Ding",
