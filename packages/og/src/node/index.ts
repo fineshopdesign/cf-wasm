@@ -11,7 +11,7 @@ const fallbackFont = fs.readFileSync(
 
 modules.resvg = resvg;
 modules.satori = satori;
-modules.setFallbackFont(fallbackFont);
+modules.setDefaultFont(fallbackFont);
 
 export {
 	setDefaultFont,
