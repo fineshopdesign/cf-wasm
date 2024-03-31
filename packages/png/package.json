@@ -3,6 +3,16 @@
 	"version": "0.1.10",
 	"private": false,
 	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
+	"keywords": [
+		"image",
+		"png",
+		"encoding",
+		"decoding",
+		"png-decoder",
+		"png-encoder",
+		"wasm",
+		"cloudflare-workers"
+	],
 	"license": "MIT",
 	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png#readme",
 	"repository": {

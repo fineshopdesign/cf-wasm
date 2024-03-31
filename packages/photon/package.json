@@ -2,7 +2,17 @@
 	"name": "@cf-wasm/photon",
 	"version": "0.1.10",
 	"private": false,
-	"description": "Photon library for Cloudflare workers",
+	"description": "Photon library for Cloudflare workers, Next.js and Node.js.",
+	"keywords": [
+		"image-processing",
+		"image-manipulation",
+		"image-resizing",
+		"rust",
+		"rust-library",
+		"webassembly",
+		"wasm",
+		"cloudflare-workers"
+	],
 	"license": "Apache-2.0",
 	"collaborators": [
 		"Silvia O'Dwyer <silviaodwyerdev@gmail.com>"

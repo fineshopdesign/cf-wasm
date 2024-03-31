@@ -1,5 +1,6 @@
-# photon
+# @cf-wam/photon
 
+Photon library for Cloudflare workers, Next.js and Node.js.  
 Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon)  
 Forked at [a2cefcb](https://github.com/silvia-odwyer/photon/commit/a2cefcb3bf31b14a9e61508364b5ea88842d614b)
 
