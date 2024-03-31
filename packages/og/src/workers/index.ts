@@ -5,7 +5,7 @@ import { modules } from "../lib";
 
 modules.resvg = resvg;
 modules.satori = satori;
-modules.setFallbackFont(fallbackFont);
+modules.setDefaultFont(fallbackFont);
 
 export {
 	setDefaultFont,

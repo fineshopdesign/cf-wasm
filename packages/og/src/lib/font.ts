@@ -125,7 +125,7 @@ export type BaseFontOptions = {
 };
 
 export class BaseFont {
-	protected buffer: ArrayBuffer | Promise<ArrayBuffer> | undefined;
+	protected input;
 
 	name: string;
 
@@ -135,72 +135,127 @@ export class BaseFont {
 
 	constructor(
 		name: string,
-		data: ArrayBuffer | Promise<ArrayBuffer> | undefined,
+		input:
+			| ArrayBuffer
+			| Promise<ArrayBuffer>
+			| (() => ArrayBuffer | Promise<ArrayBuffer>)
+			| undefined,
 		{ weight = 400, style = "normal" }: BaseFontOptions = {}
 	) {
-		this.buffer = data;
+		this.input = input;
 		this.name = name;
 		this.style = style;
 		this.weight = weight;
 	}
 
 	get data() {
-		return this.buffer;
+		return this.input;
 	}
 }
 
-export type CustomFontOptions = BaseFontOptions;
+export type CustomFontOptions = BaseFontOptions & {
+	lang?: string;
+};
 
+/**
+ * A helper class to load Custom Fonts
+ */
 export class CustomFont extends BaseFont {
-	protected buffer: ArrayBuffer | Promise<ArrayBuffer>;
+	protected input:
+		| ArrayBuffer
+		| Promise<ArrayBuffer>
+		| (() => ArrayBuffer | Promise<ArrayBuffer>);
 
+	private evaluated: ArrayBuffer | undefined;
+
+	lang: string | undefined;
+
+	/**
+	 * Creates an instance of {@link CustomFont}
+	 *
+	 * @param name The name of the font (can be used for font-family css property)
+	 * @param input Font data as `ArrayBuffer` or a promise which resolves to `ArrayBuffer`
+	 * @param options
+	 */
 	constructor(
 		name: string,
-		data: ArrayBuffer | Promise<ArrayBuffer>,
+		input: ArrayBuffer | Promise<ArrayBuffer> | (() => Promise<ArrayBuffer>),
 		options?: CustomFontOptions
 	) {
-		super(name, data, options);
-		this.buffer = data;
+		super(name, input, options);
+		this.input = input;
+		this.lang = options?.lang;
 	}
 
 	get data() {
-		return this.buffer;
+		return (async () => {
+			if (!this.evaluated) {
+				this.evaluated = await (typeof this.input === "function"
+					? this.input()
+					: this.input);
+			}
+			return this.evaluated;
+		})();
 	}
 }
 
 export type GoogleFontOptions = BaseFontOptions & {
+	/**
+	 * The name of the font (can be used for font-family css property)
+	 */
 	name?: string;
+
+	/**
+	 * Loads font only for particular text (for better performance)
+	 */
 	text?: string;
 };
 
+/**
+ * A helper class to load Google Fonts
+ */
 export class GoogleFont extends BaseFont {
-	protected buffer: Promise<ArrayBuffer> | undefined;
+	protected input: Promise<ArrayBuffer> | undefined;
 
+	private evaluated: ArrayBuffer | undefined;
+
+	/**
+	 * The font family name
+	 */
 	family: string;
 
+	/**
+	 * Text for which the font is loaded
+	 */
 	text: string | undefined;
 
+	/**
+	 * Creates an instance of {@link GoogleFont}
+	 *
+	 * @param family The name of font family to load
+	 * @param options The {@link GoogleFontOptions}
+	 */
 	constructor(family: string, options: GoogleFontOptions = {}) {
 		super(options.name || family, undefined, options);
 		this.family = family;
 		this.text = options.text;
-		this.buffer = undefined;
+		this.input = undefined;
 	}
 
+	/**
+	 * A promise which resolves with font data as `ArrayBuffer`
+	 */
 	get data() {
-		if (this.buffer) {
-			this.buffer.catch(() => {
-				this.buffer = undefined;
-			});
-		} else {
-			this.buffer = loadGoogleFont(this.family, {
-				weight: this.weight,
-				italic: this.style === "italic",
-				normal: this.style === "normal",
-				text: this.text
-			});
-		}
-
-		return this.buffer;
+		return (async () => {
+			if (!this.evaluated) {
+				this.evaluated = await loadGoogleFont(this.family, {
+					weight: this.weight,
+					italic: this.style === "italic",
+					normal: this.style === "normal",
+					text: this.text
+				});
+			}
+			return this.evaluated;
+		})();
 	}
 }
