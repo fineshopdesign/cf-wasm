@@ -2,7 +2,18 @@
 	"name": "@cf-wasm/og",
 	"version": "0.0.0",
 	"private": false,
-	"description": "Generate Open Graph Images dynamically from HTML/CSS without a browser",
+	"description": "Generate Open Graph Images dynamically from HTML/CSS without a browser.",
+	"keywords": [
+		"open-graph-image",
+		"open-graph",
+		"og-image",
+		"og:image",
+		"social",
+		"card",
+		"image",
+		"wasm",
+		"cloudflare-workers"
+	],
 	"license": "MPL-2.0",
 	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/og#readme",
 	"repository": {
