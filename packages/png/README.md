@@ -1,6 +1,7 @@
-# png
+# @cf-wasm/png
 
 A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.
+Powered by [denosaurs/pngs](https://github.com/denosaurs/pngs).
 
 ## Installation
 
