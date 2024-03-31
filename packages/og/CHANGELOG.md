@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.12
+
+### Patch Changes
+
+- [`51a4f37`](https://github.com/fineshopdesign/cf-wasm/commit/51a4f37043ec76f418e12817f35f9df62b3f8bf5) Thanks [@fineshop](https://github.com/fineshop)! - fix(og): added support for next-on-pages (for next.js on cloudflare pages)
+
+- Updated dependencies []:
+  - @cf-wasm/resvg@0.1.12
+  - @cf-wasm/satori@0.1.12
+
 ## 0.1.11
 
 ### Patch Changes
