@@ -61,14 +61,34 @@ export type RenderOptions = {
 	 */
 	emoji?: EmojiType;
 
+	/**
+	 * The format of response, can be one of `svg` or `png`
+	 */
 	format?: "svg" | "png";
 
+	/**
+	 * Passes {@link RenderSatoriOptions} to satori
+	 */
 	satoriOptions?: RenderSatoriOptions;
 
+	/**
+	 * Passes {@link RenderResvgOptions} to resvg
+	 */
 	resvgOptions?: RenderResvgOptions;
 };
 
-function render(element: React.ReactElement, options?: RenderOptions) {
+/**
+ * Renders {@link React.ReactElement} to image
+ *
+ * @param element The {@link React.ReactElement}
+ * @param options The {@link RenderOptions}
+ *
+ * @returns An object containing methods for rendering the input element to image
+ */
+export const render = (
+	element: React.ReactElement,
+	options?: RenderOptions
+) => {
 	const data: {
 		svg: SvgResult | undefined;
 		png: PngResult | undefined;
@@ -85,9 +105,14 @@ function render(element: React.ReactElement, options?: RenderOptions) {
 		...options
 	};
 
+	/**
+	 * Method to render the element as svg image
+	 *
+	 * @returns A promise which resolves to rendered svg image as {@link SvgResult}
+	 */
 	const asSvg = async () => {
 		if (!data.svg) {
-			const fallbackFont = await modules.getFallbackFont();
+			const fallbackFont = await modules.getDefaultFont();
 			if (!fallbackFont) {
 				console.warn(
 					"(@cf-wasm/og) [ WARNING ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font"
@@ -133,6 +158,11 @@ function render(element: React.ReactElement, options?: RenderOptions) {
 		return data.svg;
 	};
 
+	/**
+	 * Method to render the element as png image
+	 *
+	 * @returns A promise which resolves to rendered png image as {@link PngResult}
+	 */
 	const asPng = async () => {
 		if (!data.png) {
 			const svg = await asSvg();
@@ -159,15 +189,4 @@ function render(element: React.ReactElement, options?: RenderOptions) {
 	};
 
 	return { asSvg, asPng };
-	// const svg = await satori(element, {
-	// 	width: options.width,
-	// 	height: options.height,
-	// 	debug: options.debug,
-	// 	fonts: options.fonts || defaultFonts,
-	// 	loadAdditionalAsset: loadDynamicAsset({
-	// 		emoji: options.emoji
-	// 	})
-	// });
-}
-
-export { render };
+};

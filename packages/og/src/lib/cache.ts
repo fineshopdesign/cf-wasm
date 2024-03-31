@@ -1,9 +1,11 @@
 export const cacheInstances = new Map<string, Cache>();
 
-export const getCache = async (name: string = "cf-wasm-og-cache") => {
+export const getCache = async (name?: string) => {
+	const cacheName = typeof name !== "undefined" ? name : getCache.default;
 	let cache: Cache;
+
 	if (typeof caches !== "undefined") {
-		cache = cacheInstances.get(name) || (await caches.open(name));
+		cache = cacheInstances.get(cacheName) || (await caches.open(cacheName));
 	} else {
 		cache = {
 			async add() {
@@ -29,6 +31,9 @@ export const getCache = async (name: string = "cf-wasm-og-cache") => {
 			}
 		};
 	}
-	cacheInstances.set(name, cache);
+
+	cacheInstances.set(cacheName, cache);
 	return cache;
 };
+
+getCache.default = "cf-wasm-og-cache";
