@@ -133,6 +133,9 @@ export const FigmaImageResponse = async (
 	const { url, template, token } = figmaOptions;
 	const { fileId, nodeId } = parseFigmaUrl(url);
 
+	assertValue(url, "(@cf-wasm/og) [ERROR] 'url' field is required");
+	assertValue(token, "(@cf-wasm/og) [ERROR] 'token' field is required");
+
 	const figmaResponse = await fetch(
 		`https://api.figma.com/v1/images/${fileId}?ids=${nodeId}&svg_outline_text=false&format=svg&svg_include_id=true`,
 		{

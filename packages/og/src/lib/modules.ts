@@ -80,7 +80,7 @@ export const modules = {
 	set satori(m) {
 		data.satori = m;
 	},
-	setFallbackFont: setDefaultFont,
-	getFallbackFont: getDefaultFont,
-	hasFallbackFont: hasDefaultFont
+	setDefaultFont,
+	getDefaultFont,
+	hasDefaultFont
 };
