@@ -19,7 +19,7 @@ npm install @cf-wasm/photon
 - Next.js (Webpack):  
   `import * as photon from "@cf-wasm/photon/next";`
 - CJS (file base):  
-  `import * as photon from "@cf-wasm/photon/node"';`
+  `import * as photon from "@cf-wasm/photon/node";`
 
 ## Examples
 

@@ -1,9 +1,9 @@
 import { modules } from "./modules";
-import { loadDynamicAsset } from "./asset";
 import { type EmojiType } from "./emoji";
+import { CustomFont, GoogleFont } from "./font";
+import { loadDynamicAsset } from "./asset";
 import type { ResvgRenderOptions } from "./resvg";
 import type { SatoriOptions, Font } from "./satori";
-import { CustomFont, GoogleFont } from "./font";
 
 export type PngResult = {
 	pixels: Uint8Array;

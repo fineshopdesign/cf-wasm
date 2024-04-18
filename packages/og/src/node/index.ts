@@ -1,7 +1,8 @@
 import path from "path";
 import fs from "fs";
 import * as resvg from "@cf-wasm/resvg/node";
-// eslint-disable-next-line import/namespace
+/* eslint-disable-next-line import/namespace --
+   See this issue: https://github.com/sekoyo/react-image-crop/issues/178 */
 import * as satori from "@cf-wasm/satori/node";
 import { modules } from "../lib";
 

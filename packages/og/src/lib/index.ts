@@ -29,7 +29,7 @@ export {
 	type PngResult
 } from "./render";
 
-export { type ResvgRenderOptions } from "./resvg";
+export type { ResvgRenderOptions } from "./resvg";
 
 export type {
 	Font,
