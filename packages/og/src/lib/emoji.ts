@@ -4,11 +4,14 @@ const U200D = String.fromCharCode(8205);
 const UFE0Fg = /\uFE0F/g;
 
 export const apis = {
+	openmoji: (code: string) =>
+		`https://cdn.jsdelivr.net/npm/@svgmoji/openmoji@2.0.0/svg/${code.toUpperCase()}.svg`,
+	blobmoji: (code: string) =>
+		`https://cdn.jsdelivr.net/npm/@svgmoji/blob@2.0.0/svg/${code.toUpperCase()}.svg`,
+	noto: (code: string) =>
+		`https://cdn.jsdelivr.net/gh/svgmoji/svgmoji/packages/svgmoji__noto/svg/${code.toUpperCase()}.svg`,
 	twemoji: (code: string) =>
 		`https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/${code.toLowerCase()}.svg`,
-	openmoji: "https://cdn.jsdelivr.net/npm/@svgmoji/openmoji@2.0.0/svg/",
-	blobmoji: "https://cdn.jsdelivr.net/npm/@svgmoji/blob@2.0.0/svg/",
-	noto: "https://cdn.jsdelivr.net/gh/svgmoji/svgmoji/packages/svgmoji__noto/svg/",
 	fluent: (code: string) =>
 		`https://cdn.jsdelivr.net/gh/shuding/fluentui-emoji-unicode/assets/${code.toLowerCase()}_color.svg`,
 	fluentFlat: (code: string) =>
@@ -23,8 +26,8 @@ export const toCodePoint = (unicodeSurrogates: string) => {
 	let p = 0;
 	let i = 0;
 	while (i < unicodeSurrogates.length) {
-		// eslint-disable-next-line no-plusplus
-		c = unicodeSurrogates.charCodeAt(i++);
+		c = unicodeSurrogates.charCodeAt(i);
+		i += 1;
 		if (p) {
 			// eslint-disable-next-line no-bitwise
 			r.push((65536 + ((p - 55296) << 10) + (c - 56320)).toString(16));
@@ -52,8 +55,7 @@ export const loadEmoji = async (
 	const apiType = !type || !apis[type] ? "twemoji" : type;
 	const api = apis[apiType];
 
-	const svgUrl =
-		typeof api === "function" ? api(code) : `${api}${code.toUpperCase()}.svg`;
+	const svgUrl = api(code);
 
 	const fromMap = emojiCacheMap.get(svgUrl);
 

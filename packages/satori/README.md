@@ -18,4 +18,4 @@ npm install @cf-wasm/satori
 - Next.js (Webpack):  
   `import * as satori from "@cf-wasm/satori/next";`
 - CJS (file base):  
-  `import * as satori from "@cf-wasm/satori/node"';`
+  `import * as satori from "@cf-wasm/satori/node";`

@@ -12,8 +12,3 @@ declare module "*.bin" {
 	const content: ArrayBuffer;
 	export default content;
 }
-
-declare module "*.bin?module" {
-	const content: ArrayBuffer;
-	export default content;
-}
