@@ -6,7 +6,18 @@ export const isComplexTemplate = (template: unknown) =>
 	"value" in (template as { value?: unknown });
 
 export const svgToBase64 = (svg: string) => {
-	const base64 = Buffer.from(svg).toString("base64");
+	let base64: string;
+	if (typeof Buffer !== "undefined") {
+		base64 = Buffer.from(svg).toString("base64");
+	} else if (typeof btoa === "function") {
+		console.warn(
+			"(@cf-wasm/og) [ WARNING ] Using btoa global function for svg string base64 encoding."
+		);
+		base64 = btoa(svg);
+	} else {
+		throw new Error("Base64 encoding is not supported in this environment.");
+	}
+
 	return `data:image/svg+xml;base64,${base64}`;
 };
 
