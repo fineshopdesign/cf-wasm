@@ -1,4 +1,4 @@
-import ImageResponse, { ImageResponseOptions } from "./response";
+import ImageResponse, { type ImageResponseOptions } from "./response";
 
 export const isComplexTemplate = (template: unknown) =>
 	typeof template !== "string" &&

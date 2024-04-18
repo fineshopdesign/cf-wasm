@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { getCache } from "./cache";
-import { FontStyle, FontWeight } from "./satori";
+import type { FontStyle, FontWeight } from "./satori";
 
 export const fontCacheMap = new Map<string, ArrayBuffer>();
 

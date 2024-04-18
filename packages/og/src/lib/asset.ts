@@ -1,4 +1,4 @@
-import { EmojiType, getIconCode, loadEmoji } from "./emoji";
+import { type EmojiType, getIconCode, loadEmoji } from "./emoji";
 import { FontDetector, languageFontMap } from "./language";
 import { loadGoogleFont } from "./font";
 

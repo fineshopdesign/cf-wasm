@@ -1,4 +1,4 @@
-import type * as satoriModuleType from "@cf-wasm/satori";
+import type * as satoriModule from "@cf-wasm/satori";
 
-export type SatoriModule = typeof satoriModuleType;
+export type SatoriModule = typeof satoriModule;
 export type * from "@cf-wasm/satori";
