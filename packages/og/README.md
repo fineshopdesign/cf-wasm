@@ -18,4 +18,4 @@ npm install @cf-wasm/og
 - Next.js (Webpack):  
   `import * as og from "@cf-wasm/og/next";`
 - CJS (file base):  
-  `import * as og from "@cf-wasm/og/node"';`
+  `import * as og from "@cf-wasm/og/node";`

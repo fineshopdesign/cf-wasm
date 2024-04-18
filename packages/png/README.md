@@ -18,7 +18,7 @@ npm install @cf-wasm/png
 - Next.js (Webpack):  
   `import * as png from "@cf-wasm/png/next";`
 - CJS (file base):  
-  `import * as png from "@cf-wasm/png/node"';`
+  `import * as png from "@cf-wasm/png/node";`
 
 ## API
 

@@ -1,8 +1,7 @@
 {
 	"root": true,
 	"workspaces": true,
-	"upgrade": false,
 	"reject": [],
-	"install": "never",
+	"install": "prompt",
 	"packageManager": "pnpm"
 }

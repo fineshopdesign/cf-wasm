@@ -18,4 +18,4 @@ npm install @cf-wasm/resvg
 - Next.js (Webpack):  
   `import * as resvg from "@cf-wasm/resvg/next";`
 - CJS (file base):  
-  `import * as resvg from "@cf-wasm/resvg/node"';`
+  `import * as resvg from "@cf-wasm/resvg/node";`
