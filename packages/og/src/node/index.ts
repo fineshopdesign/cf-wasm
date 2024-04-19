@@ -22,6 +22,7 @@ export {
 	render,
 	setDefaultFont,
 	loadGoogleFont,
+	getCache,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,

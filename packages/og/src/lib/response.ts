@@ -1,8 +1,9 @@
 import { render, type RenderOptions } from "./render";
 
-export type ImageResponseOptions = RenderOptions & {
-	format?: "svg" | "png";
-} & ConstructorParameters<typeof Response>[1];
+export type ImageResponseOptions = RenderOptions &
+	Omit<ResponseInit, "webSocket" | "encodeBody"> & {
+		format?: "svg" | "png";
+	};
 
 export const encoder = new TextEncoder();
 

@@ -30,10 +30,8 @@
 		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
 		"crate:download": "fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
-		"wasm:build": "node scripts/buildwasm.mjs",
-		"prebuild": "rimraf dist",
-		"build": "tsc && tsc -p ./tsconfig.cjs.json",
-		"postbuild": "copyfiles -u 1 ./src/lib/*.wasm ./dist/esm/ && copyfiles -u 1 ./src/lib/*.wasm ./dist/cjs/",
+		"wasm": "node scripts/wasm.mjs",
+		"build": "node scripts/build.mjs",
 		"test": "vitest run",
 		"clean": "rimraf dist"
 	},

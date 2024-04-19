@@ -1,4 +1,4 @@
-import { getCache } from "./cache";
+import { cachedAssetResponse } from "./cache";
 
 const U200D = String.fromCharCode(8205);
 const UFE0Fg = /\uFE0F/g;
@@ -63,34 +63,26 @@ export const loadEmoji = async (
 		return fromMap;
 	}
 
-	const cacheStore = cache ?? (await getCache());
-
-	let response = await cacheStore
-		.match(svgUrl)
-		.then((res) => (res?.ok ? res : undefined));
-
-	if (!response) {
-		const fetchResponse = await fetch(svgUrl)
-			.then((res) => {
-				if (!res.ok) {
+	const response = await cachedAssetResponse(
+		svgUrl,
+		() =>
+			fetch(svgUrl)
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						);
+					}
+					return res;
+				})
+				.catch((e) => {
 					throw new Error(
-						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						`Failed to download dynamic emoji. An error ocurred while fetching ${svgUrl}`,
+						{ cause: e }
 					);
-				}
-				return res;
-			})
-			.catch((e) => {
-				throw new Error(
-					`Failed to download dynamic emoji. An error ocurred while fetching ${svgUrl}`,
-					{ cause: e }
-				);
-			});
-
-		response = new Response(fetchResponse.body, fetchResponse);
-		response.headers.append("Cache-Control", "s-maxage=3600");
-
-		await cacheStore.put(svgUrl, response.clone());
-	}
+				}),
+		{ cache }
+	);
 
 	const text = await response.text();
 
