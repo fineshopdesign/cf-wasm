@@ -6,6 +6,7 @@
 		"moduleResolution": "Node",
 		"declaration": true,
 		"incremental": true,
+		"sourceMap": true,
 		"esModuleInterop": true,
 		"strict": true,
 		"resolveJsonModule": true,
@@ -17,7 +18,8 @@
 		"skipLibCheck": true,
 		"baseUrl": ".",
 		"types": ["@types/node"],
-		"outDir": "dist/esm"
+		"outDir": "dist/esm",
+		"tsBuildInfoFile": "dist/esm/.tsbuildinfo"
 	},
 	"include": ["src", "declarations.d.ts"],
 	"exclude": [

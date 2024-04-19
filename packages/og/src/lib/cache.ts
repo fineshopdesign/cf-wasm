@@ -8,27 +8,13 @@ export const getCache = async (name?: string) => {
 		cache = cacheInstances.get(cacheName) || (await caches.open(cacheName));
 	} else {
 		cache = {
-			async add() {
-				return Promise.resolve(undefined);
-			},
-			async addAll() {
-				return Promise.resolve(undefined);
-			},
-			async delete() {
-				return Promise.resolve(false);
-			},
-			async keys() {
-				return Promise.resolve([]);
-			},
-			async match() {
-				return Promise.resolve(undefined);
-			},
-			async matchAll() {
-				return Promise.resolve([]);
-			},
-			async put() {
-				return Promise.resolve(undefined);
-			}
+			add: () => Promise.resolve(),
+			addAll: () => Promise.resolve(),
+			delete: () => Promise.resolve(false),
+			keys: () => Promise.resolve([]),
+			match: () => Promise.resolve(undefined),
+			matchAll: () => Promise.resolve([]),
+			put: () => Promise.resolve()
 		};
 	}
 

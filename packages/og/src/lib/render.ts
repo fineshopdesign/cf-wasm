@@ -115,7 +115,7 @@ export const render = (
 			const fallbackFont = await modules.getDefaultFont();
 			if (!fallbackFont) {
 				console.warn(
-					"(@cf-wasm/og) [ WARNING ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font"
+					"(@cf-wasm/og) [ WARN ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font"
 				);
 			}
 			const defaultFonts = [
