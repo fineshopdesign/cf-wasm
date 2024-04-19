@@ -1,5 +1,7 @@
 export { modules, setDefaultFont } from "./modules";
 
+export { getCache } from "./cache";
+
 export { type EmojiType } from "./emoji";
 
 export {

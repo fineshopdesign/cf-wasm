@@ -1,3 +1,5 @@
+import { getCache } from "./cache";
+
 export const languageFontMap = {
 	"ja-JP": "Noto+Sans+JP",
 	"ko-KR": "Noto+Sans+KR",
@@ -91,20 +93,36 @@ export class FontDetector {
 
 		const API = `https://fonts.googleapis.com/css2?${params}`;
 
-		let cssResponse = cache ? await cache.match(API) : undefined;
+		const cacheStore = cache ?? (await getCache());
+
+		let cssResponse = await cacheStore
+			.match(API)
+			.then((res) => (res?.ok ? res : undefined));
+
 		if (!cssResponse) {
 			const fetchResponse = await fetch(API, {
 				headers: {
 					"User-Agent":
 						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
 				}
-			});
+			})
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						);
+					}
+					return res;
+				})
+				.catch((e) => {
+					throw new Error(`An error ocurred while fetching ${API}`, {
+						cause: e
+					});
+				});
+
 			cssResponse = new Response(fetchResponse.body, fetchResponse);
 			cssResponse.headers.append("Cache-Control", "s-maxage=3600");
-
-			if (cache) {
-				await cache.put(API, cssResponse.clone());
-			}
+			await cacheStore.put(API, cssResponse.clone());
 		}
 
 		const fontFace = await cssResponse.text();
