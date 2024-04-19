@@ -1,5 +1,12 @@
 # @cf-wasm/og
 
+## 0.1.13
+
+### Patch Changes
+
+- [`deaf885`](https://github.com/fineshopdesign/cf-wasm/commit/deaf885730bf894c41c800fb0079359e53715598) Thanks [@fineshop](https://github.com/fineshop)! - refactor(og): log detailed information about errors
+  fix(og): check if Buffer class is available for base64 encoding otherwise use btoa global function if available
+
 ## 0.1.12
 
 ### Patch Changes
