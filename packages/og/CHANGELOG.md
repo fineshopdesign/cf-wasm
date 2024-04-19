@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.14
+
+### Patch Changes
+
+- [`603a8d5`](https://github.com/fineshopdesign/cf-wasm/commit/603a8d5c89aee22c9d7488b4ea1ed75f56ed9e75) Thanks [@fineshop](https://github.com/fineshop)! - perf(og): improved caching for dynamic assets
+
 ## 0.1.13
 
 ### Patch Changes
