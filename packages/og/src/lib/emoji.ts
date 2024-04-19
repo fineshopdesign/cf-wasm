@@ -65,10 +65,27 @@ export const loadEmoji = async (
 
 	const cacheStore = cache ?? (await getCache());
 
-	let response = await cacheStore.match(svgUrl);
+	let response = await cacheStore
+		.match(svgUrl)
+		.then((res) => (res?.ok ? res : undefined));
 
 	if (!response) {
-		const fetchResponse = await fetch(svgUrl);
+		const fetchResponse = await fetch(svgUrl)
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error(
+						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+					);
+				}
+				return res;
+			})
+			.catch((e) => {
+				throw new Error(
+					`Failed to download dynamic emoji. An error ocurred while fetching ${svgUrl}`,
+					{ cause: e }
+				);
+			});
+
 		response = new Response(fetchResponse.body, fetchResponse);
 		response.headers.append("Cache-Control", "s-maxage=3600");
 

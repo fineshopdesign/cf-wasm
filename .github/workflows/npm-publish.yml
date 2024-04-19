@@ -22,7 +22,8 @@ jobs:
 
   publish:
     name: 🚀 Release packages
-    # needs: [test]
+    if: "${{ github.repository_owner == 'fineshopdesign' && (contains(github.event.head_commit.message, '[bump]') || contains(github.event.head_commit.message, 'chore(packages): publish packages')) }}"
+    needs: [test]
     runs-on: [ubuntu-latest]
     permissions:
       contents: write
@@ -32,7 +33,6 @@ jobs:
       matrix:
         node-version: ["18.x"]
         pnpm-version: ["8.x"]
-    if: "${{ contains(github.event.head_commit.message, '[bump]') || contains(github.event.head_commit.message, 'chore(packages): publish packages') }}"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -61,5 +61,7 @@ jobs:
           title: "chore(packages): publish packages"
           publish: pnpm run publish-packages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Needs access to push to main
+          GITHUB_TOKEN: ${{ secrets.FDBOT_GITHUB_TOKEN }}
+          # Needs access to publish to npm
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

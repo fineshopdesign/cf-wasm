@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"module": "Node16",
 		"moduleResolution": "Node16",
-		"outDir": "dist/cjs"
+		"outDir": "dist/cjs",
+		"tsBuildInfoFile": "dist/cjs/.tsbuildinfo"
 	},
 	"exclude": [
 		"node_modules",

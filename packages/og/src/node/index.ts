@@ -15,13 +15,13 @@ modules.satori = satori;
 modules.setDefaultFont(fallbackFont);
 
 export {
-	setDefaultFont,
-	render,
-	loadGoogleFont,
 	ImageResponse,
 	FigmaImageResponse,
 	CustomFont,
 	GoogleFont,
+	render,
+	setDefaultFont,
+	loadGoogleFont,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,

@@ -4,6 +4,8 @@ export type ImageResponseOptions = RenderOptions & {
 	format?: "svg" | "png";
 } & ConstructorParameters<typeof Response>[1];
 
+export const encoder = new TextEncoder();
+
 /**
  * A class for rendering {@link React.ReactElement} to image as {@link Response}
  */
@@ -17,16 +19,18 @@ export default class ImageResponse extends Response {
 	constructor(element: React.ReactElement, options?: ImageResponseOptions) {
 		const isSvg = options?.format === "svg";
 		const result = new ReadableStream({
-			async start(controller) {
+			start(controller) {
 				const renderer = render(element, options);
-				const result2 = (await (isSvg ? renderer.asSvg() : renderer.asPng()))
-					.image;
-				if (typeof result2 === "string") {
-					controller.enqueue(new TextEncoder().encode(result2));
-				} else {
-					controller.enqueue(result2);
-				}
-				controller.close();
+				(isSvg ? renderer.asSvg() : renderer.asPng())
+					.then(({ image }) => {
+						const bytes =
+							typeof image === "string" ? encoder.encode(image) : image;
+						controller.enqueue(bytes);
+						controller.close();
+					})
+					.catch((e) => {
+						controller.error(e);
+					});
 			}
 		});
 		const headers = new Headers(options?.headers);

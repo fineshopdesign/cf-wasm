@@ -53,9 +53,9 @@ export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
 			});
 		} catch (e) {
 			console.warn(
-				"(@cf-wasm/og) [ WARNING ] Failed to load dynamic font for",
+				"(@cf-wasm/og) [ WARN ] Failed to load dynamic font for",
 				text,
-				". Error:",
+				".\n",
 				e
 			);
 		}

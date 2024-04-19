@@ -11,7 +11,7 @@ export const svgToBase64 = (svg: string) => {
 		base64 = Buffer.from(svg).toString("base64");
 	} else if (typeof btoa === "function") {
 		console.warn(
-			"(@cf-wasm/og) [ WARNING ] Using btoa global function for svg string base64 encoding."
+			"(@cf-wasm/og) [ WARN ] Using btoa global function for svg string base64 encoding."
 		);
 		base64 = btoa(svg);
 	} else {
