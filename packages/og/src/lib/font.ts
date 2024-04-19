@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { getCache } from "./cache";
+import { cachedAssetResponse } from "./cache";
 import type { FontStyle, FontWeight } from "./satori";
 
 export const fontCacheMap = new Map<string, ArrayBuffer>();
@@ -70,39 +70,31 @@ export const loadGoogleFont = async (
 		return fromMap;
 	}
 
-	const cacheStore = cache ?? (await getCache());
-
-	let cssResponse = await cacheStore
-		.match(cssUrl)
-		.then((res) => (res?.ok ? res : undefined));
-
-	if (!cssResponse) {
-		const fetchResponse = await fetch(cssUrl, {
-			headers: {
-				"User-Agent":
-					"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1"
-			}
-		})
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error(
-						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
-					);
+	const cssResponse = await cachedAssetResponse(
+		cssUrl,
+		() =>
+			fetch(cssUrl, {
+				headers: {
+					"User-Agent":
+						"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1"
 				}
-				return res;
 			})
-			.catch((e) => {
-				throw new Error(
-					`Failed to download dynamic font. An error ocurred while fetching ${cssUrl}`,
-					{ cause: e }
-				);
-			});
-
-		cssResponse = new Response(fetchResponse.body, fetchResponse);
-		cssResponse.headers.append("Cache-Control", "s-maxage=3600");
-
-		await cacheStore.put(cssUrl, cssResponse.clone());
-	}
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						);
+					}
+					return res;
+				})
+				.catch((e) => {
+					throw new Error(
+						`Failed to download dynamic font. An error ocurred while fetching ${cssUrl}`,
+						{ cause: e }
+					);
+				}),
+		{ cache }
+	);
 
 	const css = await cssResponse.text();
 	const fontUrl = css.match(
@@ -113,32 +105,26 @@ export const loadGoogleFont = async (
 		throw new Error(`Failed to download dynamic font. No font was found.`);
 	}
 
-	let fontResponse = await cacheStore
-		.match(fontUrl)
-		.then((res) => (res?.ok ? res : undefined));
-
-	if (!fontResponse) {
-		const fetchResponse = await fetch(fontUrl)
-			.then((res) => {
-				if (!res.ok) {
+	const fontResponse = await cachedAssetResponse(
+		fontUrl,
+		() =>
+			fetch(fontUrl)
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						);
+					}
+					return res;
+				})
+				.catch((e) => {
 					throw new Error(
-						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						`Failed to download dynamic font. An error ocurred while fetching ${fontUrl}`,
+						{ cause: e }
 					);
-				}
-				return res;
-			})
-			.catch((e) => {
-				throw new Error(
-					`Failed to download dynamic font. An error ocurred while fetching ${fontUrl}`,
-					{ cause: e }
-				);
-			});
-
-		fontResponse = new Response(fetchResponse.body, fetchResponse);
-		fontResponse.headers.append("Cache-Control", "s-maxage=3600");
-
-		await cacheStore.put(fontUrl, fontResponse.clone());
-	}
+				}),
+		{ cache }
+	);
 
 	const buffer = await fontResponse.arrayBuffer();
 
