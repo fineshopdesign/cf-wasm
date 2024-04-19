@@ -11,17 +11,21 @@ export const loadGoogleFont = async (
 		weight,
 		italic = false,
 		normal = true,
+		display,
 		cache
 	}: {
 		text?: string;
 		weight?: string | number;
 		italic?: boolean;
 		normal?: boolean;
+		display?: "auto" | "block" | "swap" | "fallback" | "optional";
 		cache?: Cache;
 	} = {}
 ) => {
-	if (!family) {
-		throw new Error(`No font family name was provided`);
+	if (typeof family !== "string" || family.trim().length === 0) {
+		throw new Error(
+			`Failed to download dynamic font. Not a valid font family name was provided`
+		);
 	}
 
 	let familyDelimiter = "";
@@ -52,6 +56,10 @@ export const loadGoogleFont = async (
 		params.subset = "latin";
 	}
 
+	if (typeof display === "string") {
+		params.display = display;
+	}
+
 	const cssUrl = `https://fonts.googleapis.com/css2?${Object.keys(params)
 		.map((key) => `${key}=${params[key]}`)
 		.join("&")}`;
@@ -64,7 +72,9 @@ export const loadGoogleFont = async (
 
 	const cacheStore = cache ?? (await getCache());
 
-	let cssResponse = await cacheStore.match(cssUrl);
+	let cssResponse = await cacheStore
+		.match(cssUrl)
+		.then((res) => (res?.ok ? res : undefined));
 
 	if (!cssResponse) {
 		const fetchResponse = await fetch(cssUrl, {
@@ -72,18 +82,26 @@ export const loadGoogleFont = async (
 				"User-Agent":
 					"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1"
 			}
-		});
+		})
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error(
+						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+					);
+				}
+				return res;
+			})
+			.catch((e) => {
+				throw new Error(
+					`Failed to download dynamic font. An error ocurred while fetching ${cssUrl}`,
+					{ cause: e }
+				);
+			});
 
 		cssResponse = new Response(fetchResponse.body, fetchResponse);
 		cssResponse.headers.append("Cache-Control", "s-maxage=3600");
 
 		await cacheStore.put(cssUrl, cssResponse.clone());
-	}
-
-	if (!cssResponse.ok) {
-		throw new Error(
-			`Failed to download dynamic font. Error while fetching ${cssUrl} (status: ${cssResponse.status})`
-		);
 	}
 
 	const css = await cssResponse.text();
@@ -95,21 +113,31 @@ export const loadGoogleFont = async (
 		throw new Error(`Failed to download dynamic font. No font was found.`);
 	}
 
-	let fontResponse = await cacheStore.match(fontUrl);
+	let fontResponse = await cacheStore
+		.match(fontUrl)
+		.then((res) => (res?.ok ? res : undefined));
 
 	if (!fontResponse) {
-		const fetchResponse = await fetch(fontUrl);
+		const fetchResponse = await fetch(fontUrl)
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error(
+						`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+					);
+				}
+				return res;
+			})
+			.catch((e) => {
+				throw new Error(
+					`Failed to download dynamic font. An error ocurred while fetching ${fontUrl}`,
+					{ cause: e }
+				);
+			});
 
 		fontResponse = new Response(fetchResponse.body, fetchResponse);
 		fontResponse.headers.append("Cache-Control", "s-maxage=3600");
 
 		await cacheStore.put(fontUrl, fontResponse.clone());
-	}
-
-	if (!fontResponse.ok) {
-		throw new Error(
-			`Failed to download dynamic font. Error while fetching ${fontUrl} (status: ${fontResponse.status})`
-		);
 	}
 
 	const buffer = await fontResponse.arrayBuffer();
