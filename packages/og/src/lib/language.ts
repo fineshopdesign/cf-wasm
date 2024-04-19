@@ -1,4 +1,4 @@
-import { getCache } from "./cache";
+import { cachedAssetResponse } from "./cache";
 
 export const languageFontMap = {
 	"ja-JP": "Noto+Sans+JP",
@@ -91,41 +91,36 @@ export class FontDetector {
 		}
 		params += "display=swap";
 
-		const API = `https://fonts.googleapis.com/css2?${params}`;
+		const cssUrl = `https://fonts.googleapis.com/css2?${params}`;
 
-		const cacheStore = cache ?? (await getCache());
-
-		let cssResponse = await cacheStore
-			.match(API)
-			.then((res) => (res?.ok ? res : undefined));
-
-		if (!cssResponse) {
-			const fetchResponse = await fetch(API, {
-				headers: {
-					"User-Agent":
-						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-				}
-			})
-				.then((res) => {
-					if (!res.ok) {
-						throw new Error(
-							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
-						);
+		const response = await cachedAssetResponse(
+			cssUrl,
+			() =>
+				fetch(cssUrl, {
+					headers: {
+						"User-Agent":
+							"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
 					}
-					return res;
 				})
-				.catch((e) => {
-					throw new Error(`An error ocurred while fetching ${API}`, {
-						cause: e
-					});
-				});
+					.then((res) => {
+						if (!res.ok) {
+							throw new Error(
+								`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+							);
+						}
+						return res;
+					})
+					.catch((e) => {
+						throw new Error(`An error ocurred while fetching ${cssUrl}`, {
+							cause: e
+						});
+					}),
+			{
+				cache
+			}
+		);
 
-			cssResponse = new Response(fetchResponse.body, fetchResponse);
-			cssResponse.headers.append("Cache-Control", "s-maxage=3600");
-			await cacheStore.put(API, cssResponse.clone());
-		}
-
-		const fontFace = await cssResponse.text();
+		const fontFace = await response.text();
 		this.addDetectors(fontFace);
 	}
 
