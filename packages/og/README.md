@@ -29,7 +29,7 @@ Here are some examples for using this library.
 If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
-// src/index.ts
+// src/index.tsx
 import React from "react";
 import { ImageResponse, GoogleFont } from "@cf-wasm/og";
 

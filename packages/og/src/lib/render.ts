@@ -1,9 +1,10 @@
-import { modules } from "./modules";
+import { modules, defaultFont } from "./modules";
 import { type EmojiType } from "./emoji";
 import { CustomFont, GoogleFont } from "./font";
 import { loadDynamicAsset } from "./asset";
 import type { ResvgRenderOptions } from "./resvg";
 import type { SatoriOptions, Font } from "./satori";
+import { parseHTML } from "./html";
 
 export type PngResult = {
 	pixels: Uint8Array;
@@ -78,15 +79,15 @@ export type RenderOptions = {
 };
 
 /**
- * Renders {@link React.ReactElement} to image
+ * Renders {@link React.ReactElement} or html string to image
  *
- * @param element The {@link React.ReactElement}
+ * @param element The {@link React.ReactElement} or html string
  * @param options The {@link RenderOptions}
  *
  * @returns An object containing methods for rendering the input element to image
  */
 export const render = (
-	element: React.ReactElement,
+	element: string | React.ReactElement,
 	options?: RenderOptions
 ) => {
 	const data: {
@@ -112,7 +113,7 @@ export const render = (
 	 */
 	const asSvg = async () => {
 		if (!data.svg) {
-			const fallbackFont = await modules.getDefaultFont();
+			const fallbackFont = await defaultFont.get();
 			if (!fallbackFont) {
 				console.warn(
 					"(@cf-wasm/og) [ WARN ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font"
@@ -146,7 +147,10 @@ export const render = (
 					emoji: renderOptions?.emoji
 				}) as SatoriOptions["loadAdditionalAsset"]
 			};
-			const svg = await modules.satori.satori(element, satoriOptions);
+			const svg = await modules.satori.satori(
+				typeof element === "string" ? parseHTML(element) : element,
+				satoriOptions
+			);
 
 			data.svg = {
 				image: svg,

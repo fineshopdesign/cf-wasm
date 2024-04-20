@@ -1,4 +1,4 @@
-export { modules, setDefaultFont } from "./modules";
+export { modules, defaultFont } from "./modules";
 
 export { getCache } from "./cache";
 
@@ -14,6 +14,8 @@ export {
 	type CustomFontOptions,
 	type GoogleFontOptions
 } from "./font";
+
+export { parseHTML, type ParserOptions } from "./html";
 
 export {
 	default as ImageResponse,
