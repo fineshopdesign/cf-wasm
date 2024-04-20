@@ -1,10 +1,13 @@
 import * as resvg from "@cf-wasm/resvg/others";
 import * as satori from "@cf-wasm/satori/others";
-import { GoogleFont, modules } from "../lib";
+import { GoogleFont, defaultFont, modules } from "../lib";
 
+// Set modules
 modules.resvg = resvg;
 modules.satori = satori;
-modules.setDefaultFont(
+
+// Set default font
+defaultFont.set(
 	new GoogleFont("Noto Sans", {
 		name: "sans serif",
 		weight: 400,
@@ -18,9 +21,10 @@ export {
 	CustomFont,
 	GoogleFont,
 	render,
-	setDefaultFont,
+	defaultFont,
 	loadGoogleFont,
 	getCache,
+	parseHTML,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,
@@ -36,7 +40,8 @@ export {
 	type RenderSatoriOptions,
 	type ResvgRenderOptions,
 	type SatoriNode,
-	type SatoriOptions
+	type SatoriOptions,
+	type ParserOptions
 } from "../lib";
 
 export { initResvg } from "@cf-wasm/resvg/others";

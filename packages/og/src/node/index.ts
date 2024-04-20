@@ -4,15 +4,18 @@ import * as resvg from "@cf-wasm/resvg/node";
 /* eslint-disable-next-line import/namespace --
    See this issue: https://github.com/sekoyo/react-image-crop/issues/178 */
 import * as satori from "@cf-wasm/satori/node";
-import { modules } from "../lib";
+import { defaultFont, modules } from "../lib";
 
 const fallbackFont = fs.readFileSync(
 	path.resolve(__dirname, "../lib/noto-sans-v27-latin-regular.ttf.bin")
 );
 
+// Set modules
 modules.resvg = resvg;
 modules.satori = satori;
-modules.setDefaultFont(fallbackFont);
+
+// Set default font
+defaultFont.set(fallbackFont);
 
 export {
 	ImageResponse,
@@ -20,9 +23,10 @@ export {
 	CustomFont,
 	GoogleFont,
 	render,
-	setDefaultFont,
+	defaultFont,
 	loadGoogleFont,
 	getCache,
+	parseHTML,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,
@@ -38,5 +42,6 @@ export {
 	type RenderSatoriOptions,
 	type ResvgRenderOptions,
 	type SatoriNode,
-	type SatoriOptions
+	type SatoriOptions,
+	type ParserOptions
 } from "../lib";
