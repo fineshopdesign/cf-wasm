@@ -1,11 +1,14 @@
 import * as resvg from "@cf-wasm/resvg/workers";
 import * as satori from "@cf-wasm/satori/workers";
 import fallbackFont from "../lib/noto-sans-v27-latin-regular.ttf.bin";
-import { modules } from "../lib";
+import { defaultFont, modules } from "../lib";
 
+// Set modules
 modules.resvg = resvg;
 modules.satori = satori;
-modules.setDefaultFont(fallbackFont);
+
+// Set default font
+defaultFont.set(fallbackFont);
 
 export {
 	ImageResponse,
@@ -13,9 +16,10 @@ export {
 	CustomFont,
 	GoogleFont,
 	render,
-	setDefaultFont,
+	defaultFont,
 	loadGoogleFont,
 	getCache,
+	parseHTML,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,
@@ -31,5 +35,6 @@ export {
 	type RenderSatoriOptions,
 	type ResvgRenderOptions,
 	type SatoriNode,
-	type SatoriOptions
+	type SatoriOptions,
+	type ParserOptions
 } from "../lib";
