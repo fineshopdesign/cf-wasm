@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.13
+
+### Patch Changes
+
+- [`8b56731`](https://github.com/fineshopdesign/cf-wasm/commit/8b567314f273adea4ec2af72ee9c05f894e212e4) Thanks [@fineshop](https://github.com/fineshop)! - feat: add submodule `others` (experimental)
+
 ## 0.1.12
 
 ## 0.1.11
