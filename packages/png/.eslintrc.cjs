@@ -35,7 +35,7 @@ const eslintConfig = {
 			}
 		},
 		{
-			files: ["src/node/**/*.ts"],
+			files: ["src/node/**/*.ts", "src/others/**/*.ts"],
 			parserOptions: {
 				project: [path.resolve(__dirname, "tsconfig.cjs.json")]
 			},

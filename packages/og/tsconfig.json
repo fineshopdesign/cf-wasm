@@ -22,5 +22,12 @@
 		"tsBuildInfoFile": "dist/esm/.tsbuildinfo"
 	},
 	"include": ["src", "declarations.d.ts"],
-	"exclude": ["node_modules", "dist", "src/node"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"vitest.config.ts",
+		"__tests__",
+		"src/node",
+		"src/others"
+	]
 }

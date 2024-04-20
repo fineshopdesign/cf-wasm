@@ -57,6 +57,14 @@
 				"types": "./dist/cjs/node/index.d.ts"
 			}
 		},
+		"./others": {
+			"default": {
+				"require": "./dist/cjs/others/index.js",
+				"import": "./dist/cjs/others/index.js",
+				"types": "./dist/cjs/others/index.d.ts"
+			}
+		},
+		"./others/photon.wasm": "./dist/cjs/lib/png_bg.wasm",
 		"./workers": {
 			"default": {
 				"import": "./dist/esm/workers/index.js",
@@ -72,6 +80,9 @@
 			],
 			"node": [
 				"./dist/cjs/node/index.d.ts"
+			],
+			"others": [
+				"./dist/cjs/others/index.d.ts"
 			],
 			"workers": [
 				"./dist/esm/workers/index.d.ts"

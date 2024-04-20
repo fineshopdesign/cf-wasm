@@ -27,6 +27,7 @@
 		"dist",
 		"vitest.config.ts",
 		"__tests__",
-		"src/node"
+		"src/node",
+		"src/others"
 	]
 }
