@@ -84,10 +84,13 @@ export const decode = (image: Uint8Array) => {
 	};
 };
 
-export { default, initSync } from "./lib/png";
-export type {
-	DecodeResult,
-	SyncInitInput,
-	InitInput,
-	InitOutput
+export {
+	default,
+	initSync,
+	encode as wasmEncode,
+	decode as wasmDecode,
+	type DecodeResult,
+	type SyncInitInput,
+	type InitInput,
+	type InitOutput
 } from "./lib/png";
