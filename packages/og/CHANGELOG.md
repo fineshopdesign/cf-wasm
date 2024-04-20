@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.16
+
+### Patch Changes
+
+- [`8f0b517`](https://github.com/fineshopdesign/cf-wasm/commit/8f0b51789d79bf3b251bb87eb3df7a25e09a6865) Thanks [@fineshop](https://github.com/fineshop)! - feat(og): add support for html string as input for rendering images
+
 ## 0.1.15
 
 ### Patch Changes
