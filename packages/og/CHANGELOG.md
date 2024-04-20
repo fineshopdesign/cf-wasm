@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.15
+
+### Patch Changes
+
+- [`8b56731`](https://github.com/fineshopdesign/cf-wasm/commit/8b567314f273adea4ec2af72ee9c05f894e212e4) Thanks [@fineshop](https://github.com/fineshop)! - feat: add submodule `others` (experimental)
+
+- Updated dependencies [[`8b56731`](https://github.com/fineshopdesign/cf-wasm/commit/8b567314f273adea4ec2af72ee9c05f894e212e4)]:
+  - @cf-wasm/satori@0.1.13
+  - @cf-wasm/resvg@0.1.13
+
 ## 0.1.14
 
 ### Patch Changes
