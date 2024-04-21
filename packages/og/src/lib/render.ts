@@ -185,10 +185,14 @@ export const render = (
 	const asPng = async () => {
 		if (!data.png) {
 			const svg = await asSvg();
+			const fonts = await getFonts();
 			const resvg = await modules.resvg.Resvg.create(svg.image, {
-				font: {
-					fontBuffers: (await getFonts()).map((e) => new Uint8Array(e.data))
-				},
+				// Pass only the first font which is also the default font
+				font: fonts[0]
+					? {
+							fontBuffers: [new Uint8Array(fonts[0].data)]
+						}
+					: undefined,
 				...renderOptions.resvgOptions,
 				fitTo: {
 					mode: "width",
