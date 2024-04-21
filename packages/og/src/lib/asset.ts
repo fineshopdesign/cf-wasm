@@ -1,20 +1,16 @@
 import { type EmojiType, getIconCode, loadEmoji } from "./emoji";
 import { FontDetector, languageFontMap } from "./language";
 import { loadGoogleFont } from "./font";
-
-export type DynamicAsset = {
-	name: string;
-	data: ArrayBuffer;
-	weight: number;
-	style: string;
-	lang: string | undefined;
-};
+import type { Font } from "./satori";
 
 export const detector = new FontDetector();
-export const assetCache = new Map<string, string | DynamicAsset[]>();
+export const assetCache = new Map<string, string | Font[]>();
 
+/**
+ * A helper function for loading dynamic assets requested by satori
+ */
 export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
-	const fn = async (languageCode: string, text: string) => {
+	const load = async (languageCode: string, text: string) => {
 		if (languageCode === "emoji") {
 			return `data:image/svg+xml;base64,${btoa(
 				await loadEmoji(getIconCode(text), emoji)
@@ -23,7 +19,7 @@ export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
 
 		const codes = languageCode.split("|");
 		const names = codes
-			.map((code2) => languageFontMap[code2 as keyof typeof languageFontMap])
+			.map((code) => languageFontMap[code as keyof typeof languageFontMap])
 			.filter(Boolean)
 			.flat();
 		if (names.length === 0) {
@@ -41,16 +37,16 @@ export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
 					})
 				)
 			);
-			return fontData.map((data, index) => {
-				const asset = {
-					name: `satori_${codes[index]}_fallback_${text}`,
-					data,
-					weight: 400,
-					style: "normal",
-					lang: codes[index] === "unknown" ? undefined : codes[index]
-				};
-				return asset;
-			});
+			return fontData.map(
+				(data, index) =>
+					({
+						name: `satori_${codes[index]}_fallback_${text}`,
+						data,
+						weight: 400,
+						style: "normal",
+						lang: codes[index] === "unknown" ? undefined : codes[index]
+					}) as Font
+			);
 		} catch (e) {
 			console.warn(
 				"(@cf-wasm/og) [ WARN ] Failed to load dynamic font for",
@@ -65,13 +61,13 @@ export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
 	return async (
 		languageCode: string,
 		text: string
-	): Promise<string | DynamicAsset[]> => {
+	): Promise<string | Font[]> => {
 		const key = JSON.stringify([languageCode, text]);
 		if (assetCache.has(key)) {
 			const cache = assetCache.get(key);
 			return cache ?? [];
 		}
-		const asset = await fn(languageCode, text);
+		const asset = await load(languageCode, text);
 		assetCache.set(key, asset);
 		return asset;
 	};

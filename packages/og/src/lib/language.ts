@@ -1,4 +1,5 @@
-import { cachedAssetResponse } from "./cache";
+import { cache } from "./cache";
+import { FetchError } from "./errors";
 
 export const languageFontMap = {
 	"ja-JP": "Noto+Sans+JP",
@@ -74,7 +75,7 @@ export class FontDetector {
 		return null;
 	}
 
-	private async load(fonts: string[], cache?: Cache) {
+	private async load(fonts: string[], cacheStore?: Cache) {
 		let params = "";
 
 		const existingLang = Object.keys(this.rangesByLang);
@@ -93,7 +94,7 @@ export class FontDetector {
 
 		const cssUrl = `https://fonts.googleapis.com/css2?${params}`;
 
-		const response = await cachedAssetResponse(
+		const response = await cache.serve(
 			cssUrl,
 			() =>
 				fetch(cssUrl, {
@@ -103,21 +104,27 @@ export class FontDetector {
 					}
 				})
 					.then((res) => {
+						if (res.status === 400) {
+							throw new FetchError(
+								`Google Font is not available (status: ${res.status}, statusText: ${res.statusText})`,
+								{ response: res }
+							);
+						}
 						if (!res.ok) {
-							throw new Error(
-								`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+							throw new FetchError(
+								`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`,
+								{ response: res }
 							);
 						}
 						return res;
 					})
 					.catch((e) => {
-						throw new Error(`An error ocurred while fetching ${cssUrl}`, {
-							cause: e
+						throw new FetchError(`An error ocurred while fetching ${cssUrl}`, {
+							cause: e,
+							response: e instanceof FetchError ? e.response : undefined
 						});
 					}),
-			{
-				cache
-			}
+			{ cache: cacheStore }
 		);
 
 		const fontFace = await response.text();
