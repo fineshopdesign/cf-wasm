@@ -1,5 +1,17 @@
 # @cf-wasm/og
 
+## 0.1.17
+
+### Patch Changes
+
+- [`544d90c`](https://github.com/fineshopdesign/cf-wasm/commit/544d90c60647139f451ffed0698003c5b1039aca) Thanks [@fineshop](https://github.com/fineshop)! - fix(og): `FigmaResponse` (experimental) wasn't working at all
+  refactor(og): improved error handling and caching
+
+  Notes: If you find any bug using `FigmaResponse`, please consider open an issue.
+  If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit these limits.
+
+- [`a7f343f`](https://github.com/fineshopdesign/cf-wasm/commit/a7f343f7dc8537d00e7aceacaf0501b003bebba1) Thanks [@fineshop](https://github.com/fineshop)! - refactor(og): pass only the default font to resvg.render function
+
 ## 0.1.16
 
 ### Patch Changes
