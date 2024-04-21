@@ -18,7 +18,7 @@ export {
 	render,
 	defaultFont,
 	loadGoogleFont,
-	getCache,
+	cache,
 	parseHTML,
 	type ImageResponseOptions,
 	type FigmaComplexTemplate,
