@@ -22,13 +22,25 @@ const data: {
 };
 
 export const defaultFont = {
+	/**
+	 * Sets default font for image rendering
+	 *
+	 * @param input {@link FallbackFont}
+	 */
 	set: (input: FallbackFont | (() => FallbackFont)) => {
 		if (!input) {
-			throw new Error("Argument 1 type is not acceptable");
+			throw new TypeError("Argument 1 type is not acceptable");
 		}
 		data.fontShouldResolve = true;
 		data.fallbackFont = input;
 	},
+
+	/**
+	 * Gets default font buffer for image rendering if it is set
+	 *
+	 * @returns A Promise which resolves to ArrayBuffer if default font is set,
+	 * otherwise undefined
+	 */
 	get: async () => {
 		const { fallbackFont, fontData, fontShouldResolve } = data;
 
@@ -58,10 +70,19 @@ export const defaultFont = {
 		data.fontShouldResolve = false;
 		return buffer;
 	},
+
+	/**
+	 * Check whether default font is set or not
+	 *
+	 * @returns true if default font is set, otherwise false
+	 */
 	has: () => Boolean(data.fallbackFont)
 };
 
 export const modules = {
+	/**
+	 * The {@link ResvgModule}
+	 */
 	get resvg() {
 		if (!data.resvg) {
 			throw new Error("modules.resvg is not set!");
@@ -71,6 +92,10 @@ export const modules = {
 	set resvg(m) {
 		data.resvg = m;
 	},
+
+	/**
+	 * The {@link SatoriModule}
+	 */
 	get satori() {
 		if (!data.satori) {
 			throw new Error("modules.satori is not set!");

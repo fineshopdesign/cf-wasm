@@ -1,9 +1,18 @@
 /* eslint-disable max-classes-per-file */
-import { cachedAssetResponse } from "./cache";
+import { cache } from "./cache";
+import { FetchError } from "./errors";
 import type { FontStyle, FontWeight } from "./satori";
 
 export const fontCacheMap = new Map<string, ArrayBuffer>();
 
+/**
+ * A helper function for loading google fonts as {@link ArrayBuffer}
+ *
+ * @param family The name of the font family
+ * @param param1 Options
+ *
+ * @returns A promise which resolved to {@link ArrayBuffer}
+ */
 export const loadGoogleFont = async (
 	family: string,
 	{
@@ -12,7 +21,7 @@ export const loadGoogleFont = async (
 		italic = false,
 		normal = true,
 		display,
-		cache
+		cache: cacheStore
 	}: {
 		text?: string;
 		weight?: string | number;
@@ -70,7 +79,7 @@ export const loadGoogleFont = async (
 		return fromMap;
 	}
 
-	const cssResponse = await cachedAssetResponse(
+	const cssResponse = await cache.serve(
 		cssUrl,
 		() =>
 			fetch(cssUrl, {
@@ -80,20 +89,30 @@ export const loadGoogleFont = async (
 				}
 			})
 				.then((res) => {
+					if (res.status === 400) {
+						throw new FetchError(
+							`Google Font is not available (status: ${res.status}, statusText: ${res.statusText})`,
+							{ response: res }
+						);
+					}
 					if (!res.ok) {
-						throw new Error(
-							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						throw new FetchError(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`,
+							{ response: res }
 						);
 					}
 					return res;
 				})
 				.catch((e) => {
-					throw new Error(
+					throw new FetchError(
 						`Failed to download dynamic font. An error ocurred while fetching ${cssUrl}`,
-						{ cause: e }
+						{
+							cause: e,
+							response: e instanceof FetchError ? e.response : undefined
+						}
 					);
 				}),
-		{ cache }
+		{ cache: cacheStore }
 	);
 
 	const css = await cssResponse.text();
@@ -105,25 +124,29 @@ export const loadGoogleFont = async (
 		throw new Error(`Failed to download dynamic font. No font was found.`);
 	}
 
-	const fontResponse = await cachedAssetResponse(
+	const fontResponse = await cache.serve(
 		fontUrl,
 		() =>
 			fetch(fontUrl)
 				.then((res) => {
 					if (!res.ok) {
-						throw new Error(
-							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						throw new FetchError(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`,
+							{ response: res }
 						);
 					}
 					return res;
 				})
 				.catch((e) => {
-					throw new Error(
+					throw new FetchError(
 						`Failed to download dynamic font. An error ocurred while fetching ${fontUrl}`,
-						{ cause: e }
+						{
+							cause: e,
+							response: e instanceof FetchError ? e.response : undefined
+						}
 					);
 				}),
-		{ cache }
+		{ cache: cacheStore }
 	);
 
 	const buffer = await fontResponse.arrayBuffer();
@@ -201,7 +224,10 @@ export class CustomFont extends BaseFont {
 		this.lang = options?.lang;
 	}
 
-	get data() {
+	/**
+	 * A promise which resolves to font data as `ArrayBuffer`
+	 */
+	get data(): Promise<ArrayBuffer> {
 		return (async () => {
 			if (!this.evaluated) {
 				this.evaluated = await (typeof this.input === "function"
@@ -257,9 +283,9 @@ export class GoogleFont extends BaseFont {
 	}
 
 	/**
-	 * A promise which resolves with font data as `ArrayBuffer`
+	 * A promise which resolves to font data as `ArrayBuffer`
 	 */
-	get data() {
+	get data(): Promise<ArrayBuffer> {
 		return (async () => {
 			if (!this.evaluated) {
 				this.evaluated = await loadGoogleFont(this.family, {
@@ -271,5 +297,16 @@ export class GoogleFont extends BaseFont {
 			}
 			return this.evaluated;
 		})();
+	}
+
+	async isAvailable() {
+		try {
+			await this.data;
+		} catch (e) {
+			if (e instanceof FetchError && e.response?.status === 400) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
