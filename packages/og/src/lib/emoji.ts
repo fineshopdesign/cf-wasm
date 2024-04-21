@@ -1,8 +1,10 @@
-import { cachedAssetResponse } from "./cache";
+import { cache } from "./cache";
+import { FetchError } from "./errors";
 
 const U200D = String.fromCharCode(8205);
 const UFE0Fg = /\uFE0F/g;
 
+// Apis for loading emoji svg
 export const apis = {
 	openmoji: (code: string) =>
 		`https://cdn.jsdelivr.net/npm/@svgmoji/openmoji@2.0.0/svg/${code.toUpperCase()}.svg`,
@@ -47,10 +49,19 @@ export const getIconCode = (char: string) =>
 
 export const emojiCacheMap = new Map<string, string>();
 
+/**
+ * A helper function for loading emoji svg
+ *
+ * @param code The emoji code
+ * @param type The {@link EmojiType}
+ * @param cacheStore The Cache to be used for caching svg responses
+ *
+ * @returns The emoji's svg as string
+ */
 export const loadEmoji = async (
 	code: string,
 	type?: EmojiType,
-	cache?: Cache
+	cacheStore?: Cache
 ) => {
 	const apiType = !type || !apis[type] ? "twemoji" : type;
 	const api = apis[apiType];
@@ -63,26 +74,33 @@ export const loadEmoji = async (
 		return fromMap;
 	}
 
-	const response = await cachedAssetResponse(
+	const response = await cache.serve(
 		svgUrl,
 		() =>
 			fetch(svgUrl)
 				.then((res) => {
 					if (!res.ok) {
-						throw new Error(
-							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`
+						throw new FetchError(
+							`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`,
+							{ response: res }
 						);
 					}
 					return res;
 				})
 				.catch((e) => {
-					throw new Error(
+					throw new FetchError(
 						`Failed to download dynamic emoji. An error ocurred while fetching ${svgUrl}`,
-						{ cause: e }
+						{
+							cause: e,
+							response: e instanceof FetchError ? e.response : undefined
+						}
 					);
 				}),
-		{ cache }
+		{ cache: cacheStore }
 	);
+
+	// To hide warnings in cloudflare devtools
+	response.headers.set("content-type", "text/xml");
 
 	const text = await response.text();
 

@@ -2,29 +2,31 @@ import { modules, defaultFont } from "./modules";
 import { type EmojiType } from "./emoji";
 import { CustomFont, GoogleFont } from "./font";
 import { loadDynamicAsset } from "./asset";
-import type { ResvgRenderOptions } from "./resvg";
+import type { CustomFontsOptions, ResvgRenderOptions } from "./resvg";
 import type { SatoriOptions, Font } from "./satori";
 import { parseHTML } from "./html";
 
-export type PngResult = {
+export interface PngResult {
 	pixels: Uint8Array;
 	image: Uint8Array;
 	width: number;
 	height: number;
-};
+}
 
-export type SvgResult = {
+export interface SvgResult {
 	image: string;
 	width: number;
 	height: number;
-};
+}
 
 export type RenderSatoriOptions = Omit<
 	SatoriOptions,
 	"width" | "height" | "fonts" | "loadAdditionalAsset" | "debug"
 >;
 
-export type RenderResvgOptions = Omit<ResvgRenderOptions, "font">;
+export type RenderResvgOptions = Omit<ResvgRenderOptions, "fitTo" | "font"> & {
+	font?: CustomFontsOptions;
+};
 
 export type RenderOptions = {
 	/**
@@ -93,9 +95,11 @@ export const render = (
 	const data: {
 		svg: SvgResult | undefined;
 		png: PngResult | undefined;
+		fonts: SatoriOptions["fonts"] | undefined;
 	} = {
 		svg: undefined,
-		png: undefined
+		png: undefined,
+		fonts: undefined
 	};
 
 	const renderOptions = {
@@ -106,13 +110,8 @@ export const render = (
 		...options
 	};
 
-	/**
-	 * Method to render the element as svg image
-	 *
-	 * @returns A promise which resolves to rendered svg image as {@link SvgResult}
-	 */
-	const asSvg = async () => {
-		if (!data.svg) {
+	const getFonts = async () => {
+		if (!data.fonts) {
 			const fallbackFont = await defaultFont.get();
 			if (!fallbackFont) {
 				console.warn(
@@ -137,6 +136,22 @@ export const render = (
 					data: await font.data
 				}))
 			);
+
+			data.fonts = satoriFonts;
+		}
+
+		return data.fonts;
+	};
+
+	/**
+	 * Method to render the element as svg image
+	 *
+	 * @returns A promise which resolves to rendered svg image as {@link SvgResult}
+	 */
+	const asSvg = async () => {
+		if (!data.svg) {
+			const satoriFonts = await getFonts();
+
 			const satoriOptions = {
 				...renderOptions.satoriOptions,
 				width: renderOptions.width,
@@ -145,7 +160,7 @@ export const render = (
 				fonts: satoriFonts,
 				loadAdditionalAsset: loadDynamicAsset({
 					emoji: renderOptions?.emoji
-				}) as SatoriOptions["loadAdditionalAsset"]
+				})
 			};
 			const svg = await modules.satori.satori(
 				typeof element === "string" ? parseHTML(element) : element,
@@ -171,6 +186,10 @@ export const render = (
 		if (!data.png) {
 			const svg = await asSvg();
 			const resvg = await modules.resvg.Resvg.create(svg.image, {
+				font: {
+					fontBuffers: (await getFonts()).map((e) => new Uint8Array(e.data))
+				},
+				...renderOptions.resvgOptions,
 				fitTo: {
 					mode: "width",
 					value: renderOptions.width

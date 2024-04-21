@@ -1,6 +1,6 @@
 export { modules, defaultFont } from "./modules";
 
-export { getCache } from "./cache";
+export { cache } from "./cache";
 
 export { type EmojiType } from "./emoji";
 

@@ -79,6 +79,14 @@ const wrapper = (
 	return cloneElement(fragment(children));
 };
 
+/**
+ * A helper function to parse html string to a {@link React.ReactElement} like object
+ *
+ * @param html The html string to parse
+ * @param options Options
+ *
+ * @returns Parsed {@link React.ReactElement}
+ */
 export const parseHTML = (
 	html: string,
 	options?: ParserOptions
@@ -87,7 +95,7 @@ export const parseHTML = (
 		throw new TypeError("Argument 1 must be of type string");
 	}
 	if (html.trim().length === 0) {
-		throw new Error("Empty string cannot be parsed");
+		throw new TypeError("Empty html string cannot be parsed");
 	}
 
 	return wrapper(convertHtmlToReact(html, options));
