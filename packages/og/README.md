@@ -31,12 +31,20 @@ If you are using Cloudflare Workers, you can use it as shown below:
 ```ts
 // src/index.tsx
 import React from "react";
-import { ImageResponse, GoogleFont } from "@cf-wasm/og";
+import { ImageResponse, GoogleFont, cache, defaultFont } from "@cf-wasm/og";
 
 export type Env = Readonly<{}>;
 
 const worker: ExportedHandler<Env> = {
-  async fetch(request) {
+  async fetch(request, env, ctx) {
+    // Make sure to overwrite the cache.waitUntil function
+    cache.waitUntil = ctx.waitUntil.bind(ctx);
+
+    // Sets default font to `Inter` from Google Fonts
+    // defaultFont.set(
+    //   new GoogleFont("Inter")
+    // );
+
     const { searchParams } = new URL(request.url);
     const parameters = Object.fromEntries(searchParams.entries());
 
@@ -86,4 +94,4 @@ const worker: ExportedHandler<Env> = {
 export default worker;
 ```
 
-Notes: If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit these limits.
+Notes: If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the 1MiB script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.

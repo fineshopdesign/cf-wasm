@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.5.0",
 		"@changesets/cli": "^2.27.1",
-		"@cloudflare/workers-types": "^4.20240405.0",
+		"@cloudflare/workers-types": "^4.20240419.0",
 		"@types/node": "^20.12.7",
 		"@typescript-eslint/eslint-plugin": "^7.7.0",
 		"@typescript-eslint/parser": "^7.7.0",
