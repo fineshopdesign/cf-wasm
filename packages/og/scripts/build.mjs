@@ -1,6 +1,7 @@
-import childProcess from "node:child_process";
-import path from "node:path";
+import cp from "node:child_process";
 import fs from "node:fs";
+
+const startedOn = Date.now();
 
 // Clean out dir
 console.log("⚡ Cleaning dist dir...");
@@ -8,10 +9,21 @@ fs.rmSync("dist", { recursive: true, force: true });
 
 // Build ESM
 console.log("⚡ Building ESM...");
-childProcess.execSync("npx tsc");
-childProcess.execSync("npx copyfiles -u 1 ./src/lib/*.bin ./dist/esm/");
+cp.execSync(
+	["pnpm tsc", "pnpm copyfiles -u 1 ./src/lib/*.bin ./dist/esm/"].join(" && "),
+	{ stdio: "inherit" }
+);
 
 // Build CommonJS
-console.log("⚡ Building CommonJS...");
-childProcess.execSync("npx tsc -p ./tsconfig.cjs.json");
-childProcess.execSync("npx copyfiles -u 1 ./src/lib/*.bin ./dist/cjs/");
+console.log("⚡ Building CJS...");
+cp.execSync(
+	[
+		"pnpm tsc -p ./tsconfig.cjs.json",
+		"pnpm copyfiles -u 1 ./src/lib/*.bin ./dist/cjs/"
+	].join(" && "),
+	{ stdio: "inherit" }
+);
+
+const finishedOn = Date.now();
+
+console.log(`⚡ Took ${((finishedOn - startedOn) / 1000).toFixed(2)} s`);
