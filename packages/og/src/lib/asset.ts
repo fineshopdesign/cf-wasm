@@ -8,6 +8,10 @@ export const assetCache = new Map<string, string | Font[]>();
 
 /**
  * A helper function for loading dynamic assets requested by satori
+ *
+ * @param param0 Options
+ *
+ * @returns A callback function for loading assets
  */
 export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
 	const load = async (languageCode: string, text: string) => {

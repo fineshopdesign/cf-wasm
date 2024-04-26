@@ -11,7 +11,7 @@ export interface FigmaComplexTemplate {
 	} & React.CSSProperties;
 }
 
-export type FigmaImageResponseOptions = {
+export interface FigmaImageResponseOptions {
 	/**
 	 * Link to the Figma template frame.
 	 *
@@ -44,8 +44,15 @@ export type FigmaImageResponseOptions = {
 	 * Figma API token
 	 */
 	token: string;
-};
+}
 
+/**
+ * A helper function to parse figma url and return its `fileId` and `nodeId`
+ *
+ * @param figmaUrl The figma file url
+ *
+ * @returns An object containing `fileId` and `nodeId`
+ */
 export const parseFigmaUrl = (figmaUrl: string) => {
 	const regex = /\/file\/([^/]+)\/[^?]+\?[^#]*node-id=([^&#]+)/;
 	const match = figmaUrl.match(regex);
@@ -86,6 +93,13 @@ export const isComplexTemplate = (template: unknown) =>
 	template !== undefined &&
 	"value" in (template as { value?: unknown });
 
+/**
+ * Converts svg string to base64 data uri string
+ *
+ * @param svg The svg as string
+ *
+ * @returns The base64 data uri string for the svg
+ */
 export const svgToBase64 = (svg: string) => {
 	let base64: string;
 	if (typeof Buffer !== "undefined") {
@@ -99,6 +113,13 @@ export const svgToBase64 = (svg: string) => {
 	return `data:image/svg+xml;base64,${base64}`;
 };
 
+/**
+ * Gets the `width` and `height` of the svg string
+ *
+ * @param svg The svg string
+ *
+ * @returns An Object containing `width` and `height`
+ */
 export const getSvgDimensions = (svg: string) => {
 	const widthMatch = svg.match(/width="(\d+)/);
 	const heightMatch = svg.match(/height="(\d+)/);
