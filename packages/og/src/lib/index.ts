@@ -1,4 +1,4 @@
-export { modules, defaultFont } from "./modules";
+export { modules } from "./modules";
 
 export { cache } from "./cache";
 
@@ -10,6 +10,7 @@ export {
 	CustomFont,
 	loadGoogleFont,
 	fontCacheMap,
+	defaultFont,
 	type BaseFontOptions,
 	type CustomFontOptions,
 	type GoogleFontOptions
