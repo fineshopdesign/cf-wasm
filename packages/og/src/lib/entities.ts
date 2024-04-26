@@ -3246,6 +3246,13 @@ export const entitiesMap = Object.keys(entitiesDict).reduce(
 
 export const entities = Object.keys(entitiesMap);
 
+/**
+ * Replaces all entities in a string
+ *
+ * @param string The input string
+ *
+ * @returns A string with replaced entities
+ */
 export const replaceEntities = (string: string) => {
 	let result = string;
 	entities.forEach((entity) => {

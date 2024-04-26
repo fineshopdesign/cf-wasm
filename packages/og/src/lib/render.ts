@@ -1,34 +1,63 @@
-import { modules, defaultFont } from "./modules";
+import { modules } from "./modules";
 import { type EmojiType } from "./emoji";
-import { CustomFont, GoogleFont } from "./font";
+import { CustomFont, GoogleFont, defaultFont } from "./font";
 import { loadDynamicAsset } from "./asset";
 import type { CustomFontsOptions, ResvgRenderOptions } from "./resvg";
 import type { SatoriOptions, Font } from "./satori";
 import { parseHTML } from "./html";
 
+/**
+ * Represents a png result of render function
+ */
 export interface PngResult {
 	pixels: Uint8Array;
 	image: Uint8Array;
+
+	/**
+	 * The width of the image
+	 */
 	width: number;
+
+	/**
+	 * The height of the image
+	 */
 	height: number;
 }
 
+/**
+ * Represents a svg result of render function
+ */
 export interface SvgResult {
+	/**
+	 * The svg image as string
+	 */
 	image: string;
+
+	/**
+	 * The width of the image
+	 */
 	width: number;
+
+	/**
+	 * The height of the image
+	 */
 	height: number;
 }
 
-export type RenderSatoriOptions = Omit<
-	SatoriOptions,
-	"width" | "height" | "fonts" | "loadAdditionalAsset" | "debug"
->;
+export interface RenderSatoriOptions
+	extends Omit<
+		SatoriOptions,
+		"width" | "height" | "fonts" | "loadAdditionalAsset" | "debug"
+	> {}
 
-export type RenderResvgOptions = Omit<ResvgRenderOptions, "fitTo" | "font"> & {
+export interface RenderResvgOptions extends Omit<ResvgRenderOptions, "fitTo"> {
 	font?: CustomFontsOptions;
-};
+}
 
-export type RenderOptions = {
+/**
+ * An interface representing options for {@link render} function
+ */
+export interface RenderOptions {
 	/**
 	 * The width of the image.
 	 *
@@ -78,7 +107,7 @@ export type RenderOptions = {
 	 * Passes {@link RenderResvgOptions} to resvg
 	 */
 	resvgOptions?: RenderResvgOptions;
-};
+}
 
 /**
  * Renders {@link React.ReactElement} or html string to image
