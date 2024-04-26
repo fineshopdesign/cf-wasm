@@ -9,13 +9,13 @@
 	],
 	"scripts": {
 		"upgrade": "ncu",
-		"lint": "turbo run lint",
-		"format": "turbo run format",
-		"build": "turbo run build",
+		"lint": "turbo run lint --concurrency=1",
+		"format": "turbo run format --concurrency=1",
+		"build": "turbo run build --concurrency=1",
 		"dev": "turbo run dev",
 		"start": "turbo run start",
-		"clean": "turbo run clean",
-		"test": "turbo run test",
+		"clean": "turbo run clean --concurrency=1",
+		"test": "turbo run test --concurrency=1",
 		"publish-packages": "cross-env PUBLISH=true pnpm run build && changeset publish"
 	},
 	"devDependencies": {

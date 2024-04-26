@@ -1,3 +1,5 @@
+import type { MayBePromise } from "./types";
+
 export const cacheInstances = new Map<string, Cache>();
 
 // A Cache like no-op object
@@ -10,6 +12,38 @@ export const cacheInterface: Cache = {
 	matchAll: () => Promise.resolve([]),
 	put: () => Promise.resolve()
 };
+
+/**
+ * An interface representing options for `cache.serve` method
+ */
+export interface ServeCacheOptions<K extends RequestInfo | URL> {
+	/**
+	 * The {@link Cache} to use if provided, otherwise uses default
+	 */
+	cache?: Cache;
+
+	/**
+	 * Preserve headers from response headers being removed
+	 */
+	preserveHeaders?:
+		| string[]
+		| ((
+				headerKey: string,
+				headerValue: string,
+				response: Response,
+				cacheStore: Cache,
+				cacheKey: K
+		  ) => boolean)
+		| boolean;
+
+	/**
+	 * Indicates whether `Cache-Control should be overwritten`.
+	 * It also can be a string representing the header value
+	 *
+	 * @default true
+	 */
+	overwriteCacheControl?: string | boolean;
+}
 
 export const cache = {
 	/**
@@ -80,9 +114,9 @@ export const cache = {
 	async serve<
 		K extends RequestInfo | URL,
 		F extends (
-			_cacheKey: K,
-			_cacheStore: Cache
-		) => Response | Promise<Response | undefined | void> | undefined | void
+			cacheKey: K,
+			cacheStore: Cache
+		) => MayBePromise<Response | void | undefined>
 	>(
 		key: K,
 		fallback: F,
@@ -90,20 +124,7 @@ export const cache = {
 			cache: cacheStore,
 			preserveHeaders,
 			overwriteCacheControl = true
-		}: {
-			cache?: Cache;
-			preserveHeaders?:
-				| string[]
-				| ((
-						_headerKey: string,
-						_headerValue: string,
-						_response: Response,
-						_cacheStore: Cache,
-						_cacheKey: K
-				  ) => boolean)
-				| boolean;
-			overwriteCacheControl?: string | boolean;
-		} = {}
+		}: ServeCacheOptions<K> = {}
 	): Promise<Awaited<ReturnType<F>>> {
 		const store = cacheStore ?? (await this.open());
 

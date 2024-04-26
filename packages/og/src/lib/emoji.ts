@@ -20,6 +20,9 @@ export const apis = {
 		`https://cdn.jsdelivr.net/gh/shuding/fluentui-emoji-unicode/assets/${code.toLowerCase()}_flat.svg`
 };
 
+/**
+ * Represents type of emoji
+ */
 export type EmojiType = keyof typeof apis;
 
 export const toCodePoint = (unicodeSurrogates: string) => {

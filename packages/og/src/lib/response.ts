@@ -5,17 +5,16 @@ import {
 	type SvgResult,
 	type PngResult
 } from "./render";
+import type { MayBePromise } from "./types";
 
-export type BaseResponseOptions = Omit<
-	ResponseInit,
-	"webSocket" | "encodeBody"
-> & {
+export interface BaseResponseOptions
+	extends Omit<ResponseInit, "webSocket" | "encodeBody"> {
 	format?: "svg" | "png";
-};
+}
 
-export type ImageResponseOptions = RenderOptions & BaseResponseOptions;
-
-type MayBePromise<T> = T | Promise<T>;
+export interface ImageResponseOptions
+	extends RenderOptions,
+		BaseResponseOptions {}
 
 export const encoder = new TextEncoder();
 
@@ -47,11 +46,17 @@ export class BaseResponse extends Response {
 		});
 		const headers = new Headers(options?.headers);
 		headers.set("Content-Type", isSvg ? "image/svg+xml" : "image/png");
-		super(result, {
+		const requestInit = {
 			headers,
 			status: options?.status,
 			statusText: options?.statusText
-		});
+		};
+		if (typeof options === "object" && options) {
+			if ("cf" in options) {
+				Object.assign(requestInit, { cf: options.cf });
+			}
+		}
+		super(result, requestInit);
 	}
 }
 
