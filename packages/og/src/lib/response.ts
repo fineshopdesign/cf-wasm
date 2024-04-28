@@ -63,7 +63,7 @@ export class BaseResponse extends Response {
 /**
  * A class for rendering {@link React.ReactElement} to image as {@link Response}
  */
-export default class ImageResponse extends BaseResponse {
+export class ImageResponse extends BaseResponse {
 	/**
 	 * Creates an instance of {@link ImageResponse}
 	 *

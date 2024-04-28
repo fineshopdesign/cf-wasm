@@ -1,2 +1,4 @@
 packages:
-  - "packages/**"
+  - "packages/*"
+  - "__tests__"
+  - "__tests__/*"

@@ -31,68 +31,59 @@
 	"scripts": {
 		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
 		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"build": "node scripts/build.mjs",
-		"test": "vitest run",
+		"build": "tsx scripts/build.ts",
 		"clean": "rimraf dist"
 	},
 	"files": [
 		"dist"
 	],
-	"main": "./dist/esm/workers/index.js",
-	"types": "./dist/esm/workers/index.d.ts",
+	"type": "module",
+	"module": "./dist/esm/workers/index.js",
+	"types": "./dist/dts/workers/index.d.ts",
 	"exports": {
 		".": {
-			"default": {
-				"import": "./dist/esm/workers/index.js",
-				"types": "./dist/esm/workers/index.d.ts",
-				"default": "./dist/esm/workers/index.js"
-			}
+			"types": "./dist/dts/workers/index.d.ts",
+			"import": "./dist/esm/workers/index.js"
 		},
 		"./next": {
-			"default": {
-				"import": "./dist/esm/next/index.js",
-				"types": "./dist/esm/next/index.d.ts"
-			}
+			"types": "./dist/dts/next/index.d.ts",
+			"import": "./dist/esm/next/index.js"
 		},
 		"./node": {
-			"default": {
-				"require": "./dist/cjs/node/index.js",
-				"import": "./dist/cjs/node/index.js",
-				"types": "./dist/cjs/node/index.d.ts"
-			}
+			"types": "./dist/dts/node/index.d.ts",
+			"import": "./dist/esm/node/index.js",
+			"require": "./dist/cjs/node/index.js"
 		},
 		"./others": {
-			"default": {
-				"require": "./dist/cjs/others/index.js",
-				"import": "./dist/cjs/others/index.js",
-				"types": "./dist/cjs/others/index.d.ts"
-			}
+			"types": "./dist/dts/others/index.d.ts",
+			"import": "./dist/esm/others/index.js",
+			"require": "./dist/cjs/others/index.js"
 		},
-		"./others/resvg.wasm": "./dist/cjs/lib/resvg.wasm",
+		"./others/resvg.wasm": {
+			"import": "./dist/esm/lib/resvg.wasm",
+			"require": "./dist/cjs/lib/resvg.wasm"
+		},
 		"./workers": {
-			"default": {
-				"import": "./dist/esm/workers/index.js",
-				"types": "./dist/esm/workers/index.d.ts",
-				"default": "./dist/esm/workers/index.js"
-			}
+			"types": "./dist/dts/workers/index.d.ts",
+			"import": "./dist/esm/workers/index.js"
 		}
 	},
 	"typesVersions": {
 		"*": {
 			"next": [
-				"./dist/esm/next/index.d.ts"
+				"./dist/dts/next/index.d.ts"
 			],
 			"node": [
-				"./dist/cjs/node/index.d.ts"
+				"./dist/dts/node/index.d.ts"
 			],
 			"others": [
-				"./dist/cjs/others/index.d.ts"
+				"./dist/dts/others/index.d.ts"
 			],
 			"workers": [
-				"./dist/esm/workers/index.d.ts"
+				"./dist/dts/workers/index.d.ts"
 			],
 			"*": [
-				"./dist/esm/workers/index.d.ts"
+				"./dist/dts/workers/index.d.ts"
 			]
 		}
 	},

@@ -1,7 +1,9 @@
-const path = require("path");
+// @ts-check
 
-/** @type {import("eslint-define-config").ESLintConfig} */
-const eslintConfig = {
+const path = require("path");
+const { defineConfig } = require("eslint-define-config");
+
+module.exports = defineConfig({
 	root: true,
 	extends: [
 		"airbnb-base",
@@ -70,10 +72,19 @@ const eslintConfig = {
 			],
 			plugins: ["@typescript-eslint"],
 			parserOptions: {
-				project: [path.join(__dirname, "tsconfig.eslint.json")]
+				project: [path.join(__dirname, "tsconfig.json")]
+			}
+		},
+		{
+			files: [".eslintrc.cjs"],
+			rules: {
+				"import/no-extraneous-dependencies": [
+					"error",
+					{
+						devDependencies: true
+					}
+				]
 			}
 		}
 	]
-};
-
-module.exports = eslintConfig;
+});
