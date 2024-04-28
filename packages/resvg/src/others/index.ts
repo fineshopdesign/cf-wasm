@@ -13,7 +13,6 @@ export const initResvg = async (input: InitInput | Promise<InitInput>) => {
 	}
 	await initAsync(input);
 };
-
 initResvg.initialized = false;
 
 export class Resvg extends ResvgClass {

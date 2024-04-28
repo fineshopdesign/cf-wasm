@@ -18,10 +18,7 @@ export {
 
 export { parseHTML, type ParserOptions } from "./html";
 
-export {
-	default as ImageResponse,
-	type ImageResponseOptions
-} from "./response";
+export { ImageResponse, type ImageResponseOptions } from "./response";
 
 export { FigmaImageResponse, type FigmaComplexTemplate } from "./figma";
 
