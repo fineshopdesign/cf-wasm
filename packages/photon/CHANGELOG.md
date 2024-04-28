@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.14
+
+### Patch Changes
+
+- [`058910e`](https://github.com/fineshopdesign/cf-wasm/commit/058910e62cfb65e0796eba0be383a56d883ff6cb) Thanks [@fineshop](https://github.com/fineshop)! - refactor: separate directory (./dist/dts) for .d.ts files to minimize bundle size
+
 ## 0.1.13
 
 ### Patch Changes
