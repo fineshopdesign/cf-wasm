@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.18
+
+### Patch Changes
+
+- [`058910e`](https://github.com/fineshopdesign/cf-wasm/commit/058910e62cfb65e0796eba0be383a56d883ff6cb) Thanks [@fineshop](https://github.com/fineshop)! - refactor: separate directory (./dist/dts) for .d.ts files to minimize bundle size
+
+- Updated dependencies [[`058910e`](https://github.com/fineshopdesign/cf-wasm/commit/058910e62cfb65e0796eba0be383a56d883ff6cb)]:
+  - @cf-wasm/satori@0.1.14
+  - @cf-wasm/resvg@0.1.14
+
 ## 0.1.17
 
 ### Patch Changes
