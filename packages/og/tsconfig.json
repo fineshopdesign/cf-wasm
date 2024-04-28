@@ -1,33 +1,26 @@
 {
 	"compilerOptions": {
 		"target": "ES2020",
-		"module": "ES2022",
+		"module": "ES2020",
 		"lib": ["ES2022", "WebWorker"],
-		"moduleResolution": "Node",
-		"declaration": true,
-		"incremental": true,
-		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "Bundler",
 		"esModuleInterop": true,
-		"strict": true,
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"checkJs": false,
-		"isolatedModules": true,
-		"allowSyntheticDefaultImports": true,
 		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"strict": true,
+		"allowJs": true,
 		"skipLibCheck": true,
-		"baseUrl": ".",
-		"types": ["@types/node"],
-		"outDir": "dist/esm",
-		"tsBuildInfoFile": "dist/esm/.tsbuildinfo"
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"outDir": "./dist/esm",
+		"types": ["@types/node"]
 	},
-	"include": ["src", "declarations.d.ts"],
-	"exclude": [
-		"node_modules",
-		"dist",
-		"vitest.config.ts",
-		"__tests__",
-		"src/node",
-		"src/others"
-	]
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.d.ts",
+		"src/**/*.js",
+		"declarations.d.ts"
+	],
+	"exclude": ["node_modules"]
 }
