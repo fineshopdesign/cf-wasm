@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, test, expect } from "vitest";
-import * as og from "../dist/cjs/node";
+import * as og from "@cf-wasm/og/node";
 
 describe("Tests for og.render", () => {
 	const renderer = og.render(<>Test</>);
