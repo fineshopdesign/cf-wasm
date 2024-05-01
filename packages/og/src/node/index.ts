@@ -1,13 +1,19 @@
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
+import url from "node:url";
 import * as resvg from "@cf-wasm/resvg/node";
-/* eslint-disable-next-line import/namespace --
-   See this issue: https://github.com/sekoyo/react-image-crop/issues/178 */
 import * as satori from "@cf-wasm/satori/node";
+
 import { defaultFont, modules } from "../lib";
 
+const filename =
+	typeof __filename === "string"
+		? __filename
+		: url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
 const fallbackFont = fs.readFileSync(
-	path.resolve(__dirname, "../lib/noto-sans-v27-latin-regular.ttf.bin")
+	path.resolve(dirname, "../lib/noto-sans-v27-latin-regular.ttf.bin")
 );
 
 // Set modules
