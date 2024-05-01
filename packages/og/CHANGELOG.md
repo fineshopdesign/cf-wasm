@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.20
+
+### Patch Changes
+
+- [`7f00ec0`](https://github.com/fineshopdesign/cf-wasm/commit/7f00ec06f67cbfd3b9f494d43a18ac6fec59f498) Thanks [@fineshop](https://github.com/fineshop)! - fix: ensure `import.meta` is being used only in ES Module scope and `__filename` or `__dirname` only in Common JS scope to prevent the errors such as `__dirname is not defined in ES module scope`
+  chore: add the `node:` prefix in Node.js core module imports
+- Updated dependencies [[`7f00ec0`](https://github.com/fineshopdesign/cf-wasm/commit/7f00ec06f67cbfd3b9f494d43a18ac6fec59f498)]:
+  - @cf-wasm/satori@0.1.16
+  - @cf-wasm/resvg@0.1.16
+
 ## 0.1.19
 
 ### Patch Changes
