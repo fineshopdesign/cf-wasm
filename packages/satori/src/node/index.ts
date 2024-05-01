@@ -1,14 +1,20 @@
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
+import url from "node:url";
+
 import { init, satori } from "../lib/satori";
 
-const wasmBinaries = fs.readFileSync(
-	path.resolve(__dirname, "../lib/yoga.wasm")
-);
+const filename =
+	typeof __filename === "string"
+		? __filename
+		: url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const wasmBinaries = fs.readFileSync(path.resolve(dirname, "../lib/yoga.wasm"));
 
 const YOGA_MODULE = new WebAssembly.Module(wasmBinaries);
 
-init(import("yoga-wasm-web").then((m) => m.default(YOGA_MODULE)));
+init(import("yoga-wasm-web").then((module) => module.default(YOGA_MODULE)));
 
 export default satori;
 export { YOGA_MODULE };
