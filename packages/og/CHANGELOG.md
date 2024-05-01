@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.19
+
+### Patch Changes
+
+- [`a35fe1f`](https://github.com/fineshopdesign/cf-wasm/commit/a35fe1fd85388e5ff17de7c6b477c38155c22a61) Thanks [@fineshop](https://github.com/fineshop)! - fix: use esbuild for building modules to fix errors such as `ERR_MODULE_NOT_FOUND`, `ERR_UNSUPPORTED_DIR_IMPORT`, etc.
+
+- Updated dependencies [[`a35fe1f`](https://github.com/fineshopdesign/cf-wasm/commit/a35fe1fd85388e5ff17de7c6b477c38155c22a61)]:
+  - @cf-wasm/satori@0.1.15
+  - @cf-wasm/resvg@0.1.15
+
 ## 0.1.18
 
 ### Patch Changes
