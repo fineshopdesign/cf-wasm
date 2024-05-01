@@ -1,9 +1,17 @@
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
+import url from "node:url";
+
 import { init } from "../lib/resvg";
 
+const filename =
+	typeof __filename === "string"
+		? __filename
+		: url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
 const wasmBinaries = fs.readFileSync(
-	path.resolve(__dirname, "../lib/resvg.wasm")
+	path.resolve(dirname, "../lib/resvg.wasm")
 );
 
 const MODULE = new WebAssembly.Module(wasmBinaries);
