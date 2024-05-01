@@ -7,8 +7,8 @@
  * Copyright (c) 2022 Taishi Naritomi
  */
 
-import cp from "child_process";
-import path from "path";
+import cp from "node:child_process";
+import path from "node:path";
 import fs from "fs-extra";
 import {
 	build as esbuild,
@@ -91,16 +91,25 @@ const esmOptions: BuildOptions = {
 			{ from: ".ts", to: ".js" },
 			{ from: ".js", to: ".js" }
 		])
-	]
+	],
+	define: {
+		// ensure `__filename` and `__dirname` is not available in ESM module
+		__filename: JSON.stringify(null),
+		__dirname: JSON.stringify(null)
+	}
 };
 
 // Build options for CJS
 const cjsOptions: BuildOptions = {
 	...commonOptions,
 	entryPoints: cjsEntryPoints,
-	outbase: "./src",
-	outdir: "./dist/cjs",
-	format: "cjs"
+	outbase: "src",
+	outdir: "dist/cjs",
+	format: "cjs",
+	define: {
+		// ensure `import.meta` is not available in CJS module
+		"import.meta": JSON.stringify({ url: "" })
+	}
 };
 
 const startedOn = Date.now();
