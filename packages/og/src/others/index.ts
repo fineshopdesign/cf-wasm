@@ -21,18 +21,23 @@ export {
 	CustomFont,
 	GoogleFont,
 	render,
+	renderFigma,
 	defaultFont,
 	loadGoogleFont,
 	cache,
 	parseHTML,
 	type ImageResponseOptions,
+	type FigmaImageResponseOptions,
+	type FigmaOptions,
 	type FigmaComplexTemplate,
 	type CustomFontOptions,
 	type GoogleFontOptions,
 	type EmojiType,
 	type RenderOptions,
+	type RenderFigmaOptions,
 	type SvgResult,
 	type PngResult,
+	type ElementResult,
 	type Font,
 	type FontStyle,
 	type FontWeight,
@@ -43,6 +48,3 @@ export {
 	type SatoriOptions,
 	type ParserOptions
 } from "../lib";
-
-export { initResvg } from "@cf-wasm/resvg/others";
-export { initSatori } from "@cf-wasm/satori/others";

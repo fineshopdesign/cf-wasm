@@ -122,13 +122,13 @@ export const render = (
 	options?: RenderOptions
 ) => {
 	const data: {
-		svg: SvgResult | undefined;
-		png: PngResult | undefined;
-		fonts: SatoriOptions["fonts"] | undefined;
+		svg: SvgResult | null;
+		png: PngResult | null;
+		fonts: SatoriOptions["fonts"] | null;
 	} = {
-		svg: undefined,
-		png: undefined,
-		fonts: undefined
+		svg: null,
+		png: null,
+		fonts: null
 	};
 
 	const renderOptions = {

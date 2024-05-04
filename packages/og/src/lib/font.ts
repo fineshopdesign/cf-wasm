@@ -18,14 +18,9 @@ export interface LoadGoogleFontOptions {
 	weight?: string | number;
 
 	/**
-	 * Indicates whether italic style should be loaded
+	 * The font style to load
 	 */
-	italic?: boolean;
-
-	/**
-	 * Indicates whether normal style should be loaded
-	 */
-	normal?: boolean;
+	style?: "normal" | "italic";
 
 	/**
 	 * The `font-display`
@@ -47,9 +42,8 @@ export const loadGoogleFont = async (
 	family: string,
 	{
 		text,
-		weight,
-		italic = false,
-		normal = true,
+		weight = 400,
+		style = "normal",
 		display,
 		cache: cacheStore
 	}: LoadGoogleFontOptions = {}
@@ -60,26 +54,8 @@ export const loadGoogleFont = async (
 		);
 	}
 
-	let familyDelimiter = "";
-	if (weight || italic) {
-		familyDelimiter += ":";
-		if (italic) {
-			familyDelimiter += "ital";
-			if (weight) {
-				familyDelimiter += `,wght@1,${weight}`;
-			}
-		}
-		if (normal && weight) {
-			familyDelimiter += `wght@`;
-			if (italic) {
-				familyDelimiter += `0,`;
-			}
-			familyDelimiter += weight;
-		}
-	}
-
 	const params: Record<string, string> = {
-		family: encodeURIComponent(family) + familyDelimiter
+		family: `${encodeURIComponent(family)}:${style === "italic" ? "ital," : ""}wght@${style === "italic" ? "1," : ""}${weight}`
 	};
 
 	if (text) {
@@ -313,8 +289,7 @@ export class GoogleFont extends BaseFont {
 			if (!this.evaluated) {
 				this.evaluated = await loadGoogleFont(this.family, {
 					weight: this.weight,
-					italic: this.style === "italic",
-					normal: this.style === "normal",
+					style: this.style,
 					text: this.text
 				});
 			}
