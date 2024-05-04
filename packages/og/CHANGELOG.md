@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.21
+
+### Patch Changes
+
+- [`ac47ba9`](https://github.com/fineshopdesign/cf-wasm/commit/ac47ba9d7a15cac06cc9ee313f750aee996ad49d) Thanks [@fineshop](https://github.com/fineshop)! - feat: introduced new function `renderFigma`
+
 ## 0.1.20
 
 ### Patch Changes
