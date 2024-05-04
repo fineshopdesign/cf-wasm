@@ -2,11 +2,11 @@ import type { ResvgModule } from "./resvg";
 import type { SatoriModule } from "./satori";
 
 const data: {
-	resvg: ResvgModule | undefined;
-	satori: SatoriModule | undefined;
+	resvg: ResvgModule | null;
+	satori: SatoriModule | null;
 } = {
-	resvg: undefined,
-	satori: undefined
+	resvg: null,
+	satori: null
 };
 
 // eslint-disable-next-line import/prefer-default-export
