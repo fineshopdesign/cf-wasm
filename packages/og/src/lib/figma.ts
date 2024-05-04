@@ -1,9 +1,49 @@
 import { replaceEntities } from "./entities";
-import { BaseResponse, type ImageResponseOptions } from "./response";
+import {
+	BaseResponse,
+	type BaseResponseOptions,
+	type ImageResponseOptions
+} from "./response";
 import { detectRuntime } from "./utils";
 import { FetchError } from "./errors";
 import type { Font, FontWeight } from "./satori";
+import {
+	render,
+	type RenderOptions,
+	type PngResult,
+	type SvgResult
+} from "./render";
 
+/**
+ * An interface representing the element result of a figma template
+ */
+export interface ElementResult {
+	/**
+	 * The element as {@link React.ReactElement}
+	 */
+	element: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+
+	/**
+	 * The width of the image
+	 */
+	width: number;
+
+	/**
+	 * The height of the image
+	 */
+	height: number;
+
+	/**
+	 * The dynamic fonts
+	 */
+	fonts: (Omit<Font, "data"> & {
+		data: ArrayBuffer | Promise<ArrayBuffer>;
+	})[];
+}
+
+/**
+ * An interface representing a figma complex template
+ */
 export interface FigmaComplexTemplate {
 	value: string;
 	props?: {
@@ -11,7 +51,10 @@ export interface FigmaComplexTemplate {
 	} & React.CSSProperties;
 }
 
-export interface FigmaImageResponseOptions {
+/**
+ * An interface representing figma options
+ */
+export interface FigmaOptions {
 	/**
 	 * Link to the Figma template frame.
 	 *
@@ -46,6 +89,31 @@ export interface FigmaImageResponseOptions {
 	token: string;
 }
 
+export type LoadFontsFunction = (
+	fontFamily: string,
+	fontWeight: FontWeight | undefined,
+	fontStyle: "normal" | "italic" | undefined
+) =>
+	| { data: ArrayBuffer | Promise<ArrayBuffer> }
+	| ArrayBuffer
+	| Promise<{ data: ArrayBuffer | Promise<ArrayBuffer> } | ArrayBuffer | void>
+	| void;
+
+/**
+ * An interface representing options for {@link renderFigma} function
+ */
+export interface RenderFigmaOptions
+	extends Omit<RenderOptions, "width" | "height"> {
+	loadFonts?: LoadFontsFunction;
+}
+
+/**
+ * An interface representing options for {@link FigmaImageResponse}
+ */
+export interface FigmaImageResponseOptions
+	extends RenderFigmaOptions,
+		BaseResponseOptions {}
+
 /**
  * A helper function to parse figma url and return its `fileId` and `nodeId`
  *
@@ -65,6 +133,14 @@ export const parseFigmaUrl = (figmaUrl: string) => {
 	return { fileId, nodeId };
 };
 
+/**
+ * Asserts if value is undefined
+ *
+ * @param value The value
+ * @param errorMessage The error message
+ *
+ * @returns The same value if it is not undefined otherwise throws an error
+ */
 export const assertValue = (
 	value: string | undefined,
 	errorMessage: string
@@ -75,6 +151,18 @@ export const assertValue = (
 	return value;
 };
 
+/**
+ * Matches string with regex and returns the content at given index
+ *
+ * @param string The string
+ * @param matcher The regex
+ * @param index The index to get
+ * @default 1
+ * @param defaultValue The default value if content at given index is not found
+ * @default ""
+ *
+ * @returns The matched string
+ */
 const match = (
 	string: string,
 	matcher: RegExp,
@@ -82,12 +170,19 @@ const match = (
 	defaultValue = ""
 ) => {
 	const matches = string.match(matcher);
-	if (matches && matches[index]) {
+	if (matches && typeof matches[index] === "string") {
 		return matches[index];
 	}
 	return defaultValue;
 };
 
+/**
+ * Checks if target is a figma complex template
+ *
+ * @param template The complex template or any value
+ *
+ * @returns `true` if the target is a complex template otherwise `false`
+ */
 export const isComplexTemplate = (template: unknown) =>
 	typeof template !== "string" &&
 	template !== undefined &&
@@ -131,6 +226,13 @@ export const getSvgDimensions = (svg: string) => {
 	return { width: 0, height: 0 };
 };
 
+/**
+ * Gives all the text nodes in a svg string
+ *
+ * @param svg The svg as string
+ *
+ * @returns An Array of text nodes as string
+ */
 export const getTextNodes = (svg: string) => {
 	const regex = /<text[^>]*>(.*?)<\/text>/g;
 	let execArray = regex.exec(svg);
@@ -142,6 +244,13 @@ export const getTextNodes = (svg: string) => {
 	return matches;
 };
 
+/**
+ * Gives all the tspan nodes in a text node string
+ *
+ * @param svg The text node as string
+ *
+ * @returns An Array of tspan nodes as string
+ */
 export const getTspanNodes = (text: string) => {
 	const regex = /<tspan[^>]*>(.*?)<\/tspan>/g;
 	let execArray = regex.exec(text);
@@ -153,12 +262,26 @@ export const getTspanNodes = (text: string) => {
 	return matches;
 };
 
+/**
+ * Parses the tspan node of a svg and returns its attributes
+ *
+ * @param tspanNode The tspan node as string
+ *
+ * @returns The attributes of the tspan node as an object
+ */
 export const parseTspanNode = (tspanNode: string) => ({
 	x: match(tspanNode, /x="([^"]*)"/),
 	y: match(tspanNode, /y="([^"]*)"/),
 	content: replaceEntities(match(tspanNode, /<tspan[^>]*>([^<]*)<\/tspan>/))
 });
 
+/**
+ * Parses the text node of a svg and returns its attributes
+ *
+ * @param textNode The text node as string
+ *
+ * @returns The attributes of the text node as an object
+ */
 export const parseTextNode = (textNode: string) => {
 	const tspanNodesAttributes = getTspanNodes(textNode).map(parseTspanNode);
 
@@ -182,10 +305,24 @@ export const parseTextNode = (textNode: string) => {
 	};
 };
 
+/**
+ * Removes all the text nodes of a svg string
+ *
+ * @param svg The svg as string
+ *
+ * @returns The replaced svg as string
+ */
 export const removeTextNodes = (svg: string) =>
 	svg.replace(/<text[^>]*>(.*?)<\/text>/g, "");
 
-export const getFigmaSvg = async (figmaOptions: FigmaImageResponseOptions) => {
+/**
+ * Get the Figma template's svg
+ *
+ * @param figmaOptions The {@link FigmaOptions}
+ *
+ * @returns The svg as string
+ */
+export const getFigmaSvg = async (figmaOptions: FigmaOptions) => {
 	const { url, token } = figmaOptions;
 	const { fileId, nodeId } = parseFigmaUrl(url);
 
@@ -234,218 +371,275 @@ export const getFigmaSvg = async (figmaOptions: FigmaImageResponseOptions) => {
 	return svg;
 };
 
-export class FigmaImageResponse extends BaseResponse {
-	/**
-	 * Creates an instance of {@link FigmaImageResponse}
-	 *
-	 * @param figmaOptions Figma options {@link FigmaImageResponseOptions}
-	 * @param responseOptions The same as {@link ImageResponseOptions} except `width` and `height`. `width` and `height` are automatically set from the Figma frame's size.
-	 */
-	constructor(
-		figmaOptions: FigmaImageResponseOptions,
-		responseOptions?: Omit<ImageResponseOptions, "width" | "height"> & {
-			loadFonts?: (
-				fontFamily: string,
-				fontWeight: FontWeight | undefined,
-				fontStyle: "normal" | "italic" | undefined
-			) =>
-				| { data: ArrayBuffer | Promise<ArrayBuffer> }
-				| ArrayBuffer
-				| Promise<
-						{ data: ArrayBuffer | Promise<ArrayBuffer> } | ArrayBuffer | void
-				  >
-				| void;
-		}
-	) {
-		super(
-			async () => {
-				const { template } = figmaOptions;
-				const svg = await getFigmaSvg(figmaOptions);
-				const { width, height } = getSvgDimensions(svg);
-				const textNodes = getTextNodes(svg);
-				const textNodeAttributes = textNodes.map(parseTextNode);
+export const loadTextNodeFonts = async (
+	nodeAttributes: ReturnType<typeof parseTextNode>[],
+	loadFonts: LoadFontsFunction
+) =>
+	(
+		await Promise.all(
+			nodeAttributes
+				.filter(
+					(value, index, self) =>
+						index ===
+						self.findIndex(
+							(t) =>
+								t?.fontFamily === value.fontFamily &&
+								t.fontWeight === value.fontWeight &&
+								t.fontStyle === value.fontStyle
+						)
+				)
+				.map(async (attrs) => {
+					const { family, weight, style } = {
+						family: attrs.fontFamily,
+						weight: attrs.fontWeight
+							? (Number(attrs.fontWeight) as FontWeight)
+							: undefined,
+						style: attrs.fontStyle || undefined
+					};
+					const awaited = await loadFonts(family, weight, style);
+					if (awaited) {
+						return {
+							name: family,
+							weight,
+							style,
+							get data() {
+								return typeof awaited === "object" && "data" in awaited
+									? awaited.data
+									: awaited;
+							}
+						} as Omit<Font, "data"> & {
+							data: ArrayBuffer | Promise<ArrayBuffer>;
+						};
+					}
+					return undefined;
+				})
+		)
+	).filter(Boolean) as (Omit<Font, "data"> & {
+		data: ArrayBuffer | Promise<ArrayBuffer>;
+	})[];
 
-				const dynamicFonts =
-					typeof responseOptions?.loadFonts === "function"
-						? ((
-								await Promise.all(
-									textNodeAttributes
-										.filter(
-											(value, index, self) =>
-												index ===
-												self.findIndex(
-													(t) =>
-														t?.fontFamily === value.fontFamily &&
-														t.fontWeight === value.fontWeight &&
-														t.fontStyle === value.fontStyle
-												)
-										)
-										.map(async (attrs) => {
-											const { family, weight, style } = {
-												family: attrs.fontFamily,
-												weight: attrs.fontWeight
-													? (Number(attrs.fontWeight) as FontWeight)
-													: undefined,
-												style: attrs.fontStyle || undefined
-											};
-											const awaited = await responseOptions.loadFonts!(
-												family,
-												weight,
-												style
-											);
-											if (awaited) {
-												return {
-													name: family,
-													weight,
-													style,
-													get data() {
-														return typeof awaited === "object" &&
-															"data" in awaited
-															? awaited.data
-															: awaited;
-													}
-												} as Omit<Font, "data"> & {
-													data: ArrayBuffer | Promise<ArrayBuffer>;
-												};
-											}
-											return undefined;
-										})
-								)
-							).filter(Boolean) as (Omit<Font, "data"> & {
-								data: ArrayBuffer | Promise<ArrayBuffer>;
-							})[])
-						: [];
+/**
+ * Renders Figma template to image
+ *
+ * @param figmaOptions The {@link FigmaOptions}
+ * @param renderOptions The {@link RenderFigmaOptions}
+ *
+ * @returns An object containing methods for rendering the Figma template to image
+ */
+export const renderFigma = (
+	figmaOptions: FigmaOptions,
+	renderOptions?: RenderFigmaOptions
+) => {
+	const getFigmaData = async (): Promise<ElementResult> => {
+		const { template } = figmaOptions;
+		const svg = await getFigmaSvg(figmaOptions);
+		const { width, height } = getSvgDimensions(svg);
+		const textNodes = getTextNodes(svg);
+		const textNodeAttributes = textNodes.map(parseTextNode);
 
-				return [
+		const dynamicFonts =
+			typeof renderOptions?.loadFonts === "function"
+				? await loadTextNodeFonts(textNodeAttributes, renderOptions.loadFonts)
+				: [];
+
+		const element: React.ReactElement = {
+			key: "0",
+			type: "div",
+			props: {
+				style: { display: "flex" },
+				children: [
 					{
-						key: "0",
+						type: "img",
+						props: {
+							style: { position: "absolute" },
+							alt: "",
+							width,
+							height,
+							src: svgToBase64(removeTextNodes(svg))
+						}
+					},
+					{
 						type: "div",
 						props: {
-							style: { display: "flex" },
-							children: [
-								{
-									type: "img",
-									props: {
-										style: { position: "absolute" },
-										alt: "",
-										width,
-										height,
-										src: svgToBase64(removeTextNodes(svg))
-									}
-								},
-								{
-									type: "div",
-									props: {
-										style: {
-											display: "flex",
-											position: "relative",
-											width: "100%"
-										},
-										children: textNodeAttributes.map((textNode) => {
-											const t = template[textNode.id];
-											let value:
-												| { x: string; y: string; content: string }[]
-												| string = "";
-											if (t === undefined) {
-												value = textNode.children;
-											} else if (isComplexTemplate(t)) {
-												// eslint-disable-next-line prefer-destructuring
-												value = (t as FigmaComplexTemplate).value;
-											} else {
-												value = t as string;
-											}
-											let cssProps = {};
-											let centerHorizontally = false;
-											if (
-												isComplexTemplate(t) &&
-												(t as FigmaComplexTemplate).props
-											) {
-												const {
-													centerHorizontally: centerHorizontallyProp,
-													...otherCSSProps
-												} = (t as FigmaComplexTemplate).props!;
-												cssProps = otherCSSProps;
-												centerHorizontally = centerHorizontallyProp || false;
-											}
-											const children = Array.isArray(value)
-												? value.map(
-														(e, i): React.ReactElement => ({
-															key: String(i),
-															type: "span",
-															props: {
-																style: {
-																	position: "absolute",
-																	left: `${Number(e.x) - Number(textNode.x)}px`,
-																	top: `${Number(e.y) - Number(textNode.y) - Number(textNode.fontSize) / 2}px`
-																},
-																children: e.content
-															}
-														})
-													)
-												: value;
-											if (centerHorizontally) {
-												return {
-													type: "div",
-													props: {
-														style: {
-															position: "absolute",
-															display: "flex",
-															justifyContent: "center",
-															width: "100%"
-														},
-														children: {
-															type: "span",
-															props: {
-																style: {
-																	color: textNode.fill,
-																	marginTop: `${Number(textNode.y) - Number(textNode.fontSize) / 2}px`,
-																	fontWeight: textNode.fontWeight || "400",
-																	fontSize: textNode.fontSize,
-																	fontFamily: textNode.fontFamily,
-																	letterSpacing: textNode.letterSpacing,
-																	textAlign: "center",
-																	...cssProps
-																},
-																children
-															}
-														}
-													}
-												};
-											}
-											return {
+							style: {
+								display: "flex",
+								position: "relative",
+								width: "100%"
+							},
+							children: textNodeAttributes.map((textNode) => {
+								const t = template[textNode.id];
+								let value:
+									| { x: string; y: string; content: string }[]
+									| string = "";
+								if (t === undefined) {
+									value = textNode.children;
+								} else if (isComplexTemplate(t)) {
+									// eslint-disable-next-line prefer-destructuring
+									value = (t as FigmaComplexTemplate).value;
+								} else {
+									value = t as string;
+								}
+								let cssProps = {};
+								let centerHorizontally = false;
+								if (isComplexTemplate(t) && (t as FigmaComplexTemplate).props) {
+									const {
+										centerHorizontally: centerHorizontallyProp,
+										...otherCSSProps
+									} = (t as FigmaComplexTemplate).props!;
+									cssProps = otherCSSProps;
+									centerHorizontally = centerHorizontallyProp || false;
+								}
+								const children = Array.isArray(value)
+									? value.map(
+											(e, i): React.ReactElement => ({
+												key: String(i),
 												type: "span",
 												props: {
 													style: {
 														position: "absolute",
+														left: `${Number(e.x) - Number(textNode.x)}px`,
+														top: `${Number(e.y) - Number(textNode.y) - Number(textNode.fontSize) / 2}px`
+													},
+													children: e.content
+												}
+											})
+										)
+									: value;
+								if (centerHorizontally) {
+									return {
+										type: "div",
+										props: {
+											style: {
+												position: "absolute",
+												display: "flex",
+												justifyContent: "center",
+												width: "100%"
+											},
+											children: {
+												type: "span",
+												props: {
+													style: {
 														color: textNode.fill,
-														left: `${textNode.x}px`,
-														top: `${Number(textNode.y) - Number(textNode.fontSize) / 2}px`,
+														marginTop: `${Number(textNode.y) - Number(textNode.fontSize) / 2}px`,
 														fontWeight: textNode.fontWeight || "400",
 														fontSize: textNode.fontSize,
 														fontFamily: textNode.fontFamily,
 														letterSpacing: textNode.letterSpacing,
+														textAlign: "center",
 														...cssProps
 													},
 													children
 												}
-											};
-										})
-									}
+											}
+										}
+									};
 								}
-							]
+								return {
+									type: "span",
+									props: {
+										style: {
+											position: "absolute",
+											color: textNode.fill,
+											left: `${textNode.x}px`,
+											top: `${Number(textNode.y) - Number(textNode.fontSize) / 2}px`,
+											fontWeight: textNode.fontWeight || "400",
+											fontSize: textNode.fontSize,
+											fontFamily: textNode.fontFamily,
+											letterSpacing: textNode.letterSpacing,
+											...cssProps
+										},
+										children
+									}
+								};
+							})
 						}
-					},
-					{
-						width,
-						height,
-						...responseOptions,
-						fonts: [...dynamicFonts, ...(responseOptions?.fonts || [])]
 					}
-				];
-			},
-			{
-				...responseOptions
+				]
 			}
-		);
+		};
+
+		return { element, width, height, fonts: dynamicFonts };
+	};
+
+	const data: {
+		renderer: ReturnType<typeof render> | null;
+		element: ElementResult | null;
+		svg: SvgResult | null;
+		png: PngResult | null;
+	} = {
+		renderer: null,
+		element: null,
+		svg: null,
+		png: null
+	};
+
+	const asElement = async () => {
+		if (!data.element) {
+			data.element = await getFigmaData();
+		}
+
+		return data.element;
+	};
+
+	const getRenderer = async () => {
+		if (!data.renderer) {
+			const elementData = await asElement();
+			data.renderer = render(elementData.element, {
+				...renderOptions,
+				width: elementData.width,
+				height: elementData.height,
+				fonts: [...elementData.fonts, ...(renderOptions?.fonts || [])]
+			});
+		}
+
+		return data.renderer;
+	};
+
+	const asSvg = async () => {
+		if (!data.svg) {
+			data.svg = await (await getRenderer()).asSvg();
+		}
+
+		return data.svg;
+	};
+
+	const asPng = async () => {
+		if (!data.png) {
+			data.png = await (await getRenderer()).asPng();
+		}
+
+		return data.png;
+	};
+
+	return { asElement, asSvg, asPng };
+};
+
+/**
+ * A class for rendering Figma template to image as {@link Response}
+ */
+export class FigmaImageResponse extends BaseResponse {
+	/**
+	 * Creates an instance of {@link FigmaImageResponse}
+	 *
+	 * @param figmaOptions Figma options {@link FigmaOptions}
+	 * @param responseOptions The same as {@link ImageResponseOptions} except `width` and `height`. `width` and `height` are automatically set from the Figma frame's size.
+	 */
+	constructor(
+		figmaOptions: FigmaOptions,
+		responseOptions?: FigmaImageResponseOptions
+	) {
+		super(async () => {
+			const renderer = renderFigma(figmaOptions, responseOptions);
+			const elementData = await renderer.asElement();
+			return [
+				elementData.element,
+				{
+					...responseOptions,
+					width: elementData.width,
+					height: elementData.height,
+					fonts: [...elementData.fonts, ...(responseOptions?.fonts || [])]
+				}
+			];
+		}, responseOptions);
 	}
 }

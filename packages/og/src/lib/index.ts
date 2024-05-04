@@ -20,7 +20,15 @@ export { parseHTML, type ParserOptions } from "./html";
 
 export { ImageResponse, type ImageResponseOptions } from "./response";
 
-export { FigmaImageResponse, type FigmaComplexTemplate } from "./figma";
+export {
+	renderFigma,
+	FigmaImageResponse,
+	type FigmaOptions,
+	type FigmaComplexTemplate,
+	type ElementResult,
+	type RenderFigmaOptions,
+	type FigmaImageResponseOptions
+} from "./figma";
 
 export {
 	render,
