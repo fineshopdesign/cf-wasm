@@ -1,5 +1,11 @@
 # @cf-wasm/resvg
 
+## 0.1.17
+
+### Patch Changes
+
+- [`123f049`](https://github.com/fineshopdesign/cf-wasm/commit/123f0494287fd90fa7970a085c1735c0b76f88b3) Thanks [@fineshop](https://github.com/fineshop)! - fix: initialize function in `others` submodule
+
 ## 0.1.16
 
 ### Patch Changes
