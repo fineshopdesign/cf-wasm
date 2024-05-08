@@ -6,9 +6,9 @@ export const initPhoton = async (input: InitInput | Promise<InitInput>) => {
 			"Already initialized. The `initPhoton()` function can be used only once."
 		);
 	}
+	initPhoton.initialized = true;
 	await initAsync(input);
 };
-
 initPhoton.initialized = false;
 
 export { initAsync };
