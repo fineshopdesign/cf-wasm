@@ -6,9 +6,9 @@ export const initPng = async (input: InitInput | Promise<InitInput>) => {
 			"Already initialized. The `initPng()` function can be used only once."
 		);
 	}
+	initPng.initialized = true;
 	await initAsync(input);
 };
-
 initPng.initialized = false;
 
 export { initAsync };

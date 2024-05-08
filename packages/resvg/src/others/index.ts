@@ -11,6 +11,7 @@ export const initResvg = async (input: InitInput | Promise<InitInput>) => {
 			"Already initialized. The `initResvg()` function can be used only once."
 		);
 	}
+	initResvg.initialized = true;
 	await initAsync(input);
 };
 initResvg.initialized = false;
