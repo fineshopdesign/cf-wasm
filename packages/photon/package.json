@@ -1,11 +1,22 @@
 {
   "name": "@cf-wasm/photon",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "private": false,
   "description": "Photon library for Cloudflare workers, Next.js and Node.js.",
-  "keywords": ["image-processing", "image-manipulation", "image-resizing", "rust", "rust-library", "webassembly", "wasm", "cloudflare-workers"],
+  "keywords": [
+    "image-processing",
+    "image-manipulation",
+    "image-resizing",
+    "rust",
+    "rust-library",
+    "webassembly",
+    "wasm",
+    "cloudflare-workers"
+  ],
   "license": "Apache-2.0",
-  "collaborators": ["Silvia O'Dwyer <silviaodwyerdev@gmail.com>"],
+  "collaborators": [
+    "Silvia O'Dwyer <silviaodwyerdev@gmail.com>"
+  ],
   "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/photon#readme",
   "repository": {
     "type": "git",
@@ -21,7 +32,9 @@
     "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "module": "./dist/esm/workers/index.js",
   "types": "./dist/dts/workers/index.d.ts",
@@ -56,11 +69,21 @@
   },
   "typesVersions": {
     "*": {
-      "next": ["./dist/dts/next/index.d.ts"],
-      "node": ["./dist/dts/node/index.d.ts"],
-      "others": ["./dist/dts/others/index.d.ts"],
-      "workers": ["./dist/dts/workers/index.d.ts"],
-      "*": ["./dist/dts/workers/index.d.ts"]
+      "next": [
+        "./dist/dts/next/index.d.ts"
+      ],
+      "node": [
+        "./dist/dts/node/index.d.ts"
+      ],
+      "others": [
+        "./dist/dts/others/index.d.ts"
+      ],
+      "workers": [
+        "./dist/dts/workers/index.d.ts"
+      ],
+      "*": [
+        "./dist/dts/workers/index.d.ts"
+      ]
     }
   }
 }
