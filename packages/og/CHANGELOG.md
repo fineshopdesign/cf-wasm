@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.23
+
+### Patch Changes
+
+- [`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e) Thanks [@fineshop](https://github.com/fineshop)! - perf: move figma related functions to `figma` submodule, html to react node parser to `string-to-node` submodule
+
+- Updated dependencies [[`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e), [`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e)]:
+  - @cf-wasm/resvg@0.1.18
+  - @cf-wasm/satori@0.1.17
+
 ## 0.1.22
 
 ### Patch Changes

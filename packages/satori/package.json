@@ -1,9 +1,17 @@
 {
   "name": "@cf-wasm/satori",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "private": false,
   "description": "Enlightened library to convert HTML and CSS to SVG.",
-  "keywords": ["HTML", "JSX", "SVG", "converter", "renderer", "wasm", "cloudflare-workers"],
+  "keywords": [
+    "HTML",
+    "JSX",
+    "SVG",
+    "converter",
+    "renderer",
+    "wasm",
+    "cloudflare-workers"
+  ],
   "license": "MPL-2.0",
   "author": {
     "name": "Shu Ding",
@@ -22,7 +30,9 @@
     "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "module": "./dist/esm/workers/index.js",
   "types": "./dist/dts/workers/index.d.ts",
@@ -57,11 +67,21 @@
   },
   "typesVersions": {
     "*": {
-      "next": ["./dist/dts/next/index.d.ts"],
-      "node": ["./dist/dts/node/index.d.ts"],
-      "others": ["./dist/dts/others/index.d.ts"],
-      "workers": ["./dist/dts/workers/index.d.ts"],
-      "*": ["./dist/dts/workers/index.d.ts"]
+      "next": [
+        "./dist/dts/next/index.d.ts"
+      ],
+      "node": [
+        "./dist/dts/node/index.d.ts"
+      ],
+      "others": [
+        "./dist/dts/others/index.d.ts"
+      ],
+      "workers": [
+        "./dist/dts/workers/index.d.ts"
+      ],
+      "*": [
+        "./dist/dts/workers/index.d.ts"
+      ]
     }
   },
   "dependencies": {
