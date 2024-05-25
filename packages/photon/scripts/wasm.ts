@@ -1,56 +1,45 @@
-import cp from "node:child_process";
-import path from "node:path";
-import fs from "fs-extra";
+import cp from 'node:child_process';
+import path from 'node:path';
+import fs from 'fs-extra';
 
-import buildConfig from "./config";
+const CRATE_DIR = 'crate';
+const LIB_NAME = 'photon_rs';
+const OUT_DIR = 'src/lib';
 
 // Build wasm binaries and modules using wasm-pack
-cp.execSync(
-	`wasm-pack build ${buildConfig.wasm.crate} --out-dir ${path.join("..", buildConfig.wasm.out)} --out-name ${buildConfig.wasm.name} --target web`,
-	{
-		stdio: "inherit"
-	}
-);
+cp.execSync(`wasm-pack build ${CRATE_DIR} --out-dir ${path.join('..', OUT_DIR)} --out-name ${LIB_NAME} --target web`, {
+  stdio: 'inherit',
+});
 
 // Delete unnecessary files from output
-[
-	"package.json",
-	"LICENSE",
-	"LICENSE.md",
-	"README",
-	"README.md",
-	".gitignore"
-].forEach((file) =>
-	fs.rmSync(path.join(buildConfig.wasm.out, file), { force: true })
-);
+for (const file of ['package.json', 'LICENSE', 'LICENSE.md', 'README', 'README.md', '.gitignore']) {
+  fs.rmSync(path.join(OUT_DIR, file), { force: true });
+}
 
 // Make changes to out js to make it compatible
 // for different environments
-const jsOutFile = path.join(
-	buildConfig.wasm.out,
-	`${buildConfig.wasm.name}.js`
-);
+const jsOutFile = path.join(OUT_DIR, `${LIB_NAME}.js`);
 
-const originalScript = fs.readFileSync(jsOutFile, "utf-8");
+const originalScript = fs.readFileSync(jsOutFile, 'utf-8');
 
 const modifiedScript = originalScript
-	.replace(
-		`if (!(module instanceof WebAssembly.Module)) {
+  .replace(
+    `if (!(module instanceof WebAssembly.Module)) {
         module = new WebAssembly.Module(module);
     }`,
-		`//! Needed to remove these lines in order to make it work on next.js
+    `//! Needed to remove these lines in order to make it work on next.js
     // if (!(module instanceof WebAssembly.Module)) {
     //     module = new WebAssembly.Module(module);
-    // }`
-	)
-	.replace(
-		`if (typeof input === 'undefined') {
-        input = new URL('${buildConfig.wasm.name}_bg.wasm', import.meta.url);
+    // }`,
+  )
+  .replace(
+    `if (typeof input === 'undefined') {
+        input = new URL('${LIB_NAME}_bg.wasm', import.meta.url);
     }`,
-		`//! Needed to remove these lines in order to make it work on node.js
+    `//! Needed to remove these lines in order to make it work on node.js
     // if (typeof input === 'undefined') {
-    //     input = new URL('${buildConfig.wasm.name}_bg.wasm', import.meta.url);
-    // }`
-	);
+    //     input = new URL('${LIB_NAME}_bg.wasm', import.meta.url);
+    // }`,
+  );
 
-fs.writeFileSync(jsOutFile, modifiedScript, "utf-8");
+fs.writeFileSync(jsOutFile, modifiedScript, 'utf-8');

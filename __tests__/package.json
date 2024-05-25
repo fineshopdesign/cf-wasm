@@ -1,26 +1,24 @@
 {
-	"name": "@cf-wasm-tests/base",
-	"version": "1.0.0",
-	"description": "cf-wasm tests",
-	"private": true,
-	"author": "Deo Kumar",
-	"license": "MIT",
-	"homepage": "https://github.com/fineshopdesign/cf-wasm",
-	"scripts": {
-		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../.eslintignore .",
-		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"test": "vitest run"
-	},
-	"dependencies": {
-		"@cf-wasm/og": "workspace:^",
-		"@cf-wasm/photon": "workspace:^",
-		"@cf-wasm/png": "workspace:^",
-		"@cf-wasm/resvg": "workspace:^",
-		"@cf-wasm/satori": "workspace:^",
-		"react": "^18.2.0"
-	},
-	"devDependencies": {
-		"@types/react": "^18.2.79",
-		"vitest": "^1.5.0"
-	}
+  "name": "@cf-wasm-tests/base",
+  "version": "1.0.0",
+  "description": "cf-wasm tests",
+  "private": true,
+  "author": "Deo Kumar",
+  "license": "MIT",
+  "homepage": "https://github.com/fineshopdesign/cf-wasm",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@cf-wasm/og": "workspace:^",
+    "@cf-wasm/photon": "workspace:^",
+    "@cf-wasm/png": "workspace:^",
+    "@cf-wasm/resvg": "workspace:^",
+    "@cf-wasm/satori": "workspace:^",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "vitest": "^1.6.0"
+  }
 }
