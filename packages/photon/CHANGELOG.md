@@ -1,5 +1,12 @@
 # @cf-wasm/photon
 
+## 0.1.18
+
+### Patch Changes
+
+- [`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e) Thanks [@fineshop](https://github.com/fineshop)! - chore: use tsup
+  chore: build for commit [195f51a](https://github.com/silvia-odwyer/photon/commit/195f51a99dae8cf39ee5f54b77199b5145c01d6c)
+
 ## 0.1.17
 
 ### Patch Changes
