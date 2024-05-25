@@ -1,30 +1,23 @@
-import path from "node:path";
-import fs from "node:fs";
-import url from "node:url";
+import fs from 'node:fs';
+import path from 'node:path';
+import url from 'node:url';
 
-import { init } from "../lib/resvg";
+import { init } from '../core/resvg';
 
-const filename =
-	typeof __filename === "string"
-		? __filename
-		: url.fileURLToPath(import.meta.url);
+const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const wasmBinaries = fs.readFileSync(
-	path.resolve(dirname, "../lib/resvg.wasm")
-);
+const wasmBinary = fs.readFileSync(path.resolve(dirname, '../core/resvg.wasm'));
 
-const MODULE = new WebAssembly.Module(wasmBinaries);
+const MODULE = new WebAssembly.Module(wasmBinary);
 
 init(MODULE);
 
 export { MODULE };
 export {
-	Resvg,
-	ensureInit,
-	type ResvgRenderOptions,
-	type CustomFontsOptions,
-	type FontOptions,
-	type InitInput,
-	type SystemFontsOptions
-} from "../lib/resvg";
+  Resvg,
+  type ResvgRenderOptions,
+  type CustomFontsOptions,
+  type FontOptions,
+  type SystemFontsOptions,
+} from '../core/resvg';

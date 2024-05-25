@@ -1,7 +1,7 @@
-import * as resvg from "@cf-wasm/resvg/workers";
-import * as satori from "@cf-wasm/satori/workers";
-import fallbackFont from "../lib/noto-sans-v27-latin-regular.ttf.bin";
-import { defaultFont, modules } from "../lib";
+import * as resvg from '@cf-wasm/resvg/2.4.1/workers';
+import * as satori from '@cf-wasm/satori/workers';
+import { defaultFont, modules } from '../core';
+import fallbackFont from '../core/noto-sans-v27-latin-regular.ttf.bin';
 
 // Set modules
 modules.resvg = resvg;
@@ -11,35 +11,26 @@ modules.satori = satori;
 defaultFont.set(fallbackFont);
 
 export {
-	ImageResponse,
-	FigmaImageResponse,
-	CustomFont,
-	GoogleFont,
-	render,
-	renderFigma,
-	defaultFont,
-	loadGoogleFont,
-	cache,
-	parseHTML,
-	type ImageResponseOptions,
-	type FigmaImageResponseOptions,
-	type FigmaOptions,
-	type FigmaComplexTemplate,
-	type CustomFontOptions,
-	type GoogleFontOptions,
-	type EmojiType,
-	type RenderOptions,
-	type RenderFigmaOptions,
-	type SvgResult,
-	type PngResult,
-	type ElementResult,
-	type Font,
-	type FontStyle,
-	type FontWeight,
-	type RenderResvgOptions,
-	type RenderSatoriOptions,
-	type ResvgRenderOptions,
-	type SatoriNode,
-	type SatoriOptions,
-	type ParserOptions
-} from "../lib";
+  ImageResponse,
+  CustomFont,
+  GoogleFont,
+  render,
+  defaultFont,
+  loadGoogleFont,
+  cache,
+  type ImageResponseOptions,
+  type CustomFontOptions,
+  type GoogleFontOptions,
+  type EmojiType,
+  type RenderOptions,
+  type SvgResult,
+  type PngResult,
+  type Font,
+  type FontStyle,
+  type FontWeight,
+  type RenderResvgOptions,
+  type RenderSatoriOptions,
+  type ResvgRenderOptions,
+  type SatoriNode,
+  type SatoriOptions,
+} from '../core';

@@ -1,8 +1,10 @@
 # @cf-wam/photon
 
-Photon library for Cloudflare workers, Next.js and Node.js.  
+High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
+
 Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon)  
-Forked at [a2cefcb](https://github.com/silvia-odwyer/photon/commit/a2cefcb3bf31b14a9e61508364b5ea88842d614b)
+Build for commit [`195f51a`](https://github.com/silvia-odwyer/photon/commit/195f51a99dae8cf39ee5f54b77199b5145c01d6c)  
+Forked on: `25th May, 2024`.
 
 ## Installation
 
@@ -191,3 +193,13 @@ export default async function handler(req: NextRequest) {
 ## Documentation
 
 To explore all the functions, view the [official documentation](https://docs.rs/photon-rs/).
+
+## Awesome Projects
+
+Following is a list of projects built using this library:
+
+- [Next Image Processing API](https://github.com/yoeven/next-image-processing-api) (by [Yoeven D Khemlani](https://github.com/yoeven))
+
+## Credits
+
+All credit goes to [@silvia-odwyer/photon](https://github.com/silvia-odwyer/photon).

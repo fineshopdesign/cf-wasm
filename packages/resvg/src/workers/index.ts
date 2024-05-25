@@ -1,15 +1,13 @@
-import { init } from "../lib/resvg";
-import MODULE from "../lib/resvg.wasm";
+import { init } from '../core/resvg';
+import MODULE from '../core/resvg.wasm';
 
 init(MODULE);
 
 export { MODULE };
 export {
-	Resvg,
-	ensureInit,
-	type ResvgRenderOptions,
-	type CustomFontsOptions,
-	type FontOptions,
-	type InitInput,
-	type SystemFontsOptions
-} from "../lib/resvg";
+  Resvg,
+  type ResvgRenderOptions,
+  type CustomFontsOptions,
+  type FontOptions,
+  type SystemFontsOptions,
+} from '../core/resvg';
