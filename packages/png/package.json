@@ -1,86 +1,64 @@
 {
-	"name": "@cf-wasm/png",
-	"version": "0.1.17",
-	"private": false,
-	"description": "A simple wasm png encoder/decoder module for cloudflare workers",
-	"keywords": [
-		"image",
-		"png",
-		"encoding",
-		"decoding",
-		"png-decoder",
-		"png-encoder",
-		"wasm",
-		"cloudflare-workers"
-	],
-	"license": "MIT",
-	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fineshopdesign/cf-wasm",
-		"directory": "packages/png"
-	},
-	"bugs": {
-		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
-	},
-	"scripts": {
-		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
-		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"wasm": "tsx scripts/wasm.ts",
-		"build": "tsx scripts/build.ts",
-		"clean": "rimraf dist"
-	},
-	"files": [
-		"dist"
-	],
-	"type": "module",
-	"module": "./dist/esm/workers/index.js",
-	"types": "./dist/dts/workers/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		},
-		"./next": {
-			"types": "./dist/dts/next/index.d.ts",
-			"import": "./dist/esm/next/index.js"
-		},
-		"./node": {
-			"types": "./dist/dts/node/index.d.ts",
-			"import": "./dist/esm/node/index.js",
-			"require": "./dist/cjs/node/index.js"
-		},
-		"./others": {
-			"types": "./dist/dts/others/index.d.ts",
-			"import": "./dist/esm/others/index.js",
-			"require": "./dist/cjs/others/index.js"
-		},
-		"./others/png.wasm": {
-			"import": "./dist/esm/lib/png_bg.wasm",
-			"require": "./dist/cjs/lib/png_bg.wasm"
-		},
-		"./workers": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"next": [
-				"./dist/dts/next/index.d.ts"
-			],
-			"node": [
-				"./dist/dts/node/index.d.ts"
-			],
-			"others": [
-				"./dist/dts/others/index.d.ts"
-			],
-			"workers": [
-				"./dist/dts/workers/index.d.ts"
-			],
-			"*": [
-				"./dist/dts/workers/index.d.ts"
-			]
-		}
-	}
+  "name": "@cf-wasm/png",
+  "version": "0.1.17",
+  "private": false,
+  "description": "A simple wasm png encoder/decoder module for cloudflare workers",
+  "keywords": ["image", "png", "encoding", "decoding", "png-decoder", "png-encoder", "wasm", "cloudflare-workers"],
+  "license": "MIT",
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/png#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/png"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "wasm": "tsx scripts/wasm.ts",
+    "build": "tsx scripts/build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": ["dist"],
+  "type": "module",
+  "module": "./dist/esm/workers/index.js",
+  "types": "./dist/dts/workers/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./next": {
+      "types": "./dist/dts/next/index.d.ts",
+      "import": "./dist/esm/next/index.js"
+    },
+    "./node": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/esm/node/index.js",
+      "require": "./dist/cjs/node/index.js"
+    },
+    "./others": {
+      "types": "./dist/dts/others/index.d.ts",
+      "import": "./dist/esm/others/index.js",
+      "require": "./dist/cjs/others/index.js"
+    },
+    "./workers": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./png.wasm": {
+      "import": "./dist/esm/lib/png_bg.wasm",
+      "require": "./dist/cjs/lib/png_bg.wasm"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "next": ["./dist/dts/next/index.d.ts"],
+      "node": ["./dist/dts/node/index.d.ts"],
+      "others": ["./dist/dts/others/index.d.ts"],
+      "workers": ["./dist/dts/workers/index.d.ts"],
+      "*": ["./dist/dts/workers/index.d.ts"]
+    }
+  }
 }

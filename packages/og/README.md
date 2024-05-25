@@ -1,6 +1,7 @@
 # @cf-wasm/og
 
 Generate Open Graph Images dynamically from HTML/CSS without a browser.  
+
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
 
 ## Installation
@@ -94,4 +95,4 @@ const worker: ExportedHandler<Env> = {
 export default worker;
 ```
 
-Notes: If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the 1MiB script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.
+> **Warning**: If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the 1MiB script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.

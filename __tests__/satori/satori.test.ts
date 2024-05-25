@@ -1,6 +1,6 @@
-import { test, expect } from "vitest";
-import * as satori from "@cf-wasm/satori/node";
+import { YOGA_MODULE } from '@cf-wasm/satori/node';
+import { expect, test } from 'vitest';
 
-test("satori.YOGA_MODULE should be an instance of WebAssembly.Module", () => {
-	expect(satori.YOGA_MODULE).instanceOf(WebAssembly.Module);
+test('YOGA_MODULE should be an instance of WebAssembly.Module', () => {
+  expect(YOGA_MODULE).instanceOf(WebAssembly.Module);
 });

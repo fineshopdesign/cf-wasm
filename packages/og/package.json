@@ -1,90 +1,78 @@
 {
-	"name": "@cf-wasm/og",
-	"version": "0.1.22",
-	"private": false,
-	"description": "Generate Open Graph Images dynamically from HTML/CSS without a browser.",
-	"keywords": [
-		"open-graph-image",
-		"open-graph",
-		"og-image",
-		"og:image",
-		"social",
-		"card",
-		"image",
-		"wasm",
-		"cloudflare-workers"
-	],
-	"license": "MPL-2.0",
-	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/og#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fineshopdesign/cf-wasm",
-		"directory": "packages/og"
-	},
-	"bugs": {
-		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
-	},
-	"scripts": {
-		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
-		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"build": "tsx scripts/build.ts",
-		"clean": "rimraf dist"
-	},
-	"files": [
-		"dist"
-	],
-	"type": "module",
-	"module": "./dist/esm/workers/index.js",
-	"types": "./dist/dts/workers/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		},
-		"./next": {
-			"types": "./dist/dts/next/index.d.ts",
-			"import": "./dist/esm/next/index.js"
-		},
-		"./node": {
-			"types": "./dist/dts/node/index.d.ts",
-			"import": "./dist/esm/node/index.js",
-			"require": "./dist/cjs/node/index.js"
-		},
-		"./others": {
-			"types": "./dist/dts/others/index.d.ts",
-			"import": "./dist/esm/others/index.js",
-			"require": "./dist/cjs/others/index.js"
-		},
-		"./workers": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"next": [
-				"./dist/dts/next/index.d.ts"
-			],
-			"node": [
-				"./dist/dts/node/index.d.ts"
-			],
-			"others": [
-				"./dist/dts/others/index.d.ts"
-			],
-			"workers": [
-				"./dist/dts/workers/index.d.ts"
-			],
-			"*": [
-				"./dist/dts/workers/index.d.ts"
-			]
-		}
-	},
-	"dependencies": {
-		"@cf-wasm/resvg": "workspace:*",
-		"@cf-wasm/satori": "workspace:*",
-		"@hedgedoc/html-to-react": "^2.1.1"
-	},
-	"devDependencies": {
-		"react": "^18.2.0"
-	}
+  "name": "@cf-wasm/og",
+  "version": "0.1.22",
+  "private": false,
+  "description": "Generate Open Graph Images dynamically from HTML/CSS without a browser.",
+  "keywords": ["open-graph-image", "open-graph", "og-image", "og:image", "social", "card", "image", "wasm", "cloudflare-workers"],
+  "license": "MPL-2.0",
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/og#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/og"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": ["dist"],
+  "type": "module",
+  "module": "./dist/esm/workers/index.js",
+  "types": "./dist/dts/workers/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./next": {
+      "types": "./dist/dts/next/index.d.ts",
+      "import": "./dist/esm/next/index.js"
+    },
+    "./node": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/esm/node/index.js",
+      "require": "./dist/cjs/node/index.js"
+    },
+    "./others": {
+      "types": "./dist/dts/others/index.d.ts",
+      "import": "./dist/esm/others/index.js",
+      "require": "./dist/cjs/others/index.js"
+    },
+    "./workers": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./figma": {
+      "types": "./dist/dts/figma/index.d.ts",
+      "import": "./dist/esm/figma/index.js",
+      "require": "./dist/cjs/figma/index.js"
+    },
+    "./string-to-node": {
+      "types": "./dist/dts/string-to-node/index.d.ts",
+      "import": "./dist/esm/string-to-node/index.js",
+      "require": "./dist/cjs/string-to-node/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "next": ["./dist/dts/next/index.d.ts"],
+      "node": ["./dist/dts/node/index.d.ts"],
+      "others": ["./dist/dts/others/index.d.ts"],
+      "workers": ["./dist/dts/workers/index.d.ts"],
+      "figma": ["./dist/dts/figma/index.d.ts"],
+      "string-to-node": ["./dist/dts/string-to-node/index.d.ts"],
+      "*": ["./dist/dts/workers/index.d.ts"]
+    }
+  },
+  "dependencies": {
+    "@cf-wasm/resvg": "workspace:*",
+    "@cf-wasm/satori": "workspace:*",
+    "@hedgedoc/html-to-react": "^2.1.1",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1"
+  }
 }

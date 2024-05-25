@@ -1,8 +1,8 @@
 {
-	"root": true,
-	"workspaces": true,
-	"peer": true,
-	"reject": [],
-	"install": "prompt",
-	"packageManager": "pnpm"
+  "root": true,
+  "workspaces": true,
+  "peer": true,
+  "reject": [],
+  "install": "prompt",
+  "packageManager": "pnpm"
 }
