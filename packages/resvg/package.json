@@ -1,9 +1,20 @@
 {
   "name": "@cf-wasm/resvg",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "private": false,
   "description": "A high-performance SVG renderer and toolkit, powered by Rust based resvg.",
-  "keywords": ["resvg", "svg", "resvg-js", "resvg-wasm", "rust", "svg2png", "svg2img", "svg to png", "wasm", "cloudflare-workers"],
+  "keywords": [
+    "resvg",
+    "svg",
+    "resvg-js",
+    "resvg-wasm",
+    "rust",
+    "svg2png",
+    "svg2img",
+    "svg to png",
+    "wasm",
+    "cloudflare-workers"
+  ],
   "license": "MPL-2.0",
   "author": {
     "name": "yisibl"
@@ -21,7 +32,9 @@
     "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "module": "./dist/esm/workers/index.js",
   "types": "./dist/dts/workers/index.d.ts",
@@ -82,16 +95,36 @@
   },
   "typesVersions": {
     "*": {
-      "next": ["./dist/dts/next/index.d.ts"],
-      "node": ["./dist/dts/node/index.d.ts"],
-      "others": ["./dist/dts/others/index.d.ts"],
-      "workers": ["./dist/dts/workers/index.d.ts"],
-      "2.4.1": ["./dist/dts/2.4.1/workers/index.d.ts"],
-      "2.4.1/next": ["./dist/dts/2.4.1/next/index.d.ts"],
-      "2.4.1/node": ["./dist/dts/2.4.1/node/index.d.ts"],
-      "2.4.1/others": ["./dist/dts/2.4.1/others/index.d.ts"],
-      "2.4.1/workers": ["./dist/dts/2.4.1/workers/index.d.ts"],
-      "*": ["./dist/dts/2.4.1/workers/index.d.ts"]
+      "next": [
+        "./dist/dts/next/index.d.ts"
+      ],
+      "node": [
+        "./dist/dts/node/index.d.ts"
+      ],
+      "others": [
+        "./dist/dts/others/index.d.ts"
+      ],
+      "workers": [
+        "./dist/dts/workers/index.d.ts"
+      ],
+      "2.4.1": [
+        "./dist/dts/2.4.1/workers/index.d.ts"
+      ],
+      "2.4.1/next": [
+        "./dist/dts/2.4.1/next/index.d.ts"
+      ],
+      "2.4.1/node": [
+        "./dist/dts/2.4.1/node/index.d.ts"
+      ],
+      "2.4.1/others": [
+        "./dist/dts/2.4.1/others/index.d.ts"
+      ],
+      "2.4.1/workers": [
+        "./dist/dts/2.4.1/workers/index.d.ts"
+      ],
+      "*": [
+        "./dist/dts/2.4.1/workers/index.d.ts"
+      ]
     }
   },
   "dependencies": {

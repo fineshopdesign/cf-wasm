@@ -1,9 +1,19 @@
 {
   "name": "@cf-wasm/og",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "private": false,
   "description": "Generate Open Graph Images dynamically from HTML/CSS without a browser.",
-  "keywords": ["open-graph-image", "open-graph", "og-image", "og:image", "social", "card", "image", "wasm", "cloudflare-workers"],
+  "keywords": [
+    "open-graph-image",
+    "open-graph",
+    "og-image",
+    "og:image",
+    "social",
+    "card",
+    "image",
+    "wasm",
+    "cloudflare-workers"
+  ],
   "license": "MPL-2.0",
   "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/og#readme",
   "repository": {
@@ -18,7 +28,9 @@
     "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "module": "./dist/esm/workers/index.js",
   "types": "./dist/dts/workers/index.d.ts",
@@ -59,13 +71,27 @@
   },
   "typesVersions": {
     "*": {
-      "next": ["./dist/dts/next/index.d.ts"],
-      "node": ["./dist/dts/node/index.d.ts"],
-      "others": ["./dist/dts/others/index.d.ts"],
-      "workers": ["./dist/dts/workers/index.d.ts"],
-      "figma": ["./dist/dts/figma/index.d.ts"],
-      "string-to-node": ["./dist/dts/string-to-node/index.d.ts"],
-      "*": ["./dist/dts/workers/index.d.ts"]
+      "next": [
+        "./dist/dts/next/index.d.ts"
+      ],
+      "node": [
+        "./dist/dts/node/index.d.ts"
+      ],
+      "others": [
+        "./dist/dts/others/index.d.ts"
+      ],
+      "workers": [
+        "./dist/dts/workers/index.d.ts"
+      ],
+      "figma": [
+        "./dist/dts/figma/index.d.ts"
+      ],
+      "string-to-node": [
+        "./dist/dts/string-to-node/index.d.ts"
+      ],
+      "*": [
+        "./dist/dts/workers/index.d.ts"
+      ]
     }
   },
   "dependencies": {

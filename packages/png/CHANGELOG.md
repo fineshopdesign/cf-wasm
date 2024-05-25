@@ -1,5 +1,11 @@
 # @cf-wasm/png
 
+## 0.1.18
+
+### Patch Changes
+
+- [`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e) Thanks [@fineshop](https://github.com/fineshop)! - chore: use tsup
+
 ## 0.1.17
 
 ### Patch Changes

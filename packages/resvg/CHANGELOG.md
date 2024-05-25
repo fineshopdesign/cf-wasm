@@ -1,5 +1,11 @@
 # @cf-wasm/resvg
 
+## 0.1.18
+
+### Patch Changes
+
+- [`906211f`](https://github.com/fineshopdesign/cf-wasm/commit/906211f5001cdf7346851a9ab8a83bbb7705103e) Thanks [@fineshop](https://github.com/fineshop)! - feat: add submodules for version `2.4.1` since it is lightweight, it is being used by `@cf-wasm/og`
+
 ## 0.1.17
 
 ### Patch Changes
