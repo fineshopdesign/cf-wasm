@@ -1,51 +1,65 @@
 {
-	"eslint.workingDirectories": [
-		{ "directory": "workspaces/server", "changeProcessCWD": true }
-	],
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[javascriptreact]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescriptreact]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[markdown]": {
-		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-	},
-	"markdownlint.config": {
-		"no-trailing-spaces": false
-	},
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"editor.formatOnSave": true,
-	"json.schemas": [
-		{
-			"fileMatch": [".ncurc", ".ncurc.json"],
-			"url": "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json"
-		}
-	],
-	"yaml.schemas": {
-		"https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json": [
-			".ncurc.yml"
-		]
-	},
-	"cSpell.words": [
-		"blobmoji",
-		"buildwasm",
-		"copyfiles",
-		"fineshopdesign",
-		"getwasm",
-		"Kumar",
-		"noto",
-		"O'Dwyer",
-		"openmoji",
-		"postbuild",
-		"resvg",
-		"tsbuildinfo",
-		"workerd"
-	]
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "markdownlint.config": {
+    "no-trailing-spaces": false
+  },
+  "json.schemas": [
+    {
+      "fileMatch": [".ncurc", ".ncurc.json"],
+      "url": "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json"
+    }
+  ],
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json": [".ncurc.yml"]
+  },
+  "cSpell.words": [
+    "biomejs",
+    "blobmoji",
+    "buildwasm",
+    "copyfiles",
+    "fastly",
+    "fineshopdesign",
+    "getwasm",
+    "hedgedoc",
+    "Kumar",
+    "lagon",
+    "noto",
+    "O'Dwyer",
+    "openmoji",
+    "postbuild",
+    "resvg",
+    "tsbuildinfo",
+    "workerd"
+  ]
 }

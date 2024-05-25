@@ -1,93 +1,101 @@
 {
-	"name": "@cf-wasm/resvg",
-	"version": "0.1.17",
-	"private": false,
-	"description": "A high-performance SVG renderer and toolkit, powered by Rust based resvg.",
-	"keywords": [
-		"resvg",
-		"svg",
-		"resvg-js",
-		"resvg-wasm",
-		"rust",
-		"svg2png",
-		"svg2img",
-		"svg to png",
-		"wasm",
-		"cloudflare-workers"
-	],
-	"license": "MPL-2.0",
-	"author": {
-		"name": "yisibl"
-	},
-	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/resvg#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fineshopdesign/cf-wasm",
-		"directory": "packages/resvg"
-	},
-	"bugs": {
-		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
-	},
-	"scripts": {
-		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
-		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"build": "tsx scripts/build.ts",
-		"clean": "rimraf dist"
-	},
-	"files": [
-		"dist"
-	],
-	"type": "module",
-	"module": "./dist/esm/workers/index.js",
-	"types": "./dist/dts/workers/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		},
-		"./next": {
-			"types": "./dist/dts/next/index.d.ts",
-			"import": "./dist/esm/next/index.js"
-		},
-		"./node": {
-			"types": "./dist/dts/node/index.d.ts",
-			"import": "./dist/esm/node/index.js",
-			"require": "./dist/cjs/node/index.js"
-		},
-		"./others": {
-			"types": "./dist/dts/others/index.d.ts",
-			"import": "./dist/esm/others/index.js",
-			"require": "./dist/cjs/others/index.js"
-		},
-		"./others/resvg.wasm": {
-			"import": "./dist/esm/lib/resvg.wasm",
-			"require": "./dist/cjs/lib/resvg.wasm"
-		},
-		"./workers": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"next": [
-				"./dist/dts/next/index.d.ts"
-			],
-			"node": [
-				"./dist/dts/node/index.d.ts"
-			],
-			"others": [
-				"./dist/dts/others/index.d.ts"
-			],
-			"workers": [
-				"./dist/dts/workers/index.d.ts"
-			],
-			"*": [
-				"./dist/dts/workers/index.d.ts"
-			]
-		}
-	},
-	"dependencies": {
-		"@resvg/resvg-wasm": "^2.6.2"
-	}
+  "name": "@cf-wasm/resvg",
+  "version": "0.1.17",
+  "private": false,
+  "description": "A high-performance SVG renderer and toolkit, powered by Rust based resvg.",
+  "keywords": ["resvg", "svg", "resvg-js", "resvg-wasm", "rust", "svg2png", "svg2img", "svg to png", "wasm", "cloudflare-workers"],
+  "license": "MPL-2.0",
+  "author": {
+    "name": "yisibl"
+  },
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/resvg#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/resvg"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": ["dist"],
+  "type": "module",
+  "module": "./dist/esm/workers/index.js",
+  "types": "./dist/dts/workers/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./next": {
+      "types": "./dist/dts/next/index.d.ts",
+      "import": "./dist/esm/next/index.js"
+    },
+    "./node": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/esm/node/index.js",
+      "require": "./dist/cjs/node/index.js"
+    },
+    "./others": {
+      "types": "./dist/dts/others/index.d.ts",
+      "import": "./dist/esm/others/index.js",
+      "require": "./dist/cjs/others/index.js"
+    },
+    "./workers": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./resvg.wasm": {
+      "import": "./dist/esm/core/resvg.wasm",
+      "require": "./dist/cjs/core/resvg.wasm"
+    },
+    "./2.4.1": {
+      "types": "./dist/dts/2.4.1/workers/index.d.ts",
+      "import": "./dist/esm/2.4.1/workers/index.js"
+    },
+    "./2.4.1/next": {
+      "types": "./dist/dts/2.4.1/next/index.d.ts",
+      "import": "./dist/esm/2.4.1/next/index.js"
+    },
+    "./2.4.1/node": {
+      "types": "./dist/dts/2.4.1/node/index.d.ts",
+      "import": "./dist/esm/2.4.1/node/index.js",
+      "require": "./dist/cjs/2.4.1/node/index.js"
+    },
+    "./2.4.1/others": {
+      "types": "./dist/dts/2.4.1/others/index.d.ts",
+      "import": "./dist/esm/2.4.1/others/index.js",
+      "require": "./dist/cjs/2.4.1/others/index.js"
+    },
+    "./2.4.1/workers": {
+      "types": "./dist/dts/2.4.1/workers/index.d.ts",
+      "import": "./dist/esm/2.4.1/workers/index.js"
+    },
+    "./2.4.1/resvg.wasm": {
+      "import": "./dist/esm/2.4.1/core/resvg.wasm",
+      "require": "./dist/cjs/2.4.1/core/resvg.wasm"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "next": ["./dist/dts/next/index.d.ts"],
+      "node": ["./dist/dts/node/index.d.ts"],
+      "others": ["./dist/dts/others/index.d.ts"],
+      "workers": ["./dist/dts/workers/index.d.ts"],
+      "2.4.1": ["./dist/dts/2.4.1/workers/index.d.ts"],
+      "2.4.1/next": ["./dist/dts/2.4.1/next/index.d.ts"],
+      "2.4.1/node": ["./dist/dts/2.4.1/node/index.d.ts"],
+      "2.4.1/others": ["./dist/dts/2.4.1/others/index.d.ts"],
+      "2.4.1/workers": ["./dist/dts/2.4.1/workers/index.d.ts"],
+      "*": ["./dist/dts/2.4.1/workers/index.d.ts"]
+    }
+  },
+  "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@resvg/resvg-wasm-2.4.1": "npm:@resvg/resvg-wasm@2.4.1"
+  }
 }

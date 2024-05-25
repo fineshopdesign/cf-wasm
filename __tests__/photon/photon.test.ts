@@ -1,6 +1,6 @@
-import { test, expect } from "vitest";
-import * as photon from "@cf-wasm/photon/node";
+import { MODULE } from '@cf-wasm/photon/node';
+import { expect, test } from 'vitest';
 
-test("photon.MODULE should be an instance of WebAssembly.Module", () => {
-	expect(photon.MODULE).instanceOf(WebAssembly.Module);
+test('MODULE should be an instance of WebAssembly.Module', () => {
+  expect(MODULE).instanceOf(WebAssembly.Module);
 });

@@ -1,13 +1,10 @@
 {
-	"$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
-	"changelog": [
-		"@changesets/changelog-github",
-		{ "repo": "fineshopdesign/cf-wasm" }
-	],
-	"commit": false,
-	"linked": [],
-	"access": "public",
-	"baseBranch": "main",
-	"updateInternalDependencies": "patch",
-	"ignore": ["@cf-wasm-tests/*"]
+  "$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "fineshopdesign/cf-wasm" }],
+  "commit": false,
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@cf-wasm-tests/*"]
 }

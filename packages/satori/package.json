@@ -1,95 +1,73 @@
 {
-	"name": "@cf-wasm/satori",
-	"version": "0.1.16",
-	"private": false,
-	"description": "Enlightened library to convert HTML and CSS to SVG.",
-	"keywords": [
-		"HTML",
-		"JSX",
-		"SVG",
-		"converter",
-		"renderer",
-		"wasm",
-		"cloudflare-workers"
-	],
-	"license": "MPL-2.0",
-	"author": {
-		"name": "Shu Ding",
-		"email": "g@shud.in"
-	},
-	"homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/satori#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fineshopdesign/cf-wasm",
-		"directory": "packages/satori"
-	},
-	"bugs": {
-		"url": "https://github.com/fineshopdesign/cf-wasm/issues"
-	},
-	"scripts": {
-		"lint": "cross-env DEBUG=eslint:cli-engine eslint --fix --ignore-path ../../.eslintignore .",
-		"format": "prettier --write --ignore-path ../../.prettierignore .",
-		"build": "tsx scripts/build.ts",
-		"clean": "rimraf dist"
-	},
-	"files": [
-		"dist"
-	],
-	"type": "module",
-	"module": "./dist/esm/workers/index.js",
-	"types": "./dist/dts/workers/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		},
-		"./next": {
-			"types": "./dist/dts/next/index.d.ts",
-			"import": "./dist/esm/next/index.js"
-		},
-		"./node": {
-			"types": "./dist/dts/node/index.d.ts",
-			"import": "./dist/esm/node/index.js",
-			"require": "./dist/cjs/node/index.js"
-		},
-		"./others": {
-			"types": "./dist/dts/others/index.d.ts",
-			"import": "./dist/esm/others/index.js",
-			"require": "./dist/cjs/others/index.js"
-		},
-		"./others/yoga.wasm": {
-			"import": "./dist/esm/lib/yoga.wasm",
-			"require": "./dist/cjs/lib/yoga.wasm"
-		},
-		"./workers": {
-			"types": "./dist/dts/workers/index.d.ts",
-			"import": "./dist/esm/workers/index.js"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"next": [
-				"./dist/dts/next/index.d.ts"
-			],
-			"node": [
-				"./dist/dts/node/index.d.ts"
-			],
-			"others": [
-				"./dist/dts/others/index.d.ts"
-			],
-			"workers": [
-				"./dist/dts/workers/index.d.ts"
-			],
-			"*": [
-				"./dist/dts/workers/index.d.ts"
-			]
-		}
-	},
-	"dependencies": {
-		"satori": "^0.10.13",
-		"yoga-wasm-web": "^0.3.3"
-	},
-	"devDependencies": {
-		"@types/react": "^18.2.79"
-	}
+  "name": "@cf-wasm/satori",
+  "version": "0.1.16",
+  "private": false,
+  "description": "Enlightened library to convert HTML and CSS to SVG.",
+  "keywords": ["HTML", "JSX", "SVG", "converter", "renderer", "wasm", "cloudflare-workers"],
+  "license": "MPL-2.0",
+  "author": {
+    "name": "Shu Ding",
+    "email": "g@shud.in"
+  },
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/satori#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/satori"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": ["dist"],
+  "type": "module",
+  "module": "./dist/esm/workers/index.js",
+  "types": "./dist/dts/workers/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./next": {
+      "types": "./dist/dts/next/index.d.ts",
+      "import": "./dist/esm/next/index.js"
+    },
+    "./node": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/esm/node/index.js",
+      "require": "./dist/cjs/node/index.js"
+    },
+    "./others": {
+      "types": "./dist/dts/others/index.d.ts",
+      "import": "./dist/esm/others/index.js",
+      "require": "./dist/cjs/others/index.js"
+    },
+    "./workers": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./yoga.wasm": {
+      "import": "./dist/esm/core/yoga.wasm",
+      "require": "./dist/cjs/core/yoga.wasm"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "next": ["./dist/dts/next/index.d.ts"],
+      "node": ["./dist/dts/node/index.d.ts"],
+      "others": ["./dist/dts/others/index.d.ts"],
+      "workers": ["./dist/dts/workers/index.d.ts"],
+      "*": ["./dist/dts/workers/index.d.ts"]
+    }
+  },
+  "dependencies": {
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "satori": "^0.10.13",
+    "yoga-wasm-web": "^0.3.3"
+  }
 }
