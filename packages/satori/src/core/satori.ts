@@ -1,33 +1,39 @@
 import type { ReactNode } from 'react';
-import satoriWasm, { init as initSatori, type SatoriOptions } from 'satori/wasm';
+import satoriWasm, { init, type SatoriOptions } from 'satori/wasm';
+import type { Yoga } from 'yoga-wasm-web';
 
-export const init = (input: unknown) => {
-  if (init.called) {
-    throw new Error('init() can be called only once');
-  }
-  init.called = true;
-  init.input = input;
-};
-init.called = false;
-init.input = undefined as unknown;
+export type InputParam = (() => Yoga | Promise<Yoga>) | Yoga | Promise<Yoga>;
 
-export const ensureInit = async () => {
-  if (!init.called) {
-    throw new Error('Call init() first');
+/** Initializes satori */
+export const initSatori = (input: InputParam) => {
+  if (initSatori.input) {
+    throw new Error('Function already called. The `initSatori()` function can be used only once.');
   }
-  if (!init.input) {
-    throw new Error('Input provided using init() is not valid');
+  if (!input) {
+    throw new Error('Invalid `input`. Provide valid `input`.');
   }
-  if (!ensureInit.initialized) {
-    const yoga = (init.input instanceof Promise ? await init.input : init.input) as never;
-    initSatori(yoga);
-    ensureInit.initialized = true;
+  initSatori.input = input;
+};
+
+/** The input provided through function */
+initSatori.input = undefined as InputParam | undefined;
+/** Indicates whether satori is initialized */
+initSatori.initialized = false;
+
+/** Ensures satori is initialized */
+initSatori.ensure = async () => {
+  if (!initSatori.input) {
+    throw new Error('Satori is not yet initialized. Call `initSatori()` function first.');
+  }
+  if (!initSatori.initialized) {
+    const input = await (typeof initSatori.input === 'function' ? initSatori.input() : initSatori.input);
+    init(input);
+    initSatori.initialized = true;
   }
 };
-ensureInit.initialized = false;
 
 export const satori = async (element: ReactNode, options: SatoriOptions) => {
-  await ensureInit();
+  await initSatori.ensure();
   return satoriWasm(element, options);
 };
 

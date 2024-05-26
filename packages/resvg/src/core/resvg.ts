@@ -1,31 +1,50 @@
 import { type InitInput, Resvg as ResvgClass, type ResvgRenderOptions, initWasm } from '@resvg/resvg-wasm';
 
-export const init = (input: InitInput | Promise<InitInput>) => {
-  if (init.input) {
-    throw new Error('Already initialized. The `init()` function can be used only once.');
+export type InputParam = (() => InitInput | Promise<InitInput>) | InitInput | Promise<InitInput>;
+
+/** Initializes resvg */
+export const initResvg = (input: InputParam) => {
+  if (initResvg.input) {
+    throw new Error('Function already called. The `initResvg()` function can be used only once.');
   }
   if (!input) {
-    throw new Error('Provide a valid `input`');
+    throw new Error('Invalid `input`. Provide valid `input`.');
   }
-  init.input = input;
+  initResvg.input = input;
 };
-init.input = undefined as InitInput | Promise<InitInput> | undefined;
 
-const ensureInit = async () => {
-  if (!init.input) {
-    throw new Error('Call `init()` function first.');
+/** The input provided through function */
+initResvg.input = undefined as InputParam | undefined;
+/** Indicates whether resvg is initialized */
+initResvg.initialized = false;
+
+/** Ensures resvg is initialized */
+initResvg.ensure = async () => {
+  if (!initResvg.input) {
+    throw new Error('Resvg is not yet initialized. Call `initResvg()` function first.');
   }
-  if (!ensureInit.initialized) {
-    await initWasm(init.input);
-    ensureInit.initialized = true;
+  if (!initResvg.initialized) {
+    const input = (await (typeof initResvg.input === 'function' ? initResvg.input() : initResvg.input)) as InitInput | Promise<InitInput>;
+    await initWasm(input);
+    initResvg.initialized = true;
   }
 };
-ensureInit.initialized = false;
 
-// biome-ignore lint/complexity/noStaticOnlyClass: we are extending resvg original class
 export class Resvg extends ResvgClass {
+  constructor(svg: Uint8Array | string, options?: ResvgRenderOptions) {
+    if (!initResvg.initialized) {
+      if (initResvg.input) {
+        throw new Error(
+          '`initResvg()` function was called, but Resvg is not yet initialized. Use `Resvg.create()` async static method instead to ensure Resvg is initialized.',
+        );
+      }
+      throw new Error('Resvg is not yet initialized. Call `initResvg()` function first.');
+    }
+    super(svg, options);
+  }
+
   public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions) {
-    await ensureInit();
+    await initResvg.ensure();
     return new Resvg(svg, options);
   }
 }
