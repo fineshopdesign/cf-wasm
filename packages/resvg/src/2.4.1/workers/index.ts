@@ -1,7 +1,7 @@
-import { init } from '../core/resvg';
+import { initResvg } from '../core/resvg';
 import MODULE from '../core/resvg.wasm';
 
-init(MODULE);
+initResvg(MODULE);
 
 export { MODULE };
 export {

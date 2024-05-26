@@ -1,6 +1,6 @@
 export {
   Resvg,
-  init as initResvg,
+  initResvg,
   type BBox,
   type RenderedImage,
   type InitInput,
