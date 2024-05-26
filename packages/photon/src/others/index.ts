@@ -1,13 +1,19 @@
 import initAsync, { type InitInput } from '../lib/photon_rs';
 
-/** Initializes Photon asynchronously */
+/** Initializes photon asynchronously */
 export const initPhoton = async (input: InitInput | Promise<InitInput>) => {
-  if (initPhoton.initialized) {
-    throw new Error('Already initialized. The `initPhoton()` function can be used only once.');
+  if (initPhoton.input) {
+    throw new Error('Function already called. The `initPhoton()` function can be used only once.');
   }
+  if (!input) {
+    throw new Error('Invalid `input`. Provide valid `input`.');
+  }
+  initPhoton.input = input;
+  const result = await initAsync(input);
   initPhoton.initialized = true;
-  await initAsync(input);
+  return result;
 };
+initPhoton.input = undefined as InitInput | Promise<InitInput> | undefined;
 initPhoton.initialized = false;
 
 export { initAsync };

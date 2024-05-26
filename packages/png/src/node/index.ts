@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-
 import initAsync, { initSync } from '../png';
 
 const filename = url.fileURLToPath(import.meta.url);

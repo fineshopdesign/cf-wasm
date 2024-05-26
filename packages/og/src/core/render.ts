@@ -213,8 +213,9 @@ export const render = (element: ReactElement, options: RenderOptions = {}) => {
         height: renderedImage.height,
       };
 
-      resvg.free();
+      // Explicitly free rust memory
       renderedImage.free();
+      resvg.free();
     }
 
     return data.png;
