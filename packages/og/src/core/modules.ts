@@ -10,29 +10,39 @@ const MODULE_DATA: {
 };
 
 export const modules = {
-  /**
-   * The {@link ResvgModule}
-   */
+  /** The {@link ResvgModule} */
   get resvg() {
     if (!MODULE_DATA.resvg) {
-      throw new Error('modules.resvg is not set!');
+      throw new Error('Module `resvg` is not set, set it before accessing.');
     }
     return MODULE_DATA.resvg;
   },
-  set resvg(m) {
-    MODULE_DATA.resvg = m;
+  set resvg(module) {
+    MODULE_DATA.resvg = module;
   },
 
-  /**
-   * The {@link SatoriModule}
-   */
+  /** The {@link SatoriModule} */
   get satori() {
     if (!MODULE_DATA.satori) {
-      throw new Error('modules.satori is not set!');
+      throw new Error('Module `satori` is not set, set it before accessing.');
     }
     return MODULE_DATA.satori;
   },
-  set satori(m) {
-    MODULE_DATA.satori = m;
+  set satori(module) {
+    MODULE_DATA.satori = module;
+  },
+
+  /** Sets modules */
+  set(resvgModule: ResvgModule, satoriModule: SatoriModule) {
+    this.resvg = resvgModule;
+    this.satori = satoriModule;
+  },
+
+  /** Ensures all the modules are set */
+  isUsable() {
+    if (MODULE_DATA.resvg && MODULE_DATA.satori) {
+      return true;
+    }
+    return false;
   },
 };

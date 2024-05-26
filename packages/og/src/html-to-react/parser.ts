@@ -76,12 +76,12 @@ const wrapper = (children: ReactChild[]): ReactElement => {
  *
  * @returns The {@link ReactElement}
  */
-export const stringToNode = (html: string, options?: ParserOptions): ReactElement => {
+export const htmlToReact = (html: string, options?: ParserOptions): ReactElement => {
   if (typeof html !== 'string') {
     throw new TypeError('Argument 1 must be of type string');
   }
   if (html.trim().length === 0) {
-    throw new TypeError('Empty html string cannot be parsed');
+    throw new TypeError('Blank html string cannot be parsed');
   }
 
   return wrapper(convertHtmlToReact(html, options));

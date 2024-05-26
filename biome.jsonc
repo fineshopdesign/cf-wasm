@@ -32,5 +32,13 @@
     "parser": {
       "allowComments": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": ["package.json"],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ]
 }
