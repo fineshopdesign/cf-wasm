@@ -20,3 +20,7 @@ npm install @cf-wasm/satori
   `import * as satori from "@cf-wasm/satori/next";`
 - CJS (file base):  
   `import * as satori from "@cf-wasm/satori/node";`
+
+## Documentation
+
+Read official documentation at [satori](https://www.npmjs.com/package/satori).

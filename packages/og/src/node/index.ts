@@ -11,8 +11,7 @@ const dirname = path.dirname(filename);
 const fallbackFont = fs.readFileSync(path.resolve(dirname, '../core/noto-sans-v27-latin-regular.ttf.bin'));
 
 // Set modules
-modules.resvg = resvg;
-modules.satori = satori;
+modules.set(resvg, satori);
 
 // Set default font
 defaultFont.set(fallbackFont);
@@ -25,6 +24,7 @@ export {
   defaultFont,
   loadGoogleFont,
   cache,
+  FetchError,
   type ImageResponseOptions,
   type CustomFontOptions,
   type GoogleFontOptions,

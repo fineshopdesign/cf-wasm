@@ -1,46 +1,32 @@
 import type { ReactElement } from 'react';
 import { loadDynamicAsset } from './asset';
 import type { EmojiType } from './emoji';
-import { CustomFont, GoogleFont, defaultFont } from './font';
+import { CustomFont, type FontBuffer, GoogleFont, defaultFont } from './font';
 import { modules } from './modules';
 import type { ResvgRenderOptions } from './resvg';
-import type { Font, SatoriOptions } from './satori';
+import type { Font as SatoriFont, SatoriOptions } from './satori';
 
-/**
- * Represents a png result of render function
- */
+/** Represents a png result of render function */
 export interface PngResult {
   pixels: Uint8Array;
   image: Uint8Array;
 
-  /**
-   * The width of the image
-   */
+  /** The width of the image */
   width: number;
 
-  /**
-   * The height of the image
-   */
+  /** The height of the image */
   height: number;
 }
 
-/**
- * Represents a svg result of render function
- */
+/** Represents a svg result of render function */
 export interface SvgResult {
-  /**
-   * The svg image as string
-   */
+  /** The svg image as string */
   image: string;
 
-  /**
-   * The width of the image
-   */
+  /** The width of the image */
   width: number;
 
-  /**
-   * The height of the image
-   */
+  /** The height of the image */
   height: number;
 }
 
@@ -48,9 +34,9 @@ export interface RenderSatoriOptions extends Omit<SatoriOptions, 'width' | 'heig
 
 export interface RenderResvgOptions extends Omit<ResvgRenderOptions, 'fitTo'> {}
 
-/**
- * An interface representing options for {@link render} function
- */
+export type Font = Omit<SatoriFont, 'data'> & FontBuffer;
+
+/** An interface representing options for {@link render} function */
 export interface RenderOptions {
   /**
    * The width of the image.
@@ -73,12 +59,15 @@ export interface RenderOptions {
    */
   debug?: boolean;
 
+  /** The default font to use */
+  defaultFont?: FontBuffer;
+
   /**
    * A list of fonts to use.
    *
    * @default Noto Sans Latin Regular.
    */
-  fonts?: (Omit<Font, 'data'> & { data: ArrayBuffer | Promise<ArrayBuffer> })[];
+  fonts?: Font[];
 
   /**
    * Using a specific Emoji style. Defaults to `twemoji`.
@@ -103,6 +92,14 @@ export interface RenderOptions {
   resvgOptions?: RenderResvgOptions;
 }
 
+/** Default options */
+const DEFAULT_OPTIONS = {
+  width: 1200,
+  height: 630,
+  debug: false,
+  fonts: [],
+};
+
 /**
  * Renders {@link ReactElement} to image
  *
@@ -111,7 +108,7 @@ export interface RenderOptions {
  *
  * @returns An object containing methods for rendering the input element to image
  */
-export const render = (element: ReactElement, options?: RenderOptions) => {
+export const render = (element: ReactElement, options: RenderOptions = {}) => {
   const data: {
     svg: SvgResult | null;
     png: PngResult | null;
@@ -123,19 +120,18 @@ export const render = (element: ReactElement, options?: RenderOptions) => {
   };
 
   const renderOptions = {
-    width: 1200,
-    height: 630,
-    debug: false,
-    fonts: [],
+    ...DEFAULT_OPTIONS,
     ...options,
   };
 
   const getFonts = async () => {
     if (!data.fonts) {
-      const fallbackFont = await defaultFont.get();
+      const fallbackFont = await (renderOptions.defaultFont?.data ?? defaultFont.get());
+
       if (!fallbackFont) {
         console.warn("(@cf-wasm/og) [ WARN ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font");
       }
+
       const defaultFonts = [
         fallbackFont
           ? new CustomFont('sans serif', fallbackFont, {
@@ -148,6 +144,7 @@ export const render = (element: ReactElement, options?: RenderOptions) => {
               style: 'normal',
             }),
       ];
+
       const satoriFonts: SatoriOptions['fonts'] = await Promise.all(
         [...defaultFonts, ...renderOptions.fonts].map(async (font) => ({
           ...font,

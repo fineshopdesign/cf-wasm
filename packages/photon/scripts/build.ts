@@ -13,7 +13,7 @@ const ESM_ENTRYPOINTS = glob.sync('./src/**/*.{ts,js}', {
 
 // Entrypoints for CJS
 const CJS_ENTRYPOINTS = glob.sync('./src/**/*.{ts,js}', {
-  ignore: ['**/*.d.ts', './src/**/*.test.ts', './src/workers', './src/next'],
+  ignore: ['**/*.d.ts', './src/**/*.test.ts', './src/workers/**', './src/next/**'],
 });
 
 // Build directory

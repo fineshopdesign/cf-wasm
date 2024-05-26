@@ -3,8 +3,7 @@ import * as satori from '@cf-wasm/satori/others';
 import { GoogleFont, defaultFont, modules } from '../core';
 
 // Set modules
-modules.resvg = resvg;
-modules.satori = satori;
+modules.set(resvg, satori);
 
 // Set default font
 defaultFont.set(
@@ -23,6 +22,7 @@ export {
   defaultFont,
   loadGoogleFont,
   cache,
+  FetchError,
   type ImageResponseOptions,
   type CustomFontOptions,
   type GoogleFontOptions,
