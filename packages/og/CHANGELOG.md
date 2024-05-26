@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.1.25
+
+### Patch Changes
+
+- [`c90bbc8`](https://github.com/fineshopdesign/cf-wasm/commit/c90bbc8245d6e2e1b1b8bd4e72565cdc98a696ad) Thanks [@fineshop](https://github.com/fineshop)! - fix: package.json
+
+- Updated dependencies [[`c90bbc8`](https://github.com/fineshopdesign/cf-wasm/commit/c90bbc8245d6e2e1b1b8bd4e72565cdc98a696ad)]:
+  - @cf-wasm/satori@0.1.19
+  - @cf-wasm/resvg@0.1.20
+
 ## 0.1.24
 
 ### Patch Changes
