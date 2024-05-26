@@ -4,6 +4,8 @@ export { cache } from './cache';
 
 export { type EmojiType } from './emoji';
 
+export { FetchError, type FetchErrorOptions } from './errors';
+
 export {
   BaseFont,
   GoogleFont,
@@ -19,6 +21,7 @@ export { ImageResponse, type ImageResponseOptions } from './response';
 
 export {
   render,
+  type Font,
   type RenderOptions,
   type RenderSatoriOptions,
   type RenderResvgOptions,
@@ -29,7 +32,6 @@ export {
 export type { ResvgRenderOptions } from './resvg';
 
 export type {
-  Font,
   FontStyle,
   FontWeight,
   Locale,

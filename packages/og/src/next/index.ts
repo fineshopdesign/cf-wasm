@@ -3,8 +3,7 @@ import * as satori from '@cf-wasm/satori/next';
 import { defaultFont, modules } from '../core';
 
 // Set modules
-modules.resvg = resvg;
-modules.satori = satori;
+modules.set(resvg, satori);
 
 // Set default font
 defaultFont.set(() => fetch(new URL('../core/noto-sans-v27-latin-regular.ttf.bin', import.meta.url)).then((res) => res.arrayBuffer()));
@@ -17,6 +16,7 @@ export {
   defaultFont,
   loadGoogleFont,
   cache,
+  FetchError,
   type ImageResponseOptions,
   type CustomFontOptions,
   type GoogleFontOptions,

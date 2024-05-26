@@ -1,43 +1,38 @@
 import type { ReactElement } from 'react';
+import { modules } from '../core';
 import { FetchError } from '../core/errors';
-import { type PngResult, type RenderOptions, type SvgResult, render } from '../core/render';
+import type { FontBuffer } from '../core/font';
+import { type Font, type PngResult, type RenderOptions, type SvgResult, render } from '../core/render';
 import { BaseResponse, type BaseResponseOptions, type ImageResponseOptions } from '../core/response';
-import type { Font, FontWeight } from '../core/satori';
+import type { FontWeight } from '../core/satori';
 import type { MayBePromise } from '../core/types';
 import { detectRuntime } from '../core/utils/detect-runtime';
 import { replaceEntities } from '../core/utils/entities';
 
-/**
- * An interface representing the element result of a figma template
- */
+/** Make sure modules are set by importing the main module */
+if (!modules.isUsable()) {
+  throw new Error(
+    'Modules are not initialized! Please import the main module based on runtime (i.e. `@cf-wasm/og`, `@cf-wasm/og/next`, etc.) before importing the `figma` submodule (i.e. `@cf-wasm/og/figma`)',
+  );
+}
+
+/** An interface representing the element result of a figma template */
 export interface ElementResult {
-  /**
-   * The element as {@link ReactElement}
-   */
+  /** The element as {@link ReactElement} */
   // biome-ignore lint/suspicious/noExplicitAny: we need to use `any` here
   element: ReactElement<any, string | React.JSXElementConstructor<any>>;
 
-  /**
-   * The width of the image
-   */
+  /** The width of the image */
   width: number;
 
-  /**
-   * The height of the image
-   */
+  /** The height of the image */
   height: number;
 
-  /**
-   * The dynamic fonts
-   */
-  fonts: (Omit<Font, 'data'> & {
-    data: ArrayBuffer | Promise<ArrayBuffer>;
-  })[];
+  /** The dynamic fonts */
+  fonts: Font[];
 }
 
-/**
- * An interface representing a figma complex template
- */
+/** An interface representing a figma complex template */
 export interface FigmaComplexTemplate {
   value: string;
   props?: {
@@ -45,9 +40,7 @@ export interface FigmaComplexTemplate {
   } & React.CSSProperties;
 }
 
-/**
- * An interface representing figma options
- */
+/** An interface representing figma options */
 export interface FigmaOptions {
   /**
    * Link to the Figma template frame.
@@ -77,9 +70,7 @@ export interface FigmaOptions {
    */
   template: Record<string, FigmaComplexTemplate | string>;
 
-  /**
-   * Figma API token
-   */
+  /** Figma API token */
   token: string;
 }
 
@@ -87,18 +78,14 @@ export type LoadFontsFunction = (
   fontFamily: string,
   fontWeight: FontWeight | undefined,
   fontStyle: 'normal' | 'italic' | undefined,
-) => MayBePromise<{ data: ArrayBuffer | Promise<ArrayBuffer> } | ArrayBuffer | undefined>;
+) => MayBePromise<ArrayBuffer | FontBuffer | undefined>;
 
-/**
- * An interface representing options for {@link renderFigma} function
- */
+/** An interface representing options for {@link renderFigma} function */
 export interface RenderFigmaOptions extends Omit<RenderOptions, 'width' | 'height'> {
   loadFonts?: LoadFontsFunction;
 }
 
-/**
- * An interface representing options for {@link FigmaImageResponse}
- */
+/** An interface representing options for {@link FigmaImageResponse} */
 export interface FigmaImageResponseOptions extends RenderFigmaOptions, BaseResponseOptions {}
 
 /**
@@ -365,16 +352,12 @@ export const loadTextNodeFonts = async (nodeAttributes: ReturnType<typeof parseT
               get data() {
                 return typeof awaited === 'object' && 'data' in awaited ? awaited.data : awaited;
               },
-            } as Omit<Font, 'data'> & {
-              data: ArrayBuffer | Promise<ArrayBuffer>;
-            };
+            } as Font;
           }
           return undefined;
         }),
     )
-  ).filter(Boolean) as (Omit<Font, 'data'> & {
-    data: ArrayBuffer | Promise<ArrayBuffer>;
-  })[];
+  ).filter(Boolean) as Font[];
 
 /**
  * Renders Figma template to image
@@ -563,9 +546,7 @@ export const renderFigma = (figmaOptions: FigmaOptions, renderOptions?: RenderFi
   return { asElement, asSvg, asPng };
 };
 
-/**
- * A class for rendering Figma template to image as {@link Response}
- */
+/** A class for rendering Figma template to image as {@link Response} */
 export class FigmaImageResponse extends BaseResponse {
   /**
    * Creates an instance of {@link FigmaImageResponse}
