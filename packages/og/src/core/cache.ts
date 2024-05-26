@@ -1,5 +1,10 @@
 import type { MayBePromise } from './types';
 
+/** The execution context interface */
+export interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
+}
+
 export const CACHE_INSTANCE_MAP = new Map<string, Cache>();
 
 /** A Cache like no-op object */
@@ -56,23 +61,36 @@ export const cache = {
    */
   cacheControlHeader: 'public, max-age=604800, s-maxage=43200',
 
-  /**
-   * The `waitUntil` function
-   *
-   * Note that if you are overwriting this function,
-   * you should not do the following:
-   * ```ts
-   * <Object>.waitUntil = ctx.waitUntil // here ctx is cloudflare workers' executionContext
-   * ```
-   *
-   * Instead write it as following:
-   * ```ts
-   * <Object>.waitUntil = ctx.waitUntil.bind(ctx) // here ctx is cloudflare workers' executionContext
-   * ```
-   */
+  /** The waitUntil function */
   waitUntil: (async (promise) => {
     await promise;
-  }) as ((promise: Promise<unknown>) => void | Promise<void>) | undefined,
+  }) as (promise: Promise<unknown>) => Promise<void> | void,
+
+  /**
+   * Sets execution context
+   *
+   * Example for Cloudflare workers:
+   *
+   * ```ts
+   * import { cache } from "@cf-wasm/og";
+   *
+   * export interface Env {}
+   *
+   * export default {
+   *   fetch(req: Request, env: Env, ctx: ExecutionContext) {
+   *     cache.setExecutionContext(ctx);
+   *
+   *     // ...
+   *   }
+   * }
+   * ```
+   */
+  setExecutionContext(ctx: ExecutionContext) {
+    if (typeof ctx?.waitUntil !== 'function') {
+      throw new TypeError('Provided object is not an execution context object.');
+    }
+    this.waitUntil = (promise) => ctx.waitUntil(promise);
+  },
 
   /**
    * Opens a cache
@@ -137,11 +155,7 @@ export const cache = {
         }
 
         const promise = store.put(key, response.clone());
-        if (this.waitUntil) {
-          await this.waitUntil(promise);
-        } else {
-          promise.catch((e) => console.error(e));
-        }
+        await this.waitUntil(promise);
       }
     } else {
       response = new Response(response.body, response);

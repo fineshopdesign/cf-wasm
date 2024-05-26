@@ -62,10 +62,10 @@
       "import": "./dist/esm/figma/index.js",
       "require": "./dist/cjs/figma/index.js"
     },
-    "./string-to-node": {
-      "types": "./dist/dts/string-to-node/index.d.ts",
-      "import": "./dist/esm/string-to-node/index.js",
-      "require": "./dist/cjs/string-to-node/index.js"
+    "./html-to-react": {
+      "types": "./dist/dts/html-to-react/index.d.ts",
+      "import": "./dist/esm/html-to-react/index.js",
+      "require": "./dist/cjs/html-to-react/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -86,11 +86,8 @@
       "figma": [
         "./dist/dts/figma/index.d.ts"
       ],
-      "string-to-node": [
-        "./dist/dts/string-to-node/index.d.ts"
-      ],
-      "*": [
-        "./dist/dts/workers/index.d.ts"
+      "html-to-react": [
+        "./dist/dts/html-to-react/index.d.ts"
       ]
     }
   },

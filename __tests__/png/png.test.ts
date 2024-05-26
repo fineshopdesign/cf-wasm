@@ -1,6 +1,8 @@
 import { MODULE } from '@cf-wasm/png/node';
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-test('MODULE should be an instance of WebAssembly.Module', () => {
-  expect(MODULE).instanceOf(WebAssembly.Module);
+describe('MODULE', () => {
+  it('should be an instance of WebAssembly.Module', () => {
+    expect(MODULE).instanceOf(WebAssembly.Module);
+  });
 });

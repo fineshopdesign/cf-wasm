@@ -80,9 +80,6 @@
       ],
       "workers": [
         "./dist/dts/workers/index.d.ts"
-      ],
-      "*": [
-        "./dist/dts/workers/index.d.ts"
       ]
     }
   }

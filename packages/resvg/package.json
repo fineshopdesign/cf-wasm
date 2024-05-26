@@ -121,9 +121,6 @@
       ],
       "2.4.1/workers": [
         "./dist/dts/2.4.1/workers/index.d.ts"
-      ],
-      "*": [
-        "./dist/dts/2.4.1/workers/index.d.ts"
       ]
     }
   },

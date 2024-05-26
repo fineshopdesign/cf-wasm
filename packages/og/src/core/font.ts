@@ -145,7 +145,7 @@ export class BaseFont {
 
   constructor(
     name: string,
-    input: ArrayBuffer | Promise<ArrayBuffer> | (() => ArrayBuffer | Promise<ArrayBuffer>) | undefined,
+    input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>) | undefined,
     { weight = 400, style = 'normal' }: BaseFontOptions = {},
   ) {
     this.input = input;
@@ -167,7 +167,7 @@ export interface CustomFontOptions extends BaseFontOptions {
  * A helper class to load Custom Fonts
  */
 export class CustomFont extends BaseFont {
-  protected input: ArrayBuffer | Promise<ArrayBuffer> | (() => ArrayBuffer | Promise<ArrayBuffer>);
+  protected input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>);
 
   private evaluated: ArrayBuffer | undefined;
 
@@ -180,7 +180,7 @@ export class CustomFont extends BaseFont {
    * @param input Font data as `ArrayBuffer` or a promise which resolves to `ArrayBuffer`
    * @param options
    */
-  constructor(name: string, input: ArrayBuffer | Promise<ArrayBuffer> | (() => Promise<ArrayBuffer>), options?: CustomFontOptions) {
+  constructor(name: string, input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>), options?: CustomFontOptions) {
     super(name, input, options);
     this.input = input;
     this.lang = options?.lang;
@@ -270,7 +270,11 @@ export class GoogleFont extends BaseFont {
   }
 }
 
-export type FontInput = MayBePromise<ArrayBuffer | Response> | { data: ArrayBuffer | Promise<ArrayBuffer> };
+export interface FontBuffer {
+  data: MayBePromise<ArrayBuffer>;
+}
+
+export type FontInput = MayBePromise<Response | ArrayBuffer> | FontBuffer;
 
 const FONT_DATA: {
   fallbackFont: FontInput | (() => FontInput) | undefined;
