@@ -1,12 +1,13 @@
-import satori, { init as initSatori } from 'satori/wasm';
+import { satori } from '../core/satori';
 
 export default satori;
-export { satori, initSatori };
 export {
+  satori,
+  initSatori,
   type Font,
   type FontStyle,
   type FontWeight,
   type Locale,
   type SatoriNode,
   type SatoriOptions,
-} from 'satori/wasm';
+} from '../core/satori';

@@ -1,6 +1,6 @@
 export {
   Resvg,
-  init as initResvg,
+  initResvg,
   type InitInput,
   type ResvgRenderOptions,
   type CustomFontsOptions,
