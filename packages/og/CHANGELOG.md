@@ -1,5 +1,18 @@
 # @cf-wasm/og
 
+## 0.1.24
+
+### Patch Changes
+
+- [`0cd4a37`](https://github.com/fineshopdesign/cf-wasm/commit/0cd4a372a4ef89e1c8e5a08db2c94d66758dc015) Thanks [@fineshop](https://github.com/fineshop)! - refactor: throw an error if `figma` submodule is imported without importing main module for runtime to make sure modules are initialized.
+  refactor: move `string-to-node` submodule to more descriptive name `html-to-react`
+
+- [`0cd4a37`](https://github.com/fineshopdesign/cf-wasm/commit/0cd4a372a4ef89e1c8e5a08db2c94d66758dc015) Thanks [@fineshop](https://github.com/fineshop)! - fix: package.json
+
+- Updated dependencies [[`0cd4a37`](https://github.com/fineshopdesign/cf-wasm/commit/0cd4a372a4ef89e1c8e5a08db2c94d66758dc015)]:
+  - @cf-wasm/satori@0.1.18
+  - @cf-wasm/resvg@0.1.19
+
 ## 0.1.23
 
 ### Patch Changes
