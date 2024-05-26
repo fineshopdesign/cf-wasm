@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.19
+
+### Patch Changes
+
+- [`0cd4a37`](https://github.com/fineshopdesign/cf-wasm/commit/0cd4a372a4ef89e1c8e5a08db2c94d66758dc015) Thanks [@fineshop](https://github.com/fineshop)! - fix: package.json
+
 ## 0.1.18
 
 ### Patch Changes
