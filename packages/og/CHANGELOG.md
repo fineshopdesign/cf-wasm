@@ -1,5 +1,12 @@
 # @cf-wasm/og
 
+## 0.1.26
+
+### Patch Changes
+
+- [`0f2dbd6`](https://github.com/fineshopdesign/cf-wasm/commit/0f2dbd6f551ec4ced9905bb0e13a2aea2fb11a87) Thanks [@fineshop](https://github.com/fineshop)! - fix: font detector where it was not detecting the language of the font
+  feat: add option `loadAdditionalAsset`
+
 ## 0.1.25
 
 ### Patch Changes
