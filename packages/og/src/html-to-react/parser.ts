@@ -3,12 +3,12 @@ import type { ReactElement } from 'react';
 
 export type { ParserOptions };
 
-type ReactChild = ReactElement | string | null;
+export type ReactChild = ReactElement | string | null;
 
-const SYMBOL_REACT_ELEMENT = Symbol.for('react.element');
-const SYMBOL_REACT_FRAGMENT = Symbol.for('react.fragment');
+export const SYMBOL_REACT_ELEMENT = Symbol.for('react.element');
+export const SYMBOL_REACT_FRAGMENT = Symbol.for('react.fragment');
 
-const props = (input: {
+export const props = (input: {
   children?: ReactChild | ReactChild[];
 }) => {
   const props = { ...input };
@@ -38,7 +38,7 @@ const props = (input: {
   return props;
 };
 
-const element = (element: ReactElement) => {
+export const element = (element: ReactElement) => {
   const result = { ...element };
   if (typeof result.props === 'object' && result.props) {
     result.props = props(result.props);
@@ -47,7 +47,7 @@ const element = (element: ReactElement) => {
   return result;
 };
 
-const fragment = (children: ReactChild[]): ReactElement => ({
+export const fragment = (children: ReactChild[]): ReactElement => ({
   // @ts-expect-error: we need to add private property
   $$typeof: SYMBOL_REACT_ELEMENT,
   type: SYMBOL_REACT_FRAGMENT as unknown as ReactElement['type'],
@@ -58,7 +58,7 @@ const fragment = (children: ReactChild[]): ReactElement => ({
   _store: {},
 });
 
-const wrapper = (children: ReactChild[]): ReactElement => {
+export const wrapper = (children: ReactChild[]): ReactElement => {
   if (children.length === 1 && typeof children[0] === 'object' && children[0]) {
     const parent = element(children[0]);
     parent.key = null;
