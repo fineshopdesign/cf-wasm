@@ -24,6 +24,7 @@
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
   },
   "scripts": {
+    "check:types": "tsc --noEmit",
     "wasm": "tsx scripts/wasm.ts",
     "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"

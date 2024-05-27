@@ -27,6 +27,7 @@
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
   },
   "scripts": {
+    "check:types": "tsc --noEmit",
     "crate:download": "fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
     "wasm": "tsx scripts/wasm.ts",
     "build": "tsx scripts/build.ts",
