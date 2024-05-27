@@ -5,10 +5,10 @@ import fs from 'fs-extra';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 
-const resultsDir = path.resolve(__dirname, './results');
-if (!fs.existsSync(resultsDir)) {
-  fs.mkdirSync(resultsDir);
-}
+// const resultsDir = path.resolve(__dirname, './results');
+// if (!fs.existsSync(resultsDir)) {
+//   fs.mkdirSync(resultsDir);
+// }
 
 describe('CustomFont', () => {
   const customFont = new CustomFont('JetBrains Mono', () =>
@@ -100,7 +100,7 @@ describe('render', () => {
       .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
       .match(/<svg\s[^>]*height="630".*<\/svg>/i);
 
-    fs.writeFileSync(path.resolve(resultsDir, 'og-svg-result.svg'), svg.image);
+    // fs.writeFileSync(path.resolve(resultsDir, 'og-svg-result.svg'), svg.image);
   });
 
   it('can convert to png', async () => {
@@ -109,7 +109,7 @@ describe('render', () => {
     expect(png).property('pixels').instanceOf(Uint8Array);
     expect(png).property('image').instanceOf(Uint8Array);
 
-    fs.writeFileSync(path.resolve(resultsDir, 'og-png-result.png'), png.image);
+    // fs.writeFileSync(path.resolve(resultsDir, 'og-png-result.png'), png.image);
   });
 });
 
