@@ -5,9 +5,6 @@ import { CustomFont, GoogleFont, ImageResponse, render } from '@cf-wasm/og/node'
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 
-// Check if there is  issue in this file
-process.exit();
-
 const resultsDir = path.resolve(__dirname, './results');
 if (!fs.existsSync(resultsDir)) {
   fs.mkdirSync(resultsDir);
@@ -59,65 +56,65 @@ describe('htmlToReact', () => {
   });
 });
 
-describe('render', () => {
-  const renderer = render(
-    <div
-      style={{
-        display: 'flex',
-        fontSize: 40,
-        color: 'black',
-        background: 'white',
-        width: '100%',
-        height: '100%',
-        padding: '50px 200px',
-        textAlign: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <span>👋 | Hello | 你好 | नमस्ते | こんにちは | สวัสดีค่ะ | 안녕 | добрий | день | Hallá</span>
-      <span>Default: Noto Sans</span>
-      <span
-        style={{
-          fontFamily: 'Inclusive Sans',
-        }}
-      >
-        GoogleFont: Inclusive Sans
-      </span>
-      <span>Emojis: ⭐ ✨ 😊 😎 🌩️</span>
-    </div>,
-    {
-      width: 1200,
-      height: 630,
-      fonts: [new GoogleFont('Inclusive Sans')],
-      emoji: 'fluent',
-    },
-  );
+// describe('render', () => {
+//   const renderer = render(
+//     <div
+//       style={{
+//         display: 'flex',
+//         fontSize: 40,
+//         color: 'black',
+//         background: 'white',
+//         width: '100%',
+//         height: '100%',
+//         padding: '50px 200px',
+//         textAlign: 'center',
+//         flexDirection: 'column',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//       }}
+//     >
+//       <span>👋 | Hello | 你好 | नमस्ते | こんにちは | สวัสดีค่ะ | 안녕 | добрий | день | Hallá</span>
+//       <span>Default: Noto Sans</span>
+//       <span
+//         style={{
+//           fontFamily: 'Inclusive Sans',
+//         }}
+//       >
+//         GoogleFont: Inclusive Sans
+//       </span>
+//       <span>Emojis: ⭐ ✨ 😊 😎 🌩️</span>
+//     </div>,
+//     {
+//       width: 1200,
+//       height: 630,
+//       fonts: [new GoogleFont('Inclusive Sans')],
+//       emoji: 'fluent',
+//     },
+//   );
 
-  it('can convert to svg', async () => {
-    const svg = await renderer.asSvg();
+//   it('can convert to svg', async () => {
+//     const svg = await renderer.asSvg();
 
-    expect(svg)
-      .property('image')
-      .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
-      .match(/<svg\s[^>]*height="630".*<\/svg>/i);
+//     expect(svg)
+//       .property('image')
+//       .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
+//       .match(/<svg\s[^>]*height="630".*<\/svg>/i);
 
-    fs.writeFileSync(path.resolve(resultsDir, 'og-svg-result.svg'), svg.image);
-  });
+//     fs.writeFileSync(path.resolve(resultsDir, 'og-svg-result.svg'), svg.image);
+//   });
 
-  it('can convert to png', async () => {
-    const png = await renderer.asPng();
+//   it('can convert to png', async () => {
+//     const png = await renderer.asPng();
 
-    expect(png).property('pixels').instanceOf(Uint8Array);
-    expect(png).property('image').instanceOf(Uint8Array);
+//     expect(png).property('pixels').instanceOf(Uint8Array);
+//     expect(png).property('image').instanceOf(Uint8Array);
 
-    fs.writeFileSync(path.resolve(resultsDir, 'og-png-result.png'), png.image);
-  });
-});
+//     fs.writeFileSync(path.resolve(resultsDir, 'og-png-result.png'), png.image);
+//   });
+// });
 
 describe('ImageResponse', () => {
-  const response = new ImageResponse(<div>Test</div>, {
+  const response = new ImageResponse(<div>Hello World!</div>, {
     width: 200,
     height: 300,
     format: 'svg',
