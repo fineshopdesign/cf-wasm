@@ -1,6 +1,11 @@
-export const CONTAINER = {
-  _enc: undefined as TextEncoder | undefined,
-  get enc() {
-    return new TextEncoder();
-  },
-};
+/** On demand value */
+class Container {
+  private _encoder?: TextEncoder;
+
+  get encoder() {
+    this._encoder ??= new TextEncoder();
+    return this._encoder;
+  }
+}
+
+export const CONTAINER = new Container();

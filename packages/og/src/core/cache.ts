@@ -5,6 +5,7 @@ export interface ExecutionContext {
   waitUntil(promise: Promise<unknown>): void;
 }
 
+/** Cache instance map */
 export const CACHE_INSTANCE_MAP = new Map<string, Cache>();
 
 /** A Cache like no-op object */
@@ -41,30 +42,46 @@ export interface ServeCacheOptions<K extends RequestInfo | URL> {
   overwriteCacheControl?: string | boolean;
 }
 
-export const cache = {
+/** Cache utils */
+class CacheUtils {
+  /** Indicates whether cache is enabled */
+  private _enabled = true;
+
   /**
    * Indicates whether {@link Cache} api is supported
    * in current environment or not
    */
   get supported() {
     return typeof caches !== 'undefined';
-  },
+  }
 
   /**
    * The {@link Cache} instance or a
    * string representing the name of {@link Cache} to be opened
    */
-  store: 'cf-wasm-og-cache' as string | Cache,
+  store: string | Cache = 'cf-wasm-og-cache';
 
   /**
    * The `Cache-Control` header to set for asset responses for caching
+   *
+   * @default 'public, max-age=604800, s-maxage=43200'
    */
-  cacheControlHeader: 'public, max-age=604800, s-maxage=43200',
+  cacheControlHeader = 'public, max-age=604800, s-maxage=43200';
 
   /** The waitUntil function */
-  waitUntil: (async (promise) => {
+  private _waitUntil: (promise: Promise<unknown>) => Promise<void> | void = async (promise) => {
     await promise;
-  }) as (promise: Promise<unknown>) => Promise<void> | void,
+  };
+
+  /** Enables cache */
+  enable() {
+    this._enabled = true;
+  }
+
+  /** Disables cache */
+  disable() {
+    this._enabled = false;
+  }
 
   /**
    * Sets execution context
@@ -89,8 +106,8 @@ export const cache = {
     if (typeof ctx?.waitUntil !== 'function') {
       throw new TypeError('Provided object is not an execution context object.');
     }
-    this.waitUntil = (promise) => ctx.waitUntil(promise);
-  },
+    this._waitUntil = (promise) => ctx.waitUntil(promise);
+  }
 
   /**
    * Opens a cache
@@ -107,7 +124,7 @@ export const cache = {
     const store = this.supported ? CACHE_INSTANCE_MAP.get(name) ?? (await caches.open(name)) : CACHE_INTERFACE;
     CACHE_INSTANCE_MAP.set(name, store);
     return store;
-  },
+  }
 
   /**
    * Serve cached assets
@@ -125,42 +142,54 @@ export const cache = {
   ): Promise<Awaited<ReturnType<F>>> {
     const store = cacheStore ?? (await this.open());
 
-    let response: Response | undefined = await store.match(key).then((res) => (res?.ok ? res : undefined));
+    let response: Response | undefined;
 
-    if (!response) {
+    if (!this._enabled) {
       const fallbackResponse = await fallback(key, store);
 
       if (fallbackResponse instanceof Response) {
         response = new Response(fallbackResponse.body, fallbackResponse);
-
-        if (preserveHeaders !== true) {
-          response.headers.forEach((value, _key) => {
-            if (preserveHeaders === false) {
-              response?.headers.delete(_key);
-            } else if (typeof preserveHeaders === 'function' && !preserveHeaders(_key, value, response as Response, store, key)) {
-              response?.headers.delete(_key);
-            } else {
-              const preservedHeaders = (Array.isArray(preserveHeaders) ? preserveHeaders : ['content-type', 'cache-control']).map((e) =>
-                e.toLowerCase(),
-              );
-              if (!preservedHeaders.includes(_key.toLowerCase())) {
-                response?.headers.delete(_key);
-              }
-            }
-          });
-        }
-
-        if (overwriteCacheControl === true || typeof overwriteCacheControl === 'string' || !response.headers.has('Cache-Control')) {
-          response.headers.set('Cache-Control', typeof overwriteCacheControl === 'string' ? overwriteCacheControl : this.cacheControlHeader);
-        }
-
-        const promise = store.put(key, response.clone());
-        await this.waitUntil(promise);
       }
     } else {
-      response = new Response(response.body, response);
+      response = await store.match(key).then((res) => (res?.ok ? res : undefined));
+
+      if (!response) {
+        const fallbackResponse = await fallback(key, store);
+
+        if (fallbackResponse instanceof Response) {
+          response = new Response(fallbackResponse.body, fallbackResponse);
+
+          if (preserveHeaders !== true) {
+            response.headers.forEach((value, _key) => {
+              if (preserveHeaders === false) {
+                response?.headers.delete(_key);
+              } else if (typeof preserveHeaders === 'function' && !preserveHeaders(_key, value, response as Response, store, key)) {
+                response?.headers.delete(_key);
+              } else {
+                const preservedHeaders = (Array.isArray(preserveHeaders) ? preserveHeaders : ['content-type', 'cache-control']).map((e) =>
+                  e.toLowerCase(),
+                );
+                if (!preservedHeaders.includes(_key.toLowerCase())) {
+                  response?.headers.delete(_key);
+                }
+              }
+            });
+          }
+
+          if (overwriteCacheControl === true || typeof overwriteCacheControl === 'string' || !response.headers.has('Cache-Control')) {
+            response.headers.set('Cache-Control', typeof overwriteCacheControl === 'string' ? overwriteCacheControl : this.cacheControlHeader);
+          }
+
+          const promise = store.put(key, response.clone());
+          await this._waitUntil(promise);
+        }
+      } else {
+        response = new Response(response.body, response);
+      }
     }
 
     return response as unknown as Promise<Awaited<ReturnType<F>>>;
-  },
-};
+  }
+}
+
+export const cache = new CacheUtils();

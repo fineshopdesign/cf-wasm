@@ -2,34 +2,35 @@ import { type EmojiType, getIconCode, loadEmoji } from './emoji';
 import { loadGoogleFont } from './font';
 import { FontDetector, LANGUAGE_FONT_MAP } from './language';
 import type { Font } from './satori';
+import type { StringWithSuggestions } from './types';
 
-const DETECTOR = new FontDetector();
-const ASSET_CACHE_MAP = new Map<string, string | Font[]>();
+/** Font detector */
+export const DETECTOR = new FontDetector();
 
-/**
- * A helper function for loading dynamic assets requested by satori
- *
- * @param param0 Options
- *
- * @returns A callback function for loading assets
- */
-export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
-  const load = async (languageCode: string, text: string) => {
-    if (languageCode === 'emoji') {
-      return `data:image/svg+xml;base64,${btoa(await loadEmoji(getIconCode(text), emoji))}`;
-    }
+/** Assets cache map */
+export const ASSET_CACHE_MAP = new Map<string, string | Font[]>();
 
-    const codes = languageCode.split('|');
-    const names = codes
-      .map((code) => LANGUAGE_FONT_MAP[code as keyof typeof LANGUAGE_FONT_MAP])
-      .filter(Boolean)
-      .flat();
-    if (names.length === 0) {
-      return [];
-    }
+/** Loads dynamic asset requested by satori without caching */
+// `languageCode` will be the detected language code separated using `|` (i.e: `ja-JP|zh-CN|zh-TW|zh-HK`, `devanagari`), `emoji` if it's an Emoji, or `unknown` if not able to tell.
+// `segment` will be the content to render.
+export const loadSatoriAsset = async (
+  languageCode: StringWithSuggestions<'emoji' | 'unknown'>,
+  segment: string,
+  emoji?: EmojiType,
+): Promise<string | Font[]> => {
+  if (languageCode === 'emoji') {
+    return `data:image/svg+xml;base64,${btoa(await loadEmoji(getIconCode(segment), emoji))}`;
+  }
 
+  const codes = languageCode.split('|');
+  const names = codes
+    .map((code) => LANGUAGE_FONT_MAP[code as keyof typeof LANGUAGE_FONT_MAP])
+    .filter(Boolean)
+    .flat();
+
+  if (names.length !== 0) {
     try {
-      const textByFont = await DETECTOR.detect(text, names);
+      const textByFont = await DETECTOR.detect(segment, names);
       const fonts = Object.keys(textByFont);
       const fontData = await Promise.all(
         fonts.map((font) =>
@@ -39,30 +40,44 @@ export const loadDynamicAsset = ({ emoji }: { emoji?: EmojiType }) => {
           }),
         ),
       );
-      return fontData.map(
-        (data, index) =>
-          ({
-            name: `satori_${codes[index]}_fallback_${text}`,
-            data,
-            weight: 400,
-            style: 'normal',
-            lang: codes[index] === 'unknown' ? undefined : codes[index],
-          }) as Font,
-      );
-    } catch (e) {
-      console.warn('(@cf-wasm/og) [ WARN ] Failed to load dynamic font for', text, '.\n', e);
-    }
-    return [];
-  };
 
-  return async (languageCode: string, text: string): Promise<string | Font[]> => {
-    const key = JSON.stringify([languageCode, text]);
-    if (ASSET_CACHE_MAP.has(key)) {
-      const cache = ASSET_CACHE_MAP.get(key);
-      return cache ?? [];
+      return fontData.map((data, index) => ({
+        name: `satori_${codes[index]}_fallback_${segment}`,
+        data,
+        weight: 400,
+        style: 'normal',
+        lang: codes[index] === 'unknown' ? undefined : codes[index],
+      }));
+    } catch (e) {
+      console.warn(`(@cf-wasm/og) [ WARN ] Failed to load dynamic font for segment \`${segment}\`.\n`, e);
     }
-    const asset = await load(languageCode, text);
-    ASSET_CACHE_MAP.set(key, asset);
-    return asset;
-  };
+  }
+
+  // return an empty array
+  return [];
+};
+
+/**
+ * Loads dynamic assets requested by satori
+ *
+ * @param languageCode The language code
+ * @param segment The text
+ * @param emoji The {@link EmojiType}
+ *
+ * @returns On success, the asset as either string or {@link Font}
+ */
+export const loadDynamicAsset = async (
+  languageCode: StringWithSuggestions<'emoji' | 'unknown'>,
+  segment: string,
+  emoji?: EmojiType,
+): Promise<string | Font[]> => {
+  /** Get a key based in input */
+  const key = JSON.stringify([languageCode, segment]);
+  if (ASSET_CACHE_MAP.has(key)) {
+    const cache = ASSET_CACHE_MAP.get(key);
+    return cache ?? [];
+  }
+  const asset = await loadSatoriAsset(languageCode, segment, emoji);
+  ASSET_CACHE_MAP.set(key, asset);
+  return asset;
 };
