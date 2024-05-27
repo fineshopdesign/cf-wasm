@@ -1,16 +1,19 @@
 import type { ReactElement } from 'react';
 import { CONTAINER } from './constants';
 import { type PngResult, type RenderOptions, type SvgResult, render } from './render';
-import type { MayBePromise } from './types';
+import type { MayBePromise, OnlyProps } from './types';
 
-export interface BaseResponseOptions extends Omit<ResponseInit, 'webSocket' | 'encodeBody'> {
+/** Base response options */
+export interface BaseResponseOptions extends OnlyProps<ResponseInit, 'headers' | 'status' | 'statusText' | 'cf'> {
   format?: 'svg' | 'png';
 }
 
+/** An interface representing options for BaseResponse */
 export interface ImageResponseOptions extends RenderOptions, BaseResponseOptions {}
 
+/** Base response class */
 export class BaseResponse extends Response {
-  constructor(input: () => MayBePromise<[ReactElement, RenderOptions | undefined]>, options?: BaseResponseOptions) {
+  constructor(input: () => MayBePromise<[ReactElement, RenderOptions | undefined]>, options: BaseResponseOptions = {}) {
     const isSvg = options?.format === 'svg';
     const result = new ReadableStream({
       start(controller) {
@@ -20,7 +23,7 @@ export class BaseResponse extends Response {
             return isSvg ? renderer.asSvg() : renderer.asPng();
           })
           .then(({ image }) => {
-            const bytes = typeof image === 'string' ? CONTAINER.enc.encode(image) : image;
+            const bytes = typeof image === 'string' ? CONTAINER.encoder.encode(image) : image;
             controller.enqueue(bytes);
             controller.close();
           })
@@ -36,7 +39,8 @@ export class BaseResponse extends Response {
       status: options?.status,
       statusText: options?.statusText,
     };
-    if (typeof options === 'object' && options) {
+    if (options && typeof options === 'object') {
+      // Add `cf` options if provided
       if ('cf' in options) {
         Object.assign(requestInit, { cf: options.cf });
       }

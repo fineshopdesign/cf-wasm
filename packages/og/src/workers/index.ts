@@ -14,6 +14,7 @@ export {
   CustomFont,
   GoogleFont,
   render,
+  googleFonts,
   defaultFont,
   loadGoogleFont,
   cache,
@@ -26,6 +27,7 @@ export {
   type SvgResult,
   type PngResult,
   type Font,
+  type FontDisplay,
   type FontStyle,
   type FontWeight,
   type RenderResvgOptions,
@@ -33,4 +35,5 @@ export {
   type ResvgRenderOptions,
   type SatoriNode,
   type SatoriOptions,
+  type Locale,
 } from '../core';

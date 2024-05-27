@@ -1,6 +1,6 @@
-import { cache } from './cache';
-import { FetchError } from './errors';
+import { googleFonts } from './font';
 
+/** Language font map */
 export const LANGUAGE_FONT_MAP = {
   'ja-JP': 'Noto+Sans+JP',
   'ko-KR': 'Noto+Sans+KR',
@@ -26,17 +26,22 @@ export const convert = (input: string) =>
     const range = r.replaceAll('U+', '');
     const [start, end] = range.split('-').map((hex) => Number.parseInt(hex, 16));
 
-    return Number.isNaN(end) ? start : [start, end];
+    if (typeof end !== 'number' || Number.isNaN(end)) {
+      return start;
+    }
+    return [start, end];
   });
 
 export const checkSegmentInRange = (segment: string, range: (number | number[])[]) => {
   const codePoint = segment.codePointAt(0);
-  if (!codePoint) return false;
-  return range.some((val) => {
-    if (typeof val === 'number') {
-      return codePoint === val;
+  if (!codePoint) {
+    return false;
+  }
+  return range.some((value) => {
+    if (typeof value === 'number') {
+      return codePoint === value;
     }
-    const [start, end] = val;
+    const [start, end] = value;
     return start <= codePoint && codePoint <= end;
   });
 };
@@ -53,16 +58,13 @@ export class FontDetector {
     const matches = input.matchAll(regex);
     for (const [, _lang, range] of matches) {
       const lang = _lang.replaceAll(' ', '+');
-      if (!this.rangesByLang[lang]) {
-        this.rangesByLang[lang] = [];
-      }
+      this.rangesByLang[lang] ??= [];
       this.rangesByLang[lang].push(...convert(range));
     }
   }
 
   private detectSegment(segment: string, fonts: string[]) {
-    for (let i = 0; i < fonts.length; i += 1) {
-      const font = fonts[i];
+    for (const font of fonts) {
       const range = this.rangesByLang[font];
       if (range && checkSegmentInRange(segment, range)) {
         return font;
@@ -71,7 +73,7 @@ export class FontDetector {
     return null;
   }
 
-  private async load(fonts: string[], cacheStore?: Cache) {
+  private async load(fonts: string[]) {
     let params = '';
 
     const existingLang = Object.keys(this.rangesByLang);
@@ -81,48 +83,25 @@ export class FontDetector {
       return;
     }
 
-    for (let i = 0; i < langNeedsToLoad.length; i += 1) {
-      params += `family=${langNeedsToLoad[i]}&`;
+    for (const font of langNeedsToLoad) {
+      params += `family=${font}&`;
     }
     params += 'display=swap';
 
     const cssUrl = `https://fonts.googleapis.com/css2?${params}`;
 
-    const response = await cache.serve(
+    const fontFace = await googleFonts.loadCss(
       cssUrl,
-      () =>
-        fetch(cssUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-          },
-        })
-          .then((res) => {
-            if (res.status === 400) {
-              throw new FetchError(`Google Font is not available (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
-            }
-            if (!res.ok) {
-              throw new FetchError(`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
-            }
-            return res;
-          })
-          .catch((e) => {
-            throw new FetchError(`An error ocurred while fetching ${cssUrl}`, {
-              cause: e,
-              response: e instanceof FetchError ? e.response : undefined,
-            });
-          }),
-      { cache: cacheStore },
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
     );
 
-    const fontFace = await response.text();
     this.addDetectors(fontFace);
   }
 
   public async detect(text: string, fonts: string[]) {
     await this.load(fonts);
     const result: Record<string, string> = {};
-    for (let i = 0; i < text.length; i += 1) {
-      const segment = text.charAt(i);
+    for (const segment of text) {
       const lang = this.detectSegment(segment, fonts);
       if (lang) {
         result[lang] = result[lang] || '';

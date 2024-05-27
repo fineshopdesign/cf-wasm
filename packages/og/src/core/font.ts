@@ -3,50 +3,103 @@ import { FetchError } from './errors';
 import type { FontStyle, FontWeight } from './satori';
 import type { MayBePromise } from './types';
 
-const FONT_CACHE_MAP = new Map<string, ArrayBuffer>();
+/** Font cache map */
+export const FONT_CACHE_MAP = new Map<string, ArrayBuffer>();
 
-/**
- * An interface representing options for {@link loadGoogleFont} function
- */
+export type FontDisplay = 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
+
+/** An interface representing options for {@link loadGoogleFont} function */
 export interface LoadGoogleFontOptions {
   text?: string;
 
-  /**
-   * The font weight to load
-   */
+  /** The font weight to load */
   weight?: string | number;
 
-  /**
-   * The font style to load
-   */
-  style?: 'normal' | 'italic';
+  /** The font style to load */
+  style?: FontStyle;
 
-  /**
-   * The `font-display`
-   */
-  display?: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
-
-  cache?: Cache;
+  /** The `font-display` */
+  display?: FontDisplay;
 }
 
-/**
- * A helper function for loading google fonts as {@link ArrayBuffer}
- *
- * @param family The name of the font family
- * @param param1 Options
- *
- * @returns A promise which resolved to {@link ArrayBuffer}
- */
-export const loadGoogleFont = async (
+/** Default user agent for loading css */
+export const GOOGLE_FONT_CSS_DEFAULT_USER_AGENT =
+  'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1';
+
+/** Google fonts utils */
+class GoogleFontsUtils {
+  /** Default Google font css loader */
+  private _defaultCssLoader: (cssUrl: string, userAgent: string) => MayBePromise<string> = async (cssUrl, userAgent) => {
+    const cssResponse = await cache.serve(cssUrl, () =>
+      fetch(cssUrl, {
+        headers: {
+          'User-Agent': userAgent,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new FetchError(`Response was not successful (status: \`${res.status}\`, statusText: \`${res.statusText}\`)`, { response: res });
+          }
+          return res;
+        })
+        .catch((e) => {
+          throw new FetchError(`An error ocurred while fetching \`${cssUrl}\``, {
+            cause: e,
+            response: e instanceof FetchError ? e.response : undefined,
+          });
+        }),
+    );
+
+    return cssResponse.text();
+  };
+
+  /** Google font css loader */
+  private _cssLoader: (cssUrl: string, userAgent: string) => MayBePromise<string | undefined> = this._defaultCssLoader;
+
+  /**
+   * Loads Google font css
+   *
+   * @param cssUrl The Google font css url
+   * @param userAgent The user agent header to be used
+   *
+   * @returns On success, the css as string
+   */
+  async loadCss(cssUrl: string, userAgent = GOOGLE_FONT_CSS_DEFAULT_USER_AGENT) {
+    let css = await this._cssLoader(cssUrl, userAgent);
+    if (typeof css === 'undefined') {
+      css = await this._defaultCssLoader(cssUrl, userAgent);
+    } else if (typeof css !== 'string') {
+      throw new Error('Google font css loader return value must resolve to string');
+    }
+    return css;
+  }
+
+  /**
+   * Sets Google font css loader
+   *
+   * @param loader The {@link GoogleFontCssLoader}
+   */
+  setCssLoader(loader: (cssUrl: string, userAgent: string) => MayBePromise<string | undefined>) {
+    if (typeof loader !== 'function') {
+      throw new TypeError('Argument 1 must be a function.');
+    }
+    this._cssLoader = loader;
+  }
+}
+
+export const googleFonts = new GoogleFontsUtils();
+
+/** Constructs Google font css url */
+export const constructGoogleFontCssUrl = (
   family: string,
-  { text, weight = 400, style = 'normal', display, cache: cacheStore }: LoadGoogleFontOptions = {},
+  { text, weight = 400, style = 'normal', display }: { text?: string; weight?: string | number; style?: FontStyle; display?: FontDisplay } = {},
 ) => {
   if (typeof family !== 'string' || family.trim().length === 0) {
-    throw new Error('Failed to download dynamic font. Not a valid font family name was provided');
+    throw new Error('Not a valid font family name was provided');
   }
 
   const params: Record<string, string> = {
-    family: `${encodeURIComponent(family)}:${style === 'italic' ? 'ital,' : ''}wght@${style === 'italic' ? '1,' : ''}${weight}`,
+    family: `${family.replaceAll(' ', '+')}:${style === 'italic' ? 'ital,' : ''}wght@${style === 'italic' ? '1,' : ''}${weight}`,
   };
 
   if (text) {
@@ -63,63 +116,48 @@ export const loadGoogleFont = async (
     .map((key) => `${key}=${params[key]}`)
     .join('&')}`;
 
+  return cssUrl;
+};
+
+/**
+ * A helper function for loading google fonts as {@link ArrayBuffer}
+ *
+ * @param family The name of the font family
+ * @param param1 Options
+ *
+ * @returns A promise which resolved to {@link ArrayBuffer}
+ */
+export const loadGoogleFont = async (family: string, { text, weight = 400, style = 'normal', display }: LoadGoogleFontOptions = {}) => {
+  const cssUrl = constructGoogleFontCssUrl(family, { text, weight, display, style });
+
   const fromMap = FONT_CACHE_MAP.get(cssUrl);
 
   if (fromMap) {
     return fromMap;
   }
 
-  const cssResponse = await cache.serve(
-    cssUrl,
-    () =>
-      fetch(cssUrl, {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1',
-        },
-      })
-        .then((res) => {
-          if (res.status === 400) {
-            throw new FetchError(`Google Font is not available (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
-          }
-          if (!res.ok) {
-            throw new FetchError(`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
-          }
-          return res;
-        })
-        .catch((e) => {
-          throw new FetchError(`Failed to download dynamic font. An error ocurred while fetching ${cssUrl}`, {
-            cause: e,
-            response: e instanceof FetchError ? e.response : undefined,
-          });
-        }),
-    { cache: cacheStore },
-  );
+  const css = await googleFonts.loadCss(cssUrl);
 
-  const css = await cssResponse.text();
   const fontUrl = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)?.[1];
 
   if (!fontUrl) {
-    throw new Error('Failed to download dynamic font. No font was found.');
+    throw new Error('The css does not content source for truetype font.');
   }
 
-  const fontResponse = await cache.serve(
-    fontUrl,
-    () =>
-      fetch(fontUrl)
-        .then((res) => {
-          if (!res.ok) {
-            throw new FetchError(`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
-          }
-          return res;
-        })
-        .catch((e) => {
-          throw new FetchError(`Failed to download dynamic font. An error ocurred while fetching ${fontUrl}`, {
-            cause: e,
-            response: e instanceof FetchError ? e.response : undefined,
-          });
-        }),
-    { cache: cacheStore },
+  const fontResponse = await cache.serve(fontUrl, () =>
+    fetch(fontUrl)
+      .then((res) => {
+        if (!res.ok) {
+          throw new FetchError(`Response was not successful (status: ${res.status}, statusText: ${res.statusText})`, { response: res });
+        }
+        return res;
+      })
+      .catch((e) => {
+        throw new FetchError(`An error ocurred while fetching ${fontUrl}`, {
+          cause: e,
+          response: e instanceof FetchError ? e.response : undefined,
+        });
+      }),
   );
 
   const buffer = await fontResponse.arrayBuffer();
@@ -129,11 +167,13 @@ export const loadGoogleFont = async (
   return buffer;
 };
 
+/** Base font options */
 export interface BaseFontOptions {
   weight?: FontWeight;
   style?: FontStyle;
 }
 
+/** Base font class */
 export class BaseFont {
   protected input;
 
@@ -159,13 +199,12 @@ export class BaseFont {
   }
 }
 
+/** An interface representing options for {@link CustomFont} */
 export interface CustomFontOptions extends BaseFontOptions {
   lang?: string;
 }
 
-/**
- * A helper class to load Custom Fonts
- */
+/** A helper class to load Custom font */
 export class CustomFont extends BaseFont {
   protected input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>);
 
@@ -199,34 +238,25 @@ export class CustomFont extends BaseFont {
   }
 }
 
+/** An interface representing options for {@link GoogleFont} */
 export interface GoogleFontOptions extends BaseFontOptions {
-  /**
-   * The name of the font (can be used for font-family css property)
-   */
+  /** The name of the font (can be used for font-family css property) */
   name?: string;
 
-  /**
-   * Loads font only for particular text (for better performance)
-   */
+  /** Loads font only for particular text (for better performance) */
   text?: string;
 }
 
-/**
- * A helper class to load Google Fonts
- */
+/** A helper class to load Google font */
 export class GoogleFont extends BaseFont {
   protected input: Promise<ArrayBuffer> | undefined;
 
   private evaluated: ArrayBuffer | undefined;
 
-  /**
-   * The font family name
-   */
+  /** The font family name */
   family: string;
 
-  /**
-   * Text for which the font is loaded
-   */
+  /** Text for which the font is loaded */
   text: string | undefined;
 
   /**
@@ -242,9 +272,7 @@ export class GoogleFont extends BaseFont {
     this.input = undefined;
   }
 
-  /**
-   * A promise which resolves to font data as `ArrayBuffer`
-   */
+  /** A promise which resolves to font data as `ArrayBuffer` */
   get data(): Promise<ArrayBuffer> {
     return (async () => {
       if (!this.evaluated) {
@@ -258,13 +286,16 @@ export class GoogleFont extends BaseFont {
     })();
   }
 
-  async isAvailable() {
+  /**
+   * Checks whether font can load buffer
+   *
+   * @returns On success, true otherwise the error object thrown
+   */
+  async canLoad() {
     try {
       await this.data;
     } catch (e) {
-      if (e instanceof FetchError && e.response?.status === 400) {
-        return false;
-      }
+      return e;
     }
     return true;
   }
@@ -276,29 +307,24 @@ export interface FontBuffer {
 
 export type FontInput = MayBePromise<Response | ArrayBuffer> | FontBuffer;
 
-const FONT_DATA: {
-  fallbackFont: FontInput | (() => FontInput) | undefined;
-  fontData: ArrayBuffer | undefined;
-  fontShouldResolve: boolean;
-} = {
-  fallbackFont: undefined,
-  fontData: undefined,
-  fontShouldResolve: true,
-};
+/** Default font utils */
+class DefaultFont {
+  private _fallbackFont?: FontInput | (() => FontInput);
+  private _fontData?: ArrayBuffer;
+  private _fontShouldResolve = true;
 
-export const defaultFont = {
   /**
    * Sets default font for image rendering
    *
    * @param input {@link FontInput}
    */
-  set: (input: FontInput | (() => FontInput)) => {
+  set(input: FontInput | (() => FontInput)) {
     if (!input) {
       throw new TypeError('Argument 1 type is not acceptable');
     }
-    FONT_DATA.fontShouldResolve = true;
-    FONT_DATA.fallbackFont = input;
-  },
+    this._fontShouldResolve = true;
+    this._fallbackFont = input;
+  }
 
   /**
    * Gets default font buffer for image rendering if it is set
@@ -306,13 +332,13 @@ export const defaultFont = {
    * @returns A Promise which resolves to ArrayBuffer if default font is set,
    * otherwise undefined
    */
-  get: async () => {
-    const { fallbackFont, fontData, fontShouldResolve } = FONT_DATA;
+  async get() {
+    const { _fallbackFont, _fontData, _fontShouldResolve } = this;
 
     let buffer: ArrayBuffer | undefined;
-    const fontInput = typeof fallbackFont === 'function' ? fallbackFont() : fallbackFont;
+    const fontInput = typeof _fallbackFont === 'function' ? _fallbackFont() : _fallbackFont;
 
-    if (fontShouldResolve && fontInput) {
+    if (_fontShouldResolve && fontInput) {
       if (fontInput instanceof Promise) {
         const result = await fontInput;
         if (result instanceof Response) {
@@ -327,18 +353,24 @@ export const defaultFont = {
       } else {
         buffer = fontInput;
       }
-    } else if (fontData) {
-      buffer = fontData;
+    } else if (_fontData) {
+      buffer = _fontData;
     }
-    FONT_DATA.fontData = buffer;
-    FONT_DATA.fontShouldResolve = false;
+
+    this._fontData = buffer;
+    this._fontShouldResolve = false;
+
     return buffer;
-  },
+  }
 
   /**
    * Check whether default font is set or not
    *
    * @returns true if default font is set, otherwise false
    */
-  has: () => Boolean(FONT_DATA.fallbackFont),
-};
+  has() {
+    return Boolean(this._fallbackFont);
+  }
+}
+
+export const defaultFont = new DefaultFont();
