@@ -1,48 +1,46 @@
 import type { ResvgModule } from './resvg';
 import type { SatoriModule } from './satori';
 
-const MODULE_DATA: {
-  resvg: ResvgModule | null;
-  satori: SatoriModule | null;
-} = {
-  resvg: null,
-  satori: null,
-};
+/** Modules */
+class Modules {
+  private _resvg?: ResvgModule;
+  private _satori?: SatoriModule;
 
-export const modules = {
   /** The {@link ResvgModule} */
   get resvg() {
-    if (!MODULE_DATA.resvg) {
+    if (!this._resvg) {
       throw new Error('Module `resvg` is not set, set it before accessing.');
     }
-    return MODULE_DATA.resvg;
-  },
+    return this._resvg;
+  }
   set resvg(module) {
-    MODULE_DATA.resvg = module;
-  },
+    this._resvg = module;
+  }
 
   /** The {@link SatoriModule} */
   get satori() {
-    if (!MODULE_DATA.satori) {
+    if (!this._satori) {
       throw new Error('Module `satori` is not set, set it before accessing.');
     }
-    return MODULE_DATA.satori;
-  },
+    return this._satori;
+  }
   set satori(module) {
-    MODULE_DATA.satori = module;
-  },
+    this._satori = module;
+  }
 
   /** Sets modules */
   set(resvgModule: ResvgModule, satoriModule: SatoriModule) {
     this.resvg = resvgModule;
     this.satori = satoriModule;
-  },
+  }
 
   /** Ensures all the modules are set */
   isUsable() {
-    if (MODULE_DATA.resvg && MODULE_DATA.satori) {
+    if (this._resvg && this._satori) {
       return true;
     }
     return false;
-  },
-};
+  }
+}
+
+export const modules = new Modules();

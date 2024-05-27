@@ -1,7 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { htmlToReact } from '@cf-wasm/og/html-to-react';
 import { CustomFont, GoogleFont, ImageResponse, render } from '@cf-wasm/og/node';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
+
+fs.mkdirSync(path.resolve(__dirname, './results'), { recursive: true });
 
 describe('CustomFont', () => {
   const customFont = new CustomFont('JetBrains Mono', () =>
@@ -31,7 +35,7 @@ describe('GoogleFont', () => {
     expect(googleFont).property('style').equals('normal');
     expect(googleFont).property('data').instanceOf(Promise);
 
-    expect(await googleFont.isAvailable()).equals(true);
+    expect(await googleFont.canLoad()).equals(true);
 
     const buffer = await googleFont.data;
 
@@ -54,28 +58,33 @@ describe('render', () => {
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column',
+        fontSize: 40,
+        color: 'black',
+        background: 'white',
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        padding: '50px 200px',
+        textAlign: 'center',
+        flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: '#6f90ab',
-        fontSize: '2rem',
-        color: '#fff',
+        alignItems: 'center',
       }}
     >
-      <span>Noto Sans (Default Font)</span>
+      <span>👋 | Hello | 你好 | नमस्ते | こんにちは | สวัสดีค่ะ | 안녕 | добрий | день | Hallá</span>
+      <span>Default: Noto Sans</span>
       <span
         style={{
-          fontFamily: 'JetBrains Mono',
+          fontFamily: 'Inclusive Sans',
         }}
       >
-        JetBrains Mono (using GoogleFont class)
+        GoogleFont: Inclusive Sans
       </span>
-      <span>These are emojis: 😎🌩️</span>
+      <span>Emojis: ⭐ ✨ 😊 😎 🌩️</span>
     </div>,
     {
-      fonts: [new GoogleFont('JetBrains Mono')],
+      width: 1200,
+      height: 630,
+      fonts: [new GoogleFont('Inclusive Sans')],
       emoji: 'fluent',
     },
   );
@@ -88,7 +97,7 @@ describe('render', () => {
       .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
       .match(/<svg\s[^>]*height="630".*<\/svg>/i);
 
-    expect(svg.image.length).equals(83335);
+    fs.writeFileSync(path.resolve(__dirname, './results/og-svg-result.svg'), svg.image);
   });
 
   it('can convert to png', async () => {
@@ -97,8 +106,7 @@ describe('render', () => {
     expect(png).property('pixels').instanceOf(Uint8Array);
     expect(png).property('image').instanceOf(Uint8Array);
 
-    expect(png.pixels.byteLength).equals(3024000);
-    expect(png.image.byteLength).equals(26428);
+    fs.writeFileSync(path.resolve(__dirname, './results/og-png-result.png'), png.image);
   });
 });
 

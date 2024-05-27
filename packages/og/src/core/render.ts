@@ -5,8 +5,9 @@ import { CustomFont, type FontBuffer, GoogleFont, defaultFont } from './font';
 import { modules } from './modules';
 import type { ResvgRenderOptions } from './resvg';
 import type { Font as SatoriFont, SatoriOptions } from './satori';
+import type { MayBePromise, StringWithSuggestions } from './types';
 
-/** Represents a png result of render function */
+/** Represents a png result of rendered image */
 export interface PngResult {
   pixels: Uint8Array;
   image: Uint8Array;
@@ -18,7 +19,7 @@ export interface PngResult {
   height: number;
 }
 
-/** Represents a svg result of render function */
+/** Represents a svg result of rendered image */
 export interface SvgResult {
   /** The svg image as string */
   image: string;
@@ -70,6 +71,25 @@ export interface RenderOptions {
   fonts?: Font[];
 
   /**
+   * A callback function for loading dynamic assets requested by satori
+   *
+   * @param languageCode
+   * The detected language codes separated using `|` (i.e: `ja-JP|zh-CN|zh-TW|zh-HK`, `devanagari`, etc.)
+   *
+   * `emoji` if it's an Emoji
+   *
+   * `unknown` if not able to tell.
+   *
+   * @param segment Content to render.
+   * @param next A function which when called returns a Promise resolves to the next result
+   */
+  loadAdditionalAsset?: (
+    languageCode: StringWithSuggestions<'emoji' | 'unknown'>,
+    segment: string,
+    next: () => Promise<string | Font[]>,
+  ) => MayBePromise<undefined | string | Font[]>;
+
+  /**
    * Using a specific Emoji style. Defaults to `twemoji`.
    *
    * @default 'twemoji'
@@ -92,8 +112,8 @@ export interface RenderOptions {
   resvgOptions?: RenderResvgOptions;
 }
 
-/** Default options */
-const DEFAULT_OPTIONS = {
+/** Default render options */
+export const RENDER_DEFAULT_OPTIONS = {
   width: 1200,
   height: 630,
   debug: false,
@@ -120,8 +140,30 @@ export const render = (element: ReactElement, options: RenderOptions = {}) => {
   };
 
   const renderOptions = {
-    ...DEFAULT_OPTIONS,
+    ...RENDER_DEFAULT_OPTIONS,
     ...options,
+  };
+
+  const loadAdditionalAsset = async (languageCode: string, segment: string) => {
+    const next = () => loadDynamicAsset(languageCode, segment, renderOptions?.emoji);
+
+    let result: string | Font[] | undefined = undefined;
+    if (options.loadAdditionalAsset) {
+      result = await options.loadAdditionalAsset(languageCode, segment, next);
+    }
+
+    result ??= await next();
+
+    if (Array.isArray(result)) {
+      return await Promise.all(
+        result.map(async (asset) => ({
+          ...asset,
+          data: await asset.data,
+        })),
+      );
+    }
+
+    return result;
   };
 
   const getFonts = async () => {
@@ -173,9 +215,7 @@ export const render = (element: ReactElement, options: RenderOptions = {}) => {
         height: renderOptions.height,
         debug: renderOptions.debug,
         fonts: satoriFonts,
-        loadAdditionalAsset: loadDynamicAsset({
-          emoji: renderOptions?.emoji,
-        }),
+        loadAdditionalAsset,
       };
       const svg = await modules.satori.satori(element, satoriOptions);
 
