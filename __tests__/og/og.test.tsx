@@ -1,7 +1,7 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { htmlToReact } from '@cf-wasm/og/html-to-react';
 import { CustomFont, GoogleFont, ImageResponse, render } from '@cf-wasm/og/node';
+import fs from 'fs-extra';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 
