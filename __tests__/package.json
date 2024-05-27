@@ -9,7 +9,6 @@
   "scripts": {
     "test": "vitest run"
   },
-  "type": "commonjs",
   "dependencies": {
     "@cf-wasm/og": "workspace:^",
     "@cf-wasm/photon": "workspace:^",
