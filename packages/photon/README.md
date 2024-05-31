@@ -185,6 +185,94 @@ export default async function handler(req: NextRequest) {
 }
 ```
 
+### Web Workers
+
+You can use `others` submodule and provide wasm binaries using `initPhoton` function to make it work on other runtime (i.e. `Browser`, `Web Worker`, etc).
+
+> **Warning:** The `others` submodule is yet experimental. Breaking changes may be introduced without following semantic versioning.
+
+[@deox/cors-worker](https://www.npmjs.com/package/@deox/cors-worker) can make messaging even more easier when using web workers.
+
+Here is a working example for Web Workers when using Webpack bundler:
+
+Create a `worker.ts`:
+
+```ts
+import { initPhoton, PhotonImage, resize, SamplingFilter } from "@cf-wasm/photon/others";
+import { register } from "@deox/cors-worker/register";
+
+const registered = register(async () => {
+  // The wasm must be initialized first, you can provide photon wasm binaries from any source
+  await initPhoton(new URL("@cf-wasm/photon/photon.wasm", import.meta.url));
+
+  return {
+    resize: async (source: string, format?: "webp" | "png" | "jpeg") => {
+      // fetch the source image and get bytes
+      const imagBytes = new Uint8Array(
+        await (await fetch(source)).arrayBuffer()
+      );
+
+      // create a photon instance
+      const inputImage = PhotonImage.new_from_byteslice(imagBytes);
+
+      // resize image using photon
+      const outputImage = resize(
+        inputImage,
+        inputImage.get_width() * 0.5,
+        inputImage.get_height() * 0.5,
+        // @ts-expect-error
+        SamplingFilter.Nearest
+      );
+
+      let outputBytes: Uint8Array;
+
+      switch (format) {
+        case "png":
+          // get png bytes
+          outputBytes = outputImage.get_bytes();
+          break;
+
+        case "jpeg":
+          // get jpeg bytes
+          outputBytes = outputImage.get_bytes_jpeg(1);
+          break;
+
+        default:
+          // get webp bytes
+          outputBytes = outputImage.get_bytes_webp();
+      }
+
+      // Explicitly free rust memory
+      outputImage.free();
+      inputImage.free();
+
+      // create a blob url
+      return URL.createObjectURL(new Blob([outputBytes]));
+    }
+  };
+});
+
+export type Registered = typeof registered;
+```
+
+Now you can use it in your entrypoints:
+
+```ts
+import { Worker } from "@deox/cors-worker";
+import type { Registered } from "./worker";
+
+const worker = new Worker<Registered>(
+  new URL("./worker", import.meta.url),
+  undefined
+);
+
+const element = document.getElementById("demo_image") as HTMLImageElement;
+
+worker.proxy.resize("https://avatars.githubusercontent.com/u/100576030").then((blobUrl) => {
+  element.src = blobUrl;
+});
+```
+
 ## Documentation
 
 To explore all the functions, view the [official documentation](https://docs.rs/photon-rs/).
