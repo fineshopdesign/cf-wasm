@@ -4,6 +4,9 @@ Generate Open Graph Images dynamically from HTML/CSS without a browser.
 
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
 
+> **Warning:** Breaking changes may be introduced without following semantic versioning.  
+> Please note that this package may undergo breaking changes between versions without adhering strictly to semantic versioning (SemVer). While efforts will be made to minimize disruptions, it's recommended to review release notes carefully before upgrading to a new version. We apologize for any inconvenience this may cause and appreciate your understanding.
+
 ## Installation
 
 Install the package by running the following command in terminal:
