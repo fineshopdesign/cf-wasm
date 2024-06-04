@@ -17,8 +17,8 @@ describe('resize', async () => {
       inputImage,
       inputImage.get_width() * 0.5,
       inputImage.get_height() * 0.5,
-      // ! Idk why it asks for object itself
-      SamplingFilter.Nearest as unknown as typeof SamplingFilter,
+      // @ts-expect-error should accept
+      SamplingFilter.Nearest,
     );
 
     const outputBytes = outputImage.get_bytes_webp();

@@ -34,7 +34,7 @@ const commonBuildOptions: Options = {
 
 /** Adds extension to dist files */
 export const addExtensionPlugin = (
-  fileMap: { [FromExtenstion: string]: string } = {
+  fileMap: { [FromExtension: string]: string } = {
     '.ts': '.js',
     '.js': '.js',
   },

@@ -6,10 +6,10 @@ Powered by [denosaurs/pngs](https://github.com/denosaurs/pngs).
 
 ## Installation
 
-Install the package by running the following command in terminal:
-
 ```shell
-npm install @cf-wasm/png
+npm install @cf-wasm/png       # npm
+yarn add @cf-wasm/png          # yarn
+pnpm add @cf-wasm/png          # pnpm
 ```
 
 ## Usage
