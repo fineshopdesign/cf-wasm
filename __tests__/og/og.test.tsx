@@ -49,7 +49,7 @@ describe('htmlToReact', () => {
   });
 });
 
-/** Following tests were removed, IDK why actions job nevers finishes when using them, works as expected locally */
+/** Following tests were removed, IDK why actions job never finishes when using it, works as expected locally */
 // describe('render', () => {
 //   const renderer = render(
 //     <div

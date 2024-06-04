@@ -11,7 +11,11 @@ This monorepo contains the following packages:
 A high-performance image processing library.  
 Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon).  
 
-Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`  
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js
 
 [Read more..](/packages/photon/README.md)
 
@@ -20,7 +24,11 @@ Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`
 A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.  
 Powered by [denosaurs/pngs](https://github.com/denosaurs/pngs).  
 
-Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`  
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js
 
 [Read more..](/packages/png/README.md)
 
@@ -29,7 +37,11 @@ Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.  
 Powered by [@resvg/resvg-wasm](https://www.npmjs.com/package/@resvg/resvg-wasm).  
 
-Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`  
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js
 
 [Read more..](/packages/resvg/README.md)
 
@@ -38,7 +50,11 @@ Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`
 Enlightened library to convert HTML and CSS to SVG.  
 Powered by [satori](https://www.npmjs.com/package/satori).  
 
-Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`  
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js
 
 [Read more..](/packages/satori/README.md)
 
@@ -47,6 +63,10 @@ Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`
 Generate Open Graph Images dynamically from HTML/CSS without a browser.  
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).  
 
-Compatible with: `Cloudflare Workers`, `Next.js (Edge runtime)`, `Node.js`  
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js 
 
 [Read more..](/packages/og/README.md)

@@ -9,10 +9,10 @@ Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
 
 ## Installation
 
-Install the package by running the following command in terminal:
-
 ```shell
-npm install @cf-wasm/og
+npm install @cf-wasm/og       # npm
+yarn add @cf-wasm/og          # yarn
+pnpm add @cf-wasm/og          # pnpm
 ```
 
 ## Usage
