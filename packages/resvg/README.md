@@ -6,10 +6,10 @@ Powered by [@resvg/resvg-wasm](https://www.npmjs.com/package/@resvg/resvg-wasm).
 
 ## Installation
 
-Install the package by running the following command in terminal:
-
 ```shell
-npm install @cf-wasm/resvg
+npm install @cf-wasm/resvg       # npm
+yarn add @cf-wasm/resvg          # yarn
+pnpm add @cf-wasm/resvg          # pnpm
 ```
 
 ## Usage

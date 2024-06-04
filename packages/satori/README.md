@@ -6,10 +6,10 @@ Powered by [satori](https://www.npmjs.com/package/satori).
 
 ## Installation
 
-Install the package by running the following command in terminal:
-
 ```shell
-npm install @cf-wasm/satori
+npm install @cf-wasm/satori       # npm
+yarn add @cf-wasm/satori          # yarn
+pnpm add @cf-wasm/satori          # pnpm
 ```
 
 ## Usage

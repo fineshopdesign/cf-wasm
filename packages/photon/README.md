@@ -8,10 +8,10 @@ Forked on: `25th May, 2024`.
 
 ## Installation
 
-Install the package by running the following command in terminal:
-
 ```shell
-npm install @cf-wasm/photon
+npm install @cf-wasm/photon       # npm
+yarn add @cf-wasm/photon          # yarn
+pnpm add @cf-wasm/photon          # pnpm
 ```
 
 ## Usage
@@ -22,6 +22,8 @@ npm install @cf-wasm/photon
   `import * as photon from "@cf-wasm/photon/next";`
 - CJS (file base):  
   `import * as photon from "@cf-wasm/photon/node";`
+- Browser, Web Worker, etc. (experimental)  
+  `import * as photon from "@cf-wasm/photon/others";`
 
 ## Examples
 
@@ -185,7 +187,7 @@ export default async function handler(req: NextRequest) {
 }
 ```
 
-### Web Workers
+### Web Worker
 
 You can use `others` submodule and provide wasm binaries using `initPhoton` function to make it work on other runtime (i.e. `Browser`, `Web Worker`, etc).
 
