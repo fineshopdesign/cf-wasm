@@ -48,6 +48,7 @@
     "blobmoji",
     "buildwasm",
     "copyfiles",
+    "emscripten",
     "fastly",
     "fineshopdesign",
     "getwasm",
@@ -58,6 +59,7 @@
     "O'Dwyer",
     "openmoji",
     "postbuild",
+    "quickjs",
     "resvg",
     "tsbuildinfo",
     "workerd"

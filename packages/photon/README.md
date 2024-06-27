@@ -1,10 +1,10 @@
-# @cf-wam/photon
+# @cf-wasm/photon
 
 High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
 
 Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon)  
-Build for commit [`195f51a`](https://github.com/silvia-odwyer/photon/commit/195f51a99dae8cf39ee5f54b77199b5145c01d6c)  
-Forked on: `25th May, 2024`.
+Build for commit [`56b7d38`](https://github.com/silvia-odwyer/photon/commit/56b7d38e3e9a66e03bcf4167e5bef5c28b5c6b9f)  
+Forked on: `27th June, 2024`.
 
 ## Installation
 
@@ -37,7 +37,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 // src/index.ts
 import * as photon from "@cf-wasm/photon";
 
-const handlers: ExportedHandler = {
+export default {
   async fetch() {
     // url of image to fetch
     const imageUrl = "https://avatars.githubusercontent.com/u/314135";
@@ -76,9 +76,7 @@ const handlers: ExportedHandler = {
       }
     });
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### Next.js (App Router)
@@ -191,7 +189,8 @@ export default async function handler(req: NextRequest) {
 
 You can use `others` submodule and provide wasm binaries using `initPhoton` function to make it work on other runtime (i.e. `Browser`, `Web Worker`, etc).
 
-> **Warning:** The `others` submodule is yet experimental. Breaking changes may be introduced without following semantic versioning.
+> [!WARNING]
+> The `others` submodule is yet experimental. Breaking changes may be introduced without following semantic versioning.
 
 [@deox/cors-worker](https://www.npmjs.com/package/@deox/cors-worker) can make messaging even more easier when using web workers.
 
