@@ -1,9 +1,9 @@
-import { MODULE, PhotonImage, SamplingFilter, resize } from '@cf-wasm/photon/node';
+import { PhotonImage, SamplingFilter, photonWasmModule, resize } from '@cf-wasm/photon/node';
 import { describe, expect, it } from 'vitest';
 
-describe('MODULE', () => {
+describe('photonWasmModule', () => {
   it('should be an instance of WebAssembly.Module', () => {
-    expect(MODULE).instanceOf(WebAssembly.Module);
+    expect(photonWasmModule).instanceOf(WebAssembly.Module);
   });
 });
 

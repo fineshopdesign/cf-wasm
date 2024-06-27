@@ -1,3 +1,4 @@
+import '@cf-wasm/internals/polyfills/image-data';
 import initAsync, { type InitInput } from '../lib/photon_rs';
 
 /** Initializes photon asynchronously */
