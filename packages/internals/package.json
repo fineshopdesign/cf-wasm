@@ -1,0 +1,45 @@
+{
+  "name": "@cf-wasm/internals",
+  "version": "0.0.1",
+  "private": false,
+  "description": "cf-wasm internals",
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "name": "Deo Kumar",
+		"url": "https://github.com/kumardeo"
+  },
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/internals#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/internals"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "check:types": "tsc --noEmit",
+    "build": "tsx build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    "./polyfills/image-data": {
+      "types": "./dist/dts/polyfills/image-data/index.d.ts",
+      "import": "./dist/esm/polyfills/image-data/index.js",
+      "require": "./dist/cjs/polyfills/image-data/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "polyfills/image-data": ["./dist/dts/polyfills/image-data/index.d.ts"]
+    }
+  }
+}

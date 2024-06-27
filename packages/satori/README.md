@@ -1,4 +1,4 @@
-# @cf-wam/satori
+# @cf-wasm/satori
 
 Enlightened library to convert HTML and CSS to SVG.  
 

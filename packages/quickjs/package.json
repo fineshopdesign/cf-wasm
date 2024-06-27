@@ -1,0 +1,99 @@
+{
+  "name": "@cf-wasm/quickjs",
+  "version": "0.0.1",
+  "private": false,
+  "description": "QuickJS",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/quickjs#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/quickjs"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "check:types": "tsc --noEmit",
+    "wasm": "tsx scripts/wasm.ts",
+    "build": "tsx scripts/build.ts",
+    "clean": "rimraf dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/esm/workers/index.js",
+  "types": "./dist/dts/workers/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./debug": {
+      "types": "./dist/dts/workers/debug.d.ts",
+      "import": "./dist/esm/workers/debug.js"
+    },
+    "./next": {
+      "types": "./dist/dts/next/index.d.ts",
+      "import": "./dist/esm/next/index.js"
+    },
+    "./next/debug": {
+      "types": "./dist/dts/next/debug.d.ts",
+      "import": "./dist/esm/next/debug.js"
+    },
+    "./node": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/esm/node/index.js",
+      "require": "./dist/cjs/node/index.js"
+    },
+    "./node/debug": {
+      "types": "./dist/dts/node/debug.d.ts",
+      "import": "./dist/esm/node/debug.js",
+      "require": "./dist/cjs/node/debug.js"
+    },
+    "./workers": {
+      "types": "./dist/dts/workers/index.d.ts",
+      "import": "./dist/esm/workers/index.js"
+    },
+    "./workers/debug": {
+      "types": "./dist/dts/workers/debug.d.ts",
+      "import": "./dist/esm/workers/debug.js"
+    },
+    "./DEBUG_SYNC.wasm": {
+      "import": "./dist/esm/core/DEBUG_SYNC.wasm",
+      "require": "./dist/cjs/core/DEBUG_SYNC.wasm",
+      "default": "./dist/esm/core/DEBUG_SYNC.wasm"
+    },
+    "./DEBUG_SYNC.wasm.map.txt": {
+      "import": "./dist/esm/core/DEBUG_SYNC.wasm.map.txt",
+      "require": "./dist/cjs/core/DEBUG_SYNC.wasm.map.txt",
+      "default": "./dist/esm/core/DEBUG_SYNC.wasm.map.txt"
+    },
+    "./RELEASE_SYNC.wasm": {
+      "import": "./dist/esm/core/RELEASE_SYNC.wasm",
+      "require": "./dist/cjs/core/RELEASE_SYNC.wasm",
+      "default": "./dist/esm/core/RELEASE_SYNC.wasm"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "debug": ["./dist/dts/workers/debug.d.ts"],
+      "next": ["./dist/dts/next/index.d.ts"],
+      "next/debug": ["./dist/dts/next/debug.d.ts"],
+      "node": ["./dist/dts/node/index.d.ts"],
+      "node/debug": ["./dist/dts/node/debug.d.ts"],
+      "workers": ["./dist/dts/workers/index.d.ts"],
+      "workers/debug": ["./dist/dts/workers/debug.d.ts"]
+    }
+  },
+  "dependencies": {
+    "quickjs-emscripten": "^0.26.0"
+  },
+  "devDependencies": {
+    "@jitl/quickjs-wasmfile-debug-sync": "^0.26.0",
+    "@jitl/quickjs-wasmfile-release-sync": "^0.26.0"
+  }
+}

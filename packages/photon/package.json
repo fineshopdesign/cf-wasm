@@ -84,5 +84,8 @@
         "./dist/dts/workers/index.d.ts"
       ]
     }
+  },
+  "dependencies": {
+    "@cf-wasm/internals": "workspace:*"
   }
 }
