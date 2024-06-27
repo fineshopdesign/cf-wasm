@@ -53,6 +53,359 @@ export function base64_to_vec(base64: string): Uint8Array;
 */
 export function to_image_data(photon_image: PhotonImage): ImageData;
 /**
+* Crop an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to crop an image at (0, 0) to (500, 800)
+* use photon_rs::native::{open_image};
+* use photon_rs::transform::crop;
+* use photon_rs::PhotonImage;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let cropped_img: PhotonImage = crop(&img, 0_u32, 0_u32, 500_u32, 800_u32);
+* // Write the contents of this image in JPG format.
+* ```
+* @param {PhotonImage} photon_image
+* @param {number} x1
+* @param {number} y1
+* @param {number} x2
+* @param {number} y2
+* @returns {PhotonImage}
+*/
+export function crop(photon_image: PhotonImage, x1: number, y1: number, x2: number, y2: number): PhotonImage;
+/**
+* @param {HTMLCanvasElement} source_canvas
+* @param {number} width
+* @param {number} height
+* @param {number} left
+* @param {number} top
+* @returns {HTMLCanvasElement}
+*/
+export function crop_img_browser(source_canvas: HTMLCanvasElement, width: number, height: number, left: number, top: number): HTMLCanvasElement;
+/**
+* Flip an image horizontally.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to flip an image horizontally:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::fliph;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* fliph(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function fliph(photon_image: PhotonImage): void;
+/**
+* Flip an image vertically.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to flip an image vertically:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::flipv;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* flipv(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function flipv(photon_image: PhotonImage): void;
+/**
+* Resize an image on the web.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `width` - New width.
+* * `height` - New height.
+* * `sampling_filter` - Nearest = 1, Triangle = 2, CatmullRom = 3, Gaussian = 4, Lanczos3 = 5
+* @param {PhotonImage} photon_img
+* @param {number} width
+* @param {number} height
+* @param {SamplingFilter} sampling_filter
+* @returns {HTMLCanvasElement}
+*/
+export function resize_img_browser(photon_img: PhotonImage, width: number, height: number, sampling_filter: SamplingFilter): HTMLCanvasElement;
+/**
+* Resize an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `width` - New width.
+* * `height` - New height.
+* * `sampling_filter` - Nearest = 1, Triangle = 2, CatmullRom = 3, Gaussian = 4, Lanczos3 = 5
+* @param {PhotonImage} photon_img
+* @param {number} width
+* @param {number} height
+* @param {SamplingFilter} sampling_filter
+* @returns {PhotonImage}
+*/
+export function resize(photon_img: PhotonImage, width: number, height: number, sampling_filter: SamplingFilter): PhotonImage;
+/**
+* Resize image using seam carver.
+* Resize only if new dimensions are smaller, than original image.
+* # NOTE: This is still experimental feature, and pretty slow.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `width` - New width.
+* * `height` - New height.
+*
+* # Example
+*
+* ```no_run
+* // For example, resize image using seam carver:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::seam_carve;
+* use photon_rs::PhotonImage;
+*
+* let img = open_image("img.jpg").expect("File should open");
+* let result: PhotonImage = seam_carve(&img, 100_u32, 100_u32);
+* ```
+* @param {PhotonImage} img
+* @param {number} width
+* @param {number} height
+* @returns {PhotonImage}
+*/
+export function seam_carve(img: PhotonImage, width: number, height: number): PhotonImage;
+/**
+* Shear the image along the X axis.
+* A sheared PhotonImage is returned.
+*
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `shear` - Amount to shear.
+*
+* # Example
+*
+* ```no_run
+* // For example, to shear an image by 0.5:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::shearx;
+*
+* let img = open_image("img.jpg").expect("File should open");
+* let sheared_img = shearx(&img, 0.5);
+* ```
+* @param {PhotonImage} photon_img
+* @param {number} shear
+* @returns {PhotonImage}
+*/
+export function shearx(photon_img: PhotonImage, shear: number): PhotonImage;
+/**
+* Shear the image along the Y axis.
+* A sheared PhotonImage is returned.
+*
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `shear` - Amount to shear.
+*
+* # Example
+*
+* ```no_run
+* // For example, to shear an image by 0.5:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::sheary;
+*
+* let img = open_image("img.jpg").expect("File should open");
+* let sheared_img = sheary(&img, 0.5);
+* ```
+* @param {PhotonImage} photon_img
+* @param {number} shear
+* @returns {PhotonImage}
+*/
+export function sheary(photon_img: PhotonImage, shear: number): PhotonImage;
+/**
+* Apply uniform padding around the PhotonImage
+* A padded PhotonImage is returned.
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `padding` - The amount of padding to be applied to the PhotonImage.
+* * `padding_rgba` - Tuple containing the RGBA code for padding color.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a padding of 10 pixels around a PhotonImage:
+* use photon_rs::transform::padding_uniform;
+* use photon_rs::native::open_image;
+* use photon_rs::Rgba;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
+* padding_uniform(&img, 10_u32, rgba);
+* ```
+* @param {PhotonImage} img
+* @param {number} padding
+* @param {Rgba} padding_rgba
+* @returns {PhotonImage}
+*/
+export function padding_uniform(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
+/**
+* Apply padding on the left side of the PhotonImage
+* A padded PhotonImage is returned.
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `padding` - The amount of padding to be applied to the PhotonImage.
+* * `padding_rgba` - Tuple containing the RGBA code for padding color.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a padding of 10 pixels on the left side of a PhotonImage:
+* use photon_rs::transform::padding_left;
+* use photon_rs::native::open_image;
+* use photon_rs::Rgba;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
+* padding_left(&img, 10_u32, rgba);
+* ```
+* @param {PhotonImage} img
+* @param {number} padding
+* @param {Rgba} padding_rgba
+* @returns {PhotonImage}
+*/
+export function padding_left(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
+/**
+* Apply padding on the left side of the PhotonImage
+* A padded PhotonImage is returned.
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `padding` - The amount of padding to be applied to the PhotonImage.
+* * `padding_rgba` - Tuple containing the RGBA code for padding color.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a padding of 10 pixels on the right side of a PhotonImage:
+* use photon_rs::transform::padding_right;
+* use photon_rs::native::open_image;
+* use photon_rs::Rgba;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
+* padding_right(&img, 10_u32, rgba);
+* ```
+* @param {PhotonImage} img
+* @param {number} padding
+* @param {Rgba} padding_rgba
+* @returns {PhotonImage}
+*/
+export function padding_right(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
+/**
+* Apply padding on the left side of the PhotonImage
+* A padded PhotonImage is returned.
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `padding` - The amount of padding to be applied to the PhotonImage.
+* * `padding_rgba` - Tuple containing the RGBA code for padding color.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a padding of 10 pixels on the top of a PhotonImage:
+* use photon_rs::transform::padding_top;
+* use photon_rs::native::open_image;
+* use photon_rs::Rgba;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
+* padding_top(&img, 10_u32, rgba);
+* ```
+* @param {PhotonImage} img
+* @param {number} padding
+* @param {Rgba} padding_rgba
+* @returns {PhotonImage}
+*/
+export function padding_top(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
+/**
+* Apply padding on the left side of the PhotonImage
+* A padded PhotonImage is returned.
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `padding` - The amount of padding to be applied to the PhotonImage.
+* * `padding_rgba` - Tuple containing the RGBA code for padding color.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a padding of 10 pixels on the bottom of a PhotonImage:
+* use photon_rs::transform::padding_bottom;
+* use photon_rs::native::open_image;
+* use photon_rs::Rgba;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
+* padding_bottom(&img, 10_u32, rgba);
+* ```
+* @param {PhotonImage} img
+* @param {number} padding
+* @param {Rgba} padding_rgba
+* @returns {PhotonImage}
+*/
+export function padding_bottom(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
+/**
+* Rotate the PhotonImage on an arbitrary angle
+* A rotated PhotonImage is returned.
+*
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `angle` - Rotation angle in degrees.
+*
+* # Example
+*
+* ```no_run
+* // For example, to rotate a PhotonImage by 30 degrees:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::rotate;
+*
+* let img = open_image("img.jpg").expect("File should open");
+* let rotated_img = rotate(&img, 30.0);
+* ```
+* @param {PhotonImage} photon_img
+* @param {number} angle
+* @returns {PhotonImage}
+*/
+export function rotate(photon_img: PhotonImage, angle: number): PhotonImage;
+/**
+* Resample the PhotonImage.
+*
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `dst_width` - Target width.
+* * `dst_height` - Target height.
+*
+* # Example
+*
+* ```no_run
+* // For example, to resample a PhotonImage to 1920x1080 size:
+* use photon_rs::native::open_image;
+* use photon_rs::transform::resample;
+*
+* let img = open_image("img.jpg").expect("File should open");
+* let rotated_img = resample(&img, 1920, 1080);
+* ```
+* @param {PhotonImage} img
+* @param {number} dst_width
+* @param {number} dst_height
+* @returns {PhotonImage}
+*/
+export function resample(img: PhotonImage, dst_width: number, dst_height: number): PhotonImage;
+/**
 * Applies gamma correction to an image.
 * # Arguments
 * * `photon_image` - A PhotonImage that contains a view into the image.
@@ -981,6 +1334,314 @@ export function firenze(img: PhotonImage): void;
 */
 export function obsidian(img: PhotonImage): void;
 /**
+* Noise reduction.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to noise reduct an image:
+* use photon_rs::conv::noise_reduction;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* noise_reduction(&mut img);
+* ```
+* Adds a constant to a select R, G, or B channel's value.
+* @param {PhotonImage} photon_image
+*/
+export function noise_reduction(photon_image: PhotonImage): void;
+/**
+* Sharpen an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to sharpen an image:
+* use photon_rs::conv::sharpen;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* sharpen(&mut img);
+* ```
+* Adds a constant to a select R, G, or B channel's value.
+* @param {PhotonImage} photon_image
+*/
+export function sharpen(photon_image: PhotonImage): void;
+/**
+* Apply edge detection to an image, to create a dark version with its edges highlighted.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the Red channel for all pixels by 10:
+* use photon_rs::conv::edge_detection;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* edge_detection(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function edge_detection(photon_image: PhotonImage): void;
+/**
+* Apply an identity kernel convolution to an image.
+*
+* # Arguments
+* * `img` -A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply an identity kernel convolution:
+* use photon_rs::conv::identity;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* identity(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function identity(photon_image: PhotonImage): void;
+/**
+* Apply a box blur effect.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a box blur effect:
+* use photon_rs::conv::box_blur;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* box_blur(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function box_blur(photon_image: PhotonImage): void;
+/**
+* Gaussian blur in linear time.
+*
+* Reference: http://blog.ivank.net/fastest-gaussian-blur.html
+*
+* # Arguments
+* * `photon_image` - A PhotonImage
+* * `radius` - blur radius
+* # Example
+*
+* ```no_run
+* use photon_rs::conv::gaussian_blur;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* gaussian_blur(&mut img, 3_i32);
+* ```
+* @param {PhotonImage} photon_image
+* @param {number} radius
+*/
+export function gaussian_blur(photon_image: PhotonImage, radius: number): void;
+/**
+* Detect horizontal lines in an image, and highlight these only.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to display the horizontal lines in an image:
+* use photon_rs::conv::detect_horizontal_lines;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* detect_horizontal_lines(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function detect_horizontal_lines(photon_image: PhotonImage): void;
+/**
+* Detect vertical lines in an image, and highlight these only.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to display the vertical lines in an image:
+* use photon_rs::conv::detect_vertical_lines;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* detect_vertical_lines(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function detect_vertical_lines(photon_image: PhotonImage): void;
+/**
+* Detect lines at a forty five degree angle in an image, and highlight these only.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to display the lines at a forty five degree angle in an image:
+* use photon_rs::conv::detect_45_deg_lines;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* detect_45_deg_lines(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function detect_45_deg_lines(photon_image: PhotonImage): void;
+/**
+* Detect lines at a 135 degree angle in an image, and highlight these only.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to display the lines at a 135 degree angle in an image:
+* use photon_rs::conv::detect_135_deg_lines;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* detect_135_deg_lines(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function detect_135_deg_lines(photon_image: PhotonImage): void;
+/**
+* Apply a standard laplace convolution.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a laplace effect:
+* use photon_rs::conv::laplace;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* laplace(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function laplace(photon_image: PhotonImage): void;
+/**
+* Preset edge effect.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply this effect:
+* use photon_rs::conv::edge_one;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* edge_one(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function edge_one(photon_image: PhotonImage): void;
+/**
+* Apply an emboss effect to an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply an emboss effect:
+* use photon_rs::conv::emboss;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* emboss(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function emboss(photon_image: PhotonImage): void;
+/**
+* Apply a horizontal Sobel filter to an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a horizontal Sobel filter:
+* use photon_rs::conv::sobel_horizontal;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* sobel_horizontal(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function sobel_horizontal(photon_image: PhotonImage): void;
+/**
+* Apply a horizontal Prewitt convolution to an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a horizontal Prewitt convolution effect:
+* use photon_rs::conv::prewitt_horizontal;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* prewitt_horizontal(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function prewitt_horizontal(photon_image: PhotonImage): void;
+/**
+* Apply a vertical Sobel filter to an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+*
+* # Example
+*
+* ```no_run
+* // For example, to apply a vertical Sobel filter:
+* use photon_rs::conv::sobel_vertical;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* sobel_vertical(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function sobel_vertical(photon_image: PhotonImage): void;
+/**
 * Add a watermark to an image.
 *
 * # Arguments
@@ -1009,8 +1670,8 @@ export function watermark(img: PhotonImage, watermark: PhotonImage, x: bigint, y
 * Blend two images together.
 *
 * The `blend_mode` (3rd param) determines which blending mode to use; change this for varying effects.
-* The blend modes available include: `overlay`, `over`, `atop`, `xor`, `multiply`, `burn`, `soft_light`, `hard_light`,
-* `difference`, `lighten`, `darken`, `dodge`, `plus`, `exclusion` (more to come)
+* The blend modes available include: `overlay`, `over`, `atop`, `xor`, `plus`, `multiply`, `burn`,
+* `difference`, `soft_light`, `screen`, `hard_light`, `dodge`, `exclusion`, `lighten`, `darken` (more to come)
 * NOTE: The first image must be smaller than the second image passed as params.
 * If the first image were larger than the second, then there would be overflowing pixels which would have no corresponding pixels
 * in the second image.
@@ -1045,6 +1706,513 @@ export function create_gradient(width: number, height: number): PhotonImage;
 * @param {PhotonImage} image
 */
 export function apply_gradient(image: PhotonImage): void;
+/**
+* Alter a select channel by incrementing or decrementing its value by a constant.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `channel` - The channel you wish to alter, it should be either 0, 1 or 2,
+* representing R, G, or B respectively. (O=Red, 1=Green, 2=Blue)
+* * `amount` - The amount to increment/decrement the channel's value by for that pixel.
+* A positive value will increment/decrement the channel's value, a negative value will decrement the channel's value.
+*
+* ## Example
+*
+* ```no_run
+* // For example, to increase the Red channel for all pixels by 10:
+* use photon_rs::channels::alter_channel;
+* use photon_rs::native::{open_image};
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_channel(&mut img, 0_usize, 10_i16);
+* ```
+*
+* Adds a constant to a select R, G, or B channel's value.
+*
+* ### Decrease a channel's value
+* // For example, to decrease the Green channel for all pixels by 20:
+* ```no_run
+* use photon_rs::channels::alter_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_channel(&mut img, 1_usize, -20_i16);
+* ```
+* **Note**: Note the use of a minus symbol when decreasing the channel.
+* @param {PhotonImage} img
+* @param {number} channel
+* @param {number} amt
+*/
+export function alter_channel(img: PhotonImage, channel: number, amt: number): void;
+/**
+* Increment or decrement every pixel's Red channel by a constant.
+*
+* # Arguments
+* * `img` - A PhotonImage. See the PhotonImage struct for details.
+* * `amt` - The amount to increment or decrement the channel's value by for that pixel.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the Red channel for all pixels by 10:
+* use photon_rs::channels::alter_red_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_red_channel(&mut img, 10_i16);
+* ```
+* @param {PhotonImage} photon_image
+* @param {number} amt
+*/
+export function alter_red_channel(photon_image: PhotonImage, amt: number): void;
+/**
+* Increment or decrement every pixel's Green channel by a constant.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `amt` - The amount to increment/decrement the channel's value by for that pixel.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the Green channel for all pixels by 20:
+* use photon_rs::channels::alter_green_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_green_channel(&mut img, 20_i16);
+* ```
+* @param {PhotonImage} img
+* @param {number} amt
+*/
+export function alter_green_channel(img: PhotonImage, amt: number): void;
+/**
+* Increment or decrement every pixel's Blue channel by a constant.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `amt` - The amount to increment or decrement the channel's value by for that pixel.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the Blue channel for all pixels by 10:
+* use photon_rs::channels::alter_blue_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_blue_channel(&mut img, 10_i16);
+* ```
+* @param {PhotonImage} img
+* @param {number} amt
+*/
+export function alter_blue_channel(img: PhotonImage, amt: number): void;
+/**
+* Increment/decrement two channels' values simultaneously by adding an amt to each channel per pixel.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `channel1` - A usize from 0 to 2 that represents either the R, G or B channels.
+* * `amt1` - The amount to increment/decrement the channel's value by for that pixel.
+* * `channel2` -A usize from 0 to 2 that represents either the R, G or B channels.
+* * `amt2` - The amount to increment/decrement the channel's value by for that pixel.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the values of the Red and Blue channels per pixel:
+* use photon_rs::channels::alter_two_channels;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_two_channels(&mut img, 0_usize, 10_i16, 2_usize, 20_i16);
+* ```
+* @param {PhotonImage} img
+* @param {number} channel1
+* @param {number} amt1
+* @param {number} channel2
+* @param {number} amt2
+*/
+export function alter_two_channels(img: PhotonImage, channel1: number, amt1: number, channel2: number, amt2: number): void;
+/**
+* Increment all 3 channels' values by adding an amt to each channel per pixel.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `r_amt` - The amount to increment/decrement the Red channel by.
+* * `g_amt` - The amount to increment/decrement the Green channel by.
+* * `b_amt` - The amount to increment/decrement the Blue channel by.
+*
+* # Example
+*
+* ```no_run
+* // For example, to increase the values of the Red channel by 10, the Green channel by 20,
+* // and the Blue channel by 50:
+* use photon_rs::channels::alter_channels;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* alter_channels(&mut img, 10_i16, 20_i16, 50_i16);
+* ```
+* @param {PhotonImage} img
+* @param {number} r_amt
+* @param {number} g_amt
+* @param {number} b_amt
+*/
+export function alter_channels(img: PhotonImage, r_amt: number, g_amt: number, b_amt: number): void;
+/**
+* Set a certain channel to zero, thus removing the channel's influence in the pixels' final rendered colour.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `channel` - The channel to be removed; must be a usize from 0 to 2, with 0 representing Red, 1 representing Green, and 2 representing Blue.
+* * `min_filter` - Minimum filter. Value between 0 and 255. Only remove the channel if the current pixel's channel value is less than this minimum filter. To completely
+* remove the channel, set this value to 255, to leave the channel as is, set to 0, and to set a channel to zero for a pixel whose red value is greater than 50,
+* then channel would be 0 and min_filter would be 50.
+*
+* # Example
+*
+* ```no_run
+* // For example, to remove the Red channel with a min_filter of 100:
+* use photon_rs::channels::remove_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* remove_channel(&mut img, 0_usize, 100_u8);
+* ```
+* @param {PhotonImage} img
+* @param {number} channel
+* @param {number} min_filter
+*/
+export function remove_channel(img: PhotonImage, channel: number, min_filter: number): void;
+/**
+* Remove the Red channel's influence in an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
+*
+* # Example
+*
+* ```no_run
+* // For example, to remove the red channel for red channel pixel values less than 50:
+* use photon_rs::channels::remove_red_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* remove_red_channel(&mut img, 50_u8);
+* ```
+* @param {PhotonImage} img
+* @param {number} min_filter
+*/
+export function remove_red_channel(img: PhotonImage, min_filter: number): void;
+/**
+* Remove the Green channel's influence in an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
+*
+* # Example
+*
+* ```no_run
+* // For example, to remove the green channel for green channel pixel values less than 50:
+* use photon_rs::channels::remove_green_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* remove_green_channel(&mut img, 50_u8);
+* ```
+* @param {PhotonImage} img
+* @param {number} min_filter
+*/
+export function remove_green_channel(img: PhotonImage, min_filter: number): void;
+/**
+* Remove the Blue channel's influence in an image.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
+*
+* # Example
+*
+* ```no_run
+* // For example, to remove the blue channel for blue channel pixel values less than 50:
+* use photon_rs::channels::remove_blue_channel;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* remove_blue_channel(&mut img, 50_u8);
+* ```
+* @param {PhotonImage} img
+* @param {number} min_filter
+*/
+export function remove_blue_channel(img: PhotonImage, min_filter: number): void;
+/**
+* Swap two channels.
+*
+* # Arguments
+* * `img` - A PhotonImage.
+* * `channel1` - An index from 0 to 2, representing the Red, Green or Blue channels respectively. Red would be represented by 0, Green by 1, and Blue by 2.
+* * `channel2` - An index from 0 to 2, representing the Red, Green or Blue channels respectively. Same as above.
+*
+* # Example
+*
+* ```no_run
+* // For example, to swap the values of the Red channel with the values of the Blue channel:
+* use photon_rs::channels::swap_channels;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* swap_channels(&mut img, 0_usize, 2_usize);
+* ```
+* @param {PhotonImage} img
+* @param {number} channel1
+* @param {number} channel2
+*/
+export function swap_channels(img: PhotonImage, channel1: number, channel2: number): void;
+/**
+* Invert RGB value of an image.
+*
+* # Arguments
+* * `photon_image` - A DynamicImage that contains a view into the image.
+* # Example
+*
+* ```no_run
+* use photon_rs::channels::invert;
+* use photon_rs::native::open_image;
+*
+* let mut img = open_image("img.jpg").expect("File should open");
+* invert(&mut img);
+* ```
+* @param {PhotonImage} photon_image
+*/
+export function invert(photon_image: PhotonImage): void;
+/**
+* Selective hue rotation.
+*
+* Only rotate the hue of a pixel if its RGB values are within a specified range.
+* This function only rotates a pixel's hue to another  if it is visually similar to the colour specified.
+* For example, if a user wishes all pixels that are blue to be changed to red, they can selectively specify  only the blue pixels to be changed.
+* # Arguments
+* * `img` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+* * `degrees` - The amount of degrees to hue rotate by.
+*
+* # Example
+*
+* ```no_run
+* // For example, to only rotate the pixels that are of RGB value RGB{20, 40, 60}:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_hue_rotate;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_hue_rotate(&mut img, ref_color, 180_f32);
+* ```
+* @param {PhotonImage} photon_image
+* @param {Rgb} ref_color
+* @param {number} degrees
+*/
+export function selective_hue_rotate(photon_image: PhotonImage, ref_color: Rgb, degrees: number): void;
+/**
+* Selectively change pixel colours which are similar to the reference colour provided.
+*
+* Similarity between two colours is calculated via the CIE76 formula.
+* Only changes the color of a pixel if its similarity to the reference colour is within the range in the algorithm.
+* For example, with this function, a user can change the color of all blue pixels by mixing them with red by 10%.
+* # Arguments
+* * `photon_image` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+* * `new_color` - The `RGB` value of the new color (to be mixed with the matched pixels)
+* * `fraction` - The amount of mixing the new colour with the matched pixels
+*
+* # Example
+*
+* ```no_run
+* // For example, to only change the color of pixels that are similar to the RGB value RGB{200, 120, 30} by mixing RGB{30, 120, 200} with 25%:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_color_convert;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(200, 120, 30);
+* let new_color = Rgb::new(30, 120, 200);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_color_convert(&mut img, ref_color, new_color, 0.25);
+* ```
+* @param {PhotonImage} photon_image
+* @param {Rgb} ref_color
+* @param {Rgb} new_color
+* @param {number} fraction
+*/
+export function selective_color_convert(photon_image: PhotonImage, ref_color: Rgb, new_color: Rgb, fraction: number): void;
+/**
+* Selectively lighten an image.
+*
+* Only lighten the hue of a pixel if its colour matches or is similar to the RGB colour specified.
+* For example, if a user wishes all pixels that are blue to be lightened, they can selectively specify  only the blue pixels to be changed.
+* # Arguments
+* * `img` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+* * `amt` - The level from 0 to 1 to lighten the hue by. Increasing by 10% would have an `amt` of 0.1
+*
+* # Example
+*
+* ```no_run
+* // For example, to only lighten the pixels that are of or similar to RGB value RGB{20, 40, 60}:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_lighten;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_lighten(&mut img, ref_color, 0.2_f32);
+* ```
+* @param {PhotonImage} img
+* @param {Rgb} ref_color
+* @param {number} amt
+*/
+export function selective_lighten(img: PhotonImage, ref_color: Rgb, amt: number): void;
+/**
+* Selectively desaturate pixel colours which are similar to the reference colour provided.
+*
+* Similarity between two colours is calculated via the CIE76 formula.
+* Only desaturates the hue of a pixel if its similarity to the reference colour is within the range in the algorithm.
+* For example, if a user wishes all pixels that are blue to be desaturated by 0.1, they can selectively specify  only the blue pixels to be changed.
+* # Arguments
+* * `img` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+* * `amt` - The amount of desaturate the colour by.
+*
+* # Example
+*
+* ```no_run
+* // For example, to only desaturate the pixels that are similar to the RGB value RGB{20, 40, 60}:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_desaturate;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_desaturate(&mut img, ref_color, 0.1_f32);
+* ```
+* @param {PhotonImage} img
+* @param {Rgb} ref_color
+* @param {number} amt
+*/
+export function selective_desaturate(img: PhotonImage, ref_color: Rgb, amt: number): void;
+/**
+* Selectively saturate pixel colours which are similar to the reference colour provided.
+*
+* Similarity between two colours is calculated via the CIE76 formula.
+* Only saturates the hue of a pixel if its similarity to the reference colour is within the range in the algorithm.
+* For example, if a user wishes all pixels that are blue to have an increase in saturation by 10%, they can selectively specify only the blue pixels to be changed.
+* # Arguments
+* * `img` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+* * `amt` - The amount of saturate the colour by.
+*
+* # Example
+*
+* ```no_run
+* // For example, to only increase the saturation of pixels that are similar to the RGB value RGB{20, 40, 60}:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_saturate;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_saturate(&mut img, ref_color, 0.1_f32);
+* ```
+* @param {PhotonImage} img
+* @param {Rgb} ref_color
+* @param {number} amt
+*/
+export function selective_saturate(img: PhotonImage, ref_color: Rgb, amt: number): void;
+/**
+* Selectively changes a pixel to greyscale if it is *not* visually similar or close to the colour specified.
+* Only changes the colour of a pixel if its RGB values are within a specified range.
+*
+* (Similarity between two colours is calculated via the CIE76 formula.)
+* For example, if a user wishes all pixels that are *NOT* blue to be displayed in greyscale, they can selectively specify only the blue pixels to be
+* kept in the photo.
+* # Arguments
+* * `img` - A PhotonImage.
+* * `ref_color` - The `RGB` value of the reference color (to be compared to)
+*
+* # Example
+*
+* ```no_run
+* // For example, to greyscale all pixels that are *not* visually similar to the RGB colour RGB{20, 40, 60}:
+* use photon_rs::Rgb;
+* use photon_rs::channels::selective_greyscale;
+* use photon_rs::native::open_image;
+*
+* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
+* let mut img = open_image("img.jpg").expect("File should open");
+* selective_greyscale(img, ref_color);
+* ```
+* @param {PhotonImage} photon_image
+* @param {Rgb} ref_color
+*/
+export function selective_greyscale(photon_image: PhotonImage, ref_color: Rgb): void;
+/**
+* Add bordered-text to an image.
+* The only font available as of now is Roboto.
+* Note: A graphic design/text-drawing library is currently being developed, so stay tuned.
+*
+* # Arguments
+* * `photon_image` - A PhotonImage.
+* * `text` - Text string to be drawn to the image.
+* * `x` - x-coordinate of where first letter's 1st pixel should be drawn.
+* * `y` - y-coordinate of where first letter's 1st pixel should be drawn.
+*
+* # Example
+*
+* ```no_run
+* // For example to draw the string "Welcome to Photon!" at 10, 10:
+* use photon_rs::native::open_image;
+* use photon_rs::text::draw_text_with_border;
+*
+* // Open the image. A PhotonImage is returned.
+* let mut img = open_image("img.jpg").expect("File should open");
+* draw_text_with_border(&mut img, "Welcome to Photon!", 10_i32, 10_i32);
+* ```
+* @param {PhotonImage} photon_img
+* @param {string} text
+* @param {number} x
+* @param {number} y
+*/
+export function draw_text_with_border(photon_img: PhotonImage, text: string, x: number, y: number): void;
+/**
+* Add text to an image.
+* The only font available as of now is Roboto.
+* Note: A graphic design/text-drawing library is currently being developed, so stay tuned.
+*
+* # Arguments
+* * `photon_image` - A PhotonImage.
+* * `text` - Text string to be drawn to the image.
+* * `x` - x-coordinate of where first letter's 1st pixel should be drawn.
+* * `y` - y-coordinate of where first letter's 1st pixel should be drawn.
+*
+* # Example
+*
+* ```no_run
+* // For example to draw the string "Welcome to Photon!" at 10, 10:
+* use photon_rs::native::open_image;
+* use photon_rs::text::draw_text;
+*
+* // Open the image. A PhotonImage is returned.
+* let mut img = open_image("img.jpg").expect("File should open");
+* draw_text(&mut img, "Welcome to Photon!", 10_i32, 10_i32);
+* ```
+* @param {PhotonImage} photon_img
+* @param {string} text
+* @param {number} x
+* @param {number} y
+*/
+export function draw_text(photon_img: PhotonImage, text: string, x: number, y: number): void;
 /**
 * Adds an offset to the image by a certain number of pixels.
 *
@@ -1728,765 +2896,6 @@ export function single_channel_grayscale(photon_image: PhotonImage, channel: num
 */
 export function threshold(img: PhotonImage, threshold: number): void;
 /**
-* Alter a select channel by incrementing or decrementing its value by a constant.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `channel` - The channel you wish to alter, it should be either 0, 1 or 2,
-* representing R, G, or B respectively. (O=Red, 1=Green, 2=Blue)
-* * `amount` - The amount to increment/decrement the channel's value by for that pixel.
-* A positive value will increment/decrement the channel's value, a negative value will decrement the channel's value.
-*
-* ## Example
-*
-* ```no_run
-* // For example, to increase the Red channel for all pixels by 10:
-* use photon_rs::channels::alter_channel;
-* use photon_rs::native::{open_image};
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_channel(&mut img, 0_usize, 10_i16);
-* ```
-*
-* Adds a constant to a select R, G, or B channel's value.
-*
-* ### Decrease a channel's value
-* // For example, to decrease the Green channel for all pixels by 20:
-* ```no_run
-* use photon_rs::channels::alter_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_channel(&mut img, 1_usize, -20_i16);
-* ```
-* **Note**: Note the use of a minus symbol when decreasing the channel.
-* @param {PhotonImage} img
-* @param {number} channel
-* @param {number} amt
-*/
-export function alter_channel(img: PhotonImage, channel: number, amt: number): void;
-/**
-* Increment or decrement every pixel's Red channel by a constant.
-*
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `amt` - The amount to increment or decrement the channel's value by for that pixel.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the Red channel for all pixels by 10:
-* use photon_rs::channels::alter_red_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_red_channel(&mut img, 10_i16);
-* ```
-* @param {PhotonImage} photon_image
-* @param {number} amt
-*/
-export function alter_red_channel(photon_image: PhotonImage, amt: number): void;
-/**
-* Increment or decrement every pixel's Green channel by a constant.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `amt` - The amount to increment/decrement the channel's value by for that pixel.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the Green channel for all pixels by 20:
-* use photon_rs::channels::alter_green_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_green_channel(&mut img, 20_i16);
-* ```
-* @param {PhotonImage} img
-* @param {number} amt
-*/
-export function alter_green_channel(img: PhotonImage, amt: number): void;
-/**
-* Increment or decrement every pixel's Blue channel by a constant.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `amt` - The amount to increment or decrement the channel's value by for that pixel.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the Blue channel for all pixels by 10:
-* use photon_rs::channels::alter_blue_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_blue_channel(&mut img, 10_i16);
-* ```
-* @param {PhotonImage} img
-* @param {number} amt
-*/
-export function alter_blue_channel(img: PhotonImage, amt: number): void;
-/**
-* Increment/decrement two channels' values simultaneously by adding an amt to each channel per pixel.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `channel1` - A usize from 0 to 2 that represents either the R, G or B channels.
-* * `amt1` - The amount to increment/decrement the channel's value by for that pixel.
-* * `channel2` -A usize from 0 to 2 that represents either the R, G or B channels.
-* * `amt2` - The amount to increment/decrement the channel's value by for that pixel.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the values of the Red and Blue channels per pixel:
-* use photon_rs::channels::alter_two_channels;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_two_channels(&mut img, 0_usize, 10_i16, 2_usize, 20_i16);
-* ```
-* @param {PhotonImage} img
-* @param {number} channel1
-* @param {number} amt1
-* @param {number} channel2
-* @param {number} amt2
-*/
-export function alter_two_channels(img: PhotonImage, channel1: number, amt1: number, channel2: number, amt2: number): void;
-/**
-* Increment all 3 channels' values by adding an amt to each channel per pixel.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `r_amt` - The amount to increment/decrement the Red channel by.
-* * `g_amt` - The amount to increment/decrement the Green channel by.
-* * `b_amt` - The amount to increment/decrement the Blue channel by.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the values of the Red channel by 10, the Green channel by 20,
-* // and the Blue channel by 50:
-* use photon_rs::channels::alter_channels;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* alter_channels(&mut img, 10_i16, 20_i16, 50_i16);
-* ```
-* @param {PhotonImage} img
-* @param {number} r_amt
-* @param {number} g_amt
-* @param {number} b_amt
-*/
-export function alter_channels(img: PhotonImage, r_amt: number, g_amt: number, b_amt: number): void;
-/**
-* Set a certain channel to zero, thus removing the channel's influence in the pixels' final rendered colour.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `channel` - The channel to be removed; must be a usize from 0 to 2, with 0 representing Red, 1 representing Green, and 2 representing Blue.
-* * `min_filter` - Minimum filter. Value between 0 and 255. Only remove the channel if the current pixel's channel value is less than this minimum filter. To completely
-* remove the channel, set this value to 255, to leave the channel as is, set to 0, and to set a channel to zero for a pixel whose red value is greater than 50,
-* then channel would be 0 and min_filter would be 50.
-*
-* # Example
-*
-* ```no_run
-* // For example, to remove the Red channel with a min_filter of 100:
-* use photon_rs::channels::remove_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* remove_channel(&mut img, 0_usize, 100_u8);
-* ```
-* @param {PhotonImage} img
-* @param {number} channel
-* @param {number} min_filter
-*/
-export function remove_channel(img: PhotonImage, channel: number, min_filter: number): void;
-/**
-* Remove the Red channel's influence in an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
-*
-* # Example
-*
-* ```no_run
-* // For example, to remove the red channel for red channel pixel values less than 50:
-* use photon_rs::channels::remove_red_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* remove_red_channel(&mut img, 50_u8);
-* ```
-* @param {PhotonImage} img
-* @param {number} min_filter
-*/
-export function remove_red_channel(img: PhotonImage, min_filter: number): void;
-/**
-* Remove the Green channel's influence in an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
-*
-* # Example
-*
-* ```no_run
-* // For example, to remove the green channel for green channel pixel values less than 50:
-* use photon_rs::channels::remove_green_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* remove_green_channel(&mut img, 50_u8);
-* ```
-* @param {PhotonImage} img
-* @param {number} min_filter
-*/
-export function remove_green_channel(img: PhotonImage, min_filter: number): void;
-/**
-* Remove the Blue channel's influence in an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `min_filter` - Only remove the channel if the current pixel's channel value is less than this minimum filter.
-*
-* # Example
-*
-* ```no_run
-* // For example, to remove the blue channel for blue channel pixel values less than 50:
-* use photon_rs::channels::remove_blue_channel;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* remove_blue_channel(&mut img, 50_u8);
-* ```
-* @param {PhotonImage} img
-* @param {number} min_filter
-*/
-export function remove_blue_channel(img: PhotonImage, min_filter: number): void;
-/**
-* Swap two channels.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `channel1` - An index from 0 to 2, representing the Red, Green or Blue channels respectively. Red would be represented by 0, Green by 1, and Blue by 2.
-* * `channel2` - An index from 0 to 2, representing the Red, Green or Blue channels respectively. Same as above.
-*
-* # Example
-*
-* ```no_run
-* // For example, to swap the values of the Red channel with the values of the Blue channel:
-* use photon_rs::channels::swap_channels;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* swap_channels(&mut img, 0_usize, 2_usize);
-* ```
-* @param {PhotonImage} img
-* @param {number} channel1
-* @param {number} channel2
-*/
-export function swap_channels(img: PhotonImage, channel1: number, channel2: number): void;
-/**
-* Invert RGB value of an image.
-*
-* # Arguments
-* * `photon_image` - A DynamicImage that contains a view into the image.
-* # Example
-*
-* ```no_run
-* use photon_rs::channels::invert;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* invert(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function invert(photon_image: PhotonImage): void;
-/**
-* Selective hue rotation.
-*
-* Only rotate the hue of a pixel if its RGB values are within a specified range.
-* This function only rotates a pixel's hue to another  if it is visually similar to the colour specified.
-* For example, if a user wishes all pixels that are blue to be changed to red, they can selectively specify  only the blue pixels to be changed.
-* # Arguments
-* * `img` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-* * `degrees` - The amount of degrees to hue rotate by.
-*
-* # Example
-*
-* ```no_run
-* // For example, to only rotate the pixels that are of RGB value RGB{20, 40, 60}:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_hue_rotate;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_hue_rotate(&mut img, ref_color, 180_f32);
-* ```
-* @param {PhotonImage} photon_image
-* @param {Rgb} ref_color
-* @param {number} degrees
-*/
-export function selective_hue_rotate(photon_image: PhotonImage, ref_color: Rgb, degrees: number): void;
-/**
-* Selectively change pixel colours which are similar to the reference colour provided.
-*
-* Similarity between two colours is calculated via the CIE76 formula.
-* Only changes the color of a pixel if its similarity to the reference colour is within the range in the algorithm.
-* For example, with this function, a user can change the color of all blue pixels by mixing them with red by 10%.
-* # Arguments
-* * `photon_image` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-* * `new_color` - The `RGB` value of the new color (to be mixed with the matched pixels)
-* * `fraction` - The amount of mixing the new colour with the matched pixels
-*
-* # Example
-*
-* ```no_run
-* // For example, to only change the color of pixels that are similar to the RGB value RGB{200, 120, 30} by mixing RGB{30, 120, 200} with 25%:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_color_convert;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(200, 120, 30);
-* let new_color = Rgb::new(30, 120, 200);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_color_convert(&mut img, ref_color, new_color, 0.25);
-* ```
-* @param {PhotonImage} photon_image
-* @param {Rgb} ref_color
-* @param {Rgb} new_color
-* @param {number} fraction
-*/
-export function selective_color_convert(photon_image: PhotonImage, ref_color: Rgb, new_color: Rgb, fraction: number): void;
-/**
-* Selectively lighten an image.
-*
-* Only lighten the hue of a pixel if its colour matches or is similar to the RGB colour specified.
-* For example, if a user wishes all pixels that are blue to be lightened, they can selectively specify  only the blue pixels to be changed.
-* # Arguments
-* * `img` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-* * `amt` - The level from 0 to 1 to lighten the hue by. Increasing by 10% would have an `amt` of 0.1
-*
-* # Example
-*
-* ```no_run
-* // For example, to only lighten the pixels that are of or similar to RGB value RGB{20, 40, 60}:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_lighten;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_lighten(&mut img, ref_color, 0.2_f32);
-* ```
-* @param {PhotonImage} img
-* @param {Rgb} ref_color
-* @param {number} amt
-*/
-export function selective_lighten(img: PhotonImage, ref_color: Rgb, amt: number): void;
-/**
-* Selectively desaturate pixel colours which are similar to the reference colour provided.
-*
-* Similarity between two colours is calculated via the CIE76 formula.
-* Only desaturates the hue of a pixel if its similarity to the reference colour is within the range in the algorithm.
-* For example, if a user wishes all pixels that are blue to be desaturated by 0.1, they can selectively specify  only the blue pixels to be changed.
-* # Arguments
-* * `img` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-* * `amt` - The amount of desaturate the colour by.
-*
-* # Example
-*
-* ```no_run
-* // For example, to only desaturate the pixels that are similar to the RGB value RGB{20, 40, 60}:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_desaturate;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_desaturate(&mut img, ref_color, 0.1_f32);
-* ```
-* @param {PhotonImage} img
-* @param {Rgb} ref_color
-* @param {number} amt
-*/
-export function selective_desaturate(img: PhotonImage, ref_color: Rgb, amt: number): void;
-/**
-* Selectively saturate pixel colours which are similar to the reference colour provided.
-*
-* Similarity between two colours is calculated via the CIE76 formula.
-* Only saturates the hue of a pixel if its similarity to the reference colour is within the range in the algorithm.
-* For example, if a user wishes all pixels that are blue to have an increase in saturation by 10%, they can selectively specify only the blue pixels to be changed.
-* # Arguments
-* * `img` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-* * `amt` - The amount of saturate the colour by.
-*
-* # Example
-*
-* ```no_run
-* // For example, to only increase the saturation of pixels that are similar to the RGB value RGB{20, 40, 60}:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_saturate;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_saturate(&mut img, ref_color, 0.1_f32);
-* ```
-* @param {PhotonImage} img
-* @param {Rgb} ref_color
-* @param {number} amt
-*/
-export function selective_saturate(img: PhotonImage, ref_color: Rgb, amt: number): void;
-/**
-* Selectively changes a pixel to greyscale if it is *not* visually similar or close to the colour specified.
-* Only changes the colour of a pixel if its RGB values are within a specified range.
-*
-* (Similarity between two colours is calculated via the CIE76 formula.)
-* For example, if a user wishes all pixels that are *NOT* blue to be displayed in greyscale, they can selectively specify only the blue pixels to be
-* kept in the photo.
-* # Arguments
-* * `img` - A PhotonImage.
-* * `ref_color` - The `RGB` value of the reference color (to be compared to)
-*
-* # Example
-*
-* ```no_run
-* // For example, to greyscale all pixels that are *not* visually similar to the RGB colour RGB{20, 40, 60}:
-* use photon_rs::Rgb;
-* use photon_rs::channels::selective_greyscale;
-* use photon_rs::native::open_image;
-*
-* let ref_color = Rgb::new(20_u8, 40_u8, 60_u8);
-* let mut img = open_image("img.jpg").expect("File should open");
-* selective_greyscale(img, ref_color);
-* ```
-* @param {PhotonImage} photon_image
-* @param {Rgb} ref_color
-*/
-export function selective_greyscale(photon_image: PhotonImage, ref_color: Rgb): void;
-/**
-* Noise reduction.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to noise reduct an image:
-* use photon_rs::conv::noise_reduction;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* noise_reduction(&mut img);
-* ```
-* Adds a constant to a select R, G, or B channel's value.
-* @param {PhotonImage} photon_image
-*/
-export function noise_reduction(photon_image: PhotonImage): void;
-/**
-* Sharpen an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to sharpen an image:
-* use photon_rs::conv::sharpen;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* sharpen(&mut img);
-* ```
-* Adds a constant to a select R, G, or B channel's value.
-* @param {PhotonImage} photon_image
-*/
-export function sharpen(photon_image: PhotonImage): void;
-/**
-* Apply edge detection to an image, to create a dark version with its edges highlighted.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to increase the Red channel for all pixels by 10:
-* use photon_rs::conv::edge_detection;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* edge_detection(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function edge_detection(photon_image: PhotonImage): void;
-/**
-* Apply an identity kernel convolution to an image.
-*
-* # Arguments
-* * `img` -A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply an identity kernel convolution:
-* use photon_rs::conv::identity;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* identity(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function identity(photon_image: PhotonImage): void;
-/**
-* Apply a box blur effect.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a box blur effect:
-* use photon_rs::conv::box_blur;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* box_blur(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function box_blur(photon_image: PhotonImage): void;
-/**
-* Gaussian blur in linear time.
-*
-* Reference: http://blog.ivank.net/fastest-gaussian-blur.html
-*
-* # Arguments
-* * `photon_image` - A PhotonImage
-* * `radius` - blur radius
-* # Example
-*
-* ```no_run
-* use photon_rs::conv::gaussian_blur;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* gaussian_blur(&mut img, 3_i32);
-* ```
-* @param {PhotonImage} photon_image
-* @param {number} radius
-*/
-export function gaussian_blur(photon_image: PhotonImage, radius: number): void;
-/**
-* Detect horizontal lines in an image, and highlight these only.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to display the horizontal lines in an image:
-* use photon_rs::conv::detect_horizontal_lines;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* detect_horizontal_lines(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function detect_horizontal_lines(photon_image: PhotonImage): void;
-/**
-* Detect vertical lines in an image, and highlight these only.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to display the vertical lines in an image:
-* use photon_rs::conv::detect_vertical_lines;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* detect_vertical_lines(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function detect_vertical_lines(photon_image: PhotonImage): void;
-/**
-* Detect lines at a forty five degree angle in an image, and highlight these only.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to display the lines at a forty five degree angle in an image:
-* use photon_rs::conv::detect_45_deg_lines;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* detect_45_deg_lines(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function detect_45_deg_lines(photon_image: PhotonImage): void;
-/**
-* Detect lines at a 135 degree angle in an image, and highlight these only.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to display the lines at a 135 degree angle in an image:
-* use photon_rs::conv::detect_135_deg_lines;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* detect_135_deg_lines(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function detect_135_deg_lines(photon_image: PhotonImage): void;
-/**
-* Apply a standard laplace convolution.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a laplace effect:
-* use photon_rs::conv::laplace;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* laplace(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function laplace(photon_image: PhotonImage): void;
-/**
-* Preset edge effect.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply this effect:
-* use photon_rs::conv::edge_one;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* edge_one(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function edge_one(photon_image: PhotonImage): void;
-/**
-* Apply an emboss effect to an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply an emboss effect:
-* use photon_rs::conv::emboss;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* emboss(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function emboss(photon_image: PhotonImage): void;
-/**
-* Apply a horizontal Sobel filter to an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a horizontal Sobel filter:
-* use photon_rs::conv::sobel_horizontal;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* sobel_horizontal(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function sobel_horizontal(photon_image: PhotonImage): void;
-/**
-* Apply a horizontal Prewitt convolution to an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a horizontal Prewitt convolution effect:
-* use photon_rs::conv::prewitt_horizontal;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* prewitt_horizontal(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function prewitt_horizontal(photon_image: PhotonImage): void;
-/**
-* Apply a vertical Sobel filter to an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a vertical Sobel filter:
-* use photon_rs::conv::sobel_vertical;
-* use photon_rs::native::open_image;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* sobel_vertical(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function sobel_vertical(photon_image: PhotonImage): void;
-/**
 * Add randomized noise to an image.
 * This function adds a Gaussian Noise Sample to each pixel through incrementing each channel by a randomized offset.
 * This randomized offset is generated by creating a randomized thread pool.
@@ -2530,370 +2939,6 @@ export function add_noise_rand(photon_image: PhotonImage): void;
 * @param {PhotonImage} photon_image
 */
 export function pink_noise(photon_image: PhotonImage): void;
-/**
-* Add bordered-text to an image.
-* The only font available as of now is Roboto.
-* Note: A graphic design/text-drawing library is currently being developed, so stay tuned.
-*
-* # Arguments
-* * `photon_image` - A PhotonImage.
-* * `text` - Text string to be drawn to the image.
-* * `x` - x-coordinate of where first letter's 1st pixel should be drawn.
-* * `y` - y-coordinate of where first letter's 1st pixel should be drawn.
-*
-* # Example
-*
-* ```no_run
-* // For example to draw the string "Welcome to Photon!" at 10, 10:
-* use photon_rs::native::open_image;
-* use photon_rs::text::draw_text_with_border;
-*
-* // Open the image. A PhotonImage is returned.
-* let mut img = open_image("img.jpg").expect("File should open");
-* draw_text_with_border(&mut img, "Welcome to Photon!", 10_i32, 10_i32);
-* ```
-* @param {PhotonImage} photon_img
-* @param {string} text
-* @param {number} x
-* @param {number} y
-*/
-export function draw_text_with_border(photon_img: PhotonImage, text: string, x: number, y: number): void;
-/**
-* Add text to an image.
-* The only font available as of now is Roboto.
-* Note: A graphic design/text-drawing library is currently being developed, so stay tuned.
-*
-* # Arguments
-* * `photon_image` - A PhotonImage.
-* * `text` - Text string to be drawn to the image.
-* * `x` - x-coordinate of where first letter's 1st pixel should be drawn.
-* * `y` - y-coordinate of where first letter's 1st pixel should be drawn.
-*
-* # Example
-*
-* ```no_run
-* // For example to draw the string "Welcome to Photon!" at 10, 10:
-* use photon_rs::native::open_image;
-* use photon_rs::text::draw_text;
-*
-* // Open the image. A PhotonImage is returned.
-* let mut img = open_image("img.jpg").expect("File should open");
-* draw_text(&mut img, "Welcome to Photon!", 10_i32, 10_i32);
-* ```
-* @param {PhotonImage} photon_img
-* @param {string} text
-* @param {number} x
-* @param {number} y
-*/
-export function draw_text(photon_img: PhotonImage, text: string, x: number, y: number): void;
-/**
-* Crop an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to crop an image at (0, 0) to (500, 800)
-* use photon_rs::native::{open_image};
-* use photon_rs::transform::crop;
-* use photon_rs::PhotonImage;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let cropped_img: PhotonImage = crop(&mut img, 0_u32, 0_u32, 500_u32, 800_u32);
-* // Write the contents of this image in JPG format.
-* ```
-* @param {PhotonImage} photon_image
-* @param {number} x1
-* @param {number} y1
-* @param {number} x2
-* @param {number} y2
-* @returns {PhotonImage}
-*/
-export function crop(photon_image: PhotonImage, x1: number, y1: number, x2: number, y2: number): PhotonImage;
-/**
-* @param {HTMLCanvasElement} source_canvas
-* @param {number} width
-* @param {number} height
-* @param {number} left
-* @param {number} top
-* @returns {HTMLCanvasElement}
-*/
-export function crop_img_browser(source_canvas: HTMLCanvasElement, width: number, height: number, left: number, top: number): HTMLCanvasElement;
-/**
-* Flip an image horizontally.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to flip an image horizontally:
-* use photon_rs::native::open_image;
-* use photon_rs::transform::fliph;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* fliph(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function fliph(photon_image: PhotonImage): void;
-/**
-* Flip an image vertically.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-*
-* # Example
-*
-* ```no_run
-* // For example, to flip an image vertically:
-* use photon_rs::native::open_image;
-* use photon_rs::transform::flipv;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* flipv(&mut img);
-* ```
-* @param {PhotonImage} photon_image
-*/
-export function flipv(photon_image: PhotonImage): void;
-/**
-* Resize an image on the web.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `width` - New width.
-* * `height` - New height.
-* * `sampling_filter` - Nearest = 1, Triangle = 2, CatmullRom = 3, Gaussian = 4, Lanczos3 = 5
-* @param {PhotonImage} photon_img
-* @param {number} width
-* @param {number} height
-* @param {SamplingFilter} sampling_filter
-* @returns {HTMLCanvasElement}
-*/
-export function resize_img_browser(photon_img: PhotonImage, width: number, height: number, sampling_filter: SamplingFilter): HTMLCanvasElement;
-/**
-* Resize an image.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `width` - New width.
-* * `height` - New height.
-* * `sampling_filter` - Nearest = 1, Triangle = 2, CatmullRom = 3, Gaussian = 4, Lanczos3 = 5
-* @param {PhotonImage} photon_img
-* @param {number} width
-* @param {number} height
-* @param {SamplingFilter} sampling_filter
-* @returns {PhotonImage}
-*/
-export function resize(photon_img: PhotonImage, width: number, height: number, sampling_filter: SamplingFilter): PhotonImage;
-/**
-* Resize image using seam carver.
-* Resize only if new dimensions are smaller, than original image.
-* # NOTE: This is still experimental feature, and pretty slow.
-*
-* # Arguments
-* * `img` - A PhotonImage.
-* * `width` - New width.
-* * `height` - New height.
-*
-* # Example
-*
-* ```no_run
-* // For example, resize image using seam carver:
-* use photon_rs::native::open_image;
-* use photon_rs::transform::seam_carve;
-* use photon_rs::PhotonImage;
-*
-* let img = open_image("img.jpg").expect("File should open");
-* let result: PhotonImage = seam_carve(&img, 100_u32, 100_u32);
-* ```
-* @param {PhotonImage} img
-* @param {number} width
-* @param {number} height
-* @returns {PhotonImage}
-*/
-export function seam_carve(img: PhotonImage, width: number, height: number): PhotonImage;
-/**
-* Apply uniform padding around the PhotonImage
-* A padded PhotonImage is returned.
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `padding` - The amount of padding to be applied to the PhotonImage.
-* * `padding_rgba` - Tuple containing the RGBA code for padding color.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a padding of 10 pixels around a PhotonImage:
-* use photon_rs::transform::padding_uniform;
-* use photon_rs::native::open_image;
-* use photon_rs::Rgba;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
-* padding_uniform(&img, 10_u32, rgba);
-* ```
-* @param {PhotonImage} img
-* @param {number} padding
-* @param {Rgba} padding_rgba
-* @returns {PhotonImage}
-*/
-export function padding_uniform(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
-/**
-* Apply padding on the left side of the PhotonImage
-* A padded PhotonImage is returned.
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `padding` - The amount of padding to be applied to the PhotonImage.
-* * `padding_rgba` - Tuple containing the RGBA code for padding color.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a padding of 10 pixels on the left side of a PhotonImage:
-* use photon_rs::transform::padding_left;
-* use photon_rs::native::open_image;
-* use photon_rs::Rgba;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
-* padding_left(&img, 10_u32, rgba);
-* ```
-* @param {PhotonImage} img
-* @param {number} padding
-* @param {Rgba} padding_rgba
-* @returns {PhotonImage}
-*/
-export function padding_left(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
-/**
-* Apply padding on the left side of the PhotonImage
-* A padded PhotonImage is returned.
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `padding` - The amount of padding to be applied to the PhotonImage.
-* * `padding_rgba` - Tuple containing the RGBA code for padding color.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a padding of 10 pixels on the right side of a PhotonImage:
-* use photon_rs::transform::padding_right;
-* use photon_rs::native::open_image;
-* use photon_rs::Rgba;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
-* padding_right(&img, 10_u32, rgba);
-* ```
-* @param {PhotonImage} img
-* @param {number} padding
-* @param {Rgba} padding_rgba
-* @returns {PhotonImage}
-*/
-export function padding_right(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
-/**
-* Apply padding on the left side of the PhotonImage
-* A padded PhotonImage is returned.
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `padding` - The amount of padding to be applied to the PhotonImage.
-* * `padding_rgba` - Tuple containing the RGBA code for padding color.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a padding of 10 pixels on the top of a PhotonImage:
-* use photon_rs::transform::padding_top;
-* use photon_rs::native::open_image;
-* use photon_rs::Rgba;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
-* padding_top(&img, 10_u32, rgba);
-* ```
-* @param {PhotonImage} img
-* @param {number} padding
-* @param {Rgba} padding_rgba
-* @returns {PhotonImage}
-*/
-export function padding_top(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
-/**
-* Apply padding on the left side of the PhotonImage
-* A padded PhotonImage is returned.
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `padding` - The amount of padding to be applied to the PhotonImage.
-* * `padding_rgba` - Tuple containing the RGBA code for padding color.
-*
-* # Example
-*
-* ```no_run
-* // For example, to apply a padding of 10 pixels on the bottom of a PhotonImage:
-* use photon_rs::transform::padding_bottom;
-* use photon_rs::native::open_image;
-* use photon_rs::Rgba;
-*
-* let mut img = open_image("img.jpg").expect("File should open");
-* let rgba = Rgba::new(200_u8, 100_u8, 150_u8, 255_u8);
-* padding_bottom(&img, 10_u32, rgba);
-* ```
-* @param {PhotonImage} img
-* @param {number} padding
-* @param {Rgba} padding_rgba
-* @returns {PhotonImage}
-*/
-export function padding_bottom(img: PhotonImage, padding: number, padding_rgba: Rgba): PhotonImage;
-/**
-* Rotate the PhotonImage on an arbitrary angle
-* A rotated PhotonImage is returned.
-* # NOTE: This is a naive implementation. Paeth rotation should be faster.
-*
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `angle` - Rotation angle in degrees.
-*
-* # Example
-*
-* ```no_run
-* // For example, to rotate a PhotonImage by 30 degrees:
-* use photon_rs::native::open_image;
-* use photon_rs::transform::rotate;
-*
-* let img = open_image("img.jpg").expect("File should open");
-* let rotated_img = rotate(&img, 30);
-* ```
-* @param {PhotonImage} img
-* @param {number} angle
-* @returns {PhotonImage}
-*/
-export function rotate(img: PhotonImage, angle: number): PhotonImage;
-/**
-* Resample the PhotonImage.
-*
-* # Arguments
-* * `img` - A PhotonImage. See the PhotonImage struct for details.
-* * `dst_width` - Target width.
-* * `dst_height` - Target height.
-*
-* # Example
-*
-* ```no_run
-* // For example, to resample a PhotonImage to 1920x1080 size:
-* use photon_rs::native::open_image;
-* use photon_rs::transform::resample;
-*
-* let img = open_image("img.jpg").expect("File should open");
-* let rotated_img = resample(&img, 1920, 1080);
-* ```
-* @param {PhotonImage} img
-* @param {number} dst_width
-* @param {number} dst_height
-* @returns {PhotonImage}
-*/
-export function resample(img: PhotonImage, dst_width: number, dst_height: number): PhotonImage;
 /**
 */
 export enum SamplingFilter {
@@ -3136,6 +3181,22 @@ export interface InitOutput {
   readonly __wbg_rgba_free: (a: number) => void;
   readonly rgba_set_green: (a: number, b: number) => void;
   readonly rgba_set_blue: (a: number, b: number) => void;
+  readonly crop: (a: number, b: number, c: number, d: number, e: number) => number;
+  readonly crop_img_browser: (a: number, b: number, c: number, d: number, e: number) => number;
+  readonly fliph: (a: number) => void;
+  readonly flipv: (a: number) => void;
+  readonly resize_img_browser: (a: number, b: number, c: number, d: number) => number;
+  readonly resize: (a: number, b: number, c: number, d: number) => number;
+  readonly seam_carve: (a: number, b: number, c: number) => number;
+  readonly shearx: (a: number, b: number) => number;
+  readonly sheary: (a: number, b: number) => number;
+  readonly padding_uniform: (a: number, b: number, c: number) => number;
+  readonly padding_left: (a: number, b: number, c: number) => number;
+  readonly padding_right: (a: number, b: number, c: number) => number;
+  readonly padding_top: (a: number, b: number, c: number) => number;
+  readonly padding_bottom: (a: number, b: number, c: number) => number;
+  readonly rotate: (a: number, b: number) => number;
+  readonly resample: (a: number, b: number, c: number) => number;
   readonly gamma_correction: (a: number, b: number, c: number, d: number) => void;
   readonly hsluv: (a: number, b: number, c: number, d: number) => void;
   readonly lch: (a: number, b: number, c: number, d: number) => void;
@@ -3179,10 +3240,46 @@ export interface InitOutput {
   readonly duotone_ochre: (a: number) => void;
   readonly firenze: (a: number) => void;
   readonly obsidian: (a: number) => void;
+  readonly noise_reduction: (a: number) => void;
+  readonly sharpen: (a: number) => void;
+  readonly edge_detection: (a: number) => void;
+  readonly identity: (a: number) => void;
+  readonly box_blur: (a: number) => void;
+  readonly gaussian_blur: (a: number, b: number) => void;
+  readonly detect_horizontal_lines: (a: number) => void;
+  readonly detect_vertical_lines: (a: number) => void;
+  readonly detect_45_deg_lines: (a: number) => void;
+  readonly detect_135_deg_lines: (a: number) => void;
+  readonly laplace: (a: number) => void;
+  readonly edge_one: (a: number) => void;
+  readonly emboss: (a: number) => void;
+  readonly sobel_horizontal: (a: number) => void;
+  readonly prewitt_horizontal: (a: number) => void;
+  readonly sobel_vertical: (a: number) => void;
   readonly watermark: (a: number, b: number, c: number, d: number) => void;
   readonly blend: (a: number, b: number, c: number, d: number) => void;
   readonly create_gradient: (a: number, b: number) => number;
   readonly apply_gradient: (a: number) => void;
+  readonly alter_channel: (a: number, b: number, c: number) => void;
+  readonly alter_red_channel: (a: number, b: number) => void;
+  readonly alter_green_channel: (a: number, b: number) => void;
+  readonly alter_blue_channel: (a: number, b: number) => void;
+  readonly alter_two_channels: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly alter_channels: (a: number, b: number, c: number, d: number) => void;
+  readonly remove_channel: (a: number, b: number, c: number) => void;
+  readonly remove_red_channel: (a: number, b: number) => void;
+  readonly remove_green_channel: (a: number, b: number) => void;
+  readonly remove_blue_channel: (a: number, b: number) => void;
+  readonly swap_channels: (a: number, b: number, c: number) => void;
+  readonly invert: (a: number) => void;
+  readonly selective_hue_rotate: (a: number, b: number, c: number) => void;
+  readonly selective_color_convert: (a: number, b: number, c: number, d: number) => void;
+  readonly selective_lighten: (a: number, b: number, c: number) => void;
+  readonly selective_desaturate: (a: number, b: number, c: number) => void;
+  readonly selective_saturate: (a: number, b: number, c: number) => void;
+  readonly selective_greyscale: (a: number, b: number) => void;
+  readonly draw_text_with_border: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly draw_text: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly offset: (a: number, b: number, c: number) => void;
   readonly offset_red: (a: number, b: number) => void;
   readonly offset_green: (a: number, b: number) => void;
@@ -3218,58 +3315,8 @@ export interface InitOutput {
   readonly b_grayscale: (a: number) => void;
   readonly single_channel_grayscale: (a: number, b: number) => void;
   readonly threshold: (a: number, b: number) => void;
-  readonly alter_channel: (a: number, b: number, c: number) => void;
-  readonly alter_red_channel: (a: number, b: number) => void;
-  readonly alter_green_channel: (a: number, b: number) => void;
-  readonly alter_blue_channel: (a: number, b: number) => void;
-  readonly alter_two_channels: (a: number, b: number, c: number, d: number, e: number) => void;
-  readonly alter_channels: (a: number, b: number, c: number, d: number) => void;
-  readonly remove_channel: (a: number, b: number, c: number) => void;
-  readonly remove_red_channel: (a: number, b: number) => void;
-  readonly remove_green_channel: (a: number, b: number) => void;
-  readonly remove_blue_channel: (a: number, b: number) => void;
-  readonly swap_channels: (a: number, b: number, c: number) => void;
-  readonly invert: (a: number) => void;
-  readonly selective_hue_rotate: (a: number, b: number, c: number) => void;
-  readonly selective_color_convert: (a: number, b: number, c: number, d: number) => void;
-  readonly selective_lighten: (a: number, b: number, c: number) => void;
-  readonly selective_desaturate: (a: number, b: number, c: number) => void;
-  readonly selective_saturate: (a: number, b: number, c: number) => void;
-  readonly selective_greyscale: (a: number, b: number) => void;
-  readonly noise_reduction: (a: number) => void;
-  readonly sharpen: (a: number) => void;
-  readonly edge_detection: (a: number) => void;
-  readonly identity: (a: number) => void;
-  readonly box_blur: (a: number) => void;
-  readonly gaussian_blur: (a: number, b: number) => void;
-  readonly detect_horizontal_lines: (a: number) => void;
-  readonly detect_vertical_lines: (a: number) => void;
-  readonly detect_45_deg_lines: (a: number) => void;
-  readonly detect_135_deg_lines: (a: number) => void;
-  readonly laplace: (a: number) => void;
-  readonly edge_one: (a: number) => void;
-  readonly emboss: (a: number) => void;
-  readonly sobel_horizontal: (a: number) => void;
-  readonly prewitt_horizontal: (a: number) => void;
-  readonly sobel_vertical: (a: number) => void;
   readonly add_noise_rand: (a: number) => void;
   readonly pink_noise: (a: number) => void;
-  readonly draw_text_with_border: (a: number, b: number, c: number, d: number, e: number) => void;
-  readonly draw_text: (a: number, b: number, c: number, d: number, e: number) => void;
-  readonly crop: (a: number, b: number, c: number, d: number, e: number) => number;
-  readonly crop_img_browser: (a: number, b: number, c: number, d: number, e: number) => number;
-  readonly fliph: (a: number) => void;
-  readonly flipv: (a: number) => void;
-  readonly resize_img_browser: (a: number, b: number, c: number, d: number) => number;
-  readonly resize: (a: number, b: number, c: number, d: number) => number;
-  readonly seam_carve: (a: number, b: number, c: number) => number;
-  readonly padding_uniform: (a: number, b: number, c: number) => number;
-  readonly padding_left: (a: number, b: number, c: number) => number;
-  readonly padding_right: (a: number, b: number, c: number) => number;
-  readonly padding_top: (a: number, b: number, c: number) => number;
-  readonly padding_bottom: (a: number, b: number, c: number) => number;
-  readonly rotate: (a: number, b: number) => number;
-  readonly resample: (a: number, b: number, c: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
