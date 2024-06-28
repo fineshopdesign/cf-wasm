@@ -89,7 +89,7 @@ const dtsLog = clc.yellow('DTS');
 console.log(`${dtsLog} Build start`);
 cp.execSync(
   `tsc --project ${
-    fs.existsSync('tsconfig.dts.json') ? 'tsconfig.dts.json' : 'tsconfig.dts.json'
+    fs.existsSync('tsconfig.dts.json') ? 'tsconfig.dts.json' : 'tsconfig.json'
   } --emitDeclarationOnly --declaration --outDir ${OUT_DIR}/dts`,
   {
     stdio: 'inherit',

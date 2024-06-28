@@ -89,12 +89,17 @@ const dtsLog = clc.yellow('DTS');
 console.log(`${dtsLog} Build start`);
 cp.execSync(
   `tsc --project ${
-    fs.existsSync('tsconfig.dts.json') ? 'tsconfig.dts.json' : 'tsconfig.dts.json'
+    fs.existsSync('tsconfig.dts.json') ? 'tsconfig.dts.json' : 'tsconfig.json'
   } --emitDeclarationOnly --declaration --outDir ${OUT_DIR}/dts`,
   {
     stdio: 'inherit',
   },
 );
+/**
+ * ! Copy png.d.ts to declarations output directory
+ * Since typescript infer types from js file which is not same as types declared in declaration file
+ */
+fs.copyFileSync('./src/lib/png.d.ts', `${OUT_DIR}/dts/lib/png.d.ts`);
 console.log(`${dtsLog} ⚡️ Build success`);
 
 // Write package.json

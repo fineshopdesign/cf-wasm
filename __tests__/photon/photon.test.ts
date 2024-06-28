@@ -13,13 +13,7 @@ describe('resize', async () => {
     const imageBytes = new Uint8Array(await (await fetch(imageUrl)).arrayBuffer());
     const inputImage = PhotonImage.new_from_byteslice(imageBytes);
 
-    const outputImage = resize(
-      inputImage,
-      inputImage.get_width() * 0.5,
-      inputImage.get_height() * 0.5,
-      // @ts-expect-error should accept
-      SamplingFilter.Nearest,
-    );
+    const outputImage = resize(inputImage, inputImage.get_width() * 0.5, inputImage.get_height() * 0.5, SamplingFilter.Nearest);
 
     const outputBytes = outputImage.get_bytes_webp();
 
