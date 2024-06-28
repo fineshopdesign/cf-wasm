@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.27
+
+### Patch Changes
+
+- [`9b8fd4e`](https://github.com/fineshopdesign/cf-wasm/commit/9b8fd4ea482d0743e69cda16d007059a2d00b99f) Thanks [@fineshop](https://github.com/fineshop)! - fix: set `Cache-Control` header with a default value if explicitly not set
+
 ## 0.1.26
 
 ### Patch Changes
