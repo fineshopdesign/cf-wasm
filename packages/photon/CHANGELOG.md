@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.22
+
+### Patch Changes
+
+- [`0c2f957`](https://github.com/fineshopdesign/cf-wasm/commit/0c2f95732bbf1568b2339bea276e23f67a49b4e7) Thanks [@fineshop](https://github.com/fineshop)! - fix(photon): [#28](https://github.com/fineshopdesign/cf-wasm/issues/28) by copying `photon_rs.d.ts` to output directory
+
 ## 0.1.21
 
 ### Patch Changes
