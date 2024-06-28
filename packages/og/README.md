@@ -4,7 +4,8 @@ Generate Open Graph Images dynamically from HTML/CSS without a browser.
 
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
 
-> **Warning:** Breaking changes may be introduced without following semantic versioning.  
+> [!WARNING]
+> Breaking changes may be introduced without following semantic versioning.  
 > Please note that this package may undergo breaking changes between versions without adhering strictly to semantic versioning (SemVer). While efforts will be made to minimize disruptions, it's recommended to review release notes carefully before upgrading to a new version. We apologize for any inconvenience this may cause and appreciate your understanding.
 
 ## Installation
@@ -34,16 +35,14 @@ If you are using Cloudflare Workers/Pages, you must set the execution context as
 import React from "react";
 import { ImageResponse, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     // Set execution context
     cache.setExecutionContext(ctx);
 
     return new ImageResponse(<>Hello World!</>);
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### Font Loaders
@@ -54,7 +53,7 @@ You can load Google fonts and Custom fonts with ease using `GoogleFont` and `Cus
 import React from "react";
 import { ImageResponse, GoogleFont, CustomFont, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
@@ -89,9 +88,7 @@ const handlers: ExportedHandler = {
       }
     );
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### Default font
@@ -121,16 +118,14 @@ defaultFont.set(
   )
 );
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
     // It should render with JetBrains Mono font
     return new ImageResponse(<>Hello World!</>);
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 You can set default font using `defaultFont` option:
@@ -139,7 +134,7 @@ You can set default font using `defaultFont` option:
 import React from "react";
 import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
@@ -148,9 +143,7 @@ const handlers: ExportedHandler = {
       defaultFont: new GoogleFont("Merriweather")
     });
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### SVG format
@@ -161,7 +154,7 @@ By default `ImageResponse` renders to `PNG` but you can use `format` option to r
 import React from "react";
 import { ImageResponse, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
@@ -170,9 +163,7 @@ const handlers: ExportedHandler = {
       format: "svg"
     });
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### Render HTML
@@ -183,7 +174,7 @@ The `@cf-wasm/og/html-to-react` submodule provides a function `t` which can be u
 import { ImageResponse, cache } from "@cf-wasm/og";
 import { t } from "@cf-wasm/og/html-to-react";
 
-const handlers: ExportedHandler = {
+export default {
   fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
@@ -194,9 +185,7 @@ const handlers: ExportedHandler = {
 
     return new ImageResponse(t(html));
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### `render` function
@@ -207,7 +196,7 @@ You can also use `render` function instead of `ImageResponse` to catch errors or
 import React from "react";
 import { render, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
@@ -225,9 +214,7 @@ const handlers: ExportedHandler = {
       });
     }
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ## Examples
@@ -243,7 +230,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 import React from "react";
 import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og";
 
-const handlers: ExportedHandler = {
+export default {
   async fetch(req, env, ctx) {
     // Make sure to set the execution context
     cache.setExecutionContext(ctx);
@@ -290,12 +277,11 @@ const handlers: ExportedHandler = {
       }
     );
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
-> **Warning**: If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the 1MiB script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.
+> [!WARNING]
+> If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the `1MiB` script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.
 
 ### Next.js (App Router)
 

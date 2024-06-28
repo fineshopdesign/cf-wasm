@@ -64,7 +64,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 import * as photon from "@cf-wasm/photon";
 import * as png from "@cf-wasm/png";
 
-const handlers: ExportedHandler = {
+export default {
   async fetch() {
     // url of image to fetch
     const imageUrl = "https://avatars.githubusercontent.com/u/314135";
@@ -103,9 +103,7 @@ const handlers: ExportedHandler = {
       }
     });
   }
-};
-
-export default handlers;
+} satisfies ExportedHandler;
 ```
 
 ### Next.js (App Router)
