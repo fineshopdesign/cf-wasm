@@ -35,7 +35,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
 // src/index.ts
-import * as photon from "@cf-wasm/photon";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
 
 export default {
   async fetch() {
@@ -47,15 +47,15 @@ export default {
       .then((res) => res.arrayBuffer())
       .then((buffer) => new Uint8Array(buffer));
 
-    // create a photon instance
-    const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+    // create a PhotonImage instance
+    const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
     // resize image using photon
-    const outputImage = photon.resize(
+    const outputImage = resize(
       inputImage,
       inputImage.get_width() * 0.5,
       inputImage.get_height() * 0.5,
-      1
+      SamplingFilter.Nearest
     );
 
     // get webp bytes
@@ -86,7 +86,7 @@ If you are using Next.js (App router) with edge runtime, you can use it as shown
 ```ts
 // (src/)app/api/image/route.ts
 import { type NextRequest } from "next/server";
-import * as photon from "@cf-wasm/photon/next";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
 
 export const runtime = "edge";
 
@@ -99,15 +99,15 @@ export async function GET(request: NextRequest) {
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
 
-  // create a photon instance
-  const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+  // create a PhotonImage instance
+  const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
   // resize image using photon
-  const outputImage = photon.resize(
+  const outputImage = resize(
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    1
+    SamplingFilter.Nearest
   );
 
   // get webp bytes
@@ -137,7 +137,7 @@ If you are using Next.js (Pages router) with edge runtime, you can use it as sho
 ```ts
 // (src/)pages/api/image.ts
 import { type NextRequest } from "next/server";
-import * as photon from "@cf-wasm/photon/next";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
 
 export const config = {
   runtime: "edge",
@@ -154,15 +154,15 @@ export default async function handler(req: NextRequest) {
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
 
-  // create a photon instance
-  const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+  // create a PhotonImage instance
+  const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
   // resize image using photon
-  const outputImage = photon.resize(
+  const outputImage = resize(
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    1
+    SamplingFilter.Nearest
   );
 
   // get webp bytes
@@ -199,7 +199,7 @@ Here is a working example for Web Workers when using Webpack bundler:
 Create a `worker.ts`:
 
 ```ts
-import { initPhoton, PhotonImage, resize, SamplingFilter } from "@cf-wasm/photon/others";
+import { initPhoton, PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/others";
 import { register } from "@deox/cors-worker/register";
 
 const registered = register(async () => {
@@ -213,7 +213,7 @@ const registered = register(async () => {
         await (await fetch(source)).arrayBuffer()
       );
 
-      // create a photon instance
+      // create a PhotonImage instance
       const inputImage = PhotonImage.new_from_byteslice(imagBytes);
 
       // resize image using photon
@@ -221,7 +221,6 @@ const registered = register(async () => {
         inputImage,
         inputImage.get_width() * 0.5,
         inputImage.get_height() * 0.5,
-        // @ts-expect-error
         SamplingFilter.Nearest
       );
 
