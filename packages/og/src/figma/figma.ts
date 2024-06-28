@@ -12,7 +12,14 @@ import { replaceEntities } from '../core/utils/entities';
 /** Make sure modules are set by importing the main module */
 if (!modules.isUsable()) {
   throw new Error(
-    'Modules are not initialized! Please import the main module based on runtime (i.e. `@cf-wasm/og`, `@cf-wasm/og/next`, etc.) before importing the `figma` submodule (i.e. `@cf-wasm/og/figma`)',
+    `Modules are not initialized! Please import the main module based on runtime (i.e. '@cf-wasm/og', '@cf-wasm/og/next', etc.) before importing the 'figma' submodule (i.e. '@cf-wasm/og/figma').
+For example:
+------------
+import '@cf-wasm/og/next'; // <- import main module based on runtime first
+import { FigmaImageResponse } from '@cf-wasm/og/figma' // <- now you can import figma submodule
+
+// ...
+------------`,
   );
 }
 

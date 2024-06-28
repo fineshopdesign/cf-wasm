@@ -33,8 +33,11 @@ export class BaseResponse extends Response {
       },
     });
     const headers = new Headers(options?.headers);
+    if (!headers.has('Cache-Control')) {
+      headers.set('Cache-Control', 'public, immutable, no-transform, max-age=31536000');
+    }
     headers.set('Content-Type', isSvg ? 'image/svg+xml' : 'image/png');
-    const requestInit = {
+    const responseInit: ResponseInit = {
       headers,
       status: options?.status,
       statusText: options?.statusText,
@@ -42,10 +45,10 @@ export class BaseResponse extends Response {
     if (options && typeof options === 'object') {
       // Add `cf` options if provided
       if ('cf' in options) {
-        Object.assign(requestInit, { cf: options.cf });
+        Object.assign(responseInit, { cf: options.cf });
       }
     }
-    super(result, requestInit);
+    super(result, responseInit);
   }
 }
 
