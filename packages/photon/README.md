@@ -16,14 +16,29 @@ pnpm add @cf-wasm/photon          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as photon from "@cf-wasm/photon";`
-- Next.js (Webpack):  
-  `import * as photon from "@cf-wasm/photon/next";`
-- CJS (file base):  
-  `import * as photon from "@cf-wasm/photon/node";`
-- Browser, Web Worker, etc. (experimental)  
-  `import * as photon from "@cf-wasm/photon/others";`
+- Cloudflare Workers / Pages (Esbuild):
+
+  ```ts
+  import { PhotonImage } from "@cf-wasm/photon";
+  ```
+
+- Next.js Edge Runtime (Webpack):
+
+  ```ts
+  import { PhotonImage } from "@cf-wasm/photon/next";
+  ```
+
+- Node.js (file base):
+
+  ```ts
+  import { PhotonImage } from "@cf-wasm/photon/node";
+  ```
+
+- Browser, Web Worker, etc. (experimental)
+
+  ```ts
+  import { PhotonImage } from "@cf-wasm/photon/others";
+  ```
 
 ## Examples
 
@@ -142,7 +157,9 @@ import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
 export const config = {
   runtime: "edge",
   // see https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
-  unstable_allowDynamic: ["**/node_modules/@cf-wasm/photon/**/*.js"]
+  unstable_allowDynamic: [
+    "**/node_modules/@cf-wasm/**/*.js"
+  ]
 };
 
 export default async function handler(req: NextRequest) {
@@ -275,7 +292,7 @@ worker.proxy.resize("https://avatars.githubusercontent.com/u/100576030").then((b
 
 ## Documentation
 
-To explore all the functions, view the [official documentation](https://docs.rs/photon-rs/).
+To explore all the functions at [official documentation](https://docs.rs/photon-rs/).
 
 ## Awesome Projects
 

@@ -14,18 +14,29 @@ pnpm add @cf-wasm/png          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as png from "@cf-wasm/png";`
-- Next.js (Webpack):  
-  `import * as png from "@cf-wasm/png/next";`
-- CJS (file base):  
-  `import * as png from "@cf-wasm/png/node";`
+- Cloudflare Workers / Pages (Esbuild):
+
+  ```ts
+  import { encode } from "@cf-wasm/png";
+  ```
+
+- Next.js Edge Runtime (Webpack):
+
+  ```ts
+  import { encode } from "@cf-wasm/png/next";
+  ```
+
+- Node.js (file base):
+
+  ```ts
+  import { encode } from "@cf-wasm/png/node";
+  ```
 
 ## API
 
-### png.encode
+### encode
 
-The `png.encode` function encodes an input `Uint8Array` representing an image into a PNG format.
+The `encode` function encodes an input `Uint8Array` representing an image into a PNG format.
 
 ```ts
 const encode: (
@@ -36,9 +47,9 @@ const encode: (
 ) => Uint8Array
 ```
 
-### png.decode
+### decode
 
-The `png.decode` function decodes an input `Uint8Array` representing a PNG image.
+The `decode` function decodes an input `Uint8Array` representing a PNG image.
 
 ```ts
 const decode: (image: Uint8Array) => {
@@ -61,8 +72,8 @@ If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
 // src/index.ts
-import * as photon from "@cf-wasm/photon";
-import * as png from "@cf-wasm/png";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+import { encode } from "@cf-wasm/png";
 
 export default {
   async fetch() {
@@ -74,19 +85,19 @@ export default {
       .then((res) => res.arrayBuffer())
       .then((buffer) => new Uint8Array(buffer));
 
-    // create a photon instance
-    const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+    // create a PhotonImage instance
+    const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
     // resize image using photon
-    const outputImage = photon.resize(
+    const outputImage = resize(
       inputImage,
       inputImage.get_width() * 0.5,
       inputImage.get_height() * 0.5,
-      1
+      SamplingFilter.Nearest
     );
 
     // encode using png
-    const outputBytes = png.encode(
+    const outputBytes = encode(
      outputImage.get_raw_pixels(),
      outputImage.get_width(),
      outputImage.get_height()
@@ -113,8 +124,8 @@ If you are using Next.js (App router) with edge runtime, you can use it as shown
 ```ts
 // (src/)app/api/image/route.ts
 import { type NextRequest } from "next/server";
-import * as photon from "@cf-wasm/photon/next";
-import * as png from "@cf-wasm/png/next";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+import { encode } from "@cf-wasm/png";
 
 export const runtime = "edge";
 
@@ -127,19 +138,19 @@ export async function GET(request: NextRequest) {
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
 
-  // create a photon instance
-  const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+  // create a PhotonImage instance
+  const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
   // resize image using photon
-  const outputImage = photon.resize(
+  const outputImage = resize(
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    1
+    SamplingFilter.Nearest
   );
 
   // encode using png
-  const outputBytes = png.encode(
+  const outputBytes = encode(
     outputImage.get_raw_pixels(),
     outputImage.get_width(),
     outputImage.get_height()
@@ -165,15 +176,14 @@ If you are using Next.js (Pages router) with edge runtime, you can use it as sho
 ```ts
 // (src/)pages/api/image.ts
 import { type NextRequest } from "next/server";
-import * as photon from "@cf-wasm/photon/next";
-import * as png from "@cf-wasm/png/next";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+import { encode } from "@cf-wasm/png";
 
 export const config = {
   runtime: "edge",
   // see https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
   unstable_allowDynamic: [
-    "**/node_modules/@cf-wasm/photon/**/*.js",
-    "**/node_modules/@cf-wasm/png/**/*.js"
+    "**/node_modules/@cf-wasm/**/*.js"
   ]
 };
 
@@ -186,19 +196,19 @@ export default async function handler(req: NextRequest) {
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
 
-  // create a photon instance
-  const inputImage = photon.PhotonImage.new_from_byteslice(inputBytes);
+  // create a PhotonImage instance
+  const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
   // resize image using photon
-  const outputImage = photon.resize(
+  const outputImage = resize(
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    1
+    SamplingFilter.Nearest
   );
 
   // encode using png
-  const outputBytes = png.encode(
+  const outputBytes = encode(
     outputImage.get_raw_pixels(),
     outputImage.get_width(),
     outputImage.get_height()

@@ -6,11 +6,10 @@ import initAsync, { initSync } from '../png';
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const wasmBinary = fs.readFileSync(path.resolve(dirname, '../lib/png_bg.wasm'));
+const pngWasmBinary = fs.readFileSync(path.resolve(dirname, '../lib/png_bg.wasm'));
+const pngWasmModule = new WebAssembly.Module(pngWasmBinary);
 
-const MODULE = new WebAssembly.Module(wasmBinary);
+initSync(pngWasmModule);
 
-initSync(MODULE);
-
-export { initAsync, MODULE };
+export { initAsync, pngWasmModule };
 export * from '../png';

@@ -1,11 +1,11 @@
 import initYoga from 'yoga-wasm-web';
 import { initSatori, satori } from '../core/satori';
-import YOGA_MODULE from '../core/yoga.wasm?module';
+import yogaWasmModule from '../core/yoga.wasm?module';
 
-initSatori(initYoga(YOGA_MODULE));
+initSatori(initYoga(yogaWasmModule));
 
 export default satori;
-export { YOGA_MODULE };
+export { yogaWasmModule };
 export {
   satori,
   type Font,
