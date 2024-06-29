@@ -1,6 +1,6 @@
 # @cf-wasm/og
 
-Generate Open Graph Images dynamically from HTML/CSS without a browser.  
+Generate Open Graph Images dynamically from HTML/CSS without a browser.
 
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
 
@@ -18,12 +18,23 @@ pnpm add @cf-wasm/og          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as og from "@cf-wasm/og";`
-- Next.js (Webpack):  
-  `import * as og from "@cf-wasm/og/next";`
-- CJS (file base):  
-  `import * as og from "@cf-wasm/og/node";`
+- Cloudflare Workers / Pages (Esbuild):
+
+  ```ts
+  import { ImageResponse } from "@cf-wasm/og";
+  ```
+
+- Next.js Edge Runtime (Webpack):
+
+  ```ts
+  import { ImageResponse } from "@cf-wasm/og/next";
+  ```
+
+- Node.js (file base):
+
+  ```ts
+  import { ImageResponse } from "@cf-wasm/og/node";
+  ```
 
 ## Documentation
 

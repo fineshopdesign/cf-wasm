@@ -1,9 +1,9 @@
 import { initResvg } from '../core/resvg';
-import MODULE from '../core/resvg.wasm?module';
+import resvgWasmModule from '../core/resvg.wasm?module';
 
-initResvg(MODULE);
+initResvg(resvgWasmModule);
 
-export { MODULE };
+export { resvgWasmModule };
 export {
   Resvg,
   type ResvgRenderOptions,

@@ -1,6 +1,6 @@
 # @cf-wasm/quickjs
 
-QuickJS for Cloudflare workers.  
+A high-performance, secure, extensible JavaScript runtime.  
 
 Powered by [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)
 
@@ -17,10 +17,31 @@ pnpm add @cf-wasm/quickjs          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as photon from "@cf-wasm/quickjs";`
+- Cloudflare Workers / Pages (Esbuild):  
+
+  ```ts
+  import { getQuickJSWASMModule } from "@cf-wasm/quickjs";
+  ```
+
+- Next.js Edge Runtime (Webpack):  
+
+  ```ts
+  import { getQuickJSWASMModule } from "@cf-wasm/quickjs/next";
+  ```
+
+- Node.js (file base):  
+
+  ```ts
+  import { getQuickJSWASMModule } from "@cf-wasm/quickjs/node";
+  ```
 
 ## Examples
+
+Here are some examples for using this library.
+
+### Cloudflare Workers
+
+If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
 import {

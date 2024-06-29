@@ -6,14 +6,13 @@ import { initSatori, satori } from '../core/satori';
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const wasmBinary = fs.readFileSync(path.resolve(dirname, '../core/yoga.wasm'));
+const yogaWasmBinary = fs.readFileSync(path.resolve(dirname, '../core/yoga.wasm'));
+const yogaWasmModule = new WebAssembly.Module(yogaWasmBinary);
 
-const YOGA_MODULE = new WebAssembly.Module(wasmBinary);
-
-initSatori(import('yoga-wasm-web').then((module) => module.default(YOGA_MODULE)));
+initSatori(import('yoga-wasm-web').then((module) => module.default(yogaWasmModule)));
 
 export default satori;
-export { YOGA_MODULE };
+export { yogaWasmModule };
 export {
   satori,
   type Font,

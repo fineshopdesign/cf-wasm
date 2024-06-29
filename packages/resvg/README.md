@@ -14,12 +14,23 @@ pnpm add @cf-wasm/resvg          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as resvg from "@cf-wasm/resvg";`
-- Next.js (Webpack):  
-  `import * as resvg from "@cf-wasm/resvg/next";`
-- CJS (file base):  
-  `import * as resvg from "@cf-wasm/resvg/node";`
+- Cloudflare Workers / Pages (Esbuild):
+
+  ```ts
+  import { Resvg } from "@cf-wasm/resvg";
+  ```
+
+- Next.js Edge Runtime (Webpack):
+
+  ```ts
+  import { Resvg } from "@cf-wasm/resvg/next";
+  ```
+
+- Node.js (file base):
+
+  ```ts
+  import { Resvg } from "@cf-wasm/resvg/node";
+  ```
 
 ## Documentation
 
