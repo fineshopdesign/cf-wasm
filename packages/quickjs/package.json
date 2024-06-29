@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/quickjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "QuickJS",
   "keywords": [],
@@ -80,13 +80,27 @@
   },
   "typesVersions": {
     "*": {
-      "debug": ["./dist/dts/workers/debug.d.ts"],
-      "next": ["./dist/dts/next/index.d.ts"],
-      "next/debug": ["./dist/dts/next/debug.d.ts"],
-      "node": ["./dist/dts/node/index.d.ts"],
-      "node/debug": ["./dist/dts/node/debug.d.ts"],
-      "workers": ["./dist/dts/workers/index.d.ts"],
-      "workers/debug": ["./dist/dts/workers/debug.d.ts"]
+      "debug": [
+        "./dist/dts/workers/debug.d.ts"
+      ],
+      "next": [
+        "./dist/dts/next/index.d.ts"
+      ],
+      "next/debug": [
+        "./dist/dts/next/debug.d.ts"
+      ],
+      "node": [
+        "./dist/dts/node/index.d.ts"
+      ],
+      "node/debug": [
+        "./dist/dts/node/debug.d.ts"
+      ],
+      "workers": [
+        "./dist/dts/workers/index.d.ts"
+      ],
+      "workers/debug": [
+        "./dist/dts/workers/debug.d.ts"
+      ]
     }
   },
   "dependencies": {
