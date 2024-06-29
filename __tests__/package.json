@@ -13,11 +13,13 @@
     "@cf-wasm/og": "workspace:^",
     "@cf-wasm/photon": "workspace:^",
     "@cf-wasm/png": "workspace:^",
+    "@cf-wasm/quickjs": "workspace:^",
     "@cf-wasm/resvg": "workspace:^",
     "@cf-wasm/satori": "workspace:^",
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "vitest": "^1.6.0"
   }

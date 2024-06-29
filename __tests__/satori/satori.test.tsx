@@ -1,10 +1,10 @@
-import { YOGA_MODULE, satori } from '@cf-wasm/satori/node';
+import { satori, yogaWasmModule } from '@cf-wasm/satori/node';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 
-describe('YOGA_MODULE', () => {
+describe('yogaWasmModule', () => {
   it('should be an instance of WebAssembly.Module', () => {
-    expect(YOGA_MODULE).instanceOf(WebAssembly.Module);
+    expect(yogaWasmModule).instanceOf(WebAssembly.Module);
   });
 });
 

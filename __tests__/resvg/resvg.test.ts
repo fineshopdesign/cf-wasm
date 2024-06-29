@@ -1,5 +1,5 @@
-import { MODULE as MODULELegacy, Resvg as ResvgLegacy } from '@cf-wasm/resvg/2.4.1/node';
-import { MODULE, Resvg } from '@cf-wasm/resvg/node';
+import { Resvg as ResvgLegacy, resvgWasmModule as resvgWasmModuleLegacy } from '@cf-wasm/resvg/2.4.1/node';
+import { Resvg, resvgWasmModule } from '@cf-wasm/resvg/node';
 import { describe, expect, it } from 'vitest';
 
 const svgString = `<?xml version="1.0" encoding="utf-8"?>
@@ -14,10 +14,10 @@ const svgString = `<?xml version="1.0" encoding="utf-8"?>
   </g>
 </svg>`;
 
-describe('MODULE', () => {
+describe('resvgWasmModule', () => {
   it('should be an instance of WebAssembly.Module', () => {
-    expect(MODULELegacy).instanceOf(WebAssembly.Module);
-    expect(MODULE).instanceOf(WebAssembly.Module);
+    expect(resvgWasmModuleLegacy).instanceOf(WebAssembly.Module);
+    expect(resvgWasmModule).instanceOf(WebAssembly.Module);
   });
 });
 

@@ -1,7 +1,7 @@
-import MODULE from '../lib/png_bg.wasm';
+import pngWasmModule from '../lib/png_bg.wasm';
 import initAsync, { initSync } from '../png';
 
-initSync(MODULE);
+initSync(pngWasmModule);
 
-export { initAsync, MODULE };
+export { initAsync, pngWasmModule };
 export * from '../png';

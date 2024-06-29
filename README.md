@@ -32,6 +32,19 @@ Compatible with:
 
 [Read more..](/packages/png/README.md)
 
+### [@cf-wasm/quickjs](https://www.npmjs.com/package/@cf-wasm/quickjs)
+
+A high-performance, secure, extensible JavaScript runtime.  
+Powered by [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)
+
+Compatible with:
+
+* Cloudflare Workers
+* Next.js (Edge runtime)
+* Node.js
+
+[Read more..](/packages/quickjs/README.md)
+
 ### [@cf-wasm/resvg](https://www.npmjs.com/package/@cf-wasm/resvg)
 
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.  

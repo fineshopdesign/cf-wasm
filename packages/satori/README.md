@@ -14,12 +14,23 @@ pnpm add @cf-wasm/satori          # pnpm
 
 ## Usage
 
-- Cloudflare workers:  
-  `import * as satori from "@cf-wasm/satori";`
-- Next.js (Webpack):  
-  `import * as satori from "@cf-wasm/satori/next";`
-- CJS (file base):  
-  `import * as satori from "@cf-wasm/satori/node";`
+- Cloudflare Workers / Pages (Esbuild):
+
+  ```ts
+  import { satori } from "@cf-wasm/satori";
+  ```
+
+- Next.js Edge Runtime (Webpack):
+
+  ```ts
+  import { satori } from "@cf-wasm/satori/next";
+  ```
+
+- Node.js (file base):
+
+  ```ts
+  import { satori } from "@cf-wasm/satori/node";
+  ```
 
 ## Documentation
 
