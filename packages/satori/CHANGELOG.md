@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.1.20
+
+### Patch Changes
+
+- [`b07af65`](https://github.com/fineshopdesign/cf-wasm/commit/b07af651316223f32d9df9503c730d094dd256f4) Thanks [@fineshop](https://github.com/fineshop)! - docs: update README
+
 ## 0.1.19
 
 ### Patch Changes
