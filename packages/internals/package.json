@@ -2,7 +2,7 @@
   "name": "@cf-wasm/internals",
   "version": "0.0.1",
   "private": false,
-  "description": "cf-wasm internals",
+  "description": "Internals for cf-wasm",
   "keywords": [],
   "license": "MIT",
   "author": {
@@ -30,6 +30,11 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/dts/index.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
     "./polyfills/image-data": {
       "types": "./dist/dts/polyfills/image-data/index.d.ts",
       "import": "./dist/esm/polyfills/image-data/index.js",

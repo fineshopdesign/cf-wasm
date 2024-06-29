@@ -6,13 +6,12 @@ import { initResvg } from '../core/resvg';
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const wasmBinary = fs.readFileSync(path.resolve(dirname, '../core/resvg.wasm'));
+const resvgWasmBinary = fs.readFileSync(path.resolve(dirname, '../core/resvg.wasm'));
+const resvgWasmModule = new WebAssembly.Module(resvgWasmBinary);
 
-const MODULE = new WebAssembly.Module(wasmBinary);
+initResvg(resvgWasmModule);
 
-initResvg(MODULE);
-
-export { MODULE };
+export { resvgWasmModule };
 export {
   Resvg,
   type BBox,
