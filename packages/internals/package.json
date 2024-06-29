@@ -1,13 +1,13 @@
 {
   "name": "@cf-wasm/internals",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Internals for cf-wasm",
   "keywords": [],
   "license": "MIT",
   "author": {
     "name": "Deo Kumar",
-		"url": "https://github.com/kumardeo"
+    "url": "https://github.com/kumardeo"
   },
   "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/internals#readme",
   "repository": {
@@ -44,7 +44,9 @@
   },
   "typesVersions": {
     "*": {
-      "polyfills/image-data": ["./dist/dts/polyfills/image-data/index.d.ts"]
+      "polyfills/image-data": [
+        "./dist/dts/polyfills/image-data/index.d.ts"
+      ]
     }
   }
 }
