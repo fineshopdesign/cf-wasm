@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ES2020",
-    "rootDir": "./src",
-    "outDir": "./dist/dts",
+    "rootDir": "src",
+    "outDir": "dist/dts",
     "declaration": true,
     "emitDeclarationOnly": true,
     "skipLibCheck": true,

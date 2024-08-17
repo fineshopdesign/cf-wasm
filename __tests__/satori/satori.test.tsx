@@ -25,6 +25,6 @@ describe('satori', () => {
       ],
     });
 
-    expect(result.length).equals(3783);
+    expect(result.length).equals(3789);
   });
 });

@@ -1,3 +1,4 @@
+import { detectRuntime } from '@cf-wasm/internals/detect-runtime';
 import type { ReactElement } from 'react';
 import { modules } from '../core';
 import { FetchError } from '../core/errors';
@@ -6,7 +7,6 @@ import { type Font, type PngResult, type RenderOptions, type SvgResult, render }
 import { BaseResponse, type BaseResponseOptions, type ImageResponseOptions } from '../core/response';
 import type { FontWeight } from '../core/satori';
 import type { MayBePromise } from '../core/types';
-import { detectRuntime } from '../core/utils/detect-runtime';
 import { replaceEntities } from '../core/utils/entities';
 
 /** Make sure modules are set by importing the main module */

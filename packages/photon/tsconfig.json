@@ -11,8 +11,8 @@
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "dist/esm",
     "types": ["@types/node"]
   },
