@@ -93,6 +93,7 @@
     }
   },
   "dependencies": {
+    "@cf-wasm/internals": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*",
     "@hedgedoc/html-to-react": "^2.1.1",
