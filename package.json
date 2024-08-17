@@ -4,7 +4,7 @@
   "description": "WASM Packages for Cloudflare Workers",
   "author": "Deo Kumar",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
-  "packageManager": "pnpm@8.15.5",
+  "packageManager": "pnpm@9.7.1",
   "scripts": {
     "check": "pnpm biome check .",
     "check:types": "turbo check:types --force --concurrency=1",

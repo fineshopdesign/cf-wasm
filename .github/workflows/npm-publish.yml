@@ -31,8 +31,8 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        node-version: ["18.x"]
-        pnpm-version: ["8.x"]
+        node-version: ["20.x"]
+        pnpm-version: ["9.x"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
