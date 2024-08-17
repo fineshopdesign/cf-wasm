@@ -4,7 +4,9 @@ interface Settings {
   colorSpace?: 'display-p3' | 'srgb';
 }
 
-if (typeof globalThis !== 'undefined' && !('ImageData' in globalThis)) {
+const globalObject = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : self;
+
+if (!('ImageData' in globalObject)) {
   const widthMap = new WeakMap();
   const heightMap = new WeakMap();
   const colorSpaceMap = new WeakMap();
@@ -151,7 +153,7 @@ if (typeof globalThis !== 'undefined' && !('ImageData' in globalThis)) {
     },
   });
 
-  (globalThis as { ImageData: typeof ImageData }).ImageData = ImageData;
+  (globalObject as { ImageData: typeof ImageData }).ImageData = ImageData;
 }
 
-export const ImageData = globalThis.ImageData;
+export const ImageData = globalObject.ImageData;

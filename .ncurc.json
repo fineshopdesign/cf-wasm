@@ -1,9 +1,0 @@
-{
-  "workspaces": true,
-  "root": true,
-  "peer": true,
-  "interactive": true,
-  "install": "prompt",
-  "format": ["group"],
-  "packageManager": "pnpm"
-}

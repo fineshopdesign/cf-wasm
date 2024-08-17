@@ -11,9 +11,9 @@
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "outDir": "./dist/esm",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist/esm",
     "types": ["@types/node"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.js", "declarations.d.ts"],

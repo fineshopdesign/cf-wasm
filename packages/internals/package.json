@@ -35,6 +35,11 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./detect-runtime": {
+      "types": "./dist/dts/detect-runtime/index.d.ts",
+      "import": "./dist/esm/detect-runtime/index.js",
+      "require": "./dist/cjs/detect-runtime/index.js"
+    },
     "./polyfills/image-data": {
       "types": "./dist/dts/polyfills/image-data/index.d.ts",
       "import": "./dist/esm/polyfills/image-data/index.js",
@@ -44,6 +49,9 @@
   },
   "typesVersions": {
     "*": {
+      "detect-runtime": [
+        "./dist/dts/detect-runtime/index.d.ts"
+      ],
       "polyfills/image-data": [
         "./dist/dts/polyfills/image-data/index.d.ts"
       ]

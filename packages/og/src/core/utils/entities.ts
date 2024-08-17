@@ -3229,20 +3229,17 @@ export const ENTITIES_DICT: Record<string, string[][]> = {
   𝕫: [['&#120171;', '&#x1D56B;', '&zopf;']],
 };
 
-export const ENTITIES_MAP = Object.keys(ENTITIES_DICT).reduce(
-  (accumulator, ascii) => {
-    const array = ENTITIES_DICT[ascii];
-    for (const dict of array) {
-      for (const entity of dict) {
-        if (entity.trim().length !== 0) {
-          accumulator[entity] = ascii;
-        }
+export const ENTITIES_MAP = Object.keys(ENTITIES_DICT).reduce<Record<string, string>>((accumulator, ascii) => {
+  const array = ENTITIES_DICT[ascii];
+  for (const dict of array) {
+    for (const entity of dict) {
+      if (entity.trim().length !== 0) {
+        accumulator[entity] = ascii;
       }
     }
-    return accumulator;
-  },
-  {} as Record<string, string>,
-);
+  }
+  return accumulator;
+}, {});
 
 export const ENTITIES = Object.keys(ENTITIES_MAP);
 
