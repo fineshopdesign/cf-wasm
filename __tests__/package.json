@@ -1,8 +1,8 @@
 {
   "name": "@cf-wasm-tests/base",
-  "version": "1.0.0",
-  "description": "cf-wasm tests",
+  "version": "0.0.1",
   "private": true,
+  "description": "cf-wasm tests",
   "author": "Deo Kumar",
   "license": "MIT",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
@@ -19,8 +19,8 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.14.9",
+    "@types/node": "^22.4.0",
     "@types/react": "^18.3.3",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.5"
   }
 }

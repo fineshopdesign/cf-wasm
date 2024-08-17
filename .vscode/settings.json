@@ -62,6 +62,7 @@
     "quickjs",
     "resvg",
     "tsbuildinfo",
+    "tsup",
     "workerd"
   ]
 }

@@ -62,8 +62,7 @@
     },
     "./yoga.wasm": {
       "import": "./dist/esm/core/yoga.wasm",
-      "require": "./dist/cjs/core/yoga.wasm",
-      "default": "./dist/esm/core/yoga.wasm"
+      "require": "./dist/cjs/core/yoga.wasm"
     },
     "./package.json": "./package.json"
   },
@@ -86,7 +85,7 @@
   "dependencies": {
     "@types/react": "^18.3.3",
     "react": "^18.3.1",
-    "satori": "^0.10.13",
+    "satori": "^0.10.14",
     "yoga-wasm-web": "^0.3.3"
   }
 }
