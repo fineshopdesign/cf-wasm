@@ -1,5 +1,14 @@
 # @cf-wasm/photon
 
+## 0.1.24
+
+### Patch Changes
+
+- [`9743f01`](https://github.com/fineshopdesign/cf-wasm/commit/9743f01376f3bb995ddb678dae438a1ed471beb0) Thanks [@fineshop](https://github.com/fineshop)! - chore: remove unnecessary `default` conditional exports
+
+- Updated dependencies [[`9743f01`](https://github.com/fineshopdesign/cf-wasm/commit/9743f01376f3bb995ddb678dae438a1ed471beb0)]:
+  - @cf-wasm/internals@0.0.3
+
 ## 0.1.23
 
 ### Patch Changes
