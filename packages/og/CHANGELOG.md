@@ -1,5 +1,16 @@
 # @cf-wasm/og
 
+## 0.1.29
+
+### Patch Changes
+
+- [`9743f01`](https://github.com/fineshopdesign/cf-wasm/commit/9743f01376f3bb995ddb678dae438a1ed471beb0) Thanks [@fineshop](https://github.com/fineshop)! - refactor: move `detectRuntime` function to `@cf-wasm/internals/detect-runtime`
+
+- Updated dependencies [[`9743f01`](https://github.com/fineshopdesign/cf-wasm/commit/9743f01376f3bb995ddb678dae438a1ed471beb0), [`9743f01`](https://github.com/fineshopdesign/cf-wasm/commit/9743f01376f3bb995ddb678dae438a1ed471beb0)]:
+  - @cf-wasm/satori@0.1.21
+  - @cf-wasm/resvg@0.1.22
+  - @cf-wasm/internals@0.0.3
+
 ## 0.1.28
 
 ### Patch Changes
