@@ -21,4 +21,5 @@ export {
   type Locale,
   type SatoriNode,
   type SatoriOptions,
+  type VNode,
 } from '../core/satori';
