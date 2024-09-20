@@ -1,10 +1,10 @@
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import { loadDynamicAsset } from './asset';
 import type { EmojiType } from './emoji';
 import { CustomFont, type FontBuffer, GoogleFont, defaultFont } from './font';
 import { modules } from './modules';
 import type { ResvgRenderOptions } from './resvg';
-import type { Font as SatoriFont, SatoriOptions } from './satori';
+import type { Font as SatoriFont, SatoriOptions, VNode } from './satori';
 import type { MayBePromise, StringWithSuggestions } from './types';
 
 /** Represents a png result of rendered image */
@@ -121,14 +121,14 @@ export const RENDER_DEFAULT_OPTIONS = {
 };
 
 /**
- * Renders {@link ReactElement} to image
+ * Renders {@link ReactNode} to image
  *
- * @param element The {@link ReactElement}
+ * @param element The {@link ReactNode}
  * @param options The {@link RenderOptions}
  *
  * @returns An object containing methods for rendering the input element to image
  */
-export const render = (element: ReactElement, options: RenderOptions = {}) => {
+export const render = (element: ReactNode | VNode, options: RenderOptions = {}) => {
   const data: {
     svg: SvgResult | null;
     png: PngResult | null;
