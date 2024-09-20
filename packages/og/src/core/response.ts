@@ -1,6 +1,7 @@
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import { CONTAINER } from './constants';
 import { type PngResult, type RenderOptions, type SvgResult, render } from './render';
+import type { VNode } from './satori';
 import type { MayBePromise, OnlyProps } from './types';
 
 /** Base response options */
@@ -13,7 +14,7 @@ export interface ImageResponseOptions extends RenderOptions, BaseResponseOptions
 
 /** Base response class */
 export class BaseResponse extends Response {
-  constructor(input: () => MayBePromise<[ReactElement, RenderOptions | undefined]>, options: BaseResponseOptions = {}) {
+  constructor(input: () => MayBePromise<[ReactNode | VNode, RenderOptions | undefined]>, options: BaseResponseOptions = {}) {
     const isSvg = options?.format === 'svg';
     const result = new ReadableStream({
       start(controller) {
@@ -52,15 +53,15 @@ export class BaseResponse extends Response {
   }
 }
 
-/** A class for rendering {@link ReactElement} to image as {@link Response} */
+/** A class for rendering {@link ReactNode} to image as {@link Response} */
 export class ImageResponse extends BaseResponse {
   /**
    * Creates an instance of {@link ImageResponse}
    *
-   * @param element The {@link ReactElement}
+   * @param element The {@link ReactNode}
    * @param options The {@link ImageResponseOptions}
    */
-  constructor(element: ReactElement, options?: ImageResponseOptions) {
+  constructor(element: ReactNode | VNode, options?: ImageResponseOptions) {
     super(() => [element, options], options);
   }
 }
