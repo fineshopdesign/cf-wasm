@@ -1,6 +1,7 @@
 import { htmlToReact } from '@cf-wasm/og/html-to-react';
 import { CustomFont, GoogleFont, ImageResponse } from '@cf-wasm/og/node';
 import React from 'react';
+import { html } from 'satori-html';
 import { describe, expect, it } from 'vitest';
 
 describe('CustomFont', () => {
@@ -104,17 +105,51 @@ describe('htmlToReact', () => {
 // });
 
 describe('ImageResponse', () => {
-  const response = new ImageResponse(<div>Hello World!</div>, {
-    width: 200,
-    height: 300,
-    format: 'svg',
+  describe('should render ReactElement', () => {
+    const response = new ImageResponse(<div>Hello World!</div>, {
+      width: 200,
+      height: 300,
+      format: 'svg',
+    });
+
+    it('Response should have text in svg format', async () => {
+      const text = await response.text();
+
+      expect(text)
+        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+    });
   });
 
-  it('should have text in svg format', async () => {
-    const text = await response.text();
+  describe('should render node returned from htmlToReact', () => {
+    const response = new ImageResponse(htmlToReact('<div>Hello World!</div>'), {
+      width: 200,
+      height: 300,
+      format: 'svg',
+    });
 
-    expect(text)
-      .match(/<svg\s[^>]*width="200".*<\/svg>/i)
-      .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+    it('Response should have text in svg format', async () => {
+      const text = await response.text();
+
+      expect(text)
+        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+    });
+  });
+
+  describe('should render node returned from satori-html', () => {
+    const response = new ImageResponse(html('<div>Hello World!</div>'), {
+      width: 200,
+      height: 300,
+      format: 'svg',
+    });
+
+    it('Response should have text in svg format', async () => {
+      const text = await response.text();
+
+      expect(text)
+        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+    });
   });
 });

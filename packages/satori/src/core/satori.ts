@@ -4,6 +4,15 @@ import type { Yoga } from 'yoga-wasm-web';
 
 export type InputParam = (() => Yoga | Promise<Yoga>) | Yoga | Promise<Yoga>;
 
+export interface VNode {
+  type: string;
+  props: {
+    style?: Record<string, unknown>;
+    children?: string | VNode | VNode[];
+    [prop: string]: unknown;
+  };
+}
+
 /** Initializes satori */
 export const initSatori = (input: InputParam) => {
   if (initSatori.input) {
@@ -32,9 +41,9 @@ initSatori.ensure = async () => {
   }
 };
 
-export const satori = async (element: ReactNode, options: SatoriOptions) => {
+export const satori = async (element: ReactNode | VNode, options: SatoriOptions) => {
   await initSatori.ensure();
-  return satoriWasm(element, options);
+  return (satoriWasm as (element: ReactNode | VNode, options: SatoriOptions) => Promise<string>)(element, options);
 };
 
 export {

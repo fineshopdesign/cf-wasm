@@ -1,5 +1,6 @@
 import { satori, yogaWasmModule } from '@cf-wasm/satori/node';
 import React from 'react';
+import { html } from 'satori-html';
 import { describe, expect, it } from 'vitest';
 
 describe('yogaWasmModule', () => {
@@ -10,7 +11,9 @@ describe('yogaWasmModule', () => {
 
 describe('satori', () => {
   it('can convert ReactNode to SVG', async () => {
-    const fontBuffer = await (await fetch('https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf')).arrayBuffer();
+    const JetBrainsMonoBuffer = await (
+      await fetch('https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf')
+    ).arrayBuffer();
 
     const result = await satori(<div style={{ color: 'black' }}>Hello World!</div>, {
       width: 600,
@@ -18,7 +21,7 @@ describe('satori', () => {
       fonts: [
         {
           name: 'JetBrains Mono',
-          data: fontBuffer,
+          data: JetBrainsMonoBuffer,
           weight: 400,
           style: 'normal',
         },
@@ -26,5 +29,26 @@ describe('satori', () => {
     });
 
     expect(result.length).equals(3789);
+  });
+
+  it('can convert VNode to SVG', async () => {
+    const JetBrainsMonoBuffer = await (
+      await fetch('https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf')
+    ).arrayBuffer();
+
+    const result = await satori(html("<div style='color:black'>Hello World!</div>"), {
+      width: 600,
+      height: 400,
+      fonts: [
+        {
+          name: 'JetBrains Mono',
+          data: JetBrainsMonoBuffer,
+          weight: 400,
+          style: 'normal',
+        },
+      ],
+    });
+
+    expect(result.length).equals(3878);
   });
 });

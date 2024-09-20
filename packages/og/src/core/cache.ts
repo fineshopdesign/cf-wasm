@@ -121,7 +121,7 @@ class CacheUtils {
       return this.store;
     }
     const name = typeof cacheName === 'string' ? cacheName : this.store;
-    const store = this.supported ? CACHE_INSTANCE_MAP.get(name) ?? (await caches.open(name)) : CACHE_INTERFACE;
+    const store = this.supported ? (CACHE_INSTANCE_MAP.get(name) ?? (await caches.open(name))) : CACHE_INTERFACE;
     CACHE_INSTANCE_MAP.set(name, store);
     return store;
   }
