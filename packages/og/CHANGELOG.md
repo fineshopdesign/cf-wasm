@@ -1,5 +1,14 @@
 # @cf-wasm/og
 
+## 0.1.30
+
+### Patch Changes
+
+- [`aa88952`](https://github.com/fineshopdesign/cf-wasm/commit/aa88952594fc1a1f8eb98cab7669f3ee7fc06542) Thanks [@fineshop](https://github.com/fineshop)! - feat: update typings to accept `satori-html`'s `VNode`
+
+- Updated dependencies [[`aa88952`](https://github.com/fineshopdesign/cf-wasm/commit/aa88952594fc1a1f8eb98cab7669f3ee7fc06542), [`aa88952`](https://github.com/fineshopdesign/cf-wasm/commit/aa88952594fc1a1f8eb98cab7669f3ee7fc06542)]:
+  - @cf-wasm/satori@0.1.22
+
 ## 0.1.29
 
 ### Patch Changes
