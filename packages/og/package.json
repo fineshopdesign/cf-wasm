@@ -97,7 +97,7 @@
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*",
     "@hedgedoc/html-to-react": "^2.1.1",
-    "@types/react": "^18.3.8",
+    "@types/react": "^18.3.12",
     "react": "^18.3.1"
   }
 }
