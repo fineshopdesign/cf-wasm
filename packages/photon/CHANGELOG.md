@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.27
+
+### Patch Changes
+
+- [`c340c7b`](https://github.com/fineshopdesign/cf-wasm/commit/c340c7b9c9f3208c4712425a72ddb029c377e908) Thanks [@fineshop](https://github.com/fineshop)! - fix: using deprecated parameters for initialization function, pass a single object instead. See [rustwasm/wasm-bindgen/pull/3995](https://github.com/rustwasm/wasm-bindgen/pull/3995)
+
 ## 0.1.26
 
 ### Patch Changes
