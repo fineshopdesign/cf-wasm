@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.25
+
+### Patch Changes
+
+- [`d3846bf`](https://github.com/fineshopdesign/cf-wasm/commit/d3846bfbdd592895ce785e564724f2bdfa00866c) Thanks [@fineshop](https://github.com/fineshop)! - chore: build for commit [`941adf9`](https://github.com/silvia-odwyer/photon/tree/941adf9d2a60f9b92a2b8016b5036033dbffb192)
+
 ## 0.1.24
 
 ### Patch Changes
