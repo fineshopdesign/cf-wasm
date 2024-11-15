@@ -4620,9 +4620,10 @@ async function __wbg_init(module_or_path) {
         }
     }
 
-    if (typeof module_or_path === 'undefined') {
-        module_or_path = new URL('photon_rs_bg.wasm', import.meta.url);
-    }
+    //! Needed to remove these lines in order to make it work on node.js
+    // if (typeof module_or_path === 'undefined') {
+    //     module_or_path = new URL('photon_rs_bg.wasm', import.meta.url);
+    // }
     const imports = __wbg_get_imports();
 
     if (typeof module_or_path === 'string' || (typeof Request === 'function' && module_or_path instanceof Request) || (typeof URL === 'function' && module_or_path instanceof URL)) {
