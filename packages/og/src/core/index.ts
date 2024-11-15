@@ -2,7 +2,7 @@ export { modules } from './modules';
 
 export { cache } from './cache';
 
-export { type EmojiType } from './emoji';
+export type { EmojiType } from './emoji';
 
 export { FetchError, type FetchErrorOptions } from './errors';
 
