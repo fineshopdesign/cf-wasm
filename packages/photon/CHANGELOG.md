@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.26
+
+### Patch Changes
+
+- [`3c6b256`](https://github.com/fineshopdesign/cf-wasm/commit/3c6b25612414a2d30fafcb5496f566927d94203a) Thanks [@fineshop](https://github.com/fineshop)! - fix: remove `import.meta.url` for common js
+
 ## 0.1.25
 
 ### Patch Changes
