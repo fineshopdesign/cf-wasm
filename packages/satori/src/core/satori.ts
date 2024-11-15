@@ -46,11 +46,11 @@ export const satori = async (element: ReactNode | VNode, options: SatoriOptions)
   return (satoriWasm as (element: ReactNode | VNode, options: SatoriOptions) => Promise<string>)(element, options);
 };
 
-export {
-  type Font,
-  type FontStyle,
-  type FontWeight,
-  type Locale,
-  type SatoriNode,
-  type SatoriOptions,
+export type {
+  Font,
+  FontStyle,
+  FontWeight,
+  Locale,
+  SatoriNode,
+  SatoriOptions,
 } from 'satori/wasm';
