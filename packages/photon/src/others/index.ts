@@ -2,7 +2,14 @@ import '@cf-wasm/internals/polyfills/image-data';
 import initAsync, { type InitInput } from '../lib/photon_rs';
 
 /** Initializes photon asynchronously */
-export const initPhoton = async (input: InitInput | Promise<InitInput>) => {
+export const initPhoton = async (
+  input:
+    | {
+        module_or_path: InitInput | Promise<InitInput>;
+      }
+    | InitInput
+    | Promise<InitInput>,
+) => {
   if (initPhoton.input) {
     throw new Error('Function already called. The `initPhoton()` function can be used only once.');
   }
@@ -14,7 +21,13 @@ export const initPhoton = async (input: InitInput | Promise<InitInput>) => {
   initPhoton.initialized = true;
   return result;
 };
-initPhoton.input = undefined as InitInput | Promise<InitInput> | undefined;
+initPhoton.input = undefined as
+  | {
+      module_or_path: InitInput | Promise<InitInput>;
+    }
+  | InitInput
+  | Promise<InitInput>
+  | undefined;
 initPhoton.initialized = false;
 
 export { initAsync };

@@ -10,7 +10,7 @@ const dirname = path.dirname(filename);
 const photonWasmBinary = fs.readFileSync(path.resolve(dirname, '../lib/photon_rs_bg.wasm'));
 const photonWasmModule = new WebAssembly.Module(photonWasmBinary);
 
-initSync(photonWasmModule);
+initSync({ module: photonWasmModule });
 
 export { initAsync, photonWasmModule };
 export * from '../lib/photon_rs';
