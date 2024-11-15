@@ -40,6 +40,15 @@ const modifiedScript = originalScript
     // if (typeof input === 'undefined') {
     //     input = new URL('${LIB_NAME}_bg.wasm', import.meta.url);
     // }`,
+  )
+  .replace(
+    `if (typeof module_or_path === 'undefined') {
+        module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);
+    }`,
+    `//! Needed to remove these lines in order to make it work on node.js
+    // if (typeof module_or_path === 'undefined') {
+    //     module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);
+    // }`,
   );
 
 fs.writeFileSync(jsOutFile, modifiedScript, 'utf-8');
