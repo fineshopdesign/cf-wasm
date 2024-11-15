@@ -3,8 +3,8 @@
 High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
 
 Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon)  
-Build for commit [`56b7d38`](https://github.com/silvia-odwyer/photon/commit/56b7d38e3e9a66e03bcf4167e5bef5c28b5c6b9f)  
-Forked on: `27th June, 2024`.
+Build for commit [`941adf9`](https://github.com/silvia-odwyer/photon/tree/941adf9d2a60f9b92a2b8016b5036033dbffb192)  
+Forked on: `15th November, 2024`.
 
 ## Installation
 
@@ -292,7 +292,7 @@ worker.proxy.resize("https://avatars.githubusercontent.com/u/100576030").then((b
 
 ## Documentation
 
-To explore all the functions at [official documentation](https://docs.rs/photon-rs/).
+To explore all the functions, visit the [official documentation](https://docs.rs/photon-rs/).
 
 ## Awesome Projects
 

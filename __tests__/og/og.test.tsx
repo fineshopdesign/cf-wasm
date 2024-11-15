@@ -6,7 +6,9 @@ import { describe, expect, it } from 'vitest';
 
 describe('CustomFont', () => {
   const customFont = new CustomFont('JetBrains Mono', () =>
-    fetch('https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf').then((res) => res.arrayBuffer()),
+    fetch('https://github.com/JetBrains/JetBrainsMono/raw/cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9/fonts/ttf/JetBrainsMono-Regular.ttf').then((res) =>
+      res.arrayBuffer(),
+    ),
   );
 
   it('should load font from ArrayBuffer', async () => {
@@ -18,7 +20,7 @@ describe('CustomFont', () => {
     const buffer = await customFont.data;
 
     expect(buffer).instanceOf(ArrayBuffer);
-    expect(buffer.byteLength).equals(274744);
+    expect(buffer.byteLength).equals(273900);
   });
 });
 
