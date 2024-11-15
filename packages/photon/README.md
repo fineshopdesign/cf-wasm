@@ -221,7 +221,9 @@ import { register } from "@deox/cors-worker/register";
 
 const registered = register(async () => {
   // The wasm must be initialized first, you can provide photon wasm binaries from any source
-  await initPhoton(new URL("@cf-wasm/photon/photon.wasm", import.meta.url));
+  await initPhoton({
+    module_or_path: new URL("@cf-wasm/photon/photon.wasm", import.meta.url)
+  });
 
   return {
     resize: async (source: string, format?: "webp" | "png" | "jpeg") => {
