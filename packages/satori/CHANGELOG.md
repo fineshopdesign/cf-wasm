@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.1.24
+
+### Patch Changes
+
+- [`594bb8a`](https://github.com/fineshopdesign/cf-wasm/commit/594bb8ad1f07f96d9f788b8e825a3406dc458e9a) Thanks [@fineshop](https://github.com/fineshop)! - chore: update `satori` dependency
+
 ## 0.1.23
 
 ### Patch Changes
