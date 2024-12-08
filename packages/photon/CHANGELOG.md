@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.28
+
+### Patch Changes
+
+- [`444362c`](https://github.com/fineshopdesign/cf-wasm/commit/444362c8e68c1f27220788f9ff2de780b861b34a) Thanks [@fineshop](https://github.com/fineshop)! - refactor: `initPhoton` function
+
 ## 0.1.27
 
 ### Patch Changes
