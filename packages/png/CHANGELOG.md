@@ -1,5 +1,11 @@
 # @cf-wasm/png
 
+## 0.1.23
+
+### Patch Changes
+
+- [`444362c`](https://github.com/fineshopdesign/cf-wasm/commit/444362c8e68c1f27220788f9ff2de780b861b34a) Thanks [@fineshop](https://github.com/fineshop)! - refactor: `initPng` function
+
 ## 0.1.22
 
 ### Patch Changes
