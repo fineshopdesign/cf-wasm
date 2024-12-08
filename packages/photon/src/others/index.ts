@@ -10,25 +10,30 @@ export const initPhoton = async (
     | InitInput
     | Promise<InitInput>,
 ) => {
-  if (initPhoton.input) {
-    throw new Error('Function already called. The `initPhoton()` function can be used only once.');
+  if (initPhoton.promise) {
+    throw new Error('(@cf-wasm/photon): Function already called. The `initPhoton()` function can be used only once.');
   }
   if (!input) {
-    throw new Error('Invalid `input`. Provide valid `input`.');
+    throw new Error('(@cf-wasm/photon): Argument `input` is not valid.');
   }
-  initPhoton.input = input;
-  const result = await initAsync(input);
-  initPhoton.initialized = true;
-  return result;
+  initPhoton.promise = (async () => {
+    await initAsync(input);
+    initPhoton.initialized = true;
+  })();
+  return initPhoton.promise;
 };
-initPhoton.input = undefined as
-  | {
-      module_or_path: InitInput | Promise<InitInput>;
-    }
-  | InitInput
-  | Promise<InitInput>
-  | undefined;
+
+initPhoton.promise = null as Promise<void> | null;
+/** Indicates whether photon is initialized */
 initPhoton.initialized = false;
+
+/** Ensures photon is initialized */
+initPhoton.ensure = async () => {
+  if (!initPhoton.promise) {
+    throw new Error('(@cf-wasm/photon): Function not called. Call `initPhoton()` function first.');
+  }
+  return initPhoton.promise;
+};
 
 export { initAsync };
 export * from '../lib/photon_rs';
