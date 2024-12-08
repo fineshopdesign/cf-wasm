@@ -13,32 +13,31 @@ export interface VNode {
   };
 }
 
-/** Initializes satori */
-export const initSatori = (input: InputParam) => {
-  if (initSatori.input) {
-    throw new Error('Function already called. The `initSatori()` function can be used only once.');
+/** Initializes satori asynchronously */
+export const initSatori = async (input: Yoga | Promise<Yoga>) => {
+  if (initSatori.promise) {
+    throw new Error('(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.');
   }
   if (!input) {
-    throw new Error('Invalid `input`. Provide valid `input`.');
+    throw new Error('(@cf-wasm/satori): Argument `input` is not valid.');
   }
-  initSatori.input = input;
+  initSatori.promise = (async () => {
+    init(await input);
+    initSatori.initialized = true;
+  })();
+  return initSatori.promise;
 };
 
-/** The input provided through function */
-initSatori.input = undefined as InputParam | undefined;
+initSatori.promise = null as Promise<void> | null;
 /** Indicates whether satori is initialized */
 initSatori.initialized = false;
 
 /** Ensures satori is initialized */
 initSatori.ensure = async () => {
-  if (!initSatori.input) {
-    throw new Error('Satori is not yet initialized. Call `initSatori()` function first.');
+  if (!initSatori.promise) {
+    throw new Error('(@cf-wasm/satori): Function not called. Call `initSatori()` function first.');
   }
-  if (!initSatori.initialized) {
-    const input = await (typeof initSatori.input === 'function' ? initSatori.input() : initSatori.input);
-    init(input);
-    initSatori.initialized = true;
-  }
+  return initSatori.promise;
 };
 
 export const satori = async (element: ReactNode | VNode, options: SatoriOptions) => {
