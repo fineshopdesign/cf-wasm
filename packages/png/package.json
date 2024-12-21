@@ -60,7 +60,8 @@
     },
     "./png.wasm": {
       "import": "./dist/esm/lib/png_bg.wasm",
-      "require": "./dist/cjs/lib/png_bg.wasm"
+      "require": "./dist/cjs/lib/png_bg.wasm",
+      "default": "./dist/esm/lib/png_bg.wasm"
     },
     "./package.json": "./package.json"
   },

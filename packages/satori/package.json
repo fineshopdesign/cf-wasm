@@ -62,7 +62,8 @@
     },
     "./yoga.wasm": {
       "import": "./dist/esm/core/yoga.wasm",
-      "require": "./dist/cjs/core/yoga.wasm"
+      "require": "./dist/cjs/core/yoga.wasm",
+      "default": "./dist/esm/core/yoga.wasm"
     },
     "./package.json": "./package.json"
   },
