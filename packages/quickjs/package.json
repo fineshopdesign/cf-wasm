@@ -63,15 +63,18 @@
     },
     "./DEBUG_SYNC.wasm": {
       "import": "./dist/esm/core/DEBUG_SYNC.wasm",
-      "require": "./dist/cjs/core/DEBUG_SYNC.wasm"
+      "require": "./dist/cjs/core/DEBUG_SYNC.wasm",
+      "default": "./dist/esm/core/DEBUG_SYNC.wasm"
     },
     "./DEBUG_SYNC.wasm.map.txt": {
       "import": "./dist/esm/core/DEBUG_SYNC.wasm.map.txt",
-      "require": "./dist/cjs/core/DEBUG_SYNC.wasm.map.txt"
+      "require": "./dist/cjs/core/DEBUG_SYNC.wasm.map.txt",
+      "default": "./dist/esm/core/DEBUG_SYNC.wasm.map.txt"
     },
     "./RELEASE_SYNC.wasm": {
       "import": "./dist/esm/core/RELEASE_SYNC.wasm",
-      "require": "./dist/cjs/core/RELEASE_SYNC.wasm"
+      "require": "./dist/cjs/core/RELEASE_SYNC.wasm",
+      "default": "./dist/esm/core/RELEASE_SYNC.wasm"
     },
     "./package.json": "./package.json"
   },

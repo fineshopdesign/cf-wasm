@@ -64,7 +64,8 @@
     },
     "./resvg.wasm": {
       "import": "./dist/esm/core/resvg.wasm",
-      "require": "./dist/cjs/core/resvg.wasm"
+      "require": "./dist/cjs/core/resvg.wasm",
+      "default": "./dist/esm/core/resvg.wasm"
     },
     "./2.4.1": {
       "types": "./dist/dts/2.4.1/workers/index.d.ts",
@@ -90,7 +91,8 @@
     },
     "./2.4.1/resvg.wasm": {
       "import": "./dist/esm/2.4.1/core/resvg.wasm",
-      "require": "./dist/cjs/2.4.1/core/resvg.wasm"
+      "require": "./dist/cjs/2.4.1/core/resvg.wasm",
+      "default": "./dist/esm/2.4.1/core/resvg.wasm"
     },
     "./package.json": "./package.json"
   },
