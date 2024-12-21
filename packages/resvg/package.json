@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/resvg",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "private": false,
   "description": "A high-performance SVG renderer and toolkit, powered by Rust based resvg.",
   "keywords": [
