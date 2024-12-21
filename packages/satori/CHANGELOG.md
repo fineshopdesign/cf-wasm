@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.1.26
+
+### Patch Changes
+
+- [`b603ad0`](https://github.com/fineshopdesign/cf-wasm/commit/b603ad006dfebedf333582090b54ac7be86b94b2) Thanks [@fineshop](https://github.com/fineshop)! - fix: add `default` conditional exports for `.wasm` and `.txt` files
+
 ## 0.1.25
 
 ### Patch Changes
