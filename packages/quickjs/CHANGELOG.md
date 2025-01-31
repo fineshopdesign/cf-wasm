@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.0.5
+
+### Patch Changes
+
+- [`c59a789`](https://github.com/fineshopdesign/cf-wasm/commit/c59a789a5b171797965df78b721dbde30cd2e26a) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use `quickjs-emscripten-core` instead of `quickjs-emscripten`
+
 ## 0.0.4
 
 ### Patch Changes
