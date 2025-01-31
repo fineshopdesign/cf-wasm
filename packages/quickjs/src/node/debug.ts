@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import { DEBUG_SYNC, type QuickJSWASMModule, newQuickJSWASMModule, newVariant } from '../core';
+import { DEBUG_SYNC, type QuickJSWASMModule, newQuickJSWASMModuleFromVariant, newVariant } from '../core/debug';
 
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -15,12 +15,12 @@ export const NodeDebugSyncVariant = newVariant(DEBUG_SYNC, {
   wasmSourceMapData: debugSyncWasmModuleSourceMap,
 });
 
-let QuickJS: QuickJSWASMModule;
+let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
 export const getQuickJSWASMModule = async () => {
-  QuickJS ??= await newQuickJSWASMModule(NodeDebugSyncVariant);
-  return QuickJS;
+  singletonPromise ??= newQuickJSWASMModuleFromVariant(NodeDebugSyncVariant);
+  return singletonPromise;
 };
 
 export { debugSyncWasmModule, debugSyncWasmModuleSourceMap };
-export * from 'quickjs-emscripten';
+export * from '../core/debug';

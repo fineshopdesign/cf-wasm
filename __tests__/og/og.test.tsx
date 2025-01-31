@@ -39,7 +39,7 @@ describe('GoogleFont', () => {
     const buffer = await googleFont.data;
 
     expect(buffer).instanceOf(ArrayBuffer);
-    expect(buffer.byteLength).equals(36488);
+    expect(buffer.byteLength).equals(59512);
   });
 });
 

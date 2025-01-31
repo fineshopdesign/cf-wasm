@@ -104,10 +104,8 @@
     }
   },
   "dependencies": {
-    "quickjs-emscripten": "^0.26.0"
-  },
-  "devDependencies": {
     "@jitl/quickjs-wasmfile-debug-sync": "^0.26.0",
-    "@jitl/quickjs-wasmfile-release-sync": "^0.26.0"
+    "@jitl/quickjs-wasmfile-release-sync": "^0.26.0",
+    "quickjs-emscripten-core": "0.26.0"
   }
 }

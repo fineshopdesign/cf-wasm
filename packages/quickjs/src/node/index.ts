@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import { type QuickJSWASMModule, RELEASE_SYNC, newQuickJSWASMModule, newVariant } from '../core';
+import { type QuickJSWASMModule, RELEASE_SYNC, newQuickJSWASMModuleFromVariant, newVariant } from '../core/release';
 
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -13,12 +13,12 @@ export const NodeReleaseSyncVariant = newVariant(RELEASE_SYNC, {
   wasmModule: releaseSyncWasmModule,
 });
 
-let QuickJS: QuickJSWASMModule;
+let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
 export const getQuickJSWASMModule = async () => {
-  QuickJS ??= await newQuickJSWASMModule(NodeReleaseSyncVariant);
-  return QuickJS;
+  singletonPromise ??= newQuickJSWASMModuleFromVariant(NodeReleaseSyncVariant);
+  return singletonPromise;
 };
 
 export { releaseSyncWasmModule };
-export * from 'quickjs-emscripten';
+export * from '../core/release';
