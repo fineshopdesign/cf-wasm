@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.36
+
+### Patch Changes
+
+- [`af8bec9`](https://github.com/fineshopdesign/cf-wasm/commit/af8bec9a564cdb92be4b6f0038f7c352b7066751) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: do not use `Cache` API if `cache.setExecutionContext()` is not called
+
 ## 0.1.35
 
 ### Patch Changes
