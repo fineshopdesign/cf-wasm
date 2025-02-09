@@ -17,10 +17,12 @@ describe('CustomFont', () => {
     expect(customFont).property('style').equals('normal');
     expect(customFont).property('data').instanceOf(Promise);
 
-    const buffer = await customFont.data;
+    const promise1 = customFont.data;
+    const promise2 = customFont.data;
 
-    expect(buffer).instanceOf(ArrayBuffer);
-    expect(buffer.byteLength).equals(273900);
+    expect(await promise1).instanceOf(ArrayBuffer);
+    expect(await promise1).equals(await promise2);
+    expect((await promise1).byteLength).equals(273900);
   });
 });
 
@@ -36,10 +38,12 @@ describe('GoogleFont', () => {
 
     expect(await googleFont.canLoad()).equals(true);
 
-    const buffer = await googleFont.data;
+    const promise1 = googleFont.data;
+    const promise2 = googleFont.data;
 
-    expect(buffer).instanceOf(ArrayBuffer);
-    expect(buffer.byteLength).equals(59512);
+    expect(await promise1).instanceOf(ArrayBuffer);
+    expect(await promise1).equals(await promise2);
+    expect((await promise1).byteLength).equals(59512);
   });
 });
 

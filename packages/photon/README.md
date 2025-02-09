@@ -21,8 +21,6 @@ pnpm add @cf-wasm/photon          # pnpm
   ```ts
   import { PhotonImage } from "@cf-wasm/photon";
   ```
-  > [!WARNING]
-  > If you are using it on Cloudflare Workers, it's important to be mindful of worker memory limits (typically `128MB`). If you exceed this limit, consider adding image size checks.
 
 - Next.js Edge Runtime (Webpack):
 
@@ -41,6 +39,9 @@ pnpm add @cf-wasm/photon          # pnpm
   ```ts
   import { PhotonImage } from "@cf-wasm/photon/others";
   ```
+
+> [!WARNING]
+> If you are using it on Cloudflare Workers, it's important to be mindful of worker memory limits (typically `128MB`). If you exceed this limit, consider adding image size checks.
 
 ## Examples
 

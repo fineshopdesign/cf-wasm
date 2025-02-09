@@ -208,7 +208,7 @@ export interface CustomFontOptions extends BaseFontOptions {
 export class CustomFont extends BaseFont {
   protected input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>);
 
-  private evaluated: ArrayBuffer | undefined;
+  private promise?: Promise<ArrayBuffer>;
 
   lang: string | undefined;
 
@@ -229,12 +229,9 @@ export class CustomFont extends BaseFont {
    * A promise which resolves to font data as `ArrayBuffer`
    */
   get data(): Promise<ArrayBuffer> {
-    return (async () => {
-      if (!this.evaluated) {
-        this.evaluated = await (typeof this.input === 'function' ? this.input() : this.input);
-      }
-      return this.evaluated;
-    })();
+    const callback = async () => (typeof this.input === 'function' ? this.input() : this.input);
+    this.promise = this.promise?.then(null, callback) ?? callback();
+    return this.promise;
   }
 }
 
@@ -251,7 +248,7 @@ export interface GoogleFontOptions extends BaseFontOptions {
 export class GoogleFont extends BaseFont {
   protected input: Promise<ArrayBuffer> | undefined;
 
-  private evaluated: ArrayBuffer | undefined;
+  private promise?: Promise<ArrayBuffer>;
 
   /** The font family name */
   family: string;
@@ -274,16 +271,14 @@ export class GoogleFont extends BaseFont {
 
   /** A promise which resolves to font data as `ArrayBuffer` */
   get data(): Promise<ArrayBuffer> {
-    return (async () => {
-      if (!this.evaluated) {
-        this.evaluated = await loadGoogleFont(this.family, {
-          weight: this.weight,
-          style: this.style,
-          text: this.text,
-        });
-      }
-      return this.evaluated;
-    })();
+    const callback = async () =>
+      loadGoogleFont(this.family, {
+        weight: this.weight,
+        style: this.style,
+        text: this.text,
+      });
+    this.promise = this.promise?.then(null, callback) ?? callback();
+    return this.promise;
   }
 
   /**

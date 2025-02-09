@@ -69,9 +69,7 @@ class CacheUtils {
   cacheControlHeader = 'public, max-age=604800, s-maxage=43200';
 
   /** The waitUntil function */
-  private _waitUntil: (promise: Promise<unknown>) => Promise<void> | void = async (promise) => {
-    await promise;
-  };
+  private _waitUntil?: (promise: Promise<unknown>) => void;
 
   /** Enables cache */
   enable() {
@@ -144,7 +142,7 @@ class CacheUtils {
 
     let response: Response | undefined;
 
-    if (!this._enabled) {
+    if (!this._enabled || !this.supported || !this._waitUntil) {
       const fallbackResponse = await fallback(key, store);
 
       if (fallbackResponse instanceof Response) {
@@ -181,7 +179,7 @@ class CacheUtils {
           }
 
           const promise = store.put(key, response.clone());
-          await this._waitUntil(promise);
+          this._waitUntil(promise);
         }
       } else {
         response = new Response(response.body, response);
