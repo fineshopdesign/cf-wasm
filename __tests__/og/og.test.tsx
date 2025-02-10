@@ -1,5 +1,5 @@
 import { htmlToReact } from '@cf-wasm/og/html-to-react';
-import { CustomFont, GoogleFont, ImageResponse } from '@cf-wasm/og/node';
+import { CustomFont, GoogleFont, ImageResponse, render } from '@cf-wasm/og/node';
 import React from 'react';
 import { html } from 'satori-html';
 import { describe, expect, it } from 'vitest';
@@ -56,65 +56,57 @@ describe('htmlToReact', () => {
   });
 });
 
-/** Following tests were removed, IDK why actions job never finishes when using it, works as expected locally */
-// describe('render', () => {
-//   const renderer = render(
-//     <div
-//       style={{
-//         display: 'flex',
-//         fontSize: 40,
-//         color: 'black',
-//         background: 'white',
-//         width: '100%',
-//         height: '100%',
-//         padding: '50px 200px',
-//         textAlign: 'center',
-//         flexDirection: 'column',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//       }}
-//     >
-//       <span>👋 | Hello | 你好 | नमस्ते | こんにちは | สวัสดีค่ะ | 안녕 | добрий | день | Hallá</span>
-//       <span>Default: Noto Sans</span>
-//       <span
-//         style={{
-//           fontFamily: 'Inclusive Sans',
-//         }}
-//       >
-//         GoogleFont: Inclusive Sans
-//       </span>
-//       <span>Emojis: ⭐ ✨ 😊 😎 🌩️</span>
-//     </div>,
-//     {
-//       width: 1200,
-//       height: 630,
-//       fonts: [new GoogleFont('Inclusive Sans')],
-//       emoji: 'fluent',
-//     },
-//   );
+describe('render', () => {
+  const renderer = render(<div>Hello World!</div>);
 
-//   it('can convert to svg', async () => {
-//     const svg = await renderer.asSvg();
+  it('can convert to svg', async () => {
+    const promise1 = renderer.asSvg();
+    const promise2 = renderer.asSvg();
 
-//     expect(svg)
-//       .property('image')
-//       .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
-//       .match(/<svg\s[^>]*height="630".*<\/svg>/i);
-//   });
+    expect(await promise1).equals(await promise2);
+    expect(await promise1)
+      .property('image')
+      .match(/<svg\s[^>]*width="1200".*<\/svg>/i)
+      .match(/<svg\s[^>]*height="630".*<\/svg>/i);
+    expect(await promise1)
+      .property('width')
+      .equals(1200);
+    expect(await promise1)
+      .property('height')
+      .equals(630);
+    expect(await promise1)
+      .property('type')
+      .equals('image/svg+xml');
+  });
 
-//   it('can convert to png', async () => {
-//     const png = await renderer.asPng();
+  it('can convert to png', async () => {
+    const promise1 = renderer.asPng();
+    const promise2 = renderer.asPng();
 
-//     expect(png).property('pixels').instanceOf(Uint8Array);
-//     expect(png).property('image').instanceOf(Uint8Array);
-//   });
-// });
+    expect(await promise1).equals(await promise2);
+    expect(await promise1)
+      .property('pixels')
+      .instanceOf(Uint8Array);
+    expect(await promise1)
+      .property('image')
+      .instanceOf(Uint8Array);
+    expect(await promise1)
+      .property('width')
+      .equals(1200);
+    expect(await promise1)
+      .property('height')
+      .equals(630);
+    expect(await promise1)
+      .property('type')
+      .equals('image/png');
+  });
+});
 
 describe('ImageResponse', () => {
   describe('should render ReactElement', () => {
     const response = new ImageResponse(<div>Hello World!</div>, {
-      width: 200,
-      height: 300,
+      width: 300,
+      height: 200,
       format: 'svg',
     });
 
@@ -122,15 +114,15 @@ describe('ImageResponse', () => {
       const text = await response.text();
 
       expect(text)
-        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
-        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+        .match(/<svg\s[^>]*width="300".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="200".*<\/svg>/i);
     });
   });
 
   describe('should render node returned from htmlToReact', () => {
     const response = new ImageResponse(htmlToReact('<div>Hello World!</div>'), {
-      width: 200,
-      height: 300,
+      width: 300,
+      height: 200,
       format: 'svg',
     });
 
@@ -138,15 +130,15 @@ describe('ImageResponse', () => {
       const text = await response.text();
 
       expect(text)
-        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
-        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+        .match(/<svg\s[^>]*width="300".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="200".*<\/svg>/i);
     });
   });
 
   describe('should render node returned from satori-html', () => {
     const response = new ImageResponse(html('<div>Hello World!</div>'), {
-      width: 200,
-      height: 300,
+      width: 300,
+      height: 200,
       format: 'svg',
     });
 
@@ -154,8 +146,8 @@ describe('ImageResponse', () => {
       const text = await response.text();
 
       expect(text)
-        .match(/<svg\s[^>]*width="200".*<\/svg>/i)
-        .match(/<svg\s[^>]*height="300".*<\/svg>/i);
+        .match(/<svg\s[^>]*width="300".*<\/svg>/i)
+        .match(/<svg\s[^>]*height="200".*<\/svg>/i);
     });
   });
 });

@@ -229,8 +229,8 @@ export class CustomFont extends BaseFont {
    * A promise which resolves to font data as `ArrayBuffer`
    */
   get data(): Promise<ArrayBuffer> {
-    const callback = async () => (typeof this.input === 'function' ? this.input() : this.input);
-    this.promise = this.promise?.then(null, callback) ?? callback();
+    const fallback = async () => (typeof this.input === 'function' ? this.input() : this.input);
+    this.promise = this.promise?.then(null, fallback) ?? fallback();
     return this.promise;
   }
 }
@@ -271,13 +271,13 @@ export class GoogleFont extends BaseFont {
 
   /** A promise which resolves to font data as `ArrayBuffer` */
   get data(): Promise<ArrayBuffer> {
-    const callback = async () =>
+    const fallback = async () =>
       loadGoogleFont(this.family, {
         weight: this.weight,
         style: this.style,
         text: this.text,
       });
-    this.promise = this.promise?.then(null, callback) ?? callback();
+    this.promise = this.promise?.then(null, fallback) ?? fallback();
     return this.promise;
   }
 

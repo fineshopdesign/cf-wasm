@@ -31,8 +31,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: ${{ fromJson(inputs.nodeVersion || '["20.x"]') }}
-        pnpm-version: ${{ fromJson(inputs.pnpmVersion || '["9.x"]') }}
+        node-version: ${{ fromJson(inputs.nodeVersion || '["22.x"]') }}
+        pnpm-version: ${{ fromJson(inputs.pnpmVersion || '["10.x"]') }}
         os: [ubuntu-latest]
     steps:
       - name: Checkout repo

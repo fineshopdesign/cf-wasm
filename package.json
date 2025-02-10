@@ -4,7 +4,7 @@
   "description": "A collection of WASM packages those work on Cloudflare Workers",
   "author": "Deo Kumar",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@10.2.1",
   "scripts": {
     "check": "pnpm biome check .",
     "check:fix": "pnpm biome check --write .",

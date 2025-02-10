@@ -10,6 +10,8 @@ import type { MayBePromise, StringWithSuggestions } from './types';
 /** Represents a png result of rendered image */
 export interface PngResult {
   pixels: Uint8Array;
+
+  /* Output image bytes */
   image: Uint8Array;
 
   /** The width of the image */
@@ -17,6 +19,9 @@ export interface PngResult {
 
   /** The height of the image */
   height: number;
+
+  /** The mime type of the image */
+  type: string;
 }
 
 /** Represents a svg result of rendered image */
@@ -29,6 +34,9 @@ export interface SvgResult {
 
   /** The height of the image */
   height: number;
+
+  /** The mime type of the image */
+  type: string;
 }
 
 export interface RenderSatoriOptions extends Omit<SatoriOptions, 'width' | 'height' | 'fonts' | 'loadAdditionalAsset' | 'debug'> {}
@@ -129,15 +137,11 @@ export const RENDER_DEFAULT_OPTIONS = {
  * @returns An object containing methods for rendering the input element to image
  */
 export const render = (element: ReactNode | VNode, options: RenderOptions = {}) => {
-  const data: {
-    svg: SvgResult | null;
-    png: PngResult | null;
-    fonts: SatoriOptions['fonts'] | null;
-  } = {
-    svg: null,
-    png: null,
-    fonts: null,
-  };
+  const promises: {
+    svg?: Promise<SvgResult>;
+    png?: Promise<PngResult>;
+    fonts?: Promise<SatoriOptions['fonts']>;
+  } = {};
 
   const renderOptions = {
     ...RENDER_DEFAULT_OPTIONS,
@@ -167,7 +171,7 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
   };
 
   const getFonts = async () => {
-    if (!data.fonts) {
+    const fallback = async (): Promise<SatoriOptions['fonts']> => {
       const fallbackFont = await (renderOptions.defaultFont?.data ?? defaultFont.get());
 
       if (!fallbackFont) {
@@ -187,17 +191,16 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
             }),
       ];
 
-      const satoriFonts: SatoriOptions['fonts'] = await Promise.all(
+      return Promise.all(
         [...defaultFonts, ...renderOptions.fonts].map(async (font) => ({
           ...font,
           data: await font.data,
         })),
       );
+    };
 
-      data.fonts = satoriFonts;
-    }
-
-    return data.fonts;
+    promises.fonts = promises.fonts?.then(null, fallback) ?? fallback();
+    return promises.fonts;
   };
 
   /**
@@ -206,7 +209,7 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
    * @returns A promise which resolves to rendered svg image as {@link SvgResult}
    */
   const asSvg = async () => {
-    if (!data.svg) {
+    const fallback = async (): Promise<SvgResult> => {
       const satoriFonts = await getFonts();
 
       const satoriOptions = {
@@ -219,14 +222,16 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
       };
       const svg = await modules.satori.satori(element, satoriOptions);
 
-      data.svg = {
+      return {
         image: svg,
         height: satoriOptions.height,
         width: satoriOptions.width,
+        type: 'image/svg+xml',
       };
-    }
+    };
 
-    return data.svg;
+    promises.svg = promises.svg?.then(null, fallback) ?? fallback();
+    return promises.svg;
   };
 
   /**
@@ -235,7 +240,7 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
    * @returns A promise which resolves to rendered png image as {@link PngResult}
    */
   const asPng = async () => {
-    if (!data.png) {
+    const fallback = async (): Promise<PngResult> => {
       const svg = await asSvg();
       const resvg = await modules.resvg.Resvg.create(svg.image, {
         ...renderOptions.resvgOptions,
@@ -246,19 +251,23 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
       });
       const renderedImage = resvg.render();
 
-      data.png = {
+      const result: PngResult = {
         pixels: renderedImage.pixels,
         image: renderedImage.asPng(),
         width: renderedImage.width,
         height: renderedImage.height,
+        type: 'image/png',
       };
 
       // Explicitly free rust memory
       renderedImage.free();
       resvg.free();
-    }
 
-    return data.png;
+      return result;
+    };
+
+    promises.png = promises.png?.then(null, fallback) ?? fallback();
+    return promises.png;
   };
 
   return { asSvg, asPng };
