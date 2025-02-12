@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.1.37
+
+### Patch Changes
+
+- [`c3ec666`](https://github.com/fineshopdesign/cf-wasm/commit/c3ec666b5e6dc36facd2f9b011b3cdbc685783d0) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: make sure multiple calls to `.asPng()` or `.asSvg()` return promise resolving to same object
+
 ## 0.1.36
 
 ### Patch Changes
