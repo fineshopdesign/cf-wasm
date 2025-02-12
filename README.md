@@ -83,3 +83,7 @@ Compatible with:
 * Node.js 
 
 [Read more..](/packages/og/README.md)
+
+### Acknowledgments
+
+ - **Thanks to DuCanhGH for the workflows and issue templates**, which I shamelessly copied and modified from one of his open-source projects.
