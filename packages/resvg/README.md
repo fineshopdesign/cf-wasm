@@ -2,7 +2,7 @@
 
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.  
 
-Powered by [@resvg/resvg-wasm](https://www.npmjs.com/package/@resvg/resvg-wasm).
+Powered by [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
 
 ## Installation
 
@@ -34,4 +34,4 @@ pnpm add @cf-wasm/resvg          # pnpm
 
 ## Documentation
 
-Read official documentation at [@resvg/resvg-wasm](https://www.npmjs.com/package/@resvg/resvg-wasm).
+Read official documentation at [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).

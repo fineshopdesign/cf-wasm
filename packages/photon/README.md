@@ -2,7 +2,7 @@
 
 High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
 
-Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon)  
+Powered by [@silvia-odwyer/photon](https://github.com/silvia-odwyer)  
 Build for commit [`941adf9`](https://github.com/silvia-odwyer/photon/tree/941adf9d2a60f9b92a2b8016b5036033dbffb192)  
 Forked on: `15th November, 2024`.
 
@@ -212,7 +212,7 @@ You can use `others` submodule and provide wasm binaries using `initPhoton` func
 > [!WARNING]
 > The `others` submodule is yet experimental. Breaking changes may be introduced without following semantic versioning.
 
-[@deox/cors-worker](https://www.npmjs.com/package/@deox/cors-worker) can make messaging even more easier when using web workers.
+[@deox/cors-worker](https://github.com/kumardeo/deox/tree/main/packages/cors-worker) can make messaging even more easier when using web workers.
 
 Here is a working example for Web Workers when using Webpack bundler:
 

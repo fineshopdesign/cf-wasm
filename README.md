@@ -6,10 +6,10 @@ A collection of WASM packages those work on Cloudflare Workers.
 
 This monorepo contains the following packages:
 
-### [@cf-wasm/photon](https://www.npmjs.com/package/@cf-wasm/photon)
+### [@cf-wasm/photon](./packages/photon/README.md)
 
 A high-performance image processing library.  
-Powered by [@silvia-odwyer/photon](https://www.npmjs.com/package/@silvia-odwyer/photon).  
+Powered by [@silvia-odwyer/photon](https://github.com/silvia-odwyer/photon).  
 
 Compatible with:
 
@@ -17,12 +17,10 @@ Compatible with:
 * Next.js (Edge runtime)
 * Node.js
 
-[Read more..](/packages/photon/README.md)
-
-### [@cf-wasm/png](https://www.npmjs.com/package/@cf-wasm/png)
+### [@cf-wasm/png](./packages/png/README.md)
 
 A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.  
-Powered by [denosaurs/pngs](https://github.com/denosaurs/pngs).  
+Powered by [@denosaurs/pngs](https://github.com/denosaurs/pngs).  
 
 Compatible with:
 
@@ -30,12 +28,10 @@ Compatible with:
 * Next.js (Edge runtime)
 * Node.js
 
-[Read more..](/packages/png/README.md)
-
-### [@cf-wasm/quickjs](https://www.npmjs.com/package/@cf-wasm/quickjs)
+### [@cf-wasm/quickjs](./packages/quickjs/README.md)
 
 A high-performance, secure, extensible JavaScript runtime.  
-Powered by [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)
+Powered by [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
 Compatible with:
 
@@ -43,12 +39,10 @@ Compatible with:
 * Next.js (Edge runtime)
 * Node.js
 
-[Read more..](/packages/quickjs/README.md)
-
-### [@cf-wasm/resvg](https://www.npmjs.com/package/@cf-wasm/resvg)
+### [@cf-wasm/resvg](./packages/resvg/README.md)
 
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.  
-Powered by [@resvg/resvg-wasm](https://www.npmjs.com/package/@resvg/resvg-wasm).  
+Powered by [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).  
 
 Compatible with:
 
@@ -56,12 +50,10 @@ Compatible with:
 * Next.js (Edge runtime)
 * Node.js
 
-[Read more..](/packages/resvg/README.md)
-
-### [@cf-wasm/satori](https://www.npmjs.com/package/@cf-wasm/satori)
+### [@cf-wasm/satori](./packages/satori/README.md)
 
 Enlightened library to convert HTML and CSS to SVG.  
-Powered by [satori](https://www.npmjs.com/package/satori).  
+Powered by [satori](https://github.com/vercel/satori).  
 
 Compatible with:
 
@@ -69,9 +61,7 @@ Compatible with:
 * Next.js (Edge runtime)
 * Node.js
 
-[Read more..](/packages/satori/README.md)
-
-### [@cf-wasm/og](https://www.npmjs.com/package/@cf-wasm/og)
+### [@cf-wasm/og](./packages/og/README.md)
 
 Generate Open Graph Images dynamically from HTML/CSS without a browser.  
 Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).  
@@ -81,8 +71,6 @@ Compatible with:
 * Cloudflare Workers
 * Next.js (Edge runtime)
 * Node.js 
-
-[Read more..](/packages/og/README.md)
 
 ### Acknowledgments
 

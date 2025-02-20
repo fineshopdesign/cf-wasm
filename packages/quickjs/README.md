@@ -2,7 +2,7 @@
 
 A high-performance, secure, extensible JavaScript runtime.  
 
-Powered by [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten)
+Powered by [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
 > [!WARNING]
 > This package is in development. Breaking changes may be introduced without following semantic versioning.
