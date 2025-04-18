@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.1.29
+
+### Patch Changes
+
+- [#50](https://github.com/fineshopdesign/cf-wasm/pull/50) [`b62eff3`](https://github.com/fineshopdesign/cf-wasm/commit/b62eff35ff839ad49954fc7d8a80bf04d885f12a) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: support react 19
+
 ## 0.1.28
 
 ### Patch Changes

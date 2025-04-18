@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.0.6
+
+### Patch Changes
+
+- [`5b71a40`](https://github.com/fineshopdesign/cf-wasm/commit/5b71a40362796c5c890b265f45e0a6523e7c047f) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: bump `quickjs-emscripten-core` to `0.31.0`
+
 ## 0.0.5
 
 ### Patch Changes
