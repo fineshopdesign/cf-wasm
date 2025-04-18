@@ -1,5 +1,14 @@
 # @cf-wasm/og
 
+## 0.1.39
+
+### Patch Changes
+
+- [#50](https://github.com/fineshopdesign/cf-wasm/pull/50) [`b62eff3`](https://github.com/fineshopdesign/cf-wasm/commit/b62eff35ff839ad49954fc7d8a80bf04d885f12a) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: support react 19
+
+- Updated dependencies [[`b62eff3`](https://github.com/fineshopdesign/cf-wasm/commit/b62eff35ff839ad49954fc7d8a80bf04d885f12a)]:
+  - @cf-wasm/satori@0.1.29
+
 ## 0.1.38
 
 ### Patch Changes
