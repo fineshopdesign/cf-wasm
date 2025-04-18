@@ -16,12 +16,12 @@
     "@cf-wasm/quickjs": "workspace:^",
     "@cf-wasm/resvg": "workspace:^",
     "@cf-wasm/satori": "workspace:^",
-    "react": "^18.3.1",
+    "react": "^19.1.0",
     "satori-html": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@types/react": "^18.3.12",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
     "vitest": "^3.1.1"
   }
 }

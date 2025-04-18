@@ -1,12 +1,9 @@
 import { type ParserOptions, convertHtmlToReact } from '@hedgedoc/html-to-react';
-import type { ReactElement } from 'react';
+import { Fragment, type ReactElement, createElement } from 'react';
 
 export type { ParserOptions };
 
 export type ReactChild = ReactElement | string | null;
-
-export const SYMBOL_REACT_ELEMENT = Symbol.for('react.element');
-export const SYMBOL_REACT_FRAGMENT = Symbol.for('react.fragment');
 
 export const props = (input: {
   children?: ReactChild | ReactChild[];
@@ -38,31 +35,14 @@ export const props = (input: {
   return props;
 };
 
-export const element = (element: ReactElement) => {
-  const result = { ...element };
-  if (typeof result.props === 'object' && result.props) {
-    result.props = props(result.props);
-  }
+export const element = (element: ReactElement) =>
+  createElement(element.type, typeof element.props === 'object' && element.props ? props(element.props) : {});
 
-  return result;
-};
-
-export const fragment = (children: ReactChild[]): ReactElement => ({
-  // @ts-expect-error: we need to add private property
-  $$typeof: SYMBOL_REACT_ELEMENT,
-  type: SYMBOL_REACT_FRAGMENT as unknown as ReactElement['type'],
-  key: null,
-  ref: null,
-  props: { children },
-  _owner: null,
-  _store: {},
-});
+export const fragment = (children: ReactChild[]): ReactElement => createElement(Fragment, { children });
 
 export const wrapper = (children: ReactChild[]): ReactElement => {
   if (children.length === 1 && typeof children[0] === 'object' && children[0]) {
-    const parent = element(children[0]);
-    parent.key = null;
-    return parent;
+    return element({ ...children[0], key: null });
   }
 
   return element(fragment(children));

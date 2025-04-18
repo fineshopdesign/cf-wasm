@@ -53,6 +53,20 @@ describe('htmlToReact', () => {
     expect(htmlToReact('Hello World!')).toEqual(<>Hello World!</>);
     expect(htmlToReact('<div>Hello</div>')).toEqual(<div>Hello</div>);
     expect(htmlToReact('<div style="display:flex;">Hello</div>')).toEqual(<div style={{ display: 'flex' }}>Hello</div>);
+    expect(
+      htmlToReact(
+        '<div style="display:flex;"><div data-attr="dataset-1" style="color:red">Child 1</div><div data-attr="dataset-2" style="color:blue;">Child 2</div></div>',
+      ),
+    ).toEqual(
+      <div style={{ display: 'flex' }}>
+        <div data-attr="dataset-1" style={{ color: 'red' }}>
+          Child 1
+        </div>
+        <div data-attr="dataset-2" style={{ color: 'blue' }}>
+          Child 2
+        </div>
+      </div>,
+    );
   });
 });
 
