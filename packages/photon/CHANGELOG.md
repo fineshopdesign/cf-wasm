@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.1.30
+
+### Patch Changes
+
+- [`e659c11`](https://github.com/fineshopdesign/cf-wasm/commit/e659c119efff93ac40522050b199f9b6f1b92eb5) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: build for commit [`b7e57c9`](https://github.com/silvia-odwyer/photon/tree/b7e57c9f05adecf1c9356d6a08f86a34ca08a7d0)
+
 ## 0.1.29
 
 ### Patch Changes
