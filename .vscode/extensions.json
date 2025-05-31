@@ -1,3 +1,3 @@
 {
-  "recommendations": ["esbenp.prettier-vscode", "EditorConfig.EditorConfig", "DavidAnson.vscode-markdownlint", "biomejs.biome", "redhat.vscode-yaml"]
+  "recommendations": ["EditorConfig.EditorConfig", "DavidAnson.vscode-markdownlint", "biomejs.biome", "redhat.vscode-yaml"]
 }

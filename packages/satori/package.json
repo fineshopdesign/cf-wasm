@@ -84,9 +84,9 @@
     }
   },
   "dependencies": {
-    "@types/react": "^19.1.2",
+    "@types/react": "^19.1.6",
     "react": "^19.1.0",
-    "satori": "^0.12.2",
+    "satori": "^0.13.1",
     "yoga-wasm-web": "^0.3.3"
   }
 }
