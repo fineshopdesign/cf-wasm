@@ -212,7 +212,7 @@ You can use `others` submodule and provide wasm binaries using `initPhoton` func
 > [!WARNING]
 > The `others` submodule is yet experimental. Breaking changes may be introduced without following semantic versioning.
 
-[@deox/cors-worker](https://github.com/kumardeo/deox/tree/main/packages/cors-worker) can make messaging even more easier when using web workers.
+[@deox/worker-rpc](https://github.com/kumardeo/deox/tree/main/packages/worker-rpc) can make messaging even more easier when using web workers.
 
 Here is a working example for Web Workers when using Webpack bundler:
 
@@ -220,7 +220,7 @@ Create a `worker.ts`:
 
 ```ts
 import { initPhoton, PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/others";
-import { register } from "@deox/cors-worker/register";
+import { register } from "@deox/worker-rpc/register";
 
 const registered = register(async () => {
   // The wasm must be initialized first, you can provide photon wasm binaries from any source
@@ -280,7 +280,7 @@ export type Registered = typeof registered;
 Now you can use it in your entrypoints:
 
 ```ts
-import { Worker } from "@deox/cors-worker";
+import { Worker } from "@deox/worker-rpc";
 import type { Registered } from "./worker";
 
 const worker = new Worker<Registered>(
