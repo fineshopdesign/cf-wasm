@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.1.30
+
+### Patch Changes
+
+- [`804b24c`](https://github.com/fineshopdesign/cf-wasm/commit/804b24c36d892b1927e3d97784012f927264274e) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: update `satori`
+
 ## 0.1.29
 
 ### Patch Changes
