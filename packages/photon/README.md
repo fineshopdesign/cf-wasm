@@ -3,8 +3,8 @@
 High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
 
 Powered by [@silvia-odwyer/photon](https://github.com/silvia-odwyer)  
-Build for commit [`b7e57c9`](https://github.com/silvia-odwyer/photon/tree/b7e57c9f05adecf1c9356d6a08f86a34ca08a7d0)  
-Forked on: `3rd May, 2025`.
+Build for commit [`8347f46`](https://github.com/silvia-odwyer/photon/tree/8347f46e73fedb3b095fb816b728ae08c1c029af)  
+Forked on: `9th June, 2025 (IST)`.
 
 ## Installation
 

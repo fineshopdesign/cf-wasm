@@ -86,7 +86,7 @@
   "dependencies": {
     "@types/react": "^19.1.6",
     "react": "^19.1.0",
-    "satori": "^0.13.1",
+    "satori": "^0.14.0",
     "yoga-wasm-web": "^0.3.3"
   }
 }
