@@ -172,24 +172,26 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
 
   const getFonts = async () => {
     const fallback = async (): Promise<SatoriOptions['fonts']> => {
+      const defaultFonts: Font[] = [];
+
       const fallbackFont = await (renderOptions.defaultFont?.data ?? defaultFont.get());
-
-      if (!fallbackFont) {
-        console.warn("(@cf-wasm/og) [ WARN ] No default font was provided, fetching 'Noto Sans' from Google fonts and setting as default font");
+      if (fallbackFont) {
+        defaultFonts.push(
+          new CustomFont('sans serif', fallbackFont, {
+            weight: 400,
+            style: 'normal',
+          }),
+        );
+      } else {
+        console.warn("(@cf-wasm/og) [ WARN ] No default font specified. Using 'Noto Sans' from Google Fonts as the fallback.");
+        defaultFonts.push(
+          new GoogleFont('Noto Sans', {
+            name: 'sans serif',
+            weight: 400,
+            style: 'normal',
+          }),
+        );
       }
-
-      const defaultFonts = [
-        fallbackFont
-          ? new CustomFont('sans serif', fallbackFont, {
-              weight: 400,
-              style: 'normal',
-            })
-          : new GoogleFont('Noto Sans', {
-              name: 'sans serif',
-              weight: 400,
-              style: 'normal',
-            }),
-      ];
 
       return Promise.all(
         [...defaultFonts, ...renderOptions.fonts].map(async (font) => ({
