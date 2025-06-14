@@ -1,5 +1,12 @@
 # @cf-wasm/og
 
+## 0.1.41
+
+### Patch Changes
+
+- Updated dependencies [[`2fe395f`](https://github.com/fineshopdesign/cf-wasm/commit/2fe395faa4daf4c7b0a2c91322d51d572e35bf8e)]:
+  - @cf-wasm/satori@0.1.31
+
 ## 0.1.40
 
 ### Patch Changes
