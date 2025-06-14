@@ -28,7 +28,7 @@ describe('satori', () => {
       ],
     });
 
-    expect(result.length).equals(3735);
+    expect(result.length).equals(3744);
   });
 
   it('can convert VNode to SVG', async () => {
@@ -49,6 +49,6 @@ describe('satori', () => {
       ],
     });
 
-    expect(result.length).equals(3824);
+    expect(result.length).equals(3833);
   });
 });

@@ -20,8 +20,8 @@
     "satori-html": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "^22.15.30",
-    "@types/react": "^19.1.6",
-    "vitest": "^3.2.2"
+    "@types/node": "^24.0.1",
+    "@types/react": "^19.1.8",
+    "vitest": "^3.2.3"
   }
 }
