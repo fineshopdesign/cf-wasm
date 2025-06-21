@@ -1,6 +1,5 @@
 import { htmlToReact } from '@cf-wasm/og/html-to-react';
 import { CustomFont, GoogleFont, ImageResponse, render } from '@cf-wasm/og/node';
-import React from 'react';
 import { html } from 'satori-html';
 import { describe, expect, it } from 'vitest';
 

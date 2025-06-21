@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import { DEBUG_SYNC, type QuickJSWASMModule, newQuickJSWASMModuleFromVariant, newVariant } from '../core/debug';
+import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from '../core/debug';
 
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

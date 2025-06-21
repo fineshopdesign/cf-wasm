@@ -18,11 +18,11 @@
     "publish-packages": "cross-env PUBLISH=true pnpm run build && changeset publish"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.0.4",
     "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.4",
+    "@changesets/cli": "^2.29.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.0.3",
     "console-log-colors": "^0.5.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.25.5",
@@ -35,14 +35,7 @@
     "tsx": "^4.20.3",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.3",
+    "vitest": "^3.2.4",
     "wasm-pack": "^0.13.1"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild",
-      "wasm-pack"
-    ]
   }
 }

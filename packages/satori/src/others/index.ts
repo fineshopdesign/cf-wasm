@@ -2,14 +2,14 @@ import { satori } from '../core/satori';
 
 export default satori;
 export {
-  satori,
-  initSatori,
-  type InputParam,
   type Font,
   type FontStyle,
   type FontWeight,
+  type InputParam,
+  initSatori,
   type Locale,
   type SatoriNode,
   type SatoriOptions,
+  satori,
   type VNode,
 } from '../core/satori';

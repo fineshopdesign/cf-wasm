@@ -1,5 +1,5 @@
 import releaseSyncWasmModule from '../core/RELEASE_SYNC.wasm?module';
-import { type QuickJSWASMModule, RELEASE_SYNC, newQuickJSWASMModuleFromVariant, newVariant } from '../core/release';
+import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from '../core/release';
 
 export const NextReleaseSyncVariant = newVariant(RELEASE_SYNC, {
   wasmModule: releaseSyncWasmModule,

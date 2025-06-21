@@ -4,7 +4,7 @@ import clc from 'console-log-colors';
 import type { Plugin } from 'esbuild';
 import fs from 'fs-extra';
 import * as glob from 'glob';
-import { type Options, build } from 'tsup';
+import { build, type Options } from 'tsup';
 
 // Entrypoints for ESM
 const ESM_ENTRYPOINTS = glob.sync('./src/**/*.{ts,js}', {
@@ -53,7 +53,11 @@ export const addExtensionPlugin = (
           } else {
             formPath = path.join(args.resolveDir, args.path, `index${fromExtension}`);
             if (fs.existsSync(formPath)) {
-              importPath = `${args.path}/index${toExtension}`;
+              if (args.path.endsWith('/')) {
+                importPath = `${args.path}index${toExtension}`;
+              } else {
+                importPath = `${args.path}/index${toExtension}`;
+              }
             }
           }
         }

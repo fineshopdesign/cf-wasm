@@ -1,5 +1,5 @@
 import debugSyncWasmModule from '../core/DEBUG_SYNC.wasm?module';
-import { DEBUG_SYNC, type QuickJSWASMModule, newQuickJSWASMModuleFromVariant, newVariant } from '../core/debug';
+import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from '../core/debug';
 
 export const NextDebugSyncVariant = newVariant(DEBUG_SYNC, {
   wasmModule: debugSyncWasmModule,

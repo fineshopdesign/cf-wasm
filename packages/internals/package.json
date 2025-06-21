@@ -20,7 +20,7 @@
   },
   "scripts": {
     "check:types": "tsc --noEmit",
-    "build": "tsx build.ts",
+    "build": "tsx scripts/build.ts",
     "clean": "rimraf dist"
   },
   "files": [

@@ -1,5 +1,4 @@
 import { satori, yogaWasmModule } from '@cf-wasm/satori/node';
-import React from 'react';
 import { html } from 'satori-html';
 import { describe, expect, it } from 'vitest';
 

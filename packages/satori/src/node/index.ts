@@ -14,12 +14,12 @@ initSatori(import('yoga-wasm-web').then((module) => module.default(yogaWasmModul
 export default satori;
 export { yogaWasmModule };
 export {
-  satori,
   type Font,
   type FontStyle,
   type FontWeight,
   type Locale,
   type SatoriNode,
   type SatoriOptions,
+  satori,
   type VNode,
 } from '../core/satori';

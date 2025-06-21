@@ -7,12 +7,12 @@ initSatori(initYoga(yogaWasmModule));
 export default satori;
 export { yogaWasmModule };
 export {
-  satori,
   type Font,
   type FontStyle,
   type FontWeight,
   type Locale,
   type SatoriNode,
   type SatoriOptions,
+  satori,
   type VNode,
 } from '../core/satori';

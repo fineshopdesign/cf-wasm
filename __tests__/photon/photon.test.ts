@@ -1,4 +1,4 @@
-import { PhotonImage, SamplingFilter, photonWasmModule, resize } from '@cf-wasm/photon/node';
+import { PhotonImage, photonWasmModule, resize, SamplingFilter } from '@cf-wasm/photon/node';
 import { describe, expect, it } from 'vitest';
 
 describe('photonWasmModule', () => {

@@ -1,19 +1,24 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignore": [
-      "node_modules",
-      "dist",
-      ".ignore",
-      ".turbo",
-      "packages/photon/crate",
-      "packages/photon/src/lib",
-      "packages/png/crate",
-      "packages/png/src/lib"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/.ignore",
+      "!**/.turbo",
+      "!**/packages/photon/crate",
+      "!**/packages/photon/src/lib",
+      "!**/packages/png/crate",
+      "!**/packages/png/src/lib"
     ]
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
@@ -23,7 +28,17 @@
         "useExhaustiveDependencies": "off"
       },
       "style": {
-        "useEnumInitializers": "off"
+        "useEnumInitializers": "off",
+        "useNodejsImportProtocol": "error",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
       }
     }
   },
@@ -41,13 +56,5 @@
     "parser": {
       "allowComments": true
     }
-  },
-  "overrides": [
-    {
-      "include": ["package.json"],
-      "formatter": {
-        "enabled": false
-      }
-    }
-  ]
+  }
 }

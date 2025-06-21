@@ -13,8 +13,8 @@ initResvg(resvgWasmModule);
 
 export { resvgWasmModule };
 export {
-  Resvg,
   type BBox,
   type RenderedImage,
+  Resvg,
   type ResvgRenderOptions,
 } from '../core/resvg';

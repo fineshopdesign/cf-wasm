@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import { modules } from '../core';
 import { FetchError } from '../core/errors';
 import type { FontBuffer } from '../core/font';
-import { type Font, type PngResult, type RenderOptions, type SvgResult, render } from '../core/render';
+import { type Font, type PngResult, type RenderOptions, render, type SvgResult } from '../core/render';
 import { BaseResponse, type BaseResponseOptions, type ImageResponseOptions } from '../core/response';
 import type { FontWeight } from '../core/satori';
 import type { MayBePromise } from '../core/types';

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { CONTAINER } from './constants';
-import { type PngResult, type RenderOptions, type SvgResult, render } from './render';
+import { type PngResult, type RenderOptions, render, type SvgResult } from './render';
 import type { VNode } from './satori';
 import type { MayBePromise, OnlyProps } from './types';
 

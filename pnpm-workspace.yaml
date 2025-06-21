@@ -1,4 +1,9 @@
 packages:
-  - "packages/*"
-  - "__tests__"
-  - "__tests__/*"
+  - packages/*
+  - __tests__
+  - __tests__/*
+
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - esbuild
+  - wasm-pack

@@ -1,8 +1,8 @@
 export {
-  Resvg,
-  initResvg,
   type BBox,
-  type RenderedImage,
   type InitInput,
+  initResvg,
+  type RenderedImage,
+  Resvg,
   type ResvgRenderOptions,
 } from '../core/resvg';

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { loadDynamicAsset } from './asset';
 import type { EmojiType } from './emoji';
-import { CustomFont, type FontBuffer, GoogleFont, defaultFont } from './font';
+import { CustomFont, defaultFont, type FontBuffer, GoogleFont } from './font';
 import { modules } from './modules';
 import type { ResvgRenderOptions } from './resvg';
 import type { Font as SatoriFont, SatoriOptions, VNode } from './satori';
@@ -151,7 +151,7 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
   const loadAdditionalAsset = async (languageCode: string, segment: string) => {
     const next = () => loadDynamicAsset(languageCode, segment, renderOptions?.emoji);
 
-    let result: string | Font[] | undefined = undefined;
+    let result: string | Font[] | undefined;
     if (options.loadAdditionalAsset) {
       result = await options.loadAdditionalAsset(languageCode, segment, next);
     }

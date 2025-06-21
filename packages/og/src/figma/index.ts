@@ -1,9 +1,9 @@
 export {
-  renderFigma,
-  FigmaImageResponse,
-  type FigmaOptions,
-  type FigmaComplexTemplate,
   type ElementResult,
-  type RenderFigmaOptions,
+  type FigmaComplexTemplate,
+  FigmaImageResponse,
   type FigmaImageResponseOptions,
+  type FigmaOptions,
+  type RenderFigmaOptions,
+  renderFigma,
 } from './figma';

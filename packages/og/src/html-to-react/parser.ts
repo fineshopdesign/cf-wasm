@@ -1,18 +1,15 @@
-import { type ParserOptions, convertHtmlToReact } from '@hedgedoc/html-to-react';
-import { Fragment, type ReactElement, createElement } from 'react';
+import { convertHtmlToReact, type ParserOptions } from '@hedgedoc/html-to-react';
+import { createElement, Fragment, type ReactElement } from 'react';
 
 export type { ParserOptions };
 
 export type ReactChild = ReactElement | string | null;
 
-export const props = (input: {
-  children?: ReactChild | ReactChild[];
-}) => {
+export const props = (input: { children?: ReactChild | ReactChild[] }) => {
   const props = { ...input };
   if ('children' in props) {
     const { children } = props;
     if (typeof children === 'undefined' || children === null) {
-      // biome-ignore lint/performance/noDelete: we need to delete nullish children
       delete props.children;
     } else if (typeof children === 'string') {
       props.children = children;
@@ -22,7 +19,6 @@ export const props = (input: {
         .map((child) => (typeof child === 'object' && child ? element(child) : child));
 
       if (filtered.length === 0) {
-        // biome-ignore lint/performance/noDelete: we need to delete nullish children
         delete props.children;
       } else if (filtered.length === 1 && typeof filtered[0] === 'string') {
         props.children = filtered[0];

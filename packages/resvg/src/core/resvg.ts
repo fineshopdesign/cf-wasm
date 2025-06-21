@@ -1,4 +1,4 @@
-import { type InitInput, Resvg as ResvgClass, type ResvgRenderOptions, initWasm } from '@resvg/resvg-wasm';
+import { type InitInput, initWasm, Resvg as ResvgClass, type ResvgRenderOptions } from '@resvg/resvg-wasm';
 
 /** Initializes resvg asynchronously */
 export const initResvg = (input: InitInput | Promise<InitInput>) => {
@@ -47,10 +47,10 @@ export class Resvg extends ResvgClass {
 }
 
 export {
-  initWasm,
-  type InitInput,
-  type ResvgRenderOptions,
   type CustomFontsOptions,
   type FontOptions,
+  type InitInput,
+  initWasm,
+  type ResvgRenderOptions,
   type SystemFontsOptions,
 } from '@resvg/resvg-wasm';

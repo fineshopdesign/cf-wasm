@@ -13,9 +13,9 @@ initResvg(resvgWasmModule);
 
 export { resvgWasmModule };
 export {
-  Resvg,
-  type ResvgRenderOptions,
   type CustomFontsOptions,
   type FontOptions,
+  Resvg,
+  type ResvgRenderOptions,
   type SystemFontsOptions,
 } from '../core/resvg';
