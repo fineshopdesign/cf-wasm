@@ -4,12 +4,12 @@
   "description": "A collection of WASM packages those work on Cloudflare Workers",
   "author": "Deo Kumar",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.4",
   "scripts": {
     "check": "pnpm biome check .",
     "check:fix": "pnpm biome check --write .",
     "check:types": "turbo check:types --force --concurrency=1",
-    "upgrade": "ncu --interactive --workspaces --root",
+    "upgrade": "ncu --interactive --workspaces --root --reject @resvg/resvg-wasm-2.4.1",
     "build": "turbo run build --concurrency=1",
     "dev": "turbo run dev",
     "start": "turbo run start",
@@ -18,11 +18,11 @@
     "publish-packages": "cross-env PUBLISH=true pnpm run build && changeset publish"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.4",
+    "@biomejs/biome": "^2.0.6",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.7",
     "console-log-colors": "^0.5.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.25.5",
