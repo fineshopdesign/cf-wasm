@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/internals",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "private": false,
   "description": "Internals for cf-wasm",
   "keywords": [],

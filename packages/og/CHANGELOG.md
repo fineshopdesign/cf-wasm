@@ -1,5 +1,20 @@
 # @cf-wasm/og
 
+## 0.2.0
+
+### Minor Changes
+
+- [`9dc03e0`](https://github.com/fineshopdesign/cf-wasm/commit/9dc03e0597e5b5d709845496c010cbcf08150d3d) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use `tsup` for bundling
+
+- [`9dc03e0`](https://github.com/fineshopdesign/cf-wasm/commit/9dc03e0597e5b5d709845496c010cbcf08150d3d) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: `workers` submodule is renamed to `workerd`
+
+### Patch Changes
+
+- Updated dependencies [[`9dc03e0`](https://github.com/fineshopdesign/cf-wasm/commit/9dc03e0597e5b5d709845496c010cbcf08150d3d), [`9dc03e0`](https://github.com/fineshopdesign/cf-wasm/commit/9dc03e0597e5b5d709845496c010cbcf08150d3d)]:
+  - @cf-wasm/internals@0.1.0
+  - @cf-wasm/satori@0.2.0
+  - @cf-wasm/resvg@0.2.0
+
 ## 0.1.41
 
 ### Patch Changes
