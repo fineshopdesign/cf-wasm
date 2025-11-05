@@ -10,12 +10,13 @@
       "outputs": ["dist/**"]
     },
     "lint": {
-      "outputs": []
+      "outputs": ["^build"]
     },
     "check": {
-      "outputs": []
+      "outputs": ["^build"]
     },
     "check:types": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "test": {
