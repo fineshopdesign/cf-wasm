@@ -1,7 +1,7 @@
 import { type InitInput, initWasm, Resvg as ResvgClass, type ResvgRenderOptions } from '@resvg/resvg-wasm';
 
 /** Initializes resvg asynchronously */
-export const initResvg = (input: InitInput | Promise<InitInput>) => {
+export async function initResvg(input: InitInput | Promise<InitInput>) {
   if (initResvg.promise) {
     throw new Error('(@cf-wasm/resvg): Function already called. The `initResvg()` function can be used only once.');
   }
@@ -13,7 +13,7 @@ export const initResvg = (input: InitInput | Promise<InitInput>) => {
     initResvg.initialized = true;
   })();
   return initResvg.promise;
-};
+}
 
 initResvg.promise = null as Promise<void> | null;
 /** Indicates whether resvg is initialized */

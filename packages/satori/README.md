@@ -1,6 +1,6 @@
 # @cf-wasm/satori
 
-Enlightened library to convert HTML and CSS to SVG.  
+Enlightened library to convert HTML and CSS to SVG.
 
 Powered by [satori](https://github.com/vercel/satori).
 
@@ -14,13 +14,13 @@ pnpm add @cf-wasm/satori          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { satori } from "@cf-wasm/satori";
+  import { satori } from "@cf-wasm/satori/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):
+- Next.js Edge Runtime:
 
   ```ts
   import { satori } from "@cf-wasm/satori/next";

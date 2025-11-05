@@ -1,10 +1,8 @@
 import { cache } from './cache';
 import { FetchError } from './errors';
+import { FONT_CACHE_MAP } from './maps';
 import type { FontStyle, FontWeight } from './satori';
 import type { MayBePromise } from './types';
-
-/** Font cache map */
-export const FONT_CACHE_MAP = new Map<string, ArrayBuffer>();
 
 export type FontDisplay = 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
 
@@ -178,14 +176,12 @@ export class BaseFont {
   protected input;
 
   name: string;
-
   style: FontStyle;
-
   weight: FontWeight;
 
   constructor(
     name: string,
-    input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>) | undefined,
+    input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>) | undefined,
     { weight = 400, style = 'normal' }: BaseFontOptions = {},
   ) {
     this.input = input;
@@ -206,10 +202,11 @@ export interface CustomFontOptions extends BaseFontOptions {
 
 /** A helper class to load Custom font */
 export class CustomFont extends BaseFont {
-  protected input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>);
+  protected input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>);
 
-  private promise?: Promise<ArrayBuffer>;
+  private promise?: Promise<Buffer | ArrayBuffer>;
 
+  type: 'custom';
   lang: string | undefined;
 
   /**
@@ -219,8 +216,9 @@ export class CustomFont extends BaseFont {
    * @param input Font data as `ArrayBuffer` or a promise which resolves to `ArrayBuffer`
    * @param options
    */
-  constructor(name: string, input: MayBePromise<ArrayBuffer> | (() => MayBePromise<ArrayBuffer>), options?: CustomFontOptions) {
+  constructor(name: string, input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>), options?: CustomFontOptions) {
     super(name, input, options);
+    this.type = 'custom';
     this.input = input;
     this.lang = options?.lang;
   }
@@ -228,7 +226,7 @@ export class CustomFont extends BaseFont {
   /**
    * A promise which resolves to font data as `ArrayBuffer`
    */
-  get data(): Promise<ArrayBuffer> {
+  get data(): Promise<Buffer | ArrayBuffer> {
     const fallback = async () => (typeof this.input === 'function' ? this.input() : this.input);
     this.promise = this.promise?.then(null, fallback) ?? fallback();
     return this.promise;
@@ -250,6 +248,8 @@ export class GoogleFont extends BaseFont {
 
   private promise?: Promise<ArrayBuffer>;
 
+  type: 'google';
+
   /** The font family name */
   family: string;
 
@@ -264,6 +264,7 @@ export class GoogleFont extends BaseFont {
    */
   constructor(family: string, options: GoogleFontOptions = {}) {
     super(options.name || family, undefined, options);
+    this.type = 'google';
     this.family = family;
     this.text = options.text;
     this.input = undefined;
@@ -297,15 +298,15 @@ export class GoogleFont extends BaseFont {
 }
 
 export interface FontBuffer {
-  data: MayBePromise<ArrayBuffer>;
+  data: MayBePromise<Buffer | ArrayBuffer>;
 }
 
-export type FontInput = MayBePromise<Response | ArrayBuffer> | FontBuffer;
+export type FontInput = MayBePromise<Response | Buffer | ArrayBuffer> | FontBuffer;
 
 /** Default font utils */
 class DefaultFont {
   private _fallbackFont?: FontInput | (() => FontInput);
-  private _fontData?: ArrayBuffer;
+  private _fontData?: Buffer | ArrayBuffer;
   private _fontShouldResolve = true;
 
   /**
@@ -328,12 +329,10 @@ class DefaultFont {
    * otherwise undefined
    */
   async get() {
-    const { _fallbackFont, _fontData, _fontShouldResolve } = this;
+    let buffer: Buffer | ArrayBuffer | undefined;
+    const fontInput = typeof this._fallbackFont === 'function' ? this._fallbackFont() : this._fallbackFont;
 
-    let buffer: ArrayBuffer | undefined;
-    const fontInput = typeof _fallbackFont === 'function' ? _fallbackFont() : _fallbackFont;
-
-    if (_fontShouldResolve && fontInput) {
+    if (this._fontShouldResolve && fontInput) {
       if (fontInput instanceof Promise) {
         const result = await fontInput;
         if (result instanceof Response) {
@@ -348,8 +347,8 @@ class DefaultFont {
       } else {
         buffer = fontInput;
       }
-    } else if (_fontData) {
-      buffer = _fontData;
+    } else if (this._fontData) {
+      buffer = this._fontData;
     }
 
     this._fontData = buffer;

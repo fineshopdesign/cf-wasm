@@ -1,3 +1,4 @@
+import { ASSET_CACHE_MAP, EMOJI_CACHE_MAP, FONT_CACHE_MAP } from './maps';
 import type { MayBePromise } from './types';
 
 /** The execution context interface */
@@ -187,6 +188,13 @@ class CacheUtils {
     }
 
     return response as unknown as Promise<Awaited<ReturnType<F>>>;
+  }
+
+  clearMaps() {
+    ASSET_CACHE_MAP.clear();
+    CACHE_INSTANCE_MAP.clear();
+    EMOJI_CACHE_MAP.clear();
+    FONT_CACHE_MAP.clear();
   }
 }
 

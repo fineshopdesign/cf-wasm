@@ -3250,10 +3250,10 @@ export const ENTITIES = Object.keys(ENTITIES_MAP);
  *
  * @returns A string with replaced entities
  */
-export const replaceEntities = (string: string) => {
+export function replaceEntities(string: string) {
   let result = string;
   for (const entity of ENTITIES) {
     result = result.replaceAll(entity, ENTITIES_MAP[entity]);
   }
   return result;
-};
+}

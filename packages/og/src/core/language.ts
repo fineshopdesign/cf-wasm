@@ -21,8 +21,8 @@ export const LANGUAGE_FONT_MAP = {
   unknown: 'Noto+Sans',
 };
 
-export const convert = (input: string) =>
-  input.split(', ').map((r) => {
+export function convert(input: string) {
+  return input.split(', ').map((r) => {
     const range = r.replaceAll('U+', '');
     const [start, end] = range.split('-').map((hex) => Number.parseInt(hex, 16));
 
@@ -31,8 +31,9 @@ export const convert = (input: string) =>
     }
     return [start, end];
   });
+}
 
-export const checkSegmentInRange = (segment: string, range: (number | number[])[]) => {
+export function checkSegmentInRange(segment: string, range: (number | number[])[]) {
   const codePoint = segment.codePointAt(0);
   if (!codePoint) {
     return false;
@@ -44,7 +45,7 @@ export const checkSegmentInRange = (segment: string, range: (number | number[])[
     const [start, end] = value;
     return start <= codePoint && codePoint <= end;
   });
-};
+}
 
 export class FontDetector {
   private rangesByLang: Record<string, (number | number[])[]>;

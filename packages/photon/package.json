@@ -27,65 +27,63 @@
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
   },
   "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
     "check:types": "tsc --noEmit",
     "crate:download": "rimraf crate && fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
-    "wasm": "tsx scripts/wasm.ts",
-    "build": "tsx scripts/build.ts",
-    "clean": "rimraf dist"
+    "build": "NODE_ENV=production tsup",
+    "dev": "NODE_ENV=development tsup --watch"
   },
   "files": [
     "dist"
   ],
   "type": "module",
-  "module": "./dist/esm/workers/index.js",
-  "types": "./dist/dts/workers/index.d.ts",
+  "module": "./dist/workerd.js",
+  "types": "./dist/workerd.d.ts",
   "exports": {
+    "./package.json": "./package.json",
+    "./photon.wasm": "./dist/lib/photon_rs_bg.wasm",
     ".": {
-      "types": "./dist/dts/workers/index.d.ts",
-      "import": "./dist/esm/workers/index.js"
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
+    },
+    "./workerd": {
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
     },
     "./next": {
-      "types": "./dist/dts/next/index.d.ts",
-      "import": "./dist/esm/next/index.js"
+      "types": "./dist/next.d.ts",
+      "import": "./dist/next.js"
     },
     "./node": {
-      "types": "./dist/dts/node/index.d.ts",
-      "import": "./dist/esm/node/index.js",
-      "require": "./dist/cjs/node/index.js"
+      "import": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "require": {
+        "types": "./dist/node.d.cts",
+        "default": "./dist/node.cjs"
+      }
     },
     "./others": {
-      "types": "./dist/dts/others/index.d.ts",
-      "import": "./dist/esm/others/index.js",
-      "require": "./dist/cjs/others/index.js"
-    },
-    "./workers": {
-      "types": "./dist/dts/workers/index.d.ts",
-      "import": "./dist/esm/workers/index.js"
-    },
-    "./photon.wasm": {
-      "import": "./dist/esm/lib/photon_rs_bg.wasm",
-      "require": "./dist/cjs/lib/photon_rs_bg.wasm",
-      "default": "./dist/esm/lib/photon_rs_bg.wasm"
-    },
-    "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "next": [
-        "./dist/dts/next/index.d.ts"
-      ],
-      "node": [
-        "./dist/dts/node/index.d.ts"
-      ],
-      "others": [
-        "./dist/dts/others/index.d.ts"
-      ],
-      "workers": [
-        "./dist/dts/workers/index.d.ts"
-      ]
+      "import": {
+        "types": "./dist/others.d.ts",
+        "default": "./dist/others.js"
+      },
+      "require": {
+        "types": "./dist/others.d.cts",
+        "default": "./dist/others.cjs"
+      }
     }
   },
   "dependencies": {
     "@cf-wasm/internals": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "github-files-fetcher": "^1.6.0",
+    "glob": "^11.0.3",
+    "tsup": "^8.5.0",
+    "wasm-pack": "^0.13.1"
   }
 }

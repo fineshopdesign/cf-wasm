@@ -1,4 +1,4 @@
-import { Resvg as ResvgLegacy, resvgWasmModule as resvgWasmModuleLegacy } from '@cf-wasm/resvg/2.4.1/node';
+import { Resvg as ResvgLegacy, resvgWasmModule as resvgWasmModuleLegacy } from '@cf-wasm/resvg/legacy/node';
 import { Resvg, resvgWasmModule } from '@cf-wasm/resvg/node';
 import { describe, expect, it } from 'vitest';
 

@@ -1,6 +1,6 @@
 # @cf-wasm/quickjs
 
-A high-performance, secure, extensible JavaScript runtime.  
+A high-performance, secure, extensible JavaScript runtime.
 
 Powered by [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
 
@@ -17,19 +17,19 @@ pnpm add @cf-wasm/quickjs          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):  
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { getQuickJSWASMModule } from "@cf-wasm/quickjs";
+  import { getQuickJSWASMModule } from "@cf-wasm/quickjs/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):  
+- Next.js Edge Runtime:
 
   ```ts
   import { getQuickJSWASMModule } from "@cf-wasm/quickjs/next";
   ```
 
-- Node.js (file base):  
+- Node.js (file base):
 
   ```ts
   import { getQuickJSWASMModule } from "@cf-wasm/quickjs/node";
@@ -46,19 +46,22 @@ If you are using Cloudflare Workers, you can use it as shown below:
 ```ts
 import {
   getQuickJSWASMModule,
-  shouldInterruptAfterDeadline
+  shouldInterruptAfterDeadline,
 } from "@cf-wasm/quickjs";
 
 export default {
   async fetch() {
     const QuickJS = await getQuickJSWASMModule();
 
-    const result = QuickJS.evalCode("({ multiplication: 50 * 6, random: Math.random() })", {
-      shouldInterrupt: shouldInterruptAfterDeadline(Date.now() + 1000),
-      memoryLimitBytes: 1024 * 1024
-    });
+    const result = QuickJS.evalCode(
+      "({ multiplication: 50 * 6, random: Math.random() })",
+      {
+        shouldInterrupt: shouldInterruptAfterDeadline(Date.now() + 1000),
+        memoryLimitBytes: 1024 * 1024,
+      }
+    );
 
     return Response.json({ result });
-  }
+  },
 } satisfies ExportedHandler;
 ```

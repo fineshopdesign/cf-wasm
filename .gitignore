@@ -1,23 +1,31 @@
 # dependencies
 node_modules
 
-# production
+# output
 build
 dist
-
-# cloudflare
+.output
+.vercel
+.netlify
+.astro
 .wrangler
-.dev.vars
-
-# turbo
+.workers-build
+.svelte-kit
 .turbo
 
-# ignore
-.ignore
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
 
-# Environment variables
-actions.env
-secrets.env
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# crate target
+packages/photon/crate/target
+packages/png/crate/target
 
 # misc
 .DS_Store

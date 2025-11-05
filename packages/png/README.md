@@ -1,6 +1,6 @@
 # @cf-wasm/png
 
-A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.  
+A simple wasm png encoder/decoder module for Cloudflare Workers, Next.js and Node.
 
 Powered by [denosaurs/pngs](https://github.com/denosaurs/pngs).
 
@@ -14,13 +14,13 @@ pnpm add @cf-wasm/png          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { encode } from "@cf-wasm/png";
+  import { encode } from "@cf-wasm/png/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):
+- Next.js Edge Runtime:
 
   ```ts
   import { encode } from "@cf-wasm/png/next";
@@ -44,7 +44,7 @@ const encode: (
   width: number,
   height: number,
   options?: EncodeOptions
-) => Uint8Array
+) => Uint8Array;
 ```
 
 ### decode
@@ -53,13 +53,13 @@ The `decode` function decodes an input `Uint8Array` representing a PNG image.
 
 ```ts
 const decode: (image: Uint8Array) => {
-    image: Uint8Array;
-    width: number;
-    height: number;
-    colorType: number;
-    bitDepth: number;
-    lineSize: number;
-}
+  image: Uint8Array;
+  width: number;
+  height: number;
+  colorType: number;
+  bitDepth: number;
+  lineSize: number;
+};
 ```
 
 ## Examples
@@ -72,8 +72,8 @@ If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
 // src/index.ts
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
-import { encode } from "@cf-wasm/png";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/workerd";
+import { encode } from "@cf-wasm/png/workerd";
 
 export default {
   async fetch() {
@@ -98,9 +98,9 @@ export default {
 
     // encode using png
     const outputBytes = encode(
-     outputImage.get_raw_pixels(),
-     outputImage.get_width(),
-     outputImage.get_height()
+      outputImage.get_raw_pixels(),
+      outputImage.get_width(),
+      outputImage.get_height()
     );
 
     // call free() method to free memory
@@ -110,10 +110,10 @@ export default {
     // return the Response instance
     return new Response(outputBytes, {
       headers: {
-        "Content-Type": "image/png"
-      }
+        "Content-Type": "image/png",
+      },
     });
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -124,8 +124,8 @@ If you are using Next.js (App router) with edge runtime, you can use it as shown
 ```ts
 // (src/)app/api/image/route.ts
 import { type NextRequest } from "next/server";
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
-import { encode } from "@cf-wasm/png";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
+import { encode } from "@cf-wasm/png/next";
 
 export const runtime = "edge";
 
@@ -163,8 +163,8 @@ export async function GET(request: NextRequest) {
   // return the Response instance
   return new Response(outputBytes, {
     headers: {
-      "Content-Type": "image/png"
-    }
+      "Content-Type": "image/png",
+    },
   });
 }
 ```
@@ -176,15 +176,13 @@ If you are using Next.js (Pages router) with edge runtime, you can use it as sho
 ```ts
 // (src/)pages/api/image.ts
 import { type NextRequest } from "next/server";
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
-import { encode } from "@cf-wasm/png";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
+import { encode } from "@cf-wasm/png/next";
 
 export const config = {
   runtime: "edge",
   // see https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
-  unstable_allowDynamic: [
-    "**/node_modules/@cf-wasm/**/*.js"
-  ]
+  unstable_allowDynamic: ["**/node_modules/@cf-wasm/**/*.js"],
 };
 
 export default async function handler(req: NextRequest) {
@@ -221,8 +219,8 @@ export default async function handler(req: NextRequest) {
   // return the Response instance
   return new Response(outputBytes, {
     headers: {
-      "Content-Type": "image/png"
-    }
+      "Content-Type": "image/png",
+    },
   });
 }
 ```

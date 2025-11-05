@@ -18,13 +18,13 @@ pnpm add @cf-wasm/og          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { ImageResponse } from "@cf-wasm/og";
+  import { ImageResponse } from "@cf-wasm/og/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):
+- Next.js Edge Runtime:
 
   ```ts
   import { ImageResponse } from "@cf-wasm/og/next";
@@ -44,7 +44,7 @@ If you are using Cloudflare Workers/Pages, you must set the execution context as
 
 ```tsx
 import React from "react";
-import { ImageResponse, cache } from "@cf-wasm/og";
+import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 
 export default {
   fetch(req, env, ctx) {
@@ -52,7 +52,7 @@ export default {
     cache.setExecutionContext(ctx);
 
     return new ImageResponse(<>Hello World!</>);
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -62,7 +62,12 @@ You can load Google fonts and Custom fonts with ease using `GoogleFont` and `Cus
 
 ```tsx
 import React from "react";
-import { ImageResponse, GoogleFont, CustomFont, cache } from "@cf-wasm/og";
+import {
+  ImageResponse,
+  GoogleFont,
+  CustomFont,
+  cache,
+} from "@cf-wasm/og/workerd";
 
 export default {
   fetch(req, env, ctx) {
@@ -77,7 +82,7 @@ export default {
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
-            height: "100%"
+            height: "100%",
           }}
         >
           <p>Text with Default font</p>
@@ -94,11 +99,11 @@ export default {
             fetch(
               "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf"
             ).then((res) => res.arrayBuffer())
-          )
-        ]
+          ),
+        ],
       }
     );
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -113,8 +118,8 @@ import {
   CustomFont,
   GoogleFont,
   defaultFont,
-  cache
-} from "@cf-wasm/og";
+  cache,
+} from "@cf-wasm/og/workerd";
 
 // By using Google font loader
 defaultFont.set(new GoogleFont("Merriweather"));
@@ -135,7 +140,7 @@ export default {
 
     // It should render with JetBrains Mono font
     return new ImageResponse(<>Hello World!</>);
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -143,7 +148,7 @@ You can set default font using `defaultFont` option:
 
 ```tsx
 import React from "react";
-import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og";
+import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og/workerd";
 
 export default {
   fetch(req, env, ctx) {
@@ -151,9 +156,9 @@ export default {
 
     return new ImageResponse(<>Hello World!</>, {
       // Set default font
-      defaultFont: new GoogleFont("Merriweather")
+      defaultFont: new GoogleFont("Merriweather"),
     });
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -163,7 +168,7 @@ By default `ImageResponse` renders to `PNG` but you can use `format` option to r
 
 ```tsx
 import React from "react";
-import { ImageResponse, cache } from "@cf-wasm/og";
+import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 
 export default {
   fetch(req, env, ctx) {
@@ -171,9 +176,9 @@ export default {
 
     return new ImageResponse(<>Hello World!</>, {
       // Set format
-      format: "svg"
+      format: "svg",
     });
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -182,7 +187,7 @@ export default {
 The `@cf-wasm/og/html-to-react` submodule provides a function `t` which can be used to transform html to `ReactElement` making it possible to render html as well:
 
 ```tsx
-import { ImageResponse, cache } from "@cf-wasm/og";
+import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 import { t } from "@cf-wasm/og/html-to-react";
 
 export default {
@@ -195,7 +200,7 @@ export default {
       </div>`;
 
     return new ImageResponse(t(html));
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -205,7 +210,7 @@ You can also use `render` function instead of `ImageResponse` to catch errors or
 
 ```tsx
 import React from "react";
-import { render, cache } from "@cf-wasm/og";
+import { render, cache } from "@cf-wasm/og/workerd";
 
 export default {
   async fetch(req, env, ctx) {
@@ -216,15 +221,15 @@ export default {
 
       return new Response(image, {
         headers: {
-          "Content-Type": "image/png"
-        }
+          "Content-Type": "image/png",
+        },
       });
     } catch {
       return new Response("Not found", {
-        status: 404
+        status: 404,
       });
     }
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -239,7 +244,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 ```tsx
 // src/index.tsx
 import React from "react";
-import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og";
+import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og/workerd";
 
 export default {
   async fetch(req, env, ctx) {
@@ -261,13 +266,13 @@ export default {
             justifyContent: "center",
             backgroundColor: "#6f90ab",
             fontSize: "2rem",
-            color: "#fff"
+            color: "#fff",
           }}
         >
           <span>Noto Sans (Default Font)</span>
           <span
             style={{
-              fontFamily: "JetBrains Mono"
+              fontFamily: "JetBrains Mono",
             }}
           >
             JetBrains Mono (using GoogleFont class)
@@ -275,7 +280,7 @@ export default {
           <span>These are emojis: 😎🌩️</span>
           <span
             style={{
-              fontFamily: "JetBrains Mono"
+              fontFamily: "JetBrains Mono",
             }}
           >
             Parameters: {JSON.stringify(parameters)}
@@ -284,10 +289,10 @@ export default {
       ),
       {
         fonts: [new GoogleFont("JetBrains Mono")],
-        emoji: "fluent"
+        emoji: "fluent",
       }
     );
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -322,13 +327,13 @@ export function GET(req: NextRequest) {
           justifyContent: "center",
           backgroundColor: "#6f90ab",
           fontSize: "2rem",
-          color: "#fff"
+          color: "#fff",
         }}
       >
         <span>Noto Sans (Default Font)</span>
         <span
           style={{
-            fontFamily: "JetBrains Mono"
+            fontFamily: "JetBrains Mono",
           }}
         >
           JetBrains Mono (using GoogleFont class)
@@ -336,7 +341,7 @@ export function GET(req: NextRequest) {
         <span>These are emojis: 😎🌩️</span>
         <span
           style={{
-            fontFamily: "JetBrains Mono"
+            fontFamily: "JetBrains Mono",
           }}
         >
           Parameters: {JSON.stringify(parameters)}
@@ -345,7 +350,7 @@ export function GET(req: NextRequest) {
     ),
     {
       fonts: [new GoogleFont("JetBrains Mono")],
-      emoji: "fluent"
+      emoji: "fluent",
     }
   );
 }
@@ -362,7 +367,7 @@ import { type NextRequest } from "next/server";
 import { ImageResponse, GoogleFont } from "@cf-wasm/og/next";
 
 export const config = {
-  runtime: "edge"
+  runtime: "edge",
 };
 
 export default async function handler(req: NextRequest) {
@@ -381,13 +386,13 @@ export default async function handler(req: NextRequest) {
           justifyContent: "center",
           backgroundColor: "#6f90ab",
           fontSize: "2rem",
-          color: "#fff"
+          color: "#fff",
         }}
       >
         <span>Noto Sans (Default Font)</span>
         <span
           style={{
-            fontFamily: "JetBrains Mono"
+            fontFamily: "JetBrains Mono",
           }}
         >
           JetBrains Mono (using GoogleFont class)
@@ -395,7 +400,7 @@ export default async function handler(req: NextRequest) {
         <span>These are emojis: 😎🌩️</span>
         <span
           style={{
-            fontFamily: "JetBrains Mono"
+            fontFamily: "JetBrains Mono",
           }}
         >
           Parameters: {JSON.stringify(parameters)}
@@ -404,7 +409,7 @@ export default async function handler(req: NextRequest) {
     ),
     {
       fonts: [new GoogleFont("JetBrains Mono")],
-      emoji: "fluent"
+      emoji: "fluent",
     }
   );
 }

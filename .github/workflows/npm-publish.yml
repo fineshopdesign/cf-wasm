@@ -1,27 +1,23 @@
-name: Publish packages to npm
-
+name: Publish packages
 on:
   push:
-    branches: [main]
-
+    paths: [packages/**, .changeset/*, __tests__/**]
+    branches: [main, preview]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 # env:
-#  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-#  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-#  TURBO_REMOTE_ONLY: true
-
+#   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+#   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+#   TURBO_CACHE: remote:rw
 jobs:
   test:
-    name: ⬣, 🔎, 🔨 Test before releasing
-    uses: ./.github/workflows/build-and-test.yml
+    name: ⬣, 🔎, 🔨 Run tests
+    uses: ./.github/workflows/build-test-reusable.yml
+    if: "${{ !contains(github.event.head_commit.message, 'chore(packages): publish packages') }}"
     secrets: inherit
-
   publish:
-    name: 🚀 Release packages
-    if: "${{ github.repository_owner == 'fineshopdesign' && (contains(github.event.head_commit.message, '[bump]') || contains(github.event.head_commit.message, 'chore(packages): publish packages')) }}"
+    name: 🚀 Publish packages / Create PR for publishing packages
     needs: [test]
     runs-on: [ubuntu-latest]
     permissions:
@@ -30,37 +26,28 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        node-version: ["22.x"]
-        pnpm-version: ["10.x"]
+        node-version: [22.x]
+    if: |
+      ${{ (contains(github.event.head_commit.message, '[bump]') || contains(github.event.head_commit.message, 'chore(packages): publish packages')) && !cancelled() && (success() || failure() || needs.test.result == 'skipped') }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Use pnpm ${{ matrix.pnpm-version }}
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm-version }}
-
+        uses: actions/checkout@v4
+      - name: Use pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
-
-      - name: Update npm
-        run: npm i -g npm@10
-
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-
-      - name: Publish to NPM
+      - name: Publish to npm
         uses: changesets/action@v1
         with:
           commit: "chore(packages): publish packages"
           title: "chore(packages): publish packages"
-          publish: pnpm run publish-packages
+          publish: pnpm publish-packages
+          version: pnpm version-packages
         env:
-          # Needs access to push to main
           GITHUB_TOKEN: ${{ secrets.FDBOT_GITHUB_TOKEN }}
-          # Needs access to publish to npm
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

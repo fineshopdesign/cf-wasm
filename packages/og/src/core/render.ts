@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { loadDynamicAsset } from './asset';
 import type { EmojiType } from './emoji';
 import { CustomFont, defaultFont, type FontBuffer, GoogleFont } from './font';
+import { SATORI_FONT_CACHE_MAP } from './maps';
 import { modules } from './modules';
 import type { ResvgRenderOptions } from './resvg';
 import type { Font as SatoriFont, SatoriOptions, VNode } from './satori';
@@ -136,7 +137,7 @@ export const RENDER_DEFAULT_OPTIONS = {
  *
  * @returns An object containing methods for rendering the input element to image
  */
-export const render = (element: ReactNode | VNode, options: RenderOptions = {}) => {
+export function render(element: ReactNode | VNode, options: RenderOptions = {}) {
   const promises: {
     svg?: Promise<SvgResult>;
     png?: Promise<PngResult>;
@@ -198,6 +199,21 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
           ...font,
           data: await font.data,
         })),
+      ).then((fonts) =>
+        /**
+         * An attempt to improve performance by passing cached satori font object
+         *
+         * @see https://github.com/vercel/satori/issues/590
+         */
+        fonts.map((font) => {
+          const key = `[${font.name}]:[${font.style || ''}]:[${font.weight || ''}]:[${font.lang || ''}]:[${font.data.byteLength}]`;
+          const fromMap = SATORI_FONT_CACHE_MAP.get(key);
+          if (fromMap) {
+            return fromMap;
+          }
+          SATORI_FONT_CACHE_MAP.set(key, font);
+          return font;
+        }),
       );
     };
 
@@ -273,4 +289,4 @@ export const render = (element: ReactNode | VNode, options: RenderOptions = {}) 
   };
 
   return { asSvg, asPng };
-};
+}

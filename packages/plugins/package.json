@@ -1,0 +1,65 @@
+{
+  "name": "@cf-wasm/plugins",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Plugins for cf-wasm",
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "name": "Deo Kumar",
+    "url": "https://github.com/kumardeo"
+  },
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/plugins#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/plugins"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
+    "check:types": "tsc --noEmit",
+    "build": "NODE_ENV=production tsup",
+    "dev": "NODE_ENV=development tsup --watch"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./vite-cloudflare-modules": {
+      "import": {
+        "types": "./dist/vite-cloudflare-modules.d.ts",
+        "default": "./dist/vite-cloudflare-modules.js"
+      },
+      "require": {
+        "types": "./dist/vite-cloudflare-modules.d.cts",
+        "default": "./dist/vite-cloudflare-modules.cjs"
+      }
+    }
+  },
+  "dependencies": {
+    "vite": "6.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsup": "^8.5.0"
+  }
+}

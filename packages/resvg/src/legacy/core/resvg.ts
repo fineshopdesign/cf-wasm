@@ -1,0 +1,55 @@
+import { type InitInput, initWasm, Resvg as ResvgClass, type ResvgRenderOptions } from '@resvg/resvg-wasm-legacy';
+
+/** Initializes resvg asynchronously */
+export async function initResvg(input: InitInput | Promise<InitInput>) {
+  if (initResvg.promise) {
+    throw new Error('(@cf-wasm/resvg/legacy): Function already called. The `initResvg()` function can be used only once.');
+  }
+  if (!input) {
+    throw new Error('(@cf-wasm/resvg/legacy): Argument `input` is not valid.');
+  }
+  initResvg.promise = (async () => {
+    await initWasm(input);
+    initResvg.initialized = true;
+  })();
+  return initResvg.promise;
+}
+
+initResvg.promise = null as Promise<void> | null;
+/** Indicates whether resvg is initialized */
+initResvg.initialized = false;
+
+/** Ensures resvg is initialized */
+initResvg.ensure = async () => {
+  if (!initResvg.promise) {
+    throw new Error('(@cf-wasm/resvg/legacy): Function not called. Call `initResvg()` function first.');
+  }
+  return initResvg.promise;
+};
+
+export class Resvg extends ResvgClass {
+  constructor(svg: Uint8Array | string, options?: ResvgRenderOptions) {
+    if (!initResvg.initialized) {
+      if (initResvg.promise) {
+        throw new Error(
+          '(@cf-wasm/resvg/legacy): Resvg is not yet initialized while `initResvg()` function was called. Use `Resvg.create()` async static method instead to ensure Resvg is initialized.',
+        );
+      }
+      throw new Error('(@cf-wasm/resvg/legacy): Resvg is not yet initialized. Call `initResvg()` function first.');
+    }
+    super(svg, options);
+  }
+
+  public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions) {
+    await initResvg.ensure();
+    return new Resvg(svg, options);
+  }
+}
+
+export {
+  type BBox,
+  type InitInput,
+  initWasm,
+  type RenderedImage,
+  type ResvgRenderOptions,
+} from '@resvg/resvg-wasm-legacy';

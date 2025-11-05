@@ -48,7 +48,6 @@ describe('GoogleFont', () => {
 
 describe('htmlToReact', () => {
   it('should parse html to react element', () => {
-    // biome-ignore lint/complexity/noUselessFragments: we have to check for fragments
     expect(htmlToReact('Hello World!')).toEqual(<>Hello World!</>);
     expect(htmlToReact('<div>Hello</div>')).toEqual(<div>Hello</div>);
     expect(htmlToReact('<div style="display:flex;">Hello</div>')).toEqual(<div style={{ display: 'flex' }}>Hello</div>);

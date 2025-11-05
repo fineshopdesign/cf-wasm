@@ -1,6 +1,6 @@
 # @cf-wasm/resvg
 
-A high-performance SVG renderer and toolkit, powered by Rust based resvg.  
+A high-performance SVG renderer and toolkit, powered by Rust based resvg.
 
 Powered by [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
 
@@ -14,13 +14,13 @@ pnpm add @cf-wasm/resvg          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { Resvg } from "@cf-wasm/resvg";
+  import { Resvg } from "@cf-wasm/resvg/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):
+- Next.js Edge Runtime:
 
   ```ts
   import { Resvg } from "@cf-wasm/resvg/next";

@@ -7,7 +7,10 @@
   "license": "MIT",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
   "scripts": {
-    "test": "vitest run"
+    "lint": "biome lint .",
+    "check": "biome check .",
+    "test": "vitest run",
+    "check:types": "tsc --noEmit"
   },
   "dependencies": {
     "@cf-wasm/og": "workspace:^",
@@ -16,12 +19,12 @@
     "@cf-wasm/quickjs": "workspace:^",
     "@cf-wasm/resvg": "workspace:^",
     "@cf-wasm/satori": "workspace:^",
-    "react": "^19.1.0",
+    "react": "^19.2.0",
     "satori-html": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "^24.0.12",
-    "@types/react": "^19.1.8",
-    "vitest": "^3.2.4"
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.2",
+    "vitest": "^4.0.7"
   }
 }

@@ -1,0 +1,33 @@
+{
+  "name": "@examples/svelte-kit-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync || echo ''",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "cf:preview": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "cf:build": "wrangler deploy --dry-run --outdir=.workers-build"
+  },
+  "dependencies": {
+    "@cf-wasm/og": "workspace:*",
+    "@cf-wasm/plugins": "workspace:*",
+    "@cf-wasm/resvg": "workspace:*",
+    "@cf-wasm/satori": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^7.2.4",
+    "@sveltejs/kit": "^2.43.2",
+    "@sveltejs/vite-plugin-svelte": "^6.2.0",
+    "@types/node": "^24.8.1",
+    "svelte": "^5.39.5",
+    "svelte-check": "^4.3.2",
+    "vite": "^7.1.7",
+    "vite-plugin-devtools-json": "^1.0.0",
+    "wrangler": "^4.45.4"
+  }
+}

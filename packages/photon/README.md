@@ -1,6 +1,6 @@
 # @cf-wasm/photon
 
-High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.  
+High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.
 
 Powered by [@silvia-odwyer/photon](https://github.com/silvia-odwyer/photon)  
 Build for commit [`8347f46`](https://github.com/silvia-odwyer/photon/tree/8347f46e73fedb3b095fb816b728ae08c1c029af)  
@@ -16,13 +16,13 @@ pnpm add @cf-wasm/photon          # pnpm
 
 ## Usage
 
-- Cloudflare Workers / Pages (Esbuild):
+- Cloudflare Workers / Pages (Wrangler):
 
   ```ts
-  import { PhotonImage } from "@cf-wasm/photon";
+  import { PhotonImage } from "@cf-wasm/photon/workerd";
   ```
 
-- Next.js Edge Runtime (Webpack):
+- Next.js Edge Runtime:
 
   ```ts
   import { PhotonImage } from "@cf-wasm/photon/next";
@@ -53,7 +53,7 @@ If you are using Cloudflare Workers, you can use it as shown below:
 
 ```ts
 // src/index.ts
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/workerd";
 
 export default {
   async fetch() {
@@ -90,10 +90,10 @@ export default {
     // return the Response instance
     return new Response(outputBytes, {
       headers: {
-        "Content-Type": "image/webp"
-      }
+        "Content-Type": "image/webp",
+      },
     });
-  }
+  },
 } satisfies ExportedHandler;
 ```
 
@@ -142,8 +142,8 @@ export async function GET(request: NextRequest) {
   // return the Response instance
   return new Response(outputBytes, {
     headers: {
-      "Content-Type": "image/webp"
-    }
+      "Content-Type": "image/webp",
+    },
   });
 }
 ```
@@ -160,9 +160,7 @@ import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
 export const config = {
   runtime: "edge",
   // see https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
-  unstable_allowDynamic: [
-    "**/node_modules/@cf-wasm/**/*.js"
-  ]
+  unstable_allowDynamic: ["**/node_modules/@cf-wasm/**/*.js"],
 };
 
 export default async function handler(req: NextRequest) {
@@ -199,8 +197,8 @@ export default async function handler(req: NextRequest) {
   // return the Response instance
   return new Response(outputBytes, {
     headers: {
-      "Content-Type": "image/webp"
-    }
+      "Content-Type": "image/webp",
+    },
   });
 }
 ```
@@ -219,13 +217,18 @@ Here is a working example for Web Workers when using Webpack bundler:
 Create a `worker.ts`:
 
 ```ts
-import { initPhoton, PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/others";
+import {
+  initPhoton,
+  PhotonImage,
+  SamplingFilter,
+  resize,
+} from "@cf-wasm/photon/others";
 import { register } from "@deox/worker-rpc/register";
 
 const registered = register(async () => {
   // The wasm must be initialized first, you can provide photon wasm binaries from any source
   await initPhoton({
-    module_or_path: new URL("@cf-wasm/photon/photon.wasm", import.meta.url)
+    module_or_path: new URL("@cf-wasm/photon/photon.wasm", import.meta.url),
   });
 
   return {
@@ -270,7 +273,7 @@ const registered = register(async () => {
 
       // create a blob url
       return URL.createObjectURL(new Blob([outputBytes]));
-    }
+    },
   };
 });
 
@@ -290,9 +293,11 @@ const worker = new Worker<Registered>(
 
 const element = document.getElementById("demo_image") as HTMLImageElement;
 
-worker.proxy.resize("https://avatars.githubusercontent.com/u/100576030").then((blobUrl) => {
-  element.src = blobUrl;
-});
+worker.proxy
+  .resize("https://avatars.githubusercontent.com/u/100576030")
+  .then((blobUrl) => {
+    element.src = blobUrl;
+  });
 ```
 
 ## Documentation

@@ -29,106 +29,94 @@
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
   },
   "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
     "check:types": "tsc --noEmit",
-    "build": "tsx scripts/build.ts",
-    "clean": "rimraf dist"
+    "build": "NODE_ENV=production tsup",
+    "dev": "NODE_ENV=development tsup --watch"
   },
   "files": [
     "dist"
   ],
   "type": "module",
-  "module": "./dist/esm/workers/index.js",
-  "types": "./dist/dts/workers/index.d.ts",
+  "module": "./dist/workerd.js",
+  "types": "./dist/workerd.d.ts",
   "exports": {
+    "./package.json": "./package.json",
+    "./resvg.wasm": "./dist/core/resvg.wasm",
+    "./legacy/resvg.wasm": "./dist/legacy/core/resvg.wasm",
     ".": {
-      "types": "./dist/dts/workers/index.d.ts",
-      "import": "./dist/esm/workers/index.js"
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
+    },
+    "./workerd": {
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
     },
     "./next": {
-      "types": "./dist/dts/next/index.d.ts",
-      "import": "./dist/esm/next/index.js"
+      "types": "./dist/next.d.ts",
+      "import": "./dist/next.js"
     },
     "./node": {
-      "types": "./dist/dts/node/index.d.ts",
-      "import": "./dist/esm/node/index.js",
-      "require": "./dist/cjs/node/index.js"
+      "import": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "require": {
+        "types": "./dist/node.d.cts",
+        "default": "./dist/node.cjs"
+      }
     },
     "./others": {
-      "types": "./dist/dts/others/index.d.ts",
-      "import": "./dist/esm/others/index.js",
-      "require": "./dist/cjs/others/index.js"
+      "import": {
+        "types": "./dist/others.d.ts",
+        "default": "./dist/others.js"
+      },
+      "require": {
+        "types": "./dist/others.d.cts",
+        "default": "./dist/others.cjs"
+      }
     },
-    "./workers": {
-      "types": "./dist/dts/workers/index.d.ts",
-      "import": "./dist/esm/workers/index.js"
+    "./legacy": {
+      "types": "./dist/legacy/workerd.d.ts",
+      "import": "./dist/legacy/workerd.js"
     },
-    "./resvg.wasm": {
-      "import": "./dist/esm/core/resvg.wasm",
-      "require": "./dist/cjs/core/resvg.wasm",
-      "default": "./dist/esm/core/resvg.wasm"
+    "./legacy/workerd": {
+      "types": "./dist/legacy/workerd.d.ts",
+      "import": "./dist/legacy/workerd.js"
     },
-    "./2.4.1": {
-      "types": "./dist/dts/2.4.1/workers/index.d.ts",
-      "import": "./dist/esm/2.4.1/workers/index.js"
+    "./legacy/next": {
+      "types": "./dist/legacy/next.d.ts",
+      "import": "./dist/legacy/next.js"
     },
-    "./2.4.1/next": {
-      "types": "./dist/dts/2.4.1/next/index.d.ts",
-      "import": "./dist/esm/2.4.1/next/index.js"
+    "./legacy/node": {
+      "import": {
+        "types": "./dist/legacy/node.d.ts",
+        "default": "./dist/legacy/node.js"
+      },
+      "require": {
+        "types": "./dist/legacy/node.d.cts",
+        "default": "./dist/legacy/node.cjs"
+      }
     },
-    "./2.4.1/node": {
-      "types": "./dist/dts/2.4.1/node/index.d.ts",
-      "import": "./dist/esm/2.4.1/node/index.js",
-      "require": "./dist/cjs/2.4.1/node/index.js"
-    },
-    "./2.4.1/others": {
-      "types": "./dist/dts/2.4.1/others/index.d.ts",
-      "import": "./dist/esm/2.4.1/others/index.js",
-      "require": "./dist/cjs/2.4.1/others/index.js"
-    },
-    "./2.4.1/workers": {
-      "types": "./dist/dts/2.4.1/workers/index.d.ts",
-      "import": "./dist/esm/2.4.1/workers/index.js"
-    },
-    "./2.4.1/resvg.wasm": {
-      "import": "./dist/esm/2.4.1/core/resvg.wasm",
-      "require": "./dist/cjs/2.4.1/core/resvg.wasm",
-      "default": "./dist/esm/2.4.1/core/resvg.wasm"
-    },
-    "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "next": [
-        "./dist/dts/next/index.d.ts"
-      ],
-      "node": [
-        "./dist/dts/node/index.d.ts"
-      ],
-      "others": [
-        "./dist/dts/others/index.d.ts"
-      ],
-      "workers": [
-        "./dist/dts/workers/index.d.ts"
-      ],
-      "2.4.1": [
-        "./dist/dts/2.4.1/workers/index.d.ts"
-      ],
-      "2.4.1/next": [
-        "./dist/dts/2.4.1/next/index.d.ts"
-      ],
-      "2.4.1/node": [
-        "./dist/dts/2.4.1/node/index.d.ts"
-      ],
-      "2.4.1/others": [
-        "./dist/dts/2.4.1/others/index.d.ts"
-      ],
-      "2.4.1/workers": [
-        "./dist/dts/2.4.1/workers/index.d.ts"
-      ]
+    "./legacy/others": {
+      "import": {
+        "types": "./dist/legacy/others.d.ts",
+        "default": "./dist/legacy/others.js"
+      },
+      "require": {
+        "types": "./dist/legacy/others.d.cts",
+        "default": "./dist/legacy/others.cjs"
+      }
     }
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",
-    "@resvg/resvg-wasm-2.4.1": "npm:@resvg/resvg-wasm@2.4.1"
+    "@resvg/resvg-wasm-legacy": "npm:@resvg/resvg-wasm@2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "glob": "^11.0.3",
+    "tsup": "^8.5.0"
   }
 }

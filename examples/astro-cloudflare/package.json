@@ -1,0 +1,25 @@
+{
+  "name": "astro-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "cf:preview": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "cf:build": "wrangler deploy --dry-run --outdir=.workers-build"
+  },
+  "dependencies": {
+    "astro": "^5.15.3",
+    "@cf-wasm/og": "workspace:*",
+    "@cf-wasm/plugins": "workspace:*",
+    "@cf-wasm/resvg": "workspace:*",
+    "@cf-wasm/satori": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^12.6.10",
+    "wrangler": "^4.45.4"
+  }
+}

@@ -19,42 +19,54 @@
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
   },
   "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
     "check:types": "tsc --noEmit",
-    "build": "tsx scripts/build.ts",
-    "clean": "rimraf dist"
+    "build": "NODE_ENV=production tsup",
+    "dev": "NODE_ENV=development tsup --watch"
   },
   "files": [
     "dist"
   ],
   "type": "module",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/dts/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "types": "./dist/dts/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./detect-runtime": {
-      "types": "./dist/dts/detect-runtime/index.d.ts",
-      "import": "./dist/esm/detect-runtime/index.js",
-      "require": "./dist/cjs/detect-runtime/index.js"
+      "import": {
+        "types": "./dist/detect-runtime.d.ts",
+        "default": "./dist/detect-runtime.js"
+      },
+      "require": {
+        "types": "./dist/detect-runtime.d.cts",
+        "default": "./dist/detect-runtime.cjs"
+      }
     },
     "./polyfills/image-data": {
-      "types": "./dist/dts/polyfills/image-data/index.d.ts",
-      "import": "./dist/esm/polyfills/image-data/index.js",
-      "require": "./dist/cjs/polyfills/image-data/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "detect-runtime": [
-        "./dist/dts/detect-runtime/index.d.ts"
-      ],
-      "polyfills/image-data": [
-        "./dist/dts/polyfills/image-data/index.d.ts"
-      ]
+      "import": {
+        "types": "./dist/polyfills/image-data.d.ts",
+        "default": "./dist/polyfills/image-data.js"
+      },
+      "require": {
+        "types": "./dist/polyfills/image-data.d.cts",
+        "default": "./dist/polyfills/image-data.cjs"
+      }
     }
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsup": "^8.5.0"
   }
 }

@@ -1,23 +1,21 @@
 import { type EmojiType, getIconCode, loadEmoji } from './emoji';
 import { loadGoogleFont } from './font';
 import { FontDetector, LANGUAGE_FONT_MAP } from './language';
+import { ASSET_CACHE_MAP } from './maps';
 import type { Font } from './satori';
 import type { StringWithSuggestions } from './types';
 
 /** Font detector */
 export const DETECTOR = new FontDetector();
 
-/** Assets cache map */
-export const ASSET_CACHE_MAP = new Map<string, string | Font[]>();
-
 /** Loads dynamic asset requested by satori without caching */
 // `languageCode` will be the detected language code separated using `|` (i.e: `ja-JP|zh-CN|zh-TW|zh-HK`, `devanagari`), `emoji` if it's an Emoji, or `unknown` if not able to tell.
 // `segment` will be the content to render.
-export const loadSatoriAsset = async (
+export async function loadSatoriAsset(
   languageCode: StringWithSuggestions<'emoji' | 'unknown'>,
   segment: string,
   emoji?: EmojiType,
-): Promise<string | Font[]> => {
+): Promise<string | Font[]> {
   if (languageCode === 'emoji') {
     return `data:image/svg+xml;base64,${btoa(await loadEmoji(getIconCode(segment), emoji))}`;
   }
@@ -53,9 +51,8 @@ export const loadSatoriAsset = async (
     }
   }
 
-  // return an empty array
   return [];
-};
+}
 
 /**
  * Loads dynamic assets requested by satori
@@ -66,11 +63,11 @@ export const loadSatoriAsset = async (
  *
  * @returns On success, the asset as either string or {@link Font}
  */
-export const loadDynamicAsset = async (
+export async function loadDynamicAsset(
   languageCode: StringWithSuggestions<'emoji' | 'unknown'>,
   segment: string,
   emoji?: EmojiType,
-): Promise<string | Font[]> => {
+): Promise<string | Font[]> {
   /** Get a key based in input */
   const key = `${languageCode}:${segment}`;
   if (ASSET_CACHE_MAP.has(key)) {
@@ -80,4 +77,4 @@ export const loadDynamicAsset = async (
   const asset = await loadSatoriAsset(languageCode, segment, emoji);
   ASSET_CACHE_MAP.set(key, asset);
   return asset;
-};
+}

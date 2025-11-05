@@ -1,9 +1,0 @@
-{
-  "extends": ["./tsconfig.json"],
-  "compilerOptions": {
-    "module": "CommonJS",
-    "outDir": "dist/cjs",
-    "moduleResolution": "Node"
-  },
-  "exclude": ["src/workers", "src/next"]
-}

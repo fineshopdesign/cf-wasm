@@ -1,4 +1,12 @@
-import { decode as wasmDecode, encode as wasmEncode } from './lib/png';
+import initAsync, {
+  DecodeResult,
+  type InitInput,
+  type InitOutput,
+  initSync,
+  type SyncInitInput,
+  decode as wasmDecode,
+  encode as wasmEncode,
+} from './lib/png';
 
 export const ColorType = {
   Grayscale: 0,
@@ -53,8 +61,8 @@ export interface EncodeOptions {
   stripAlpha?: boolean;
 }
 
-export const encode = (image: Uint8Array, width: number, height: number, options?: EncodeOptions) =>
-  wasmEncode(
+export function encode(image: Uint8Array, width: number, height: number, options?: EncodeOptions) {
+  return wasmEncode(
     image,
     width,
     height,
@@ -65,8 +73,9 @@ export const encode = (image: Uint8Array, width: number, height: number, options
     options?.compression,
     options?.filter,
   );
+}
 
-export const decode = (image: Uint8Array) => {
+export function decode(image: Uint8Array) {
   const res = wasmDecode(image) as DecodedImageResult;
 
   return {
@@ -77,15 +86,7 @@ export const decode = (image: Uint8Array) => {
     bitDepth: res.bitDepth,
     lineSize: res.lineSize,
   };
-};
+}
 
-export {
-  type DecodeResult,
-  decode as wasmDecode,
-  default,
-  encode as wasmEncode,
-  type InitInput,
-  type InitOutput,
-  initSync,
-  type SyncInitInput,
-} from './lib/png';
+export default initAsync;
+export { DecodeResult, wasmDecode, wasmEncode, type InitInput, type InitOutput, initSync, type SyncInitInput };
