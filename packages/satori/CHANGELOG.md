@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.2.1
+
+### Patch Changes
+
+- [`33a579f`](https://github.com/fineshopdesign/cf-wasm/commit/33a579f743db8e69acb8664a532227064cc8d306) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: improve `initSatori` and `initYoga` function
+
 ## 0.2.0
 
 ### Minor Changes
