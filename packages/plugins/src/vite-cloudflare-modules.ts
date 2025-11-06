@@ -28,8 +28,9 @@ function escapeRegExp(string: string) {
 const MODULE_TYPES = ['CompiledWasm', 'Data', 'Text'] as const;
 type ModuleType = (typeof MODULE_TYPES)[number];
 
-const MODULE_PATTERN = `__${MODULE_MAGIC_STRING}__(${MODULE_TYPES.map((x) => escapeRegExp(x)).join('|')})__(.*?)__${MODULE_MAGIC_STRING}__`;
-const MODULE_REGEX = new RegExp(MODULE_PATTERN, 'g');
+const MODULE_REGEX = new RegExp(
+  `__${MODULE_MAGIC_STRING}__(${MODULE_TYPES.map((x) => escapeRegExp(x)).join('|')})__([^\\\\s]+?)__${MODULE_MAGIC_STRING}__`,
+);
 
 function createModuleReference(type: ModuleType, id: string) {
   return `__${MODULE_MAGIC_STRING}__${type}__${id}__${MODULE_MAGIC_STRING}__`;
@@ -54,6 +55,7 @@ interface Replacement {
   chunkName: string;
   chunkFileName: string;
   fileNames: string[];
+  moduleType: ModuleType;
   // desired import for cloudflare
   cloudflareImport: string;
   cloudflareFileName: string;
@@ -95,16 +97,22 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
 
     config() {
       // let vite know that file format and the magic import string is intentional, and will be handled in this plugin
+      const assetsInclude = [...new Set(extensions.map((x) => `${escapeRegExp(x.replace(/\?\w+$/, ''))}$`))].map((p) => new RegExp(p));
+
+      // mark the module files as external so that they are not bundled and instead are loaded from the files
+      const external = [
+        ...new Set(
+          Object.entries(adaptersByExtension).map(
+            ([extension, type]) => `^${createModuleReference(type, '[^\\\\s]+?')}${escapeRegExp(extension.replace(/\?\w+$/, ''))}\\.mjs$`,
+          ),
+        ),
+      ].map((p) => new RegExp(p));
+
       return {
-        assetsInclude: extensions.map((x) => {
-          return new RegExp(`${escapeRegExp(x.replace(/\?\w+$/, ''))}$`);
-        }),
+        assetsInclude,
         build: {
           rollupOptions: {
-            // mark the module files as external so that they are not bundled and instead are loaded from the files
-            external: Object.entries(adaptersByExtension).map(([extension, type]) => {
-              return new RegExp(`^${createModuleReference(type, '.+')}${escapeRegExp(extension.replace(/\?\w+$/, ''))}\\.mjs$`);
-            }),
+            external,
           },
         },
       };
@@ -175,26 +183,26 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
       for (const [ext, type] of Object.entries(adaptersByExtension)) {
         const extension = ext.replace(/\?\w+$/, '');
         // chunk id can be many things, (alpha numeric, dollars, or underscores, maybe more)
-        replaced = replaced.replaceAll(
-          new RegExp(`${createModuleReference(type, '([^\\s]+?)')}${escapeRegExp(extension)}\\.mjs`, 'g'),
-          (_s, assetId) => {
-            const fileName = this.getFileName(assetId);
-            const relativePath = path.relative(path.dirname(chunk.fileName), fileName).replaceAll('\\', '/'); // fix windows paths for import
+        const regex = new RegExp(`${createModuleReference(type, '([^\\s]+?)')}${escapeRegExp(extension)}\\.mjs`, 'g');
 
-            // record this replacement for later, to adjust it to import the unbundled asset
-            replacements.push({
-              chunkName: chunk.name,
-              chunkFileName: chunk.fileName,
-              fileNames: [],
-              cloudflareImport: relativePath.replace(/\.mjs$/, ''),
-              cloudflareFileName: fileName.replace(/\.mjs$/, ''),
-              nodejsImport: relativePath,
-              nodejsFileName: fileName,
-            });
+        replaced = replaced.replaceAll(regex, (_s, assetId) => {
+          const fileName = this.getFileName(assetId);
+          const relativePath = path.relative(path.dirname(chunk.fileName), fileName).replaceAll('\\', '/'); // fix windows paths for import
 
-            return `./${relativePath}`;
-          },
-        );
+          // record this replacement for later, to adjust it to import the unbundled asset
+          replacements.push({
+            chunkName: chunk.name,
+            chunkFileName: chunk.fileName,
+            fileNames: [],
+            moduleType: type,
+            cloudflareImport: relativePath.replace(/\.mjs$/, ''),
+            cloudflareFileName: fileName.replace(/\.mjs$/, ''),
+            nodejsImport: relativePath,
+            nodejsFileName: fileName,
+          });
+
+          return `./${relativePath}`;
+        });
       }
 
       return { code: replaced };
