@@ -29,9 +29,9 @@
   "types": "./dist/workerd.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./DEBUG_SYNC.wasm": "./dist/core/DEBUG_SYNC.wasm",
-    "./DEBUG_SYNC.wasm.map.txt": "./dist/core/DEBUG_SYNC.wasm.map.txt",
-    "./RELEASE_SYNC.wasm": "./dist/core/RELEASE_SYNC.wasm",
+    "./DEBUG_SYNC.wasm": "./dist/lib/DEBUG_SYNC.wasm",
+    "./DEBUG_SYNC.wasm.map.txt": "./dist/lib/DEBUG_SYNC.wasm.map.txt",
+    "./RELEASE_SYNC.wasm": "./dist/lib/RELEASE_SYNC.wasm",
     ".": {
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"

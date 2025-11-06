@@ -4,7 +4,7 @@ import * as glob from 'glob';
 import { defineConfig } from 'tsup';
 
 const YOGA_WASM_LOCATION = new URL(import.meta.resolve('yoga-wasm-web/dist/yoga.wasm')).pathname;
-const YOGA_WASM_DESTINATION = 'src/core/yoga.wasm';
+const YOGA_WASM_DESTINATION = 'src/lib/yoga.wasm';
 
 export default defineConfig(() => {
   fs.copyFileSync(YOGA_WASM_LOCATION, YOGA_WASM_DESTINATION);

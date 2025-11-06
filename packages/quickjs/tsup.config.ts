@@ -3,16 +3,16 @@ import path from 'node:path';
 import * as glob from 'glob';
 import { defineConfig } from 'tsup';
 
-const VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
-const CORE_DIR = './src/core';
+const LIB_VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
+const LIB_OUT_DIR = './src/lib';
 
 export default defineConfig(() => {
-  for (const variant of VARIANTS) {
+  for (const variant of LIB_VARIANTS) {
     const wasmModulePath = new URL(import.meta.resolve(`@jitl/quickjs-wasmfile-${variant.toLowerCase().replace(/_/g, '-')}/wasm`)).pathname;
     const wasmModuleSourceMapPath = `${wasmModulePath}.map`;
-    fs.copyFileSync(wasmModulePath, path.join(CORE_DIR, `${variant}.wasm`));
+    fs.copyFileSync(wasmModulePath, path.join(LIB_OUT_DIR, `${variant}.wasm`));
     if (fs.existsSync(wasmModuleSourceMapPath)) {
-      fs.copyFileSync(wasmModuleSourceMapPath, path.join(CORE_DIR, `${variant}.wasm.map.txt`));
+      fs.copyFileSync(wasmModuleSourceMapPath, path.join(LIB_OUT_DIR, `${variant}.wasm.map.txt`));
     }
   }
 

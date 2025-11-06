@@ -2,15 +2,16 @@ import { type InitInput, initWasm, Resvg as ResvgClass, type ResvgRenderOptions 
 
 /** Initializes resvg asynchronously */
 export async function initResvg(input: InitInput | Promise<InitInput>) {
-  if (initResvg.promise) {
+  if (initResvg.initialized) {
     throw new Error('(@cf-wasm/resvg/legacy): Function already called. The `initResvg()` function can be used only once.');
   }
   if (!input) {
     throw new Error('(@cf-wasm/resvg/legacy): Argument `input` is not valid.');
   }
+  initResvg.initialized = true;
   initResvg.promise = (async () => {
-    await initWasm(input);
-    initResvg.initialized = true;
+    await initWasm(await input);
+    initResvg.ready = true;
   })();
   return initResvg.promise;
 }
@@ -18,8 +19,10 @@ export async function initResvg(input: InitInput | Promise<InitInput>) {
 initResvg.promise = null as Promise<void> | null;
 /** Indicates whether resvg is initialized */
 initResvg.initialized = false;
+/** Indicates whether resvg is ready */
+initResvg.ready = false;
 
-/** Ensures resvg is initialized */
+/** Ensures resvg is ready */
 initResvg.ensure = async () => {
   if (!initResvg.promise) {
     throw new Error('(@cf-wasm/resvg/legacy): Function not called. Call `initResvg()` function first.');
@@ -29,10 +32,10 @@ initResvg.ensure = async () => {
 
 export class Resvg extends ResvgClass {
   constructor(svg: Uint8Array | string, options?: ResvgRenderOptions) {
-    if (!initResvg.initialized) {
-      if (initResvg.promise) {
+    if (!initResvg.ready) {
+      if (initResvg.initialized) {
         throw new Error(
-          '(@cf-wasm/resvg/legacy): Resvg is not yet initialized while `initResvg()` function was called. Use `Resvg.create()` async static method instead to ensure Resvg is initialized.',
+          '(@cf-wasm/resvg/legacy): Resvg is not yet ready while `initResvg()` function was called. Use `Resvg.create()` async static method instead to ensure Resvg is ready.',
         );
       }
       throw new Error('(@cf-wasm/resvg/legacy): Resvg is not yet initialized. Call `initResvg()` function first.');
@@ -46,10 +49,9 @@ export class Resvg extends ResvgClass {
   }
 }
 
-export {
-  type BBox,
-  type InitInput,
-  initWasm,
-  type RenderedImage,
-  type ResvgRenderOptions,
+export type {
+  BBox,
+  InitInput,
+  RenderedImage,
+  ResvgRenderOptions,
 } from '@resvg/resvg-wasm-legacy';

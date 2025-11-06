@@ -4,10 +4,10 @@ import * as glob from 'glob';
 import { defineConfig } from 'tsup';
 
 const RESVG_WASM_LOCATION = new URL(import.meta.resolve('@resvg/resvg-wasm/index_bg.wasm')).pathname;
-const RESVG_WASM_DESTINATION = 'src/core/resvg.wasm';
+const RESVG_WASM_DESTINATION = 'src/lib/resvg.wasm';
 
 const RESVG_WASM_LOCATION_LEGACY = new URL(import.meta.resolve('@resvg/resvg-wasm-legacy/index_bg.wasm')).pathname;
-const RESVG_WASM_DESTINATION_LEGACY = 'src/legacy/core/resvg.wasm';
+const RESVG_WASM_DESTINATION_LEGACY = 'src/legacy/lib/resvg.wasm';
 
 export default defineConfig(() => {
   fs.copyFileSync(RESVG_WASM_LOCATION, RESVG_WASM_DESTINATION);

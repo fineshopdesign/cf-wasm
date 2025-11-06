@@ -1,17 +1,5 @@
-import { satori } from './core/satori';
+import { satori } from './satori';
 
 export default satori;
-
-export {
-  type Font,
-  type FontStyle,
-  type FontWeight,
-  type InputParam,
-  initSatori,
-  type Locale,
-  type SatoriNode,
-  type SatoriOptions,
-  satori,
-  type VNode,
-} from './core/satori';
-export { initYoga, type Yoga } from './core/yoga';
+export * from './satori';
+export { initYoga, type Yoga } from './yoga';

@@ -1,6 +1,6 @@
-import debugSyncWasmModule from './core/DEBUG_SYNC.wasm';
-import debugSyncWasmModuleSourceMap from './core/DEBUG_SYNC.wasm.map.txt';
-import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from './core/debug';
+import debugSyncWasmModule from './lib/DEBUG_SYNC.wasm';
+import debugSyncWasmModuleSourceMap from './lib/DEBUG_SYNC.wasm.map.txt';
+import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from './lib/debug';
 
 export const WorkerdDebugSyncVariant = newVariant(DEBUG_SYNC, {
   wasmModule: debugSyncWasmModule,
@@ -15,4 +15,4 @@ export async function getQuickJSWASMModule() {
 }
 
 export { debugSyncWasmModule, debugSyncWasmModuleSourceMap };
-export * from './core/debug';
+export * from './lib/debug';

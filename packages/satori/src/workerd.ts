@@ -1,19 +1,10 @@
-import { initSatori, satori } from './core/satori';
-import { initYoga } from './core/yoga';
-import yogaWasmModule from './core/yoga.wasm';
+import yogaWasmModule from './lib/yoga.wasm';
+import { initSatori, satori } from './satori';
+import { initYoga } from './yoga';
 
 initSatori(initYoga(yogaWasmModule));
 
 export default satori;
 export { yogaWasmModule };
-export {
-  type Font,
-  type FontStyle,
-  type FontWeight,
-  type Locale,
-  type SatoriNode,
-  type SatoriOptions,
-  satori,
-  type VNode,
-} from './core/satori';
-export { initYoga, type Yoga } from './core/yoga';
+export * from './satori';
+export { initYoga, type Yoga } from './yoga';

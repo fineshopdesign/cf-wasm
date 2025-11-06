@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from './core/release';
+import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from './lib/release';
 
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const releaseSyncWasmBinary = fs.readFileSync(path.resolve(dirname, './core/RELEASE_SYNC.wasm'));
+const releaseSyncWasmBinary = fs.readFileSync(path.resolve(dirname, './lib/RELEASE_SYNC.wasm'));
 const releaseSyncWasmModule = new WebAssembly.Module(releaseSyncWasmBinary);
 
 export const NodeReleaseSyncVariant = newVariant(RELEASE_SYNC, {
@@ -21,4 +21,4 @@ export async function getQuickJSWASMModule() {
 }
 
 export { releaseSyncWasmModule };
-export * from './core/release';
+export * from './lib/release';

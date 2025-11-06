@@ -41,7 +41,7 @@
   "types": "./dist/workerd.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./yoga.wasm": "./dist/core/yoga.wasm",
+    "./yoga.wasm": "./dist/lib/yoga.wasm",
     ".": {
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"

@@ -88,5 +88,50 @@ export function decode(image: Uint8Array) {
   };
 }
 
-export default initAsync;
-export { DecodeResult, wasmDecode, wasmEncode, type InitInput, type InitOutput, initSync, type SyncInitInput };
+/** Initializes png asynchronously */
+export async function initPng(input: InitInput | Promise<InitInput>): Promise<InitOutput> {
+  if (initPng.initialized) {
+    throw new Error('(@cf-wasm/png): Function already called. The `initPng()` function can be used only once.');
+  }
+  if (!input) {
+    throw new Error('(@cf-wasm/png): Argument `input` is not valid.');
+  }
+  initPng.initialized = true;
+  initPng.promise = (async () => {
+    const output = await initAsync(await input);
+    initPng.ready = true;
+    return output;
+  })();
+  return initPng.promise;
+}
+
+/** Initializes png synchronously */
+initPng.sync = (input: SyncInitInput): InitOutput => {
+  if (initPng.initialized) {
+    throw new Error('(@cf-wasm/png): Function already called. The `initPng()` function can be used only once.');
+  }
+  if (!input) {
+    throw new Error('(@cf-wasm/png): Argument `input` is not valid.');
+  }
+  initPng.initialized = true;
+  const output = initSync(input);
+  initPng.promise = Promise.resolve(output);
+  initPng.ready = true;
+  return output;
+};
+
+initPng.promise = null as Promise<InitOutput> | null;
+/** Indicates whether png is initialized */
+initPng.initialized = false;
+/** Indicates whether png is ready */
+initPng.ready = false;
+
+/** Ensures png is ready */
+initPng.ensure = async () => {
+  if (!initPng.promise) {
+    throw new Error('(@cf-wasm/png): Function not called. Call `initPng()` function first.');
+  }
+  return initPng.promise;
+};
+
+export { DecodeResult, wasmDecode, wasmEncode, type InitInput, type InitOutput, type SyncInitInput };

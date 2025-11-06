@@ -43,8 +43,8 @@
   "types": "./dist/workerd.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./resvg.wasm": "./dist/core/resvg.wasm",
-    "./legacy/resvg.wasm": "./dist/legacy/core/resvg.wasm",
+    "./resvg.wasm": "./dist/lib/resvg.wasm",
+    "./legacy/resvg.wasm": "./dist/legacy/lib/resvg.wasm",
     ".": {
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"

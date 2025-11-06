@@ -15,15 +15,16 @@ export interface VNode {
 
 /** Initializes satori asynchronously */
 export async function initSatori(input: Yoga | Promise<Yoga>) {
-  if (initSatori.promise) {
+  if (initSatori.initialized) {
     throw new Error('(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.');
   }
   if (!input) {
     throw new Error('(@cf-wasm/satori): Argument `input` is not valid.');
   }
+  initSatori.initialized = true;
   initSatori.promise = (async () => {
     init(await input);
-    initSatori.initialized = true;
+    initSatori.ready = true;
   })();
   return initSatori.promise;
 }
@@ -31,8 +32,10 @@ export async function initSatori(input: Yoga | Promise<Yoga>) {
 initSatori.promise = null as Promise<void> | null;
 /** Indicates whether satori is initialized */
 initSatori.initialized = false;
+/** Indicates whether satori is ready */
+initSatori.ready = false;
 
-/** Ensures satori is initialized */
+/** Ensures satori is ready */
 initSatori.ensure = async () => {
   if (!initSatori.promise) {
     throw new Error('(@cf-wasm/satori): Function not called. Call `initSatori()` function first.');

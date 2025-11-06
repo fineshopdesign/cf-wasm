@@ -1,12 +1,7 @@
-import { initResvg } from './core/resvg';
-import resvgWasmModule from './core/resvg.wasm';
+import resvgWasmModule from './lib/resvg.wasm';
+import { initResvg } from './resvg';
 
 initResvg(resvgWasmModule);
 
 export { resvgWasmModule };
-export {
-  type BBox,
-  type RenderedImage,
-  Resvg,
-  type ResvgRenderOptions,
-} from './core/resvg';
+export * from './resvg';

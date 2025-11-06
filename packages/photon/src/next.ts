@@ -1,8 +1,7 @@
-import '@cf-wasm/internals/polyfills/image-data';
-import initAsync, { initSync } from './lib/photon_rs';
 import photonWasmModule from './lib/photon_rs_bg.wasm?module';
+import { initPhoton } from './photon';
 
-initSync({ module: photonWasmModule });
+initPhoton.sync({ module: photonWasmModule });
 
-export { initAsync, photonWasmModule };
+export { photonWasmModule };
 export * from './lib/photon_rs';
