@@ -14,15 +14,17 @@ export default defineConfig([
     clean: true,
     dts: true,
     async onSuccess() {
-      const externalFiles = glob.sync('src/**/*.{wasm,bin}');
-      for (const file of externalFiles) {
+      // Copy assets
+      const assets = glob.sync('src/**/*.{wasm,bin}');
+      for (const file of assets) {
         const destination = path.join('dist', file.replace(/^src[\\/]/, ''));
-
         const dir = path.dirname(destination);
+        if (fs.existsSync(destination)) {
+          continue;
+        }
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir, { recursive: true });
         }
-
         fs.copyFileSync(file, destination);
       }
     },
