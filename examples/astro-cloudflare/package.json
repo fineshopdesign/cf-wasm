@@ -14,6 +14,7 @@
   "dependencies": {
     "astro": "^5.15.3",
     "@cf-wasm/og": "workspace:*",
+    "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*"
