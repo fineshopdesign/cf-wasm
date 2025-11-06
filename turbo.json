@@ -7,7 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "out/**", "dist/**", ".svelte-kit/**", ".vercel/**", ".output/**", ".nuxt/**", ".astro/**"]
     },
     "lint": {
       "outputs": ["^build"]
@@ -20,7 +20,7 @@
       "outputs": []
     },
     "test": {
-      "dependsOn": ["build", "^build"],
+      "dependsOn": ["^build"],
       "outputs": []
     }
   }

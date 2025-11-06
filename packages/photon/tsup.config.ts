@@ -76,7 +76,6 @@ export default defineConfig(() => {
       outDir: 'dist',
       sourcemap: true,
       shims: true,
-      clean: true,
       dts: true,
     },
   ];

@@ -40,7 +40,6 @@ export default defineConfig(() => {
       format: ['cjs'],
       sourcemap: true,
       shims: true,
-      clean: true,
       dts: true,
     },
   ];
