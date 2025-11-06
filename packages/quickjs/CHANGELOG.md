@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.1.1
+
+### Patch Changes
+
+- [`5d9f671`](https://github.com/fineshopdesign/cf-wasm/commit/5d9f671f820e25cd498ef8e2190271d72a7a9054) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: internal changes
+
 ## 0.1.0
 
 ### Minor Changes
