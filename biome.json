@@ -16,7 +16,8 @@
       "!**/packages/photon/crate",
       "!**/packages/photon/src/lib",
       "!**/packages/png/crate",
-      "!**/packages/png/src/lib"
+      "!**/packages/png/src/lib",
+      "!**/*.svelte"
     ]
   },
   "assist": {

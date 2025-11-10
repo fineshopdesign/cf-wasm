@@ -2,11 +2,18 @@
  * Inspired from: https://github.com/withastro/astro/blob/main/packages/integrations/cloudflare/src/utils/cloudflare-module-loader.ts [MIT]
  */
 
-import * as fs from 'node:fs/promises';
+import * as fsp from 'node:fs/promises';
 import * as path from 'node:path';
-import type { Plugin } from 'vite';
+import stringify from 'fast-json-stable-stringify';
+import type { Plugin, ResolvedConfig } from 'vite';
 
-const MODULE_MAGIC_STRING = 'CLOUDFLARE_MODULE';
+function cleanUrl(url: string) {
+  return url.replace(/[?#].*$/, '');
+}
+
+function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 
 /**
  * Returns a deterministic 32 bit hash code from a string
@@ -21,22 +28,66 @@ function hashString(str: string): string {
   return new Uint32Array([hash])[0].toString(36);
 }
 
-function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
 const MODULE_TYPES = ['CompiledWasm', 'Data', 'Text'] as const;
 type ModuleType = (typeof MODULE_TYPES)[number];
 
-const MODULE_REGEX = new RegExp(
-  `__${MODULE_MAGIC_STRING}__(${MODULE_TYPES.map((x) => escapeRegExp(x)).join('|')})__([^\\\\s]+?)__${MODULE_MAGIC_STRING}__`,
-);
+const moduleSourcePattern = '____CF_WASM:CLOUDFLARE_IMPORT__(.*?)__CF_WASM:CLOUDFLARE_IMPORT____';
+const moduleSourceRE = new RegExp(`^${moduleSourcePattern}$`);
+// const moduleSourceMatchRE = new RegExp(moduleSourcePattern);
+// const moduleSourceMatchGlobalRE = new RegExp(moduleSourcePattern, 'g');
 
-function createModuleReference(type: ModuleType, id: string) {
-  return `__${MODULE_MAGIC_STRING}__${type}__${id}__${MODULE_MAGIC_STRING}__`;
+const moduleAssetPattern = '____CF_WASM:CLOUDFLARE_MODULE__(.*?)__CF_WASM:CLOUDFLARE_MODULE____';
+const moduleAssetRE = new RegExp(`^${moduleAssetPattern}$`);
+// const moduleAssetMatchRE = new RegExp(moduleAssetPattern);
+const moduleAssetMatchGlobalRE = new RegExp(moduleAssetPattern, 'g');
+
+interface ModuleRule {
+  type: ModuleType;
+  extensions: string[];
 }
 
-const renderers: Record<ModuleType, (fileContents: Buffer) => string> = {
+const cloudflareModuleRules: ModuleRule[] = [
+  { type: 'CompiledWasm', extensions: ['.wasm', '.wasm?module'] },
+  { type: 'Data', extensions: ['.bin'] },
+  { type: 'Text', extensions: ['.txt'] },
+];
+
+function matchModule(source: string) {
+  for (const rule of cloudflareModuleRules) {
+    for (const ext of rule.extensions) {
+      if (source.endsWith(ext)) {
+        return {
+          type: rule.type,
+          extension: ext.replace(/\?\w+$/, ''),
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+interface ModuleSourceReferenceData {
+  type: ModuleType;
+  extension: string;
+  path: string;
+}
+
+function createModuleSourceReference(data: ModuleSourceReferenceData) {
+  return `____CF_WASM:CLOUDFLARE_IMPORT__${encodeURIComponent(stringify(data))}__CF_WASM:CLOUDFLARE_IMPORT____`;
+}
+
+interface ModuleAssetReferenceData {
+  type: ModuleType;
+  assetId: string;
+  chunkId: string;
+}
+
+function createModuleAssetReference(data: ModuleAssetReferenceData) {
+  return `____CF_WASM:CLOUDFLARE_MODULE__${encodeURIComponent(stringify(data))}__CF_WASM:CLOUDFLARE_MODULE____`;
+}
+
+const moduleRenderers: Record<ModuleType, (contents: Buffer) => string> = {
   CompiledWasm(fileContents: Buffer) {
     const base64 = fileContents.toString('base64');
     return `const wasmModule = new WebAssembly.Module(Uint8Array.from(atob("${base64}"), c => c.charCodeAt(0))); export default wasmModule;`;
@@ -56,10 +107,8 @@ interface Replacement {
   chunkFileName: string;
   fileNames: string[];
   moduleType: ModuleType;
-  // desired import for cloudflare
   cloudflareImport: string;
   cloudflareFileName: string;
-  // nodejs import that simulates a cloudflare module
   nodejsImport: string;
   nodejsFileName: string;
 }
@@ -70,73 +119,85 @@ export interface CloudflareModulesOptions {
   runtime?: Runtime;
 }
 
-export default function cloudflareModules({ runtime = 'workerd' }: CloudflareModulesOptions = {}) {
+export default function cloudflareModules({ runtime = 'workerd' }: CloudflareModulesOptions = {}): Plugin {
   const ctx = {
     isDev: false,
-    outDir: '',
+  } as {
+    viteConfig: ResolvedConfig;
+    isDev: boolean;
+    outDir: string;
   };
-
-  const adaptersByExtension: Record<string, ModuleType> = {
-    '.wasm?module': 'CompiledWasm',
-    '.wasm': 'CompiledWasm',
-    '.bin': 'Data',
-    '.txt': 'Text',
-  };
-  const extensions = Object.keys(adaptersByExtension);
 
   const replacements: Replacement[] = [];
 
   return {
-    name: 'vite-plugin-cf-wasm:cloudflare-modules',
+    name: 'additional-modules',
     enforce: 'pre',
-
-    configResolved(config) {
-      ctx.isDev = config.command === 'serve';
-      ctx.outDir = config.build.outDir;
-    },
 
     config() {
       // let vite know that file format and the magic import string is intentional, and will be handled in this plugin
-      const assetsInclude = [...new Set(extensions.map((x) => `${escapeRegExp(x.replace(/\?\w+$/, ''))}$`))].map((p) => new RegExp(p));
-
-      // mark the module files as external so that they are not bundled and instead are loaded from the files
-      const external = [
-        ...new Set(
-          Object.entries(adaptersByExtension).map(
-            ([extension, type]) => `^${createModuleReference(type, '[^\\\\s]+?')}${escapeRegExp(extension.replace(/\?\w+$/, ''))}\\.mjs$`,
-          ),
-        ),
-      ].map((p) => new RegExp(p));
 
       return {
-        assetsInclude,
+        assetsInclude: [...new Set(cloudflareModuleRules.flatMap((r) => r.extensions.map((e) => `${escapeRegExp(e.replace(/\?\w+$/, ''))}$`)))].map(
+          (p) => new RegExp(p),
+        ),
         build: {
           rollupOptions: {
-            external,
+            external: moduleAssetRE,
           },
         },
       };
     },
 
+    configResolved(config) {
+      ctx.viteConfig = config;
+      ctx.isDev = config.command === 'serve';
+      ctx.outDir = config.build.outDir;
+    },
+
+    async resolveId(source, importer, options) {
+      const module = matchModule(source);
+
+      if (!module) {
+        return;
+      }
+
+      const resolved = await this.resolve(cleanUrl(source), importer, options);
+
+      if (!resolved) {
+        throw new Error(`Import "${source}" not found. Does the file exists?`);
+      }
+
+      return {
+        id: createModuleSourceReference({
+          type: module.type,
+          extension: module.extension,
+          path: resolved.id,
+        }),
+      };
+    },
+
     async load(id) {
-      const maybeExtension = extensions.find((x) => id.endsWith(x));
-      if (!maybeExtension) {
+      const match = id.match(moduleSourceRE);
+
+      if (!match) {
         return;
       }
 
-      const moduleType = adaptersByExtension[maybeExtension];
-      if (!moduleType) {
-        return;
+      const sourceReferenceData = JSON.parse(decodeURIComponent(match[1])) as ModuleSourceReferenceData;
+      const { type: moduleType, extension: moduleExtension, path: modulePath } = sourceReferenceData;
+
+      let data: Buffer;
+
+      try {
+        data = await fsp.readFile(modulePath);
+      } catch (error) {
+        throw new Error(`Import "${modulePath}" not found. Does the file exists?`, {
+          cause: error,
+        });
       }
 
-      const moduleLoader = renderers[moduleType];
-
-      const filePath = id.replace(/\?\w+$/, '');
-      const extension = maybeExtension.replace(/\?\w+$/, '');
-
-      const data = await fs.readFile(filePath);
-      const base64 = data.toString('base64');
-
+      const moduleLoader = moduleRenderers[moduleType as ModuleType];
       const inlineModule = moduleLoader(data);
 
       if (ctx.isDev) {
@@ -144,73 +205,77 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
         return inlineModule;
       }
 
-      // just some shared ID
-      const hash = hashString(base64);
-      // emit the module binary as an asset file, to be picked up later by the esbuild bundle for the worker.
+      const hash = hashString(data.toString('base64'));
+      // emit the cloudflare module binary as an asset file, to be picked up later by the esbuild bundle for the worker.
       // give it a shared deterministic name to make things easy for esbuild to switch on later
-      const assetName = `${path.basename(filePath).split('.')[0]}.${hash}${extension}`;
+      const assetName = `${path.basename(modulePath).split('.')[0]}.${hash}${moduleExtension}`;
 
-      this.emitFile({
+      const assetId = this.emitFile({
         type: 'asset',
         // emit the data explicitly as an esset with `fileName` rather than `name` so that
         // vite doesn't give it a random hash-id in its name--We need to be able to easily rewrite from
-        // the .mjs loader and the actual module asset later in the ESbuild for the worker
+        // the .mjs loader and the actual module asset later in the esbuild for the worker
         fileName: assetName,
         source: data,
       });
 
-      // however, by default, the SSG generator cannot import the .wasm as a module, so embed as a base64 string
+      // however, by default, the SSG generator cannot import the cloudflare module as an es module, so embed as a base64 string
       const chunkId = this.emitFile({
         type: 'prebuilt-chunk',
         fileName: `${assetName}.mjs`,
         code: inlineModule,
       });
 
-      return `import module from "${createModuleReference(moduleType, chunkId)}${extension}.mjs"; export default module;`;
+      return `export { default } from "${createModuleAssetReference({
+        type: moduleType,
+        assetId,
+        chunkId,
+      })}";`;
     },
 
-    // output original wasm file relative to the chunk now that chunking has been achieved
-    renderChunk(code, chunk) {
-      if (ctx.isDev) return;
-
-      if (!MODULE_REGEX.test(code)) {
+    async renderChunk(code, chunk) {
+      if (ctx.isDev) {
         return;
       }
 
+      // output original wasm file relative to the chunk now that chunking has been achieved
+
       // SSR will need the .mjs suffix removed from the import before this works in cloudflare, but this is done as a final step
       // so as to support prerendering from nodejs runtime
-      let replaced = code;
-      for (const [ext, type] of Object.entries(adaptersByExtension)) {
-        const extension = ext.replace(/\?\w+$/, '');
-        // chunk id can be many things, (alpha numeric, dollars, or underscores, maybe more)
-        const regex = new RegExp(`${createModuleReference(type, '([^\\s]+?)')}${escapeRegExp(extension)}\\.mjs`, 'g');
 
-        replaced = replaced.replaceAll(regex, (_s, assetId) => {
-          const fileName = this.getFileName(assetId);
-          const relativePath = path.relative(path.dirname(chunk.fileName), fileName).replaceAll('\\', '/'); // fix windows paths for import
+      const replaced = code.replace(moduleAssetMatchGlobalRE, (_, assetReferenceEncoded) => {
+        const assetReferenceData = JSON.parse(decodeURIComponent(assetReferenceEncoded)) as ModuleAssetReferenceData;
+        const { type: moduleType, assetId, chunkId } = assetReferenceData;
 
-          // record this replacement for later, to adjust it to import the unbundled asset
-          replacements.push({
-            chunkName: chunk.name,
-            chunkFileName: chunk.fileName,
-            fileNames: [],
-            moduleType: type,
-            cloudflareImport: relativePath.replace(/\.mjs$/, ''),
-            cloudflareFileName: fileName.replace(/\.mjs$/, ''),
-            nodejsImport: relativePath,
-            nodejsFileName: fileName,
-          });
+        const assetFileName = this.getFileName(assetId);
+        const chunkFileName = this.getFileName(chunkId);
 
-          return `./${relativePath}`;
+        const assetRelativePath = path.relative(path.dirname(chunk.fileName), assetFileName);
+        const chunkRelativePath = path.relative(path.dirname(chunk.fileName), chunkFileName);
+
+        // record this replacement for later, to adjust it to import the unbundled asset
+        replacements.push({
+          chunkName: chunk.name,
+          chunkFileName: chunk.fileName,
+          fileNames: [],
+          moduleType,
+          cloudflareImport: assetRelativePath,
+          cloudflareFileName: assetFileName,
+          nodejsImport: chunkRelativePath,
+          nodejsFileName: chunkFileName,
         });
-      }
+
+        return `./${chunkRelativePath}`;
+      });
 
       return { code: replaced };
     },
 
     generateBundle(_, bundle) {
-      // associate the chunk name to the final file name. After the prerendering is done, we can use this to replace the imports after final bundle
+      // associate the chunk name to the final file name.
+      // After the prerendering is done, we can use this to replace the imports after final bundle
       // in a targeted way
+
       const replacementsByChunkName = new Map<string, Replacement[]>();
 
       for (const replacement of replacements) {
@@ -234,7 +299,8 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
         return;
       }
 
-      // Once prerendering is complete, restore the imports to cloudflare compatible ones, removing the .mjs suffix.
+      // Once prerendering is complete, restore the imports to cloudflare compatible ones
+
       const baseDir = ctx.outDir;
 
       const replacementsByFileName = new Map<string, Replacement[]>();
@@ -250,13 +316,13 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
 
       for (const [fileName, repls] of replacementsByFileName.entries()) {
         const filepath = path.join(baseDir, fileName);
-        const contents = await fs.readFile(filepath, 'utf-8');
+        const contents = await fsp.readFile(filepath, 'utf-8');
         let updated = contents;
         for (const replacement of repls) {
           updated = updated.replaceAll(replacement.nodejsImport, replacement.cloudflareImport);
         }
-        await fs.writeFile(filepath, updated, 'utf-8');
+        await fsp.writeFile(filepath, updated, 'utf-8');
       }
     },
-  } satisfies Plugin;
+  };
 }

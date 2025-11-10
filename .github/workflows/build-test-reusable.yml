@@ -17,6 +17,7 @@ jobs:
     uses: ./.github/workflows/build-reusable.yml
     with:
       afterBuild: TEST_MODE=dev pnpm run test --filter='./__tests__'
+      os: '["ubuntu-latest"]'
     secrets: inherit
   # test-prod:
   #   name: ⚫️ Run Vitest (production mode) tests
