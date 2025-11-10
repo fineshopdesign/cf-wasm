@@ -1,5 +1,12 @@
 # @cf-wasm/plugins
 
+## 0.1.2
+
+### Patch Changes
+
+- [`026735f`](https://github.com/fineshopdesign/cf-wasm/commit/026735f69078a7d86a199774a130d7e8356e0447) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: resolve cloudflare es module imports properly.
+  Now it will resolve cloudflare modules inside a package not only project source.
+
 ## 0.1.1
 
 ### Patch Changes
