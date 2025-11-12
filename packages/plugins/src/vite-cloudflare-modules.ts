@@ -253,19 +253,23 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
         const assetRelativePath = path.relative(path.dirname(chunk.fileName), assetFileName);
         const chunkRelativePath = path.relative(path.dirname(chunk.fileName), chunkFileName);
 
+        // fix windows paths for import
+        const cloudflareImport = assetRelativePath.replaceAll('\\', '/');
+        const nodejsImport = chunkRelativePath.replaceAll('\\', '/');
+
         // record this replacement for later, to adjust it to import the unbundled asset
         replacements.push({
           chunkName: chunk.name,
           chunkFileName: chunk.fileName,
           fileNames: [],
           moduleType,
-          cloudflareImport: assetRelativePath,
+          cloudflareImport,
           cloudflareFileName: assetFileName,
-          nodejsImport: chunkRelativePath,
+          nodejsImport,
           nodejsFileName: chunkFileName,
         });
 
-        return `./${chunkRelativePath}`;
+        return `./${nodejsImport}`;
       });
 
       return { code: replaced };
