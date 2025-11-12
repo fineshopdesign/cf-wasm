@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.4
+
+### Patch Changes
+
+- [`f694af8`](https://github.com/fineshopdesign/cf-wasm/commit/f694af8f71a8e574ca828b9c185ece56f24a7783) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: windows paths for import
+
 ## 0.1.3
 
 ### Patch Changes
