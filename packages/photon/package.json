@@ -80,10 +80,10 @@
     "@cf-wasm/internals": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
+    "@types/node": "catalog:default",
     "github-files-fetcher": "^1.6.0",
-    "glob": "^11.0.3",
-    "tsup": "^8.5.0",
-    "wasm-pack": "^0.13.1"
+    "glob": "catalog:default",
+    "tsup": "catalog:default",
+    "wasm-pack": "catalog:default"
   }
 }

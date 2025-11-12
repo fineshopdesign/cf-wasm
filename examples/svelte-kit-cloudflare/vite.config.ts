@@ -4,10 +4,5 @@ import { defineConfig } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 
 export default defineConfig({
-  plugins: [
-    sveltekit(),
-    devtoolsJson(),
-    // @ts-expect-error
-    cloudflareModules(),
-  ],
+  plugins: [sveltekit(), devtoolsJson(), cloudflareModules()],
 });

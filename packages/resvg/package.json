@@ -115,8 +115,8 @@
     "@resvg/resvg-wasm-legacy": "npm:@resvg/resvg-wasm@2.4.1"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
-    "glob": "^11.0.3",
-    "tsup": "^8.5.0"
+    "@types/node": "catalog:default",
+    "glob": "catalog:default",
+    "tsup": "catalog:default"
   }
 }

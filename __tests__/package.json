@@ -19,12 +19,12 @@
     "@cf-wasm/quickjs": "workspace:^",
     "@cf-wasm/resvg": "workspace:^",
     "@cf-wasm/satori": "workspace:^",
-    "react": "^19.2.0",
+    "react": "catalog:default",
     "satori-html": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
-    "@types/react": "^19.2.2",
-    "vitest": "^4.0.7"
+    "@types/node": "catalog:default",
+    "@types/react": "catalog:default",
+    "vitest": "catalog:default"
   }
 }

@@ -73,9 +73,9 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
-    "glob": "^11.0.3",
-    "tsup": "^8.5.0",
-    "wasm-pack": "^0.13.1"
+    "@types/node": "catalog:default",
+    "glob": "catalog:default",
+    "tsup": "catalog:default",
+    "wasm-pack": "catalog:default"
   }
 }

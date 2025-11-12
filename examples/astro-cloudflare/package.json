@@ -12,7 +12,7 @@
     "cf:build": "wrangler deploy --dry-run --outdir=.workers-build"
   },
   "dependencies": {
-    "astro": "^5.15.3",
+    "astro": "^5.15.5",
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^12.6.10",
-    "wrangler": "^4.45.4"
+    "wrangler": "catalog:default"
   }
 }
