@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.3
+
+### Patch Changes
+
+- [`41a1c2b`](https://github.com/fineshopdesign/cf-wasm/commit/41a1c2b823076c27555a7ed2c0de8f4756ce50e0) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: add `vite` to `peerDependencies`
+
 ## 0.1.2
 
 ### Patch Changes
