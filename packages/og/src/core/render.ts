@@ -10,10 +10,10 @@ import type { MayBePromise, StringWithSuggestions } from './types';
 
 /** Represents a png result of rendered image */
 export interface PngResult {
-  pixels: Uint8Array;
+  pixels: Uint8Array<ArrayBuffer>;
 
   /* Output image bytes */
-  image: Uint8Array;
+  image: Uint8Array<ArrayBuffer>;
 
   /** The width of the image */
   width: number;
@@ -270,8 +270,8 @@ export function render(element: ReactNode | VNode, options: RenderOptions = {}) 
       const renderedImage = resvg.render();
 
       const result: PngResult = {
-        pixels: renderedImage.pixels,
-        image: renderedImage.asPng(),
+        pixels: renderedImage.pixels as Uint8Array<ArrayBuffer>,
+        image: renderedImage.asPng() as Uint8Array<ArrayBuffer>,
         width: renderedImage.width,
         height: renderedImage.height,
         type: 'image/png',

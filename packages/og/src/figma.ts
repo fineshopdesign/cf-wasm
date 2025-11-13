@@ -4,7 +4,7 @@ import { FetchError } from './core/errors';
 import type { FontBuffer } from './core/font';
 import { modules } from './core/modules';
 import { type Font, type PngResult, type RenderOptions, render, type SvgResult } from './core/render';
-import { BaseResponse, type BaseResponseOptions, type ImageResponseOptions } from './core/response';
+import { type ImageResponseOptions, type RenderAsResponseOptions, renderAsResponse } from './core/response';
 import type { FontWeight } from './core/satori';
 import type { MayBePromise } from './core/types';
 import { replaceEntities } from './core/utils/entities';
@@ -91,9 +91,6 @@ export type LoadFontsFunction = (
 export interface RenderFigmaOptions extends Omit<RenderOptions, 'width' | 'height'> {
   loadFonts?: LoadFontsFunction;
 }
-
-/** An interface representing options for {@link FigmaImageResponse} */
-export interface FigmaImageResponseOptions extends RenderFigmaOptions, BaseResponseOptions {}
 
 /**
  * A helper function to parse figma url and return its `fileId` and `nodeId`
@@ -559,8 +556,27 @@ export function renderFigma(figmaOptions: FigmaOptions, renderOptions?: RenderFi
   return { asElement, asSvg, asPng };
 }
 
+/** An interface representing options for {@link FigmaImageResponse} */
+export interface FigmaImageResponseOptions extends RenderFigmaOptions, RenderAsResponseOptions {}
+
+function renderFigmaAsResponse(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions) {
+  return renderAsResponse(async () => {
+    const renderer = renderFigma(figmaOptions, responseOptions);
+    const elementData = await renderer.asElement();
+    return [
+      elementData.element,
+      {
+        ...responseOptions,
+        width: elementData.width,
+        height: elementData.height,
+        fonts: [...elementData.fonts, ...(responseOptions?.fonts || [])],
+      },
+    ];
+  }, responseOptions);
+}
+
 /** A class for rendering Figma template to image as {@link Response} */
-export class FigmaImageResponse extends BaseResponse {
+export class FigmaImageResponse extends Response {
   /**
    * Creates an instance of {@link FigmaImageResponse}
    *
@@ -568,18 +584,14 @@ export class FigmaImageResponse extends BaseResponse {
    * @param responseOptions The same as {@link ImageResponseOptions} except `width` and `height`. `width` and `height` are automatically set from the Figma frame's size.
    */
   constructor(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions) {
-    super(async () => {
-      const renderer = renderFigma(figmaOptions, responseOptions);
-      const elementData = await renderer.asElement();
-      return [
-        elementData.element,
-        {
-          ...responseOptions,
-          width: elementData.width,
-          height: elementData.height,
-          fonts: [...elementData.fonts, ...(responseOptions?.fonts || [])],
-        },
-      ];
-    }, responseOptions);
+    const { stream, init } = renderFigmaAsResponse(figmaOptions, responseOptions);
+
+    super(stream(), init);
+  }
+
+  async async(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions) {
+    const { body, init } = renderFigmaAsResponse(figmaOptions, responseOptions);
+
+    new Response(await body(), init);
   }
 }

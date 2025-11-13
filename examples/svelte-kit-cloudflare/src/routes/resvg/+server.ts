@@ -1,4 +1,4 @@
-import { Resvg } from '@cf-wasm/resvg/legacy';
+import { Resvg } from '$lib/resvg';
 import type { RequestHandler } from './$types';
 
 const SVG = `<?xml version="1.0" encoding="utf-8"?>

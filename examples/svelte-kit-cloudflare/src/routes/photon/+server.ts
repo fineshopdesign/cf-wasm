@@ -1,4 +1,4 @@
-import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
+import { PhotonImage, resize, SamplingFilter } from '$lib/photon';
 import type { RequestHandler } from './$types';
 
 const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
