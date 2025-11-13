@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.2.2
+
+### Patch Changes
+
+- [`83cc66c`](https://github.com/fineshopdesign/cf-wasm/commit/83cc66c5091b184a23ca6c0bb58aecd433ec4781) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: add static method `async` to `ImageResponse`
+
 ## 0.2.1
 
 ### Patch Changes
