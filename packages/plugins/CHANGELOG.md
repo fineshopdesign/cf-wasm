@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.5
+
+### Patch Changes
+
+- [`b94f7de`](https://github.com/fineshopdesign/cf-wasm/commit/b94f7de5bec4e1ebfc0c2d2b0bb884bf54c22b7c) Thanks [@kumardeo](https://github.com/kumardeo)! - chore(build): set `platform` to `neutral` in `tsup.config.ts`
+
 ## 0.1.4
 
 ### Patch Changes
