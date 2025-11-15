@@ -2,7 +2,7 @@ import cp from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import * as glob from 'glob';
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from 'tsup';
 
 const LIB_CRATE_DIR = 'crate';
 const LIB_NAME = 'photon_rs';
@@ -44,16 +44,22 @@ export default defineConfig(() => {
     fs.writeFileSync(LIB_JS, modifiedScript, 'utf-8');
   }
 
+  const commonOptions = {
+    outDir: 'dist',
+    platform: 'neutral',
+    sourcemap: true,
+    splitting: true,
+    shims: true,
+    dts: true,
+  } satisfies Options;
+
   return [
     {
+      ...commonOptions,
       entry: ['src/next.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts'],
       format: ['esm'],
-      outDir: 'dist',
       external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/],
-      sourcemap: true,
-      shims: true,
       clean: true,
-      dts: true,
       async onSuccess() {
         // Copy assets
         const assets = glob.sync('src/**/*.{wasm,bin}');
@@ -71,12 +77,9 @@ export default defineConfig(() => {
       },
     },
     {
+      ...commonOptions,
       entry: ['src/node.ts', 'src/others.ts'],
       format: ['cjs'],
-      outDir: 'dist',
-      sourcemap: true,
-      shims: true,
-      dts: true,
     },
   ];
 });

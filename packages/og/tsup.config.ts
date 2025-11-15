@@ -1,18 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as glob from 'glob';
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from 'tsup';
+
+const commonOptions = {
+  outDir: 'dist',
+  platform: 'neutral',
+  sourcemap: true,
+  splitting: true,
+  shims: true,
+  dts: true,
+} satisfies Options;
 
 export default defineConfig([
   {
+    ...commonOptions,
     entry: ['src/next.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/figma.ts', 'src/html-to-react.ts'],
     format: ['esm'],
-    outDir: 'dist',
     external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/],
-    sourcemap: true,
-    shims: true,
     clean: true,
-    dts: true,
     async onSuccess() {
       // Copy assets
       const assets = glob.sync('src/**/*.{wasm,bin}');
@@ -30,11 +36,8 @@ export default defineConfig([
     },
   },
   {
+    ...commonOptions,
     entry: ['src/node.ts', 'src/others.ts', 'src/figma.ts', 'src/html-to-react.ts'],
     format: ['cjs'],
-    outDir: 'dist',
-    sourcemap: true,
-    shims: true,
-    dts: true,
   },
 ]);

@@ -3,7 +3,7 @@
   "name": "svelte-kit-cloudflare",
   "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2025-01-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_als"],
   "minify": true,
   "upload_source_maps": true,
   "assets": {

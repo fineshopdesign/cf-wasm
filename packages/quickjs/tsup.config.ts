@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from 'tsup';
 
 const LIB_VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
 const LIB_OUT_DIR = './src/lib';
@@ -17,16 +17,22 @@ export default defineConfig(() => {
     }
   }
 
+  const commonOptions = {
+    outDir: 'dist',
+    platform: 'neutral',
+    sourcemap: true,
+    splitting: true,
+    shims: true,
+    dts: true,
+  } satisfies Options;
+
   return [
     {
+      ...commonOptions,
       entry: ['src/next.ts', 'src/next-debug.ts', 'src/node.ts', 'src/node-debug.ts', 'src/workerd.ts', 'src/workerd-debug.ts'],
       format: ['esm'],
-      outDir: 'dist',
       external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
-      sourcemap: true,
-      shims: true,
       clean: true,
-      dts: true,
       async onSuccess() {
         // Copy assets
         const assets = glob.sync('src/**/*.{wasm,bin}');
@@ -44,12 +50,9 @@ export default defineConfig(() => {
       },
     },
     {
+      ...commonOptions,
       entry: ['src/node.ts', 'src/node-debug.ts'],
       format: ['cjs'],
-      outDir: 'dist',
-      sourcemap: true,
-      shims: true,
-      dts: true,
     },
   ];
 });

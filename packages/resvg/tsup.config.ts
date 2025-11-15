@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from 'tsup';
 
 const RESVG_WASM_LOCATION = fileURLToPath(import.meta.resolve('@resvg/resvg-wasm/index_bg.wasm'));
 const RESVG_WASM_DESTINATION = 'src/lib/resvg.wasm';
@@ -14,8 +14,18 @@ export default defineConfig(() => {
   fs.copyFileSync(RESVG_WASM_LOCATION, RESVG_WASM_DESTINATION);
   fs.copyFileSync(RESVG_WASM_LOCATION_LEGACY, RESVG_WASM_DESTINATION_LEGACY);
 
+  const commonOptions = {
+    outDir: 'dist',
+    platform: 'neutral',
+    sourcemap: true,
+    splitting: true,
+    shims: true,
+    dts: true,
+  } satisfies Options;
+
   return [
     {
+      ...commonOptions,
       entry: [
         'src/next.ts',
         'src/node.ts',
@@ -27,12 +37,8 @@ export default defineConfig(() => {
         'src/legacy/workerd.ts',
       ],
       format: ['esm'],
-      outDir: 'dist',
       external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/],
-      sourcemap: true,
-      shims: true,
       clean: true,
-      dts: true,
       async onSuccess() {
         // Copy assets
         const assets = glob.sync('src/**/*.{wasm,bin}');
@@ -50,12 +56,9 @@ export default defineConfig(() => {
       },
     },
     {
+      ...commonOptions,
       entry: ['src/node.ts', 'src/others.ts', 'src/legacy/node.ts', 'src/legacy/others.ts'],
       format: ['cjs'],
-      outDir: 'dist',
-      sourcemap: true,
-      shims: true,
-      dts: true,
     },
   ];
 });
