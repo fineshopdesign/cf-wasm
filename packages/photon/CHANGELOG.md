@@ -1,5 +1,14 @@
 # @cf-wasm/photon
 
+## 0.2.2
+
+### Patch Changes
+
+- [`b94f7de`](https://github.com/fineshopdesign/cf-wasm/commit/b94f7de5bec4e1ebfc0c2d2b0bb884bf54c22b7c) Thanks [@kumardeo](https://github.com/kumardeo)! - chore(build): set `platform` to `neutral` in `tsup.config.ts`
+
+- Updated dependencies [[`b94f7de`](https://github.com/fineshopdesign/cf-wasm/commit/b94f7de5bec4e1ebfc0c2d2b0bb884bf54c22b7c)]:
+  - @cf-wasm/internals@0.1.1
+
 ## 0.2.1
 
 ### Patch Changes
