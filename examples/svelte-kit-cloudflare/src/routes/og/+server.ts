@@ -1,8 +1,7 @@
 import { ImageResponse } from '@cf-wasm/og';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ request }) => {
-  const url = new URL(request.url);
+export const GET: RequestHandler = async ({ url }) => {
   const paramName = url.searchParams.get('name');
 
   // satori can only render react node out-of-the-box

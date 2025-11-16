@@ -1,38 +1,88 @@
-# sv
+# Svelte Kit + Cloudflare adapter example
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a SvelteKit project deployed via Cloudflare Workers using `@sveltejs/adapter-cloudflare`.
 
 ## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+Create a new [Svelte Kit + Cloudflare](https://developers.cloudflare.com/workers/framework-guides/web-apps/svelte/) app:
 
-```sh
-# create a new project in the current directory
-pnpm dlx sv create
-
-# create a new project in my-app
-pnpm dlx sv create my-app
+```shell
+pnpm create cloudflare@latest my-svelte-app --framework=svelte
 ```
 
-## Developing
+After generation:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-pnpm run dev
-
-# or start the server and open the app in a new browser tab
-pnpm run dev --open
+```shell
+cd my-svelte-app
+pnpm install
 ```
 
-## Building
+## Install `@cf-wasm/plugins`
 
-To create a production version of your app:
+The `vite-cloudflare-modules` plugin tells Vite how to handle WebAssembly modules used by cf-wasm packages.
 
-```sh
-pnpm run build
+```shell
+pnpm install -D @cf-wasm/plugins
 ```
 
-You can preview the production build with `pnpm run preview`.
+## Update your `vite.config.ts`
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+We must:
+
+- Load the `vite-cloudflare-modules` plugin.
+- Ensure Vite does not externalize `@cf-wasm/*` modules during SSR bundling.
+
+```ts
+// vite.config.ts
+import cloudflareModules from "@cf-wasm/plugins/vite-cloudflare-modules";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  ssr: {
+    noExternal: [/^@cf-wasm\/.*/],
+  },
+  plugins: [sveltekit(), cloudflareModules()],
+});
+```
+
+## Install cf-wasm packages you want to use
+
+Lets say you want to use `@cf-wasm/og`, install it:
+
+```shell
+pnpm install @cf-wasm/og
+```
+
+## Create an API route
+
+Create an API route and use the package:
+
+```ts
+// src/routes/og/+server.ts
+import { ImageResponse } from "@cf-wasm/og";
+import type { RequestHandler } from "./$types";
+
+export const GET: RequestHandler = async ({ url }) => {
+  const paramName = url.searchParams.get("name");
+
+  // satori can only render react node out-of-the-box
+  return await ImageResponse.async({
+    key: "0",
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(253, 243, 255, 1)",
+        color: "rgba(10, 10, 12, 1)",
+        fontSize: "40px",
+      },
+      children: [`Hello ${paramName || "World"}!`],
+    },
+  });
+};
+```

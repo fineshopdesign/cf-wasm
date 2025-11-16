@@ -6,7 +6,7 @@ export const GET: APIRoute = async ({ request }) => {
   const paramName = url.searchParams.get('name');
 
   // satori can only render react node out-of-the-box
-  return new ImageResponse({
+  return await ImageResponse.async({
     key: '0',
     type: 'div',
     props: {
