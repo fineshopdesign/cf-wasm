@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.6
+
+### Patch Changes
+
+- [`744d8aa`](https://github.com/fineshopdesign/cf-wasm/commit/744d8aa4ce6ca9105afbf43f789cace063f04522) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: inject cloudflare modules to `assetsDir`
+
 ## 0.1.5
 
 ### Patch Changes
