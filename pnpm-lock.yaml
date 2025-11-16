@@ -133,9 +133,6 @@ importers:
       '@cf-wasm/resvg':
         specifier: workspace:*
         version: link:../../packages/resvg
-      '@cf-wasm/satori':
-        specifier: workspace:*
-        version: link:../../packages/satori
     devDependencies:
       '@sveltejs/adapter-cloudflare':
         specifier: ^7.2.4
