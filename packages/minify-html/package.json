@@ -1,0 +1,83 @@
+{
+  "name": "@cf-wasm/minify-html",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Extremely fast and smart HTML + JS + CSS minifier",
+  "keywords": [
+    "HTML",
+    "Minifier",
+    "wasm",
+    "cloudflare-workers"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Wilson Lin",
+    "email": "code@wilsonl.in"
+  },
+  "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/minify-html#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fineshopdesign/cf-wasm",
+    "directory": "packages/minify-html"
+  },
+  "bugs": {
+    "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
+    "check:types": "tsc --noEmit",
+    "build": "NODE_ENV=production tsup",
+    "dev": "NODE_ENV=development tsup --watch"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/workerd.js",
+  "types": "./dist/workerd.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    "./minify_html.wasm": "./dist/lib/index_bg.wasm",
+    ".": {
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
+    },
+    "./workerd": {
+      "types": "./dist/workerd.d.ts",
+      "import": "./dist/workerd.js"
+    },
+    "./next": {
+      "types": "./dist/next.d.ts",
+      "import": "./dist/next.js"
+    },
+    "./node": {
+      "import": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "require": {
+        "types": "./dist/node.d.cts",
+        "default": "./dist/node.cjs"
+      }
+    },
+    "./others": {
+      "import": {
+        "types": "./dist/others.d.ts",
+        "default": "./dist/others.js"
+      },
+      "require": {
+        "types": "./dist/others.d.cts",
+        "default": "./dist/others.cjs"
+      }
+    }
+  },
+  "dependencies": {
+    "@minify-html/wasm": "^0.18.1"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:default",
+    "glob": "catalog:default",
+    "tsup": "catalog:default"
+  }
+}

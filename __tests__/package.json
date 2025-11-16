@@ -13,12 +13,13 @@
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
-    "@cf-wasm/og": "workspace:^",
-    "@cf-wasm/photon": "workspace:^",
-    "@cf-wasm/png": "workspace:^",
-    "@cf-wasm/quickjs": "workspace:^",
-    "@cf-wasm/resvg": "workspace:^",
-    "@cf-wasm/satori": "workspace:^",
+    "@cf-wasm/minify-html": "workspace:*",
+    "@cf-wasm/og": "workspace:*",
+    "@cf-wasm/photon": "workspace:*",
+    "@cf-wasm/png": "workspace:*",
+    "@cf-wasm/quickjs": "workspace:*",
+    "@cf-wasm/resvg": "workspace:*",
+    "@cf-wasm/satori": "workspace:*",
     "react": "catalog:default",
     "satori-html": "^0.3.2"
   },

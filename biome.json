@@ -13,6 +13,7 @@
       "!**/.astro",
       "!**/.wrangler",
       "!**/.workers-build",
+      "!**/packages/minify-html/src/lib",
       "!**/packages/photon/crate",
       "!**/packages/photon/src/lib",
       "!**/packages/png/crate",
