@@ -16,10 +16,10 @@
   "dependencies": {
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
-    "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*"
   },
   "devDependencies": {
+    "@cf-wasm/plugins": "workspace:*",
     "@sveltejs/adapter-cloudflare": "^7.2.4",
     "@sveltejs/kit": "^2.48.4",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
