@@ -76,11 +76,11 @@
   "dependencies": {
     "@jitl/quickjs-wasmfile-debug-sync": "^0.31.0",
     "@jitl/quickjs-wasmfile-release-sync": "^0.31.0",
-    "quickjs-emscripten-core": "0.31.0",
-    "tsup": "^8.5.0"
+    "quickjs-emscripten-core": "0.31.0"
   },
   "devDependencies": {
     "@types/node": "catalog:default",
-    "glob": "catalog:default"
+    "glob": "catalog:default",
+    "tsup": "catalog:default"
   }
 }

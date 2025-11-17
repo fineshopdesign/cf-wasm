@@ -285,9 +285,6 @@ importers:
       quickjs-emscripten-core:
         specifier: 0.31.0
         version: 0.31.0
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: catalog:default
@@ -295,6 +292,9 @@ importers:
       glob:
         specifier: catalog:default
         version: 11.0.3
+      tsup:
+        specifier: catalog:default
+        version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.3)
 
   packages/resvg:
     dependencies:

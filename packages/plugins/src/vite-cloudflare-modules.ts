@@ -2,6 +2,7 @@
  * Inspired from: https://github.com/withastro/astro/blob/main/packages/integrations/cloudflare/src/utils/cloudflare-module-loader.ts [MIT]
  */
 
+import * as fs from 'node:fs';
 import * as fsp from 'node:fs/promises';
 import * as path from 'node:path';
 import stringify from 'fast-json-stable-stringify';
@@ -61,7 +62,8 @@ function matchModule(source: string) {
 
 interface ModuleReferenceData {
   type: ModuleType;
-  assetId: string;
+  assetId?: string;
+  chunkId: string;
 }
 
 function createModuleReference(data: ModuleReferenceData) {
@@ -71,15 +73,54 @@ function createModuleReference(data: ModuleReferenceData) {
 const inlineModuleRenderers: Record<ModuleType, (contents: Buffer) => string> = {
   CompiledWasm(fileContents) {
     const base64 = fileContents.toString('base64');
-    return `const wasmModule = new WebAssembly.Module(Uint8Array.from(atob("${base64}"), c => c.charCodeAt(0))); export default wasmModule;`;
+    return `export default new WebAssembly.Module(Uint8Array.from(atob("${base64}"), c => c.charCodeAt(0)));`;
   },
   Data(fileContents) {
     const base64 = fileContents.toString('base64');
-    return `const binModule = Uint8Array.from(atob("${base64}"), c => c.charCodeAt(0)).buffer; export default binModule;`;
+    return `export default Uint8Array.from(atob("${base64}"), c => c.charCodeAt(0)).buffer;`;
   },
   Text(fileContents) {
     const escaped = JSON.stringify(fileContents.toString('utf-8'));
-    return `const stringModule = ${escaped}; export default stringModule;`;
+    return `export default ${escaped};`;
+  },
+};
+
+const nodeModuleRenderers: Record<ModuleType, (source: string) => string> = {
+  CompiledWasm(source) {
+    return `import fs from 'node:fs';
+import path from 'node:path';
+import url from 'node:url';
+
+const filename = url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const wasmModule = new WebAssembly.Module(fs.readFileSync(path.resolve(dirname, "${source.replaceAll('\\', '/')}")));
+
+export default wasmModule;`;
+  },
+  Data(source) {
+    return `import fs from 'node:fs';
+import path from 'node:path';
+import url from 'node:url';
+
+const filename = url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const binModule = fs.readFileSync(path.resolve(dirname, "${source.replaceAll('\\', '/')}")).buffer;
+
+export default binModule;`;
+  },
+  Text(source) {
+    return `import fs from 'node:fs';
+import path from 'node:path';
+import url from 'node:url';
+
+const filename = url.fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const stringModule = fs.readFileSync(path.resolve(dirname, "${source.replaceAll('\\', '/')}"), "utf-8");
+
+export default stringModule;`;
   },
 };
 
@@ -94,13 +135,32 @@ interface Replacement {
   nodejsFileName: string;
 }
 
-export type Runtime = 'node' | 'workerd';
+export type Target = 'inline' | 'node' | 'workerd' | 'edge-light';
 
 export interface CloudflareModulesOptions {
-  runtime?: Runtime;
+  /**
+   * Sets the target environment
+   *
+   * `inline`: use inline base64 string
+   * `node`: use filesystem to read modules
+   * `workerd`: compatible with Cloudflare Workers, uses ESM import syntax
+   * `edge-light`: compatible with Vercel Edge Functions, uses ESM import syntax for .wasm modules and inline modules for .{bin|txt}
+   *
+   * @default "workerd"
+   *
+   * @experimental
+   */
+  target?: Target;
+
+  /**
+   * Whether to delete files emitted during SSG and no longer needed
+   *
+   * @default true
+   */
+  cleanup?: boolean;
 }
 
-export default function cloudflareModules({ runtime = 'workerd' }: CloudflareModulesOptions = {}): Plugin {
+export default function cloudflareModules({ target = 'workerd', cleanup = true }: CloudflareModulesOptions = {}): Plugin {
   const ctx = {
     isDev: false,
   } as {
@@ -170,25 +230,43 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
       const assetName = `${path.basename(modulePath).split('.')[0]}.${hash}${moduleExtension}`;
       const assetFileName = path.join(ctx.assetsDir, assetName);
 
-      const assetId = this.emitFile({
-        type: 'asset',
-        // emit the data explicitly as an esset with `fileName` rather than `name` so that
-        // vite doesn't give it a random hash-id in its name--We need to be able to easily rewrite from
-        // the .mjs loader and the actual module asset later in the esbuild for the worker
-        fileName: assetFileName,
-        source: data,
-      });
+      let assetId: string | undefined;
+      if (target !== 'inline' && (target !== 'edge-light' || moduleType === 'CompiledWasm')) {
+        assetId = this.emitFile({
+          type: 'asset',
+          // emit the data explicitly as an esset with `fileName` rather than `name` so that
+          // vite doesn't give it a random hash-id in its name--We need to be able to easily rewrite from
+          // the .mjs loader and the actual module asset later in the esbuild for the worker
+          fileName: assetFileName,
+          source: data,
+        });
+      }
 
-      // however, by default, the SSG generator cannot import the cloudflare module as an es module, so embed as a base64 string
-      this.emitFile({
-        type: 'prebuilt-chunk',
-        fileName: `${assetFileName}.inline.mjs`,
-        code: inlineModule,
-      });
+      // however, by default, the SSG generator cannot import the cloudflare module as an es module, so emit nodejs supported chunk
+      let chunkId: string;
+      if (target === 'node') {
+        // read assets from filesystem if target is node
+        const nodeModuleLoader = nodeModuleRenderers[moduleType];
+        const nodeModule = nodeModuleLoader(`./${assetName}`);
+
+        chunkId = this.emitFile({
+          type: 'prebuilt-chunk',
+          fileName: `${assetFileName}.node.mjs`,
+          code: nodeModule,
+        });
+      } else {
+        // use inline module during SSG for other targets
+        chunkId = this.emitFile({
+          type: 'prebuilt-chunk',
+          fileName: `${assetFileName}.inline.mjs`,
+          code: inlineModule,
+        });
+      }
 
       const referenceData: ModuleReferenceData = {
         type: moduleType,
         assetId,
+        chunkId,
       };
 
       return `export { default } from "${createModuleReference(referenceData)}";`;
@@ -206,29 +284,29 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
 
       const replaced = code.replace(moduleReferenceMatchGlobalRE, (_, moduleReferenceEncoded) => {
         const moduleReferenceData = JSON.parse(decodeURIComponent(moduleReferenceEncoded)) as ModuleReferenceData;
-        const { type: moduleType, assetId } = moduleReferenceData;
+        const { type: moduleType, assetId, chunkId } = moduleReferenceData;
 
-        const assetFileName = this.getFileName(assetId);
-        const chunkFileName = `${assetFileName}.inline.mjs`;
-
-        const assetRelativePath = path.relative(path.dirname(chunk.fileName), assetFileName);
+        const chunkFileName = this.getFileName(chunkId);
         const chunkRelativePath = path.relative(path.dirname(chunk.fileName), chunkFileName);
+        const nodejsImport = chunkRelativePath.replaceAll('\\', '/'); // fix windows paths for import
 
-        // fix windows paths for import
-        const cloudflareImport = assetRelativePath.replaceAll('\\', '/');
-        const nodejsImport = chunkRelativePath.replaceAll('\\', '/');
+        if (assetId && (target === 'workerd' || target === 'edge-light')) {
+          const assetFileName = this.getFileName(assetId);
+          const assetRelativePath = path.relative(path.dirname(chunk.fileName), assetFileName);
+          const cloudflareImport = assetRelativePath.replaceAll('\\', '/'); // fix windows paths for import
 
-        // record this replacement for later, to adjust it to import the unbundled asset
-        replacements.push({
-          chunkName: chunk.name,
-          chunkFileName: chunk.fileName,
-          fileNames: [],
-          moduleType,
-          cloudflareImport,
-          cloudflareFileName: assetFileName,
-          nodejsImport,
-          nodejsFileName: chunkFileName,
-        });
+          // record this replacement for later, to adjust it to import the unbundled asset
+          replacements.push({
+            chunkName: chunk.name,
+            chunkFileName: chunk.fileName,
+            fileNames: [],
+            moduleType,
+            cloudflareImport,
+            cloudflareFileName: assetFileName,
+            nodejsImport,
+            nodejsFileName: chunkFileName,
+          });
+        }
 
         return `./${nodejsImport}`;
       });
@@ -260,11 +338,11 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
     },
 
     async closeBundle() {
-      if (runtime !== 'workerd') {
+      if (target !== 'workerd' && target !== 'edge-light') {
         return;
       }
 
-      // Once prerendering is complete, restore the imports to cloudflare compatible ones
+      // Once prerendering is complete, restore the imports to cloudflare/vercel compatible ones
 
       const baseDir = ctx.outDir;
 
@@ -284,8 +362,28 @@ export default function cloudflareModules({ runtime = 'workerd' }: CloudflareMod
         const contents = await fsp.readFile(filepath, 'utf-8');
         let updated = contents;
         for (const replacement of repls) {
-          updated = updated.replaceAll(replacement.nodejsImport, replacement.cloudflareImport);
+          let importReplacement = replacement.cloudflareImport;
+
+          if (target === 'edge-light') {
+            if (replacement.moduleType === 'CompiledWasm') {
+              /** @see https://vercel.com/docs/functions/runtimes/wasm */
+              importReplacement += '?module';
+            } else {
+              // keep inline module for .bin and .txt
+              continue;
+            }
+          }
+
+          updated = updated.replaceAll(replacement.nodejsImport, importReplacement);
+
+          // remove the chunk since it is no longer needed
+          const nodejsChunkPath = path.join(baseDir, replacement.nodejsFileName);
+          if (cleanup && fs.existsSync(nodejsChunkPath)) {
+            await fsp.rm(nodejsChunkPath);
+          }
         }
+
+        // write the updated content
         await fsp.writeFile(filepath, updated, 'utf-8');
       }
     },
