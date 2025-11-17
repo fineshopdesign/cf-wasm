@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.7
+
+### Patch Changes
+
+- [`cabfa1b`](https://github.com/fineshopdesign/cf-wasm/commit/cabfa1bdab6b7628bf44be810c4b7275e0e0ee7d) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: add experimental `target` option
+
 ## 0.1.6
 
 ### Patch Changes
