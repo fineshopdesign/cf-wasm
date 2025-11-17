@@ -1,10 +1,10 @@
-# Svelte Kit + Cloudflare adapter example
+# SvelteKit + Cloudflare adapter example
 
 Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a SvelteKit project deployed via Cloudflare Workers using `@sveltejs/adapter-cloudflare`.
 
 ## Creating a project
 
-Create a new [Svelte Kit + Cloudflare](https://developers.cloudflare.com/workers/framework-guides/web-apps/svelte/) app:
+Create a new [SvelteKit + Cloudflare](https://developers.cloudflare.com/workers/framework-guides/web-apps/svelte/) app:
 
 ```shell
 pnpm create cloudflare@latest my-svelte-app --framework=svelte

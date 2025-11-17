@@ -1,5 +1,5 @@
+import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
 import type { APIRoute } from 'astro';
-import { PhotonImage, resize, SamplingFilter } from '@/lib/photon';
 
 const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
 

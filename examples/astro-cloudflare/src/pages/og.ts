@@ -1,5 +1,5 @@
+import { ImageResponse } from '@cf-wasm/og';
 import type { APIRoute } from 'astro';
-import { ImageResponse } from '@/lib/og';
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);

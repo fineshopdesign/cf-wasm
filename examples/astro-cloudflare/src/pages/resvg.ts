@@ -1,5 +1,5 @@
+import { Resvg } from '@cf-wasm/resvg/legacy';
 import type { APIRoute } from 'astro';
-import { Resvg } from '@/lib/resvg';
 
 const SVG = `<?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
