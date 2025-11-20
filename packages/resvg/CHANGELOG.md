@@ -1,5 +1,11 @@
 # @cf-wasm/resvg
 
+## 0.2.3
+
+### Patch Changes
+
+- [`95bb5c7`](https://github.com/fineshopdesign/cf-wasm/commit/95bb5c7654870bcf2ee82764884489448c0960a4) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: rename `Resvg.create` to `Resvg.async`
+
 ## 0.2.2
 
 ### Patch Changes
