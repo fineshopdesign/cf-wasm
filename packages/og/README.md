@@ -38,6 +38,21 @@ pnpm add @cf-wasm/og          # pnpm
 
 ## Documentation
 
+### Use `ImageResponse.async`
+
+It is recommended to use `ImageResponse.async()` async static method instead of `new ImageResponse()` constructor:
+
+```tsx
+import React from "react";
+import { ImageResponse } from "@cf-wasm/og/node";
+
+// this is recommended
+await ImageResponse.async(<>Hello World!</>);
+
+// instead of
+new ImageResponse(<>Hello World!</>);
+```
+
 ### Cloudflare Workers/Pages
 
 If you are using Cloudflare Workers/Pages, you must set the execution context as shown:
@@ -47,11 +62,11 @@ import React from "react";
 import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     // Set execution context
     cache.setExecutionContext(ctx);
 
-    return new ImageResponse(<>Hello World!</>);
+    return await ImageResponse.async(<>Hello World!</>);
   },
 } satisfies ExportedHandler;
 ```
@@ -70,26 +85,24 @@ import {
 } from "@cf-wasm/og/workerd";
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <p>Text with Default font</p>
-          <p style={{ fontFamily: "Inclusive Sans" }}>Text with Google font</p>
-          <p style={{ fontFamily: "JetBrains Mono" }}>Text with Custom font</p>
-        </div>
-      ),
+    return await ImageResponse.async(
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <p>Text with Default font</p>
+        <p style={{ fontFamily: "Inclusive Sans" }}>Text with Google font</p>
+        <p style={{ fontFamily: "JetBrains Mono" }}>Text with Custom font</p>
+      </div>,
       {
         fonts: [
           // Using Google font loader
@@ -135,26 +148,26 @@ defaultFont.set(
 );
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
     // It should render with JetBrains Mono font
-    return new ImageResponse(<>Hello World!</>);
+    return await ImageResponse.async(<>Hello World!</>);
   },
 } satisfies ExportedHandler;
 ```
 
-You can set default font using `defaultFont` option:
+You can also set default font using `defaultFont` option:
 
 ```tsx
 import React from "react";
 import { ImageResponse, GoogleFont, cache } from "@cf-wasm/og/workerd";
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
-    return new ImageResponse(<>Hello World!</>, {
+    return await ImageResponse.async(<>Hello World!</>, {
       // Set default font
       defaultFont: new GoogleFont("Merriweather"),
     });
@@ -171,10 +184,10 @@ import React from "react";
 import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
-    return new ImageResponse(<>Hello World!</>, {
+    return await ImageResponse.async(<>Hello World!</>, {
       // Set format
       format: "svg",
     });
@@ -191,7 +204,7 @@ import { ImageResponse, cache } from "@cf-wasm/og/workerd";
 import { t } from "@cf-wasm/og/html-to-react";
 
 export default {
-  fetch(req, env, ctx) {
+  async fetch(req, env, ctx) {
     cache.setExecutionContext(ctx);
 
     const html = `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%;">
@@ -199,7 +212,7 @@ export default {
         <p>Hello World!</p>
       </div>`;
 
-    return new ImageResponse(t(html));
+    return await ImageResponse.async(t(html));
   },
 } satisfies ExportedHandler;
 ```
@@ -233,6 +246,27 @@ export default {
 } satisfies ExportedHandler;
 ```
 
+### Tailwind CSS
+
+Satori has experimental support for Tailwind CSS, you can use it by passing Tailwind CSS classes to `tw` prop of `ReactElement`.
+
+```tsx
+import React from "react";
+import { ImageResponse, cache } from "@cf-wasm/og/workerd";
+
+export default {
+  async fetch(req, env, ctx) {
+    cache.setExecutionContext(ctx);
+
+    return await ImageResponse.async(
+      <div tw="flex w-full h-full items-center justify-center">
+        Hello World!
+      </div>
+    );
+  },
+} satisfies ExportedHandler;
+```
+
 ## Examples
 
 Following are some examples for using this library:
@@ -254,69 +288,7 @@ export default {
     const { searchParams } = new URL(req.url);
     const parameters = Object.fromEntries(searchParams.entries());
 
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#6f90ab",
-            fontSize: "2rem",
-            color: "#fff",
-          }}
-        >
-          <span>Noto Sans (Default Font)</span>
-          <span
-            style={{
-              fontFamily: "JetBrains Mono",
-            }}
-          >
-            JetBrains Mono (using GoogleFont class)
-          </span>
-          <span>These are emojis: 😎🌩️</span>
-          <span
-            style={{
-              fontFamily: "JetBrains Mono",
-            }}
-          >
-            Parameters: {JSON.stringify(parameters)}
-          </span>
-        </div>
-      ),
-      {
-        fonts: [new GoogleFont("JetBrains Mono")],
-        emoji: "fluent",
-      }
-    );
-  },
-} satisfies ExportedHandler;
-```
-
-> [!WARNING]
-> If you are using `@cf-wasm/og` on `Cloudflare Workers`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time) as well as the `1MiB` script size limit (Workers Free Plan). Even when using the original project `@vercel/og` on `Cloudflare Pages`, you hit the CPU time limit.
-
-### Next.js (App Router)
-
-If you are using Next.js (App router) with edge runtime, you can use it as shown below:
-
-```tsx
-// (src/)app/api/og/route.tsx
-import React from "react";
-import { type NextRequest } from "next/server";
-import { ImageResponse, GoogleFont } from "@cf-wasm/og/next";
-
-export const runtime = "edge";
-
-export function GET(req: NextRequest) {
-  const { searchParams } = req.nextUrl;
-  const parameters = Object.fromEntries(searchParams.entries());
-
-  return new ImageResponse(
-    (
+    return await ImageResponse.async(
       <div
         style={{
           display: "flex",
@@ -346,8 +318,67 @@ export function GET(req: NextRequest) {
         >
           Parameters: {JSON.stringify(parameters)}
         </span>
-      </div>
-    ),
+      </div>,
+      {
+        fonts: [new GoogleFont("JetBrains Mono")],
+        emoji: "fluent",
+      }
+    );
+  },
+} satisfies ExportedHandler;
+```
+
+> [!WARNING]
+> If you are using `@cf-wasm/og` on `Cloudflare Workers/Pages`, you may hit the [CPU time limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time), [128 MB Memory limit](https://developers.cloudflare.com/workers/platform/limits/#memory) or `3 MB` script size limit (Workers Free Plan).  
+> Avoid loading multiple fonts and assets in memory.
+
+### Next.js (App Router)
+
+If you are using Next.js (App router) with edge runtime, you can use it as shown below:
+
+```tsx
+// (src/)app/api/og/route.tsx
+import React from "react";
+import { type NextRequest } from "next/server";
+import { ImageResponse, GoogleFont } from "@cf-wasm/og/next";
+
+export const runtime = "edge";
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const parameters = Object.fromEntries(searchParams.entries());
+
+  return await ImageResponse.async(
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#6f90ab",
+        fontSize: "2rem",
+        color: "#fff",
+      }}
+    >
+      <span>Noto Sans (Default Font)</span>
+      <span
+        style={{
+          fontFamily: "JetBrains Mono",
+        }}
+      >
+        JetBrains Mono (using GoogleFont class)
+      </span>
+      <span>These are emojis: 😎🌩️</span>
+      <span
+        style={{
+          fontFamily: "JetBrains Mono",
+        }}
+      >
+        Parameters: {JSON.stringify(parameters)}
+      </span>
+    </div>,
     {
       fonts: [new GoogleFont("JetBrains Mono")],
       emoji: "fluent",
@@ -374,39 +405,37 @@ export default async function handler(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const parameters = Object.fromEntries(searchParams.entries());
 
-  return new ImageResponse(
-    (
-      <div
+  return await ImageResponse.async(
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#6f90ab",
+        fontSize: "2rem",
+        color: "#fff",
+      }}
+    >
+      <span>Noto Sans (Default Font)</span>
+      <span
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          height: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#6f90ab",
-          fontSize: "2rem",
-          color: "#fff",
+          fontFamily: "JetBrains Mono",
         }}
       >
-        <span>Noto Sans (Default Font)</span>
-        <span
-          style={{
-            fontFamily: "JetBrains Mono",
-          }}
-        >
-          JetBrains Mono (using GoogleFont class)
-        </span>
-        <span>These are emojis: 😎🌩️</span>
-        <span
-          style={{
-            fontFamily: "JetBrains Mono",
-          }}
-        >
-          Parameters: {JSON.stringify(parameters)}
-        </span>
-      </div>
-    ),
+        JetBrains Mono (using GoogleFont class)
+      </span>
+      <span>These are emojis: 😎🌩️</span>
+      <span
+        style={{
+          fontFamily: "JetBrains Mono",
+        }}
+      >
+        Parameters: {JSON.stringify(parameters)}
+      </span>
+    </div>,
     {
       fonts: [new GoogleFont("JetBrains Mono")],
       emoji: "fluent",

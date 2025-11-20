@@ -35,7 +35,7 @@ export class Resvg extends ResvgClass {
     if (!initResvg.ready) {
       if (initResvg.initialized) {
         throw new Error(
-          '(@cf-wasm/resvg): Resvg is not yet ready while `initResvg()` function was called. Use `Resvg.create()` async static method instead to ensure Resvg is ready.',
+          '(@cf-wasm/resvg): Resvg is not yet ready while `initResvg()` function was called. Use `Resvg.async()` async static method instead to ensure Resvg is ready.',
         );
       }
       throw new Error('(@cf-wasm/resvg): Resvg is not yet initialized. Call `initResvg()` function first.');
@@ -43,9 +43,16 @@ export class Resvg extends ResvgClass {
     super(svg, options);
   }
 
-  public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions) {
+  public static async async(svg: string | Uint8Array, options?: ResvgRenderOptions) {
     await initResvg.ensure();
     return new Resvg(svg, options);
+  }
+
+  /**
+   * @deprecated Use {@link Resvg.async} instead
+   */
+  public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions) {
+    return Resvg.async(svg, options);
   }
 }
 

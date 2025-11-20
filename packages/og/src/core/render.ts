@@ -260,7 +260,7 @@ export function render(element: ReactNode | VNode, options: RenderOptions = {}) 
   const asPng = async () => {
     const fallback = async (): Promise<PngResult> => {
       const svg = await asSvg();
-      const resvg = await modules.resvg.Resvg.create(svg.image, {
+      const resvg = await modules.resvg.Resvg.async(svg.image, {
         ...renderOptions.resvgOptions,
         fitTo: {
           mode: 'width',

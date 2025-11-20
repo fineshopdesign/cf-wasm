@@ -23,7 +23,7 @@ describe('resvgWasmModule', () => {
 
 describe('Resvg legacy', () => {
   it('should convert svg to png', async () => {
-    const resvg = await ResvgLegacy.create(svgString);
+    const resvg = await ResvgLegacy.async(svgString);
     const rendered = resvg.render();
     const pixels = rendered.pixels;
     const bytes = rendered.asPng();
@@ -38,7 +38,7 @@ describe('Resvg legacy', () => {
 
 describe('Resvg', () => {
   it('should convert svg to png', async () => {
-    const resvg = await Resvg.create(svgString);
+    const resvg = await Resvg.async(svgString);
     const rendered = resvg.render();
     const pixels = rendered.pixels;
     const bytes = rendered.asPng();

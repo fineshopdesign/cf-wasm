@@ -12,7 +12,7 @@ const SVG = `<?xml version="1.0" encoding="utf-8"?>
 </svg>`;
 
 export const GET: APIRoute = async () => {
-  const renderer = await Resvg.create(SVG);
+  const renderer = await Resvg.async(SVG);
   const rendered = renderer.render();
 
   const result = rendered.asPng();
