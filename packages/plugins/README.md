@@ -45,6 +45,22 @@ export default defineConfig({
 });
 ```
 
+> [!NOTE]
+> If a dependency is using Cloudflare supported ESM imports syntax (for example, `@cf-wasm/satori`), you need to ensure Vite does not externalize `@cf-wasm/satori` modules during SSR bundling:
+>
+> ```ts
+> // vite.config.{ts|js}
+> import cloudflareModules from "@cf-wasm/plugins/vite-cloudflare-modules";
+> import { defineConfig } from "vite";
+>
+> export default defineConfig({
+>   plugins: [cloudflareModules()],
+>   ssr: {
+>     noExternal: [/^@cf-wasm\/.*/],
+>   },
+> });
+> ```
+
 ### Example: SvelteKit + Cloudflare Adapter
 
 If you are using `@sveltejs/adapter-cloudflare`, simply include this plugin in your Vite configuration:
