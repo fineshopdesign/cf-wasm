@@ -18,20 +18,38 @@ pnpm add @cf-wasm/resvg          # pnpm
 
   ```ts
   import { Resvg } from "@cf-wasm/resvg/workerd";
+  // To use v2.4.1 of @resvg/resvg-wasm, use the below instead
+  import { Resvg } from "@cf-wasm/resvg/legacy/workerd";
   ```
 
 - Next.js Edge Runtime:
 
   ```ts
   import { Resvg } from "@cf-wasm/resvg/next";
+  // To use v2.4.1 of @resvg/resvg-wasm, use the below instead
+  import { Resvg } from "@cf-wasm/resvg/legacy/next";
   ```
 
 - Node.js (file base):
 
   ```ts
   import { Resvg } from "@cf-wasm/resvg/node";
+  // To use v2.4.1 of @resvg/resvg-wasm, use the below instead
+  import { Resvg } from "@cf-wasm/resvg/legacy/node";
   ```
 
 ## Documentation
 
-Read official documentation at [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
+It is recommended to use `Resvg.async()` async static method instead of `new Resvg()` constructor:
+
+```tsx
+import { Resvg } from "@cf-wasm/resvg/legacy/node";
+
+// this is recommended
+await Resvg.async("<svg...</svg>");
+
+// instead of
+new Resvg("<svg...</svg>");
+```
+
+For API reference, read official documentation at [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
