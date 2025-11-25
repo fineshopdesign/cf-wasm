@@ -45,4 +45,4 @@ yarn.lock
 *.crt
 
 # inline modules
-packages/**/lib/*.inline.*
+packages/**/lib/*.inline.js
