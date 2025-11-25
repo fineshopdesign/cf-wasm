@@ -27,7 +27,7 @@ pnpm add @cf-wasm/og          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { ImageResponse } from "@cf-wasm/og/next";
+  import { ImageResponse } from "@cf-wasm/og/edge-light";
   ```
 
 - Node.js (file base):
@@ -340,7 +340,7 @@ If you are using Next.js (App router) with edge runtime, you can use it as shown
 // (src/)app/api/og/route.tsx
 import React from "react";
 import { type NextRequest } from "next/server";
-import { ImageResponse, GoogleFont } from "@cf-wasm/og/next";
+import { ImageResponse, GoogleFont } from "@cf-wasm/og/edge-light";
 
 export const runtime = "edge";
 
@@ -395,7 +395,7 @@ If you are using Next.js (Pages router) with edge runtime, you can use it as sho
 // (src/)pages/api/og.tsx
 import React from "react";
 import { type NextRequest } from "next/server";
-import { ImageResponse, GoogleFont } from "@cf-wasm/og/next";
+import { ImageResponse, GoogleFont } from "@cf-wasm/og/edge-light";
 
 export const config = {
   runtime: "edge",

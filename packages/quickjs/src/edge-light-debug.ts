@@ -1,15 +1,16 @@
 import debugSyncWasmModule from './lib/DEBUG_SYNC.wasm?module';
+import debugSyncWasmModuleSourceMap from './lib/DEBUG_SYNC.wasm.map.txt.inline';
 import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from './lib/debug';
 
-export const NextDebugSyncVariant = newVariant(DEBUG_SYNC, {
+export const EdgeLightDebugSyncVariant = newVariant(DEBUG_SYNC, {
   wasmModule: debugSyncWasmModule,
-  wasmSourceMapData: async () => fetch(new URL('./lib/DEBUG_SYNC.wasm.map.txt', import.meta.url)).then((res) => res.text()),
+  wasmSourceMapData: debugSyncWasmModuleSourceMap,
 });
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
 export async function getQuickJSWASMModule() {
-  singletonPromise ??= newQuickJSWASMModuleFromVariant(NextDebugSyncVariant);
+  singletonPromise ??= newQuickJSWASMModuleFromVariant(EdgeLightDebugSyncVariant);
   return singletonPromise;
 }
 

@@ -23,7 +23,7 @@ pnpm add @cf-wasm/minify-html          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { minify } from "@cf-wasm/minify-html/next";
+  import { minify } from "@cf-wasm/minify-html/edge-light";
   ```
 
 - Node.js (file base):

@@ -57,8 +57,8 @@
         }
       },
       "edge-light": {
-        "types": "./dist/next.d.ts",
-        "import": "./dist/next.js"
+        "types": "./dist/edge-light.d.ts",
+        "import": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
@@ -73,9 +73,9 @@
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"
     },
-    "./next": {
-      "types": "./dist/next.d.ts",
-      "import": "./dist/next.js"
+    "./edge-light": {
+      "types": "./dist/edge-light.d.ts",
+      "import": "./dist/edge-light.js"
     },
     "./node": {
       "import": {
@@ -109,8 +109,8 @@
         }
       },
       "edge-light": {
-        "types": "./dist/legacy/next.d.ts",
-        "import": "./dist/legacy/next.js"
+        "types": "./dist/legacy/edge-light.d.ts",
+        "import": "./dist/legacy/edge-light.js"
       },
       "workerd": {
         "types": "./dist/legacy/workerd.d.ts",
@@ -125,9 +125,9 @@
       "types": "./dist/legacy/workerd.d.ts",
       "import": "./dist/legacy/workerd.js"
     },
-    "./legacy/next": {
-      "types": "./dist/legacy/next.d.ts",
-      "import": "./dist/legacy/next.js"
+    "./legacy/edge-light": {
+      "types": "./dist/legacy/edge-light.d.ts",
+      "import": "./dist/legacy/edge-light.js"
     },
     "./legacy/node": {
       "import": {

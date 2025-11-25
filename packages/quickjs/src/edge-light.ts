@@ -1,14 +1,14 @@
 import releaseSyncWasmModule from './lib/RELEASE_SYNC.wasm?module';
 import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from './lib/release';
 
-export const NextReleaseSyncVariant = newVariant(RELEASE_SYNC, {
+export const EdgeLightReleaseSyncVariant = newVariant(RELEASE_SYNC, {
   wasmModule: releaseSyncWasmModule,
 });
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
 export async function getQuickJSWASMModule() {
-  singletonPromise ??= newQuickJSWASMModuleFromVariant(NextReleaseSyncVariant);
+  singletonPromise ??= newQuickJSWASMModuleFromVariant(EdgeLightReleaseSyncVariant);
   return singletonPromise;
 }
 

@@ -43,3 +43,6 @@ yarn.lock
 *.log
 *.key
 *.crt
+
+# inline modules
+packages/**/lib/*.inline.*

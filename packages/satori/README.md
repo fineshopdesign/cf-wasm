@@ -23,7 +23,7 @@ pnpm add @cf-wasm/satori          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { satori } from "@cf-wasm/satori/next";
+  import { satori } from "@cf-wasm/satori/edge-light";
   ```
 
 - Node.js (file base):

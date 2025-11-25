@@ -25,7 +25,7 @@ pnpm add @cf-wasm/photon          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { PhotonImage } from "@cf-wasm/photon/next";
+  import { PhotonImage } from "@cf-wasm/photon/edge-light";
   ```
 
 - Node.js (file base):
@@ -104,7 +104,11 @@ If you are using Next.js (App router) with edge runtime, you can use it as shown
 ```ts
 // (src/)app/api/image/route.ts
 import { type NextRequest } from "next/server";
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
+import {
+  PhotonImage,
+  SamplingFilter,
+  resize,
+} from "@cf-wasm/photon/edge-light";
 
 export const runtime = "edge";
 
@@ -155,7 +159,11 @@ If you are using Next.js (Pages router) with edge runtime, you can use it as sho
 ```ts
 // (src/)pages/api/image.ts
 import { type NextRequest } from "next/server";
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/next";
+import {
+  PhotonImage,
+  SamplingFilter,
+  resize,
+} from "@cf-wasm/photon/edge-light";
 
 export const config = {
   runtime: "edge",

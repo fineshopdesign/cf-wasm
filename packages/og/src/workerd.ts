@@ -1,7 +1,7 @@
 import * as resvg from '@cf-wasm/resvg/legacy/workerd';
 import * as satori from '@cf-wasm/satori/workerd';
 import { defaultFont, modules } from './core';
-import fallbackFont from './core/noto-sans-v27-latin-regular.ttf.bin';
+import fallbackFont from './lib/noto-sans-v27-latin-regular.ttf.bin';
 
 // Set modules
 modules.set(resvg, satori);

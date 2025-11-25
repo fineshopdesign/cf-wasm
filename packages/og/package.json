@@ -39,7 +39,7 @@
   "types": "./dist/workerd.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./noto-sans-v27-latin-regular.ttf.bin": "./dist/core/noto-sans-v27-latin-regular.ttf.bin",
+    "./noto-sans-v27-latin-regular.ttf.bin": "./dist/lib/noto-sans-v27-latin-regular.ttf.bin",
     ".": {
       "node": {
         "import": {
@@ -52,8 +52,8 @@
         }
       },
       "edge-light": {
-        "types": "./dist/next.d.ts",
-        "import": "./dist/next.js"
+        "types": "./dist/edge-light.d.ts",
+        "import": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
@@ -68,9 +68,9 @@
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"
     },
-    "./next": {
-      "types": "./dist/next.d.ts",
-      "import": "./dist/next.js"
+    "./edge-light": {
+      "types": "./dist/edge-light.d.ts",
+      "import": "./dist/edge-light.js"
     },
     "./node": {
       "import": {

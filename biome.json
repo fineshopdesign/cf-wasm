@@ -13,11 +13,9 @@
       "!**/.astro",
       "!**/.wrangler",
       "!**/.workers-build",
-      "!**/packages/minify-html/src/lib",
+      "!**/packages/*/src/lib",
       "!**/packages/photon/crate",
-      "!**/packages/photon/src/lib",
       "!**/packages/png/crate",
-      "!**/packages/png/src/lib",
       "!**/*.svelte"
     ]
   },

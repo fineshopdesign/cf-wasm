@@ -26,7 +26,7 @@ pnpm add @cf-wasm/quickjs          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { getQuickJSWASMModule } from "@cf-wasm/quickjs/next";
+  import { getQuickJSWASMModule } from "@cf-wasm/quickjs/edge-light";
   ```
 
 - Node.js (file base):

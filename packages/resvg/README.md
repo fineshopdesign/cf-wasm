@@ -25,9 +25,9 @@ pnpm add @cf-wasm/resvg          # pnpm
 - Next.js Edge Runtime:
 
   ```ts
-  import { Resvg } from "@cf-wasm/resvg/next";
+  import { Resvg } from "@cf-wasm/resvg/edge-light";
   // To use v2.4.1 of @resvg/resvg-wasm, use the below instead
-  import { Resvg } from "@cf-wasm/resvg/legacy/next";
+  import { Resvg } from "@cf-wasm/resvg/legacy/edge-light";
   ```
 
 - Node.js (file base):

@@ -8,7 +8,7 @@ import { defaultFont, modules } from './core';
 const filename = url.fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const fallbackFont = fs.readFileSync(path.resolve(dirname, './core/noto-sans-v27-latin-regular.ttf.bin')).buffer;
+const fallbackFont = fs.readFileSync(path.resolve(dirname, './lib/noto-sans-v27-latin-regular.ttf.bin')).buffer;
 
 // Set modules
 modules.set(resvg, satori);

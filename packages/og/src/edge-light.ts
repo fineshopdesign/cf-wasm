@@ -1,14 +1,16 @@
-import * as resvg from '@cf-wasm/resvg/legacy/next';
-import * as satori from '@cf-wasm/satori/next';
-import { defaultFont, GoogleFont, modules } from './core';
+import * as resvg from '@cf-wasm/resvg/legacy/edge-light';
+import * as satori from '@cf-wasm/satori/edge-light';
+import { defaultFont, modules } from './core';
+import fallbackFont from './lib/noto-sans-v27-latin-regular.ttf.bin.inline';
 
 // Set modules
 modules.set(resvg, satori);
 
 // Set default font
+/*
 defaultFont.set(async () => {
   try {
-    const response = await fetch(new URL('./core/noto-sans-v27-latin-regular.ttf.bin', import.meta.url));
+    const response = await fetch(new URL('./lib/noto-sans-v27-latin-regular.ttf.bin', import.meta.url));
     return await response.arrayBuffer();
   } catch (_e) {
     console.warn("(@cf-wasm/og) [ WARN ] Failed to load default font. Using 'Noto Sans' from Google Fonts as the fallback.");
@@ -19,6 +21,8 @@ defaultFont.set(async () => {
     });
   }
 });
+*/
+defaultFont.set(fallbackFont);
 
 export {
   CustomFont,
