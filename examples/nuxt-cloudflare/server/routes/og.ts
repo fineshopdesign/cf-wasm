@@ -1,0 +1,22 @@
+import { ImageResponse } from '@cf-wasm/og';
+
+export default defineEventHandler(async () => {
+  // satori can only render react node out-of-the-box
+  return await ImageResponse.async({
+    key: '0',
+    type: 'div',
+    props: {
+      style: {
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(253, 243, 255, 1)',
+        color: 'rgba(10, 10, 12, 1)',
+        fontSize: '40px',
+      },
+      children: ['Hello World!'],
+    },
+  });
+});

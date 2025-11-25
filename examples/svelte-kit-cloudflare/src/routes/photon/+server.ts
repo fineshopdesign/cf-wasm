@@ -1,12 +1,12 @@
 import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
 import type { RequestHandler } from './$types';
 
-const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
-
 export const GET: RequestHandler = async ({ request }) => {
   const url = new URL(request.url);
-  const paramScale = Number(url.searchParams.get('scale'));
+  const paramScale = Number(url.searchParams.get('scale') || '100');
   const scale = Math.max(1, Math.min(100, Number.isNaN(paramScale) ? 100 : paramScale));
+
+  const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
 
   const inputBytes = await fetch(imageUrl)
     .then((res) => res.arrayBuffer())

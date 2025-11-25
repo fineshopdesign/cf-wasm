@@ -7,15 +7,15 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "cf:preview": "wrangler dev",
-    "cf:deploy": "wrangler deploy",
-    "cf:build": "wrangler deploy --dry-run --outdir=.workers-build"
+    "cf:preview": "pnpm run build && wrangler dev",
+    "cf:build": "pnpm run build && wrangler deploy --dry-run --outdir=.workers-build",
+    "cf:deploy": "pnpm run build && wrangler deploy",
+    "cf:types": "wrangler types ./cloudflare-env.d.ts"
   },
   "dependencies": {
     "astro": "^5.15.5",
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
-    "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*"
   },

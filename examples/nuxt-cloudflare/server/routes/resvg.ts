@@ -1,7 +1,6 @@
 import { Resvg } from '@cf-wasm/resvg/legacy';
-import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async () => {
+export default defineEventHandler(async () => {
   const SVG = `<?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect fill="#F8F5FF" x="0" y="0" width="512" height="512"/>
@@ -25,4 +24,4 @@ export const GET: RequestHandler = async () => {
       'Content-Type': 'image/png',
     },
   });
-};
+});

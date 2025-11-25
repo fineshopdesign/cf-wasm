@@ -1,7 +1,8 @@
 import { Resvg } from '@cf-wasm/resvg/legacy';
 import type { APIRoute } from 'astro';
 
-const SVG = `<?xml version="1.0" encoding="utf-8"?>
+export const GET: APIRoute = async () => {
+  const SVG = `<?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect fill="#F8F5FF" x="0" y="0" width="512" height="512"/>
   <g>
@@ -11,7 +12,6 @@ const SVG = `<?xml version="1.0" encoding="utf-8"?>
   </g>
 </svg>`;
 
-export const GET: APIRoute = async () => {
   const renderer = await Resvg.async(SVG);
   const rendered = renderer.render();
 

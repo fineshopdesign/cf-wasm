@@ -1,8 +1,7 @@
 import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
-import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = async ({ request }) => {
-  const url = new URL(request.url);
+export default defineEventHandler(async (event) => {
+  const url = new URL(event.url, 'http://localhost');
   const paramScale = Number(url.searchParams.get('scale') || '100');
   const scale = Math.max(1, Math.min(100, Number.isNaN(paramScale) ? 100 : paramScale));
 
@@ -26,4 +25,4 @@ export const GET: APIRoute = async ({ request }) => {
       'Content-Type': 'image/webp',
     },
   });
-};
+});

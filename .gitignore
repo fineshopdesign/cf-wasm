@@ -12,6 +12,10 @@ dist
 .workers-build
 .svelte-kit
 .turbo
+.data
+.nuxt
+.nitro
+.cache
 
 # Env
 .env
