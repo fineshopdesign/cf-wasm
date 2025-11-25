@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.3.1
+
+### Patch Changes
+
+- [`259607c`](https://github.com/fineshopdesign/cf-wasm/commit/259607cdca378b8eef503b582a6377654f7922c1) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: rename `next` submodule to `edge-light`
+
+- Updated dependencies [[`259607c`](https://github.com/fineshopdesign/cf-wasm/commit/259607cdca378b8eef503b582a6377654f7922c1)]:
+  - @cf-wasm/satori@0.3.1
+  - @cf-wasm/resvg@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes
