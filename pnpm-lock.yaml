@@ -102,9 +102,6 @@ importers:
       '@cf-wasm/photon':
         specifier: workspace:*
         version: link:../../packages/photon
-      '@cf-wasm/plugins':
-        specifier: workspace:*
-        version: link:../../packages/plugins
       '@cf-wasm/resvg':
         specifier: workspace:*
         version: link:../../packages/resvg
