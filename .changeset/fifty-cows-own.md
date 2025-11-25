@@ -1,11 +1,11 @@
 ---
-"@cf-wasm/minify-html": patch
-"@cf-wasm/quickjs": patch
-"@cf-wasm/photon": patch
-"@cf-wasm/satori": patch
-"@cf-wasm/resvg": patch
-"@cf-wasm/png": patch
-"@cf-wasm/og": patch
+"@cf-wasm/minify-html": minor
+"@cf-wasm/quickjs": minor
+"@cf-wasm/photon": minor
+"@cf-wasm/satori": minor
+"@cf-wasm/resvg": minor
+"@cf-wasm/png": minor
+"@cf-wasm/og": minor
 ---
 
 feat: conditional exports for main modules
