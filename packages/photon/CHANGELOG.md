@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.3.0
+
+### Minor Changes
+
+- [`16be3db`](https://github.com/fineshopdesign/cf-wasm/commit/16be3db81988132fa8e8abed0f6f4f22597f035e) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: conditional exports for main modules
+
 ## 0.2.2
 
 ### Patch Changes
