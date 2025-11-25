@@ -40,8 +40,28 @@
     "./package.json": "./package.json",
     "./minify_html.wasm": "./dist/lib/index_bg.wasm",
     ".": {
-      "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "node": {
+        "import": {
+          "types": "./dist/node.d.ts",
+          "default": "./dist/node.js"
+        },
+        "require": {
+          "types": "./dist/node.d.cts",
+          "default": "./dist/node.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/next.d.ts",
+        "import": "./dist/next.js"
+      },
+      "workerd": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      },
+      "default": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",

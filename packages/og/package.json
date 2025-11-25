@@ -41,8 +41,28 @@
     "./package.json": "./package.json",
     "./noto-sans-v27-latin-regular.ttf.bin": "./dist/core/noto-sans-v27-latin-regular.ttf.bin",
     ".": {
-      "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "node": {
+        "import": {
+          "types": "./dist/node.d.ts",
+          "default": "./dist/node.js"
+        },
+        "require": {
+          "types": "./dist/node.d.cts",
+          "default": "./dist/node.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/next.d.ts",
+        "import": "./dist/next.js"
+      },
+      "workerd": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      },
+      "default": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",

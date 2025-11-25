@@ -46,8 +46,28 @@
     "./resvg.wasm": "./dist/lib/resvg.wasm",
     "./legacy/resvg.wasm": "./dist/legacy/lib/resvg.wasm",
     ".": {
-      "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "node": {
+        "import": {
+          "types": "./dist/node.d.ts",
+          "default": "./dist/node.js"
+        },
+        "require": {
+          "types": "./dist/node.d.cts",
+          "default": "./dist/node.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/next.d.ts",
+        "import": "./dist/next.js"
+      },
+      "workerd": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      },
+      "default": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
@@ -78,8 +98,28 @@
       }
     },
     "./legacy": {
-      "types": "./dist/legacy/workerd.d.ts",
-      "import": "./dist/legacy/workerd.js"
+      "node": {
+        "import": {
+          "types": "./dist/legacy/node.d.ts",
+          "default": "./dist/legacy/node.js"
+        },
+        "require": {
+          "types": "./dist/legacy/node.d.cts",
+          "default": "./dist/legacy/node.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/legacy/next.d.ts",
+        "import": "./dist/legacy/next.js"
+      },
+      "workerd": {
+        "types": "./dist/legacy/workerd.d.ts",
+        "import": "./dist/legacy/workerd.js"
+      },
+      "default": {
+        "types": "./dist/legacy/workerd.d.ts",
+        "import": "./dist/legacy/workerd.js"
+      }
     },
     "./legacy/workerd": {
       "types": "./dist/legacy/workerd.d.ts",

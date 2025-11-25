@@ -301,13 +301,13 @@ export interface FontBuffer {
   data: MayBePromise<Buffer | ArrayBuffer>;
 }
 
-export type FontInput = MayBePromise<Response | Buffer | ArrayBuffer> | FontBuffer;
+export type FontInput = MayBePromise<Response | Buffer | ArrayBuffer | FontBuffer>;
 
 /** Default font utils */
 class DefaultFont {
-  private _fallbackFont?: FontInput | (() => FontInput);
-  private _fontData?: Buffer | ArrayBuffer;
-  private _fontShouldResolve = true;
+  private _input?: FontInput | (() => FontInput);
+  private _data?: Buffer | ArrayBuffer;
+  private _shouldResolve = true;
 
   /**
    * Sets default font for image rendering
@@ -318,8 +318,8 @@ class DefaultFont {
     if (!input) {
       throw new TypeError('Argument 1 type is not acceptable');
     }
-    this._fontShouldResolve = true;
-    this._fallbackFont = input;
+    this._shouldResolve = true;
+    this._input = input;
   }
 
   /**
@@ -330,29 +330,22 @@ class DefaultFont {
    */
   async get() {
     let buffer: Buffer | ArrayBuffer | undefined;
-    const fontInput = typeof this._fallbackFont === 'function' ? this._fallbackFont() : this._fallbackFont;
 
-    if (this._fontShouldResolve && fontInput) {
-      if (fontInput instanceof Promise) {
-        const result = await fontInput;
-        if (result instanceof Response) {
-          buffer = await result.arrayBuffer();
-        } else {
-          buffer = result;
-        }
-      } else if (fontInput instanceof Response) {
-        buffer = await fontInput.arrayBuffer();
-      } else if ('data' in fontInput) {
-        buffer = await fontInput.data;
+    if (this._shouldResolve && this._input) {
+      const input = typeof this._input === 'function' ? await this._input() : await this._input;
+      if (input instanceof Response) {
+        buffer = await input.arrayBuffer();
+      } else if ('data' in input) {
+        buffer = await input.data;
       } else {
-        buffer = fontInput;
+        buffer = input;
       }
-    } else if (this._fontData) {
-      buffer = this._fontData;
+    } else if (this._data) {
+      buffer = this._data;
     }
 
-    this._fontData = buffer;
-    this._fontShouldResolve = false;
+    this._data = buffer;
+    this._shouldResolve = false;
 
     return buffer;
   }
@@ -363,7 +356,7 @@ class DefaultFont {
    * @returns true if default font is set, otherwise false
    */
   has() {
-    return Boolean(this._fallbackFont);
+    return Boolean(this._input);
   }
 }
 

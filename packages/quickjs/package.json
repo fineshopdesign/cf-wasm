@@ -33,24 +33,36 @@
     "./DEBUG_SYNC.wasm.map.txt": "./dist/lib/DEBUG_SYNC.wasm.map.txt",
     "./RELEASE_SYNC.wasm": "./dist/lib/RELEASE_SYNC.wasm",
     ".": {
-      "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "node": {
+        "import": {
+          "types": "./dist/node.d.ts",
+          "default": "./dist/node.js"
+        },
+        "require": {
+          "types": "./dist/node.d.cts",
+          "default": "./dist/node.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/next.d.ts",
+        "import": "./dist/next.js"
+      },
+      "workerd": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      },
+      "default": {
+        "types": "./dist/workerd.d.ts",
+        "import": "./dist/workerd.js"
+      }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
       "import": "./dist/workerd.js"
     },
-    "./workerd-debug": {
-      "types": "./dist/workerd-debug.d.ts",
-      "import": "./dist/workerd-debug.js"
-    },
     "./next": {
       "types": "./dist/next.d.ts",
       "import": "./dist/next.js"
-    },
-    "./next-debug": {
-      "types": "./dist/next-debug.d.ts",
-      "import": "./dist/next-debug.js"
     },
     "./node": {
       "import": {
@@ -62,7 +74,39 @@
         "default": "./dist/node.cjs"
       }
     },
-    "./node-debug": {
+    "./debug": {
+      "node": {
+        "import": {
+          "types": "./dist/node-debug.d.ts",
+          "default": "./dist/node-debug.js"
+        },
+        "require": {
+          "types": "./dist/node-debug.d.cts",
+          "default": "./dist/node-debug.cjs"
+        }
+      },
+      "edge-light": {
+        "types": "./dist/next-debug.d.ts",
+        "import": "./dist/next-debug.js"
+      },
+      "workerd": {
+        "types": "./dist/workerd-debug.d.ts",
+        "import": "./dist/workerd-debug.js"
+      },
+      "default": {
+        "types": "./dist/workerd-debug.d.ts",
+        "import": "./dist/workerd-debug.js"
+      }
+    },
+    "./debug/workerd": {
+      "types": "./dist/workerd-debug.d.ts",
+      "import": "./dist/workerd-debug.js"
+    },
+    "./debug/next": {
+      "types": "./dist/next-debug.d.ts",
+      "import": "./dist/next-debug.js"
+    },
+    "./debug/node": {
       "import": {
         "types": "./dist/node-debug.d.ts",
         "default": "./dist/node-debug.js"
