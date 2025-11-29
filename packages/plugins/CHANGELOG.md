@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.8
+
+### Patch Changes
+
+- [`bdcaa14`](https://github.com/fineshopdesign/cf-wasm/commit/bdcaa14236f83ddd3aff985982bfde0eff20c0c2) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: nitro module and rollup plugin
+
 ## 0.1.7
 
 ### Patch Changes
