@@ -1,6 +1,5 @@
 MIT License
 
-Copyright (c) 2023–present Astro
 Copyright (c) 2025 Deo Kumar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

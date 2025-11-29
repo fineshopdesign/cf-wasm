@@ -4,9 +4,10 @@ Plugins to make Cloudflare-compatible packages work seamlessly with modern build
 
 ## Cloudflare Modules Vite
 
-The Vite plugin exported from the `@cf-wasm/plugins/vite-cloudflare-modules` submodule enables proper resolution of ESM-style imports that are natively supported on Cloudflare Workers, such as:
+The Vite plugin exported from the `@cf-wasm/plugins/vite-additional-modules` submodule enables proper resolution of ESM-style imports that are natively supported on Cloudflare Workers, such as:
 
 - `.wasm?module`
+- `.wasm`
 - `.txt`
 - `.bin`
 
@@ -23,7 +24,7 @@ error during build:
 
 This happens because Vite (and most bundlers) do not natively understand Cloudflare’s special module query syntax.
 
-The `vite-cloudflare-modules` plugin solves this problem by teaching Vite how to handle these imports.
+The `vite-additional-modules` plugin solves this problem by teaching Vite how to handle these imports.
 
 ## Installation
 
@@ -37,11 +38,11 @@ Add the plugin to your `vite.config.js` (or `vite.config.ts`):
 
 ```ts
 // vite.config.{ts|js}
-import cloudflareModules from "@cf-wasm/plugins/vite-cloudflare-modules";
+import additionalModules from "@cf-wasm/plugins/vite-additional-modules";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [cloudflareModules()],
+  plugins: [additionalModules()],
 });
 ```
 
@@ -50,11 +51,11 @@ export default defineConfig({
 >
 > ```ts
 > // vite.config.{ts|js}
-> import cloudflareModules from "@cf-wasm/plugins/vite-cloudflare-modules";
+> import additionalModules from "@cf-wasm/plugins/vite-additional-modules";
 > import { defineConfig } from "vite";
 >
 > export default defineConfig({
->   plugins: [cloudflareModules()],
+>   plugins: [additionalModules()],
 >   ssr: {
 >     noExternal: [/^@cf-wasm\/.*/],
 >   },
@@ -67,12 +68,12 @@ If you are using `@sveltejs/adapter-cloudflare`, simply include this plugin in y
 
 ```ts
 // vite.config.{ts|js}
-import cloudflareModules from "@cf-wasm/plugins/vite-cloudflare-modules";
+import additionalModules from "@cf-wasm/plugins/vite-additional-modules";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [sveltekit(), cloudflareModules()],
+  plugins: [sveltekit(), additionalModules()],
 });
 ```
 

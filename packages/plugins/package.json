@@ -44,27 +44,57 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./vite-cloudflare-modules": {
+    "./nitro-additional-modules": {
       "import": {
-        "types": "./dist/vite-cloudflare-modules.d.ts",
-        "default": "./dist/vite-cloudflare-modules.js"
+        "types": "./dist/nitro-additional-modules.d.ts",
+        "default": "./dist/nitro-additional-modules.js"
       },
       "require": {
-        "types": "./dist/vite-cloudflare-modules.d.cts",
-        "default": "./dist/vite-cloudflare-modules.cjs"
+        "types": "./dist/nitro-additional-modules.d.cts",
+        "default": "./dist/nitro-additional-modules.cjs"
+      }
+    },
+    "./rollup-additional-modules": {
+      "import": {
+        "types": "./dist/rollup-additional-modules.d.ts",
+        "default": "./dist/rollup-additional-modules.js"
+      },
+      "require": {
+        "types": "./dist/rollup-additional-modules.d.cts",
+        "default": "./dist/rollup-additional-modules.cjs"
+      }
+    },
+    "./vite-additional-modules": {
+      "import": {
+        "types": "./dist/vite-additional-modules.d.ts",
+        "default": "./dist/vite-additional-modules.js"
+      },
+      "require": {
+        "types": "./dist/vite-additional-modules.d.cts",
+        "default": "./dist/vite-additional-modules.cjs"
       }
     }
   },
   "dependencies": {
-    "fast-json-stable-stringify": "^2.1.0",
     "magic-string": "^0.30.21"
   },
   "devDependencies": {
     "@types/node": "catalog:default",
+    "nitro": "3.0.1-alpha.1",
+    "rollup": "^4.53.3",
     "tsup": "catalog:default",
     "vite": "catalog:default"
   },
   "peerDependencies": {
+    "rollup": "^4.0.0",
     "vite": "^6.1.0 || ^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
   }
 }
