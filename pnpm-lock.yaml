@@ -208,7 +208,7 @@ importers:
   packages/minify-html:
     dependencies:
       '@minify-html/wasm':
-        specifier: ^0.18.1
+        specifier: 0.18.1
         version: 0.18.1
     devDependencies:
       '@types/node':
@@ -314,10 +314,10 @@ importers:
   packages/quickjs:
     dependencies:
       '@jitl/quickjs-wasmfile-debug-sync':
-        specifier: ^0.31.0
+        specifier: 0.31.0
         version: 0.31.0
       '@jitl/quickjs-wasmfile-release-sync':
-        specifier: ^0.31.0
+        specifier: 0.31.0
         version: 0.31.0
       quickjs-emscripten-core:
         specifier: 0.31.0
@@ -336,7 +336,7 @@ importers:
   packages/resvg:
     dependencies:
       '@resvg/resvg-wasm':
-        specifier: ^2.6.2
+        specifier: 2.6.2
         version: 2.6.2
       '@resvg/resvg-wasm-legacy':
         specifier: npm:@resvg/resvg-wasm@2.4.1
@@ -358,7 +358,7 @@ importers:
         specifier: ^0.15.2
         version: 0.15.2
       yoga-wasm-web:
-        specifier: ^0.3.3
+        specifier: 0.3.3
         version: 0.3.3
     devDependencies:
       '@types/node':
