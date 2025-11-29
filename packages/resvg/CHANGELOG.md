@@ -1,5 +1,11 @@
 # @cf-wasm/resvg
 
+## 0.3.2
+
+### Patch Changes
+
+- [`36ad08a`](https://github.com/fineshopdesign/cf-wasm/commit/36ad08ac74d5694c6eb329adc17285cec7d3e8b0) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use exact version of `@resvg/resvg-wasm`
+
 ## 0.3.1
 
 ### Patch Changes

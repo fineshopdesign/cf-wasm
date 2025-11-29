@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.2.2
+
+### Patch Changes
+
+- [`36ad08a`](https://github.com/fineshopdesign/cf-wasm/commit/36ad08ac74d5694c6eb329adc17285cec7d3e8b0) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use exact version of `@jitl/quickjs-wasmfile-debug-sync` and `@jitl/quickjs-wasmfile-release-sync`
+
 ## 0.2.1
 
 ### Patch Changes
