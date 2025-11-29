@@ -93,7 +93,7 @@
     }
   },
   "dependencies": {
-    "@minify-html/wasm": "^0.18.1"
+    "@minify-html/wasm": "0.18.1"
   },
   "devDependencies": {
     "@types/node": "catalog:default",

@@ -97,7 +97,7 @@
   },
   "dependencies": {
     "satori": "^0.15.2",
-    "yoga-wasm-web": "^0.3.3"
+    "yoga-wasm-web": "0.3.3"
   },
   "devDependencies": {
     "@types/react": "catalog:default",

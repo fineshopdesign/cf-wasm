@@ -151,7 +151,7 @@
     }
   },
   "dependencies": {
-    "@resvg/resvg-wasm": "^2.6.2",
+    "@resvg/resvg-wasm": "2.6.2",
     "@resvg/resvg-wasm-legacy": "npm:@resvg/resvg-wasm@2.4.1"
   },
   "devDependencies": {
