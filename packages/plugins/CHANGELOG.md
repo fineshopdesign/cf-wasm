@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.1.9
+
+### Patch Changes
+
+- [`2b63878`](https://github.com/fineshopdesign/cf-wasm/commit/2b63878d877c3ad166eb510a9f828a6f0fbff137) Thanks [@kumardeo](https://github.com/kumardeo)! - perf: resolve ids without querystring before load
+
 ## 0.1.8
 
 ### Patch Changes
