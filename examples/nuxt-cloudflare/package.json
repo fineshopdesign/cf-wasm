@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "pnpm run build && wrangler dev",
-    "postinstall": "nuxt prepare",
+    "postinstall": "turbo run build --filter='@cf-wasm/plugins' && nuxt prepare",
     "cf:preview": "pnpm run build && wrangler dev",
     "cf:build": "pnpm run build && wrangler deploy --dry-run --outdir=./.workers-build",
     "cf:deploy": "pnpm run build && wrangler deploy",
