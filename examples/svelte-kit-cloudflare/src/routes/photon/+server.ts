@@ -1,4 +1,4 @@
-import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
+import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon/workerd';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request }) => {

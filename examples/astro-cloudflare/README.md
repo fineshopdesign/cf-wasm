@@ -1,6 +1,6 @@
 # Astro + Cloudflare adapter example
 
-Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
+Demonstration of using `@cf-wasm/*` packages (like `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
 
 ## Creating a project
 
@@ -42,7 +42,7 @@ export default defineConfig({
 });
 ```
 
-## Install cf-wasm packages you want to use
+## Install `@cf-wasm/*` packages you want to use
 
 Lets say you want to use `@cf-wasm/og`, install it:
 
@@ -54,9 +54,16 @@ pnpm install @cf-wasm/og
 
 Create an API route and use the package:
 
+> [!WARNING]
+> You must use the `workerd` submodule of the package:
+>
+> ```ts
+> import { ImageResponse } from "@cf-wasm/og/workerd";
+> ```
+
 ```ts
 // src/pages/og.ts
-import { ImageResponse } from "@cf-wasm/og";
+import { ImageResponse } from "@cf-wasm/og/workerd";
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request }) => {

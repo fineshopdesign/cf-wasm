@@ -55,7 +55,17 @@ export default function additionalModules(options: AdditionalModulesOptions = {}
 
     resolveId: {
       order: 'pre',
-      async handler(source) {
+      async handler(source, importer) {
+        if (matchModule(source)) {
+          const resolved = await this.resolve(cleanUrl(source), importer, { skipSelf: true });
+          if (resolved?.id && resolved.id !== source) {
+            return {
+              id: resolved.id.startsWith('file://') ? resolved.id.slice(7) : resolved.id,
+              external: false,
+              moduleSideEffects: false,
+            };
+          }
+        }
         if (isModuleReference(source)) {
           return {
             id: source,
@@ -213,6 +223,10 @@ export default function additionalModules(options: AdditionalModulesOptions = {}
     },
 
     async generateBundle(_, bundle) {
+      if (options.dev) {
+        return;
+      }
+
       const replacementsByChunkName = new Map<string, Replacement[]>();
 
       for (const replacement of replacements) {
@@ -242,6 +256,10 @@ export default function additionalModules(options: AdditionalModulesOptions = {}
     },
 
     async writeBundle() {
+      if (options.dev) {
+        return;
+      }
+
       if (target !== 'workerd' && target !== 'edge-light') {
         return;
       }

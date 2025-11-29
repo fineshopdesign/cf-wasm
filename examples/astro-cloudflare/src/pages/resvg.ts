@@ -1,4 +1,4 @@
-import { Resvg } from '@cf-wasm/resvg/legacy';
+import { Resvg } from '@cf-wasm/resvg/legacy/workerd';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {

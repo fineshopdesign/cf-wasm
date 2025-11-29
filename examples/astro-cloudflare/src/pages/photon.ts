@@ -1,4 +1,4 @@
-import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
+import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon/workerd';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ request }) => {

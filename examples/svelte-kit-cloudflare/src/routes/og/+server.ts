@@ -1,4 +1,4 @@
-import { ImageResponse } from '@cf-wasm/og';
+import { ImageResponse } from '@cf-wasm/og/workerd';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url }) => {

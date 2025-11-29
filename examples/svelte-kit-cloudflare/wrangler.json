@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "svelte-kit-cloudflare",
+  "name": "cf-wasm-svelte-kit-cloudflare-example",
   "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_als"],

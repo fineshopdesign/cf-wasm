@@ -16,6 +16,7 @@
   "dependencies": {
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
+    "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "nuxt": "^4.2.1",
     "vue": "^3.5.25",

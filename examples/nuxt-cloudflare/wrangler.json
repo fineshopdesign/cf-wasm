@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nuxt-cloudflare",
+  "name": "cf-wasm-nuxt-cloudflare-example",
   "main": "./.output/server/index.mjs",
   "compatibility_date": "2025-11-25",
   "assets": {

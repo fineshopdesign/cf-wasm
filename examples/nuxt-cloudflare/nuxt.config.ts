@@ -1,3 +1,5 @@
+import additionalModules from '@cf-wasm/plugins/nitro-additional-modules';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -11,9 +13,7 @@ export default defineNuxtConfig({
       nodeCompat: true,
     },
 
-    rollupConfig: {
-      external: [/^@cf-wasm\/.*/],
-    },
+    modules: [additionalModules({ target: 'edge-light' })],
   },
 
   modules: ['nitro-cloudflare-dev'],

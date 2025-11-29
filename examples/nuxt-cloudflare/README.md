@@ -1,6 +1,6 @@
 # Nuxt + Cloudflare preset example
 
-Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a Nuxt project deployed via Cloudflare Workers using preset `cloudflare_module`.
+Demonstration of using `@cf-wasm/*` packages (e.g. `@cf-wasm/og`) in a Nuxt project deployed via Cloudflare Workers using preset `cloudflare_module`.
 
 ## Creating a project
 
@@ -17,22 +17,23 @@ cd my-nuxt-app
 pnpm install
 ```
 
-## Install cf-wasm packages you want to use
+## Install `@cf-wasm/plugins`
 
-Lets say you want to use `@cf-wasm/og`, install it:
+The `nitro-additional-modules` Nitro module tells Rollup how to handle WebAssembly modules used by cf-wasm packages.
 
 ```shell
-pnpm install @cf-wasm/og
+pnpm install -D @cf-wasm/plugins
 ```
 
 ## Update your `nuxt.config.ts`
 
 We must:
 
-- Ensure Nitro externalizes `@cf-wasm/*` modules in server bundling.
+- Load the `nitro-additional-modules` Nitro module.
 
 ```ts
 // nuxt.config.ts
+import additionalModules from "@cf-wasm/plugins/nitro-additional-modules";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -47,13 +48,19 @@ export default defineNuxtConfig({
       nodeCompat: true,
     },
 
-    rollupConfig: {
-      external: [/^@cf-wasm\/.*/],
-    },
+    modules: [additionalModules({ target: "edge-light" })],
   },
 
   modules: ["nitro-cloudflare-dev"],
 });
+```
+
+## Install `@cf-wasm/*` packages you want to use
+
+Lets say you want to use `@cf-wasm/og`, install it:
+
+```shell
+pnpm install @cf-wasm/og
 ```
 
 ## Create an API route

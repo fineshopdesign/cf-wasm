@@ -17,6 +17,7 @@
   "dependencies": {
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
+    "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*"
   },
   "devDependencies": {
@@ -27,7 +28,6 @@
     "svelte": "^5.43.6",
     "svelte-check": "^4.3.4",
     "vite": "catalog:default",
-    "vite-plugin-devtools-json": "^1.0.0",
     "wrangler": "catalog:default"
   }
 }

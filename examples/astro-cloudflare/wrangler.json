@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cf-wasm-astro-cloudflare-example",
   "main": "dist/_worker.js/index.js",
-  "name": "astro-cloudflare",
   "compatibility_date": "2025-11-05",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "minify": true,

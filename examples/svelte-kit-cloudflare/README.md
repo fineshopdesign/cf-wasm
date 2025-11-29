@@ -17,7 +17,36 @@ cd my-svelte-app
 pnpm install
 ```
 
-## Install cf-wasm packages you want to use
+## Install `@cf-wasm/plugins`
+
+The `vite-additional-modules` plugin tells Vite how to handle WebAssembly modules used by cf-wasm packages.
+
+```shell
+pnpm install -D @cf-wasm/plugins
+```
+
+## Update your `vite.config.ts`
+
+We must:
+
+- Load the `vite-additional-modules` plugin.
+- Ensure Vite does not externalize `@cf-wasm/*` modules during SSR bundling.
+
+```ts
+// vite.config.ts
+import additionalModules from "@cf-wasm/plugins/vite-additional-modules";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [sveltekit(), additionalModules({ target: "edge-light" })],
+  ssr: {
+    noExternal: [/@cf-wasm\/.*/],
+  },
+});
+```
+
+## Install `@cf-wasm/*` packages you want to use
 
 Lets say you want to use `@cf-wasm/og`, install it:
 
@@ -25,37 +54,20 @@ Lets say you want to use `@cf-wasm/og`, install it:
 pnpm install @cf-wasm/og
 ```
 
-## Update your `vite.config.ts`
-
-We must:
-
-- Ensure Vite externalizes `@cf-wasm/*` modules during SSR bundling.
-
-```ts
-// vite.config.ts
-import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
-
-export default defineConfig({
-  plugins: [sveltekit()],
-  ssr: {
-    external: [
-      "@cf-wasm/og",
-      "@cf-wasm/resvg",
-      "@cf-wasm/satori",
-      "@cf-wasm/photon",
-    ],
-  },
-});
-```
-
 ## Create an API route
 
 Create an API route and use the package:
 
+> [!WARNING]
+> You must use the `workerd` submodule of the package when using the Vite plugin:
+>
+> ```ts
+> import { ImageResponse } from "@cf-wasm/og/workerd";
+> ```
+
 ```ts
 // src/routes/og/+server.ts
-import { ImageResponse } from "@cf-wasm/og";
+import { ImageResponse } from "@cf-wasm/og/workerd";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
