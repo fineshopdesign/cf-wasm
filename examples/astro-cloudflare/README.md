@@ -1,6 +1,6 @@
 # Astro + Cloudflare adapter example
 
-Demonstration of using `@cf-wasm/*` packages (like `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
+Demonstration of using `@cf-wasm/*` packages (e.g. `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
 
 ## Creating a project
 
@@ -47,7 +47,7 @@ export default defineConfig({
 });
 ```
 
-> [!INFO]
+> [!TIP]
 > Externalizing packages makes sure Vite does not bundle those dependencies in your final server build, and instead loads them at runtime.  
 > This allows the dev server to pick the `node` conditional export during local development and prerendering, while `wrangler` can pick the `workerd` conditional export during `wrangler dev` and `wrangler deploy`.
 >

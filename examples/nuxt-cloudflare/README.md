@@ -2,6 +2,9 @@
 
 Demonstration of using `@cf-wasm/*` packages (e.g. `@cf-wasm/og`) in a Nuxt project deployed via Cloudflare Workers using preset `cloudflare_module`.
 
+> [!TIP]
+> The same setup works when deploying to Vercel Edge using preset `vercel_edge`.
+
 ## Creating a project
 
 Create a new [Nuxt + Cloudflare](https://developers.cloudflare.com/workers/framework-guides/web-apps/more-web-frameworks/nuxt/) app:

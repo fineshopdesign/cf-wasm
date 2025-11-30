@@ -1,6 +1,6 @@
 # SvelteKit + Cloudflare adapter example
 
-Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a SvelteKit project deployed via Cloudflare Workers using `@sveltejs/adapter-cloudflare`.
+Demonstration of using `@cf-wasm/*` packages (e.g. `@cf-wasm/og`) in a SvelteKit project deployed via Cloudflare Workers using `@sveltejs/adapter-cloudflare`.
 
 > [!TIP]
 > The same setup works when deploying to Vercel Edge using `@sveltejs/adapter-vercel` with `runtime: 'edge'`.
@@ -44,7 +44,7 @@ export default defineConfig({
 });
 ```
 
-> [!INFO]
+> [!TIP]
 > Externalizing packages makes sure Vite does not bundle those dependencies in your final server build, and instead loads them at runtime.  
 > This allows the dev server to pick the `node` conditional export during local development and prerendering, while `wrangler` can pick the `workerd` conditional export during `wrangler dev` and `wrangler deploy`.
 >

@@ -1,6 +1,6 @@
 # Astro + Cloudflare adapter example
 
-Demonstration of using `@cf-wasm/*` packages (like `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
+Demonstration of using `@cf-wasm/*` packages (e.g. `@cf-wasm/og`) in a Astro project deployed via Cloudflare Workers using `@astrojs/cloudflare`.
 
 ## Creating a project
 
