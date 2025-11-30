@@ -1,4 +1,4 @@
-import { Resvg } from '@cf-wasm/resvg/legacy/workerd';
+import { Resvg } from '@cf-wasm/resvg/legacy';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {

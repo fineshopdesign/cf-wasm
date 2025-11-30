@@ -9,7 +9,7 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      noExternal: [/^@cf-wasm\/.*/],
+      external: ['@cf-wasm/og', '@cf-wasm/resvg', '@cf-wasm/satori', '@cf-wasm/photon'],
     },
   },
 });

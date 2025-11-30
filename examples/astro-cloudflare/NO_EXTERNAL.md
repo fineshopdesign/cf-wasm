@@ -21,7 +21,7 @@ pnpm install
 
 We must:
 
-- Ensure Vite externalizes `@cf-wasm/*` modules during SSR bundling.
+- Ensure Vite does not externalize `@cf-wasm/*` modules during SSR bundling.
 
 ```ts
 // astro.config.{mjs|ts}
@@ -36,22 +36,11 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      external: [
-        "@cf-wasm/og",
-        "@cf-wasm/resvg",
-        "@cf-wasm/satori",
-        "@cf-wasm/photon",
-      ],
+      noExternal: [/^@cf-wasm\/.*/],
     },
   },
 });
 ```
-
-> [!INFO]
-> Externalizing packages makes sure Vite does not bundle those dependencies in your final server build, and instead loads them at runtime.  
-> This allows the dev server to pick the `node` conditional export during local development and prerendering, while `wrangler` can pick the `workerd` conditional export during `wrangler dev` and `wrangler deploy`.
->
-> You can use [another method](./NO_EXTERNAL.md) if you wish to bundle packages in your final server build.
 
 ## Install `@cf-wasm/*` packages you want to use
 
@@ -61,16 +50,20 @@ Lets say you want to use `@cf-wasm/og`, install it:
 pnpm install @cf-wasm/og
 ```
 
-> [!NOTE]
-> Ensure that it is included in `ssr.external` in Vite config.
-
 ## Create an API route
 
 Create an API route and use the package:
 
+> [!WARNING]
+> You must use the `workerd` submodule of the package:
+>
+> ```ts
+> import { ImageResponse } from "@cf-wasm/og/workerd";
+> ```
+
 ```ts
 // src/pages/og.ts
-import { ImageResponse } from "@cf-wasm/og";
+import { ImageResponse } from "@cf-wasm/og/workerd";
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request }) => {

@@ -2,9 +2,6 @@
 
 Demonstration of using `cf-wasm` packages (like `@cf-wasm/og`) in a SvelteKit project deployed via Cloudflare Workers using `@sveltejs/adapter-cloudflare`.
 
-> [!TIP]
-> The same setup works when deploying to Vercel Edge using `@sveltejs/adapter-vercel` with `runtime: 'edge'`.
-
 ## Creating a project
 
 Create a new [SvelteKit + Cloudflare](https://developers.cloudflare.com/workers/framework-guides/web-apps/svelte/) app:
@@ -20,35 +17,34 @@ cd my-svelte-app
 pnpm install
 ```
 
+## Install `@cf-wasm/plugins`
+
+The `vite-additional-modules` plugin tells Vite how to handle WebAssembly modules used by cf-wasm packages.
+
+```shell
+pnpm install -D @cf-wasm/plugins
+```
+
 ## Update your `vite.config.ts`
 
 We must:
 
-- Ensure Vite externalizes `@cf-wasm/*` modules during SSR bundling.
+- Load the `vite-additional-modules` plugin.
+- Ensure Vite does not externalize `@cf-wasm/*` modules during SSR bundling.
 
 ```ts
 // vite.config.ts
+import additionalModules from "@cf-wasm/plugins/vite-additional-modules";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [sveltekit(), additionalModules({ target: "edge-light" })],
   ssr: {
-    external: [
-      "@cf-wasm/og",
-      "@cf-wasm/resvg",
-      "@cf-wasm/satori",
-      "@cf-wasm/photon",
-    ],
+    noExternal: [/@cf-wasm\/.*/],
   },
 });
 ```
-
-> [!INFO]
-> Externalizing packages makes sure Vite does not bundle those dependencies in your final server build, and instead loads them at runtime.  
-> This allows the dev server to pick the `node` conditional export during local development and prerendering, while `wrangler` can pick the `workerd` conditional export during `wrangler dev` and `wrangler deploy`.
->
-> You can use [another method](./NO_EXTERNAL.md) if you wish to bundle packages in your final server build.
 
 ## Install `@cf-wasm/*` packages you want to use
 
@@ -58,16 +54,20 @@ Lets say you want to use `@cf-wasm/og`, install it:
 pnpm install @cf-wasm/og
 ```
 
-> [!NOTE]
-> Ensure that it is included in `ssr.external` in Vite config.
-
 ## Create an API route
 
 Create an API route and use the package:
 
+> [!WARNING]
+> You must use the `workerd` submodule of the package when using the Vite plugin:
+>
+> ```ts
+> import { ImageResponse } from "@cf-wasm/og/workerd";
+> ```
+
 ```ts
 // src/routes/og/+server.ts
-import { ImageResponse } from "@cf-wasm/og";
+import { ImageResponse } from "@cf-wasm/og/workerd";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
