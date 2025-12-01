@@ -83,6 +83,10 @@ Compatible with:
 - Next.js (Edge runtime)
 - Node.js
 
+### [@cf-wasm/plugins](./packages/plugins/README.md)
+
+Plugins to make Cloudflare Workers compatible modules work seamlessly with modern build tools such as Vite.
+
 ## Examples
 
 For examples, take a look at the [examples](./examples/) directory.

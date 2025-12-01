@@ -1,6 +1,6 @@
 # @cf-wasm/plugins
 
-Plugins to make Cloudflare-compatible packages work seamlessly with modern build tools such as Vite.
+Plugins to make Cloudflare Workers compatible modules work seamlessly with modern build tools such as Vite.
 
 ## Cloudflare Modules Vite
 

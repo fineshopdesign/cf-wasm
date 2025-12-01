@@ -2,9 +2,9 @@ import type { NitroModule, RollupConfig } from 'nitro/types';
 import rollupPlugin from './rollup-additional-modules';
 import type { AdditionalModulesBaseOptions } from './shared';
 
-export interface AdditionalModules extends AdditionalModulesBaseOptions {}
+export interface AdditionalModulesOptions extends AdditionalModulesBaseOptions {}
 
-export default function additionalModules(options: AdditionalModules = {}) {
+export default function additionalModules(options: AdditionalModulesOptions = {}) {
   return {
     name: 'cf-wasm:nitro-module:additional-modules',
     setup({ options: nitroOptions }) {
