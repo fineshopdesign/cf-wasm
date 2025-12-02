@@ -17,7 +17,7 @@ async function loadWasm(input: InitInput, imports: WebAssembly.Imports): Promise
     (typeof Request === 'function' && source instanceof Request) ||
     (typeof URL === 'function' && source instanceof URL)
   ) {
-    source = fetch(source);
+    source = await fetch(source);
   }
 
   if (typeof Response === 'function' && source instanceof Response) {
@@ -39,7 +39,7 @@ async function loadWasm(input: InitInput, imports: WebAssembly.Imports): Promise
     return await WebAssembly.instantiate(bytes, imports);
   }
 
-  const instantiated = await WebAssembly.instantiate(source as BufferSource | WebAssembly.Module, imports);
+  const instantiated = (await WebAssembly.instantiate(source, imports)) as WebAssembly.Instance | WebAssembly.WebAssemblyInstantiatedSource;
 
   if (instantiated instanceof WebAssembly.Instance) {
     return { instance: instantiated, module: source as WebAssembly.Module };
