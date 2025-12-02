@@ -31,7 +31,6 @@ async function loadWasm(input: InitInput, imports: WebAssembly.Imports): Promise
             e,
           );
         }
-        throw e;
       }
     }
 
