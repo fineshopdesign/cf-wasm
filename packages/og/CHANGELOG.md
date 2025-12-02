@@ -1,5 +1,17 @@
 # @cf-wasm/og
 
+## 0.3.3
+
+### Patch Changes
+
+- [`30f2a67`](https://github.com/fineshopdesign/cf-wasm/commit/30f2a67b1064681e665ef5bf0295a94a2115a858) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: add option `subset` for `GoogleFont`
+
+- [`d59ac84`](https://github.com/fineshopdesign/cf-wasm/commit/d59ac84e590e305d2c8acdfe604cf93a0197145f) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: use inline modules for Node.js
+
+- Updated dependencies [[`d59ac84`](https://github.com/fineshopdesign/cf-wasm/commit/d59ac84e590e305d2c8acdfe604cf93a0197145f)]:
+  - @cf-wasm/satori@0.3.3
+  - @cf-wasm/resvg@0.3.3
+
 ## 0.3.2
 
 ### Patch Changes

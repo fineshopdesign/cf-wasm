@@ -1,5 +1,13 @@
 # @cf-wasm/minify-html
 
+## 0.1.3
+
+### Patch Changes
+
+- [`d59ac84`](https://github.com/fineshopdesign/cf-wasm/commit/d59ac84e590e305d2c8acdfe604cf93a0197145f) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: use inline modules for Node.js
+
+- [`2ba689e`](https://github.com/fineshopdesign/cf-wasm/commit/2ba689e8fc8f9c461767a43e43cb142fbf756bda) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: await when fetching wasm binary
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.2.3
+
+### Patch Changes
+
+- [`d59ac84`](https://github.com/fineshopdesign/cf-wasm/commit/d59ac84e590e305d2c8acdfe604cf93a0197145f) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: use inline modules for Node.js
+
 ## 0.2.2
 
 ### Patch Changes
