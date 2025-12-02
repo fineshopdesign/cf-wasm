@@ -1,14 +1,8 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import debugSyncWasmBuffer from './lib/DEBUG_SYNC.wasm.inline';
+import debugSyncWasmModuleSourceMap from './lib/DEBUG_SYNC.wasm.map.txt.inline';
 import { DEBUG_SYNC, newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule } from './lib/debug';
 
-const filename = url.fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const debugSyncWasmBinary = fs.readFileSync(path.resolve(dirname, './lib/DEBUG_SYNC.wasm'));
-const debugSyncWasmModule = new WebAssembly.Module(debugSyncWasmBinary);
-const debugSyncWasmModuleSourceMap = fs.readFileSync(path.resolve(dirname, './lib/DEBUG_SYNC.wasm.map.txt'), 'utf-8');
+const debugSyncWasmModule = new WebAssembly.Module(debugSyncWasmBuffer);
 
 export const NodeDebugSyncVariant = newVariant(DEBUG_SYNC, {
   wasmModule: debugSyncWasmModule,

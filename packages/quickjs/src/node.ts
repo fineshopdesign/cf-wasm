@@ -1,13 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import releaseSyncWasmBuffer from './lib/RELEASE_SYNC.wasm.inline';
 import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from './lib/release';
 
-const filename = url.fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const releaseSyncWasmBinary = fs.readFileSync(path.resolve(dirname, './lib/RELEASE_SYNC.wasm'));
-const releaseSyncWasmModule = new WebAssembly.Module(releaseSyncWasmBinary);
+const releaseSyncWasmModule = new WebAssembly.Module(releaseSyncWasmBuffer);
 
 export const NodeReleaseSyncVariant = newVariant(RELEASE_SYNC, {
   wasmModule: releaseSyncWasmModule,

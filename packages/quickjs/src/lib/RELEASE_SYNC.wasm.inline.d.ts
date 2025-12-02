@@ -1,2 +1,2 @@
-declare const module: WebAssembly.Module;
-export default module;
+declare const buffer: ArrayBuffer;
+export default buffer;

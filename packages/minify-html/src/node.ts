@@ -1,13 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import minifyHTMLWasmBuffer from './lib/index_bg.wasm.inline';
 import { initMinifyHTML } from './minify-html';
 
-const filename = url.fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const minifyHTMLWasmBinary = fs.readFileSync(path.resolve(dirname, './lib/index_bg.wasm'));
-const minifyHTMLWasmModule = new WebAssembly.Module(minifyHTMLWasmBinary);
+const minifyHTMLWasmModule = new WebAssembly.Module(minifyHTMLWasmBuffer);
 
 initMinifyHTML.sync(minifyHTMLWasmModule);
 

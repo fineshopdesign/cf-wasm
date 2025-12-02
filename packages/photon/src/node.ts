@@ -1,13 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import photonWasmBuffer from './lib/photon_rs_bg.wasm.inline';
 import { initPhoton } from './photon';
 
-const filename = url.fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const photonWasmBinary = fs.readFileSync(path.resolve(dirname, './lib/photon_rs_bg.wasm'));
-const photonWasmModule = new WebAssembly.Module(photonWasmBinary);
+const photonWasmModule = new WebAssembly.Module(photonWasmBuffer);
 
 initPhoton.sync({ module: photonWasmModule });
 

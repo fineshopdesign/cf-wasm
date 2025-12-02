@@ -22,10 +22,7 @@ export default defineConfig(() => {
     const content = fs.readFileSync(file);
     let module: string;
     let declaration: string;
-    if (file.endsWith('.wasm')) {
-      module = `export default new WebAssembly.Module(Uint8Array.from(atob("${content.toString('base64')}"), c => c.charCodeAt(0)));\n`;
-      declaration = 'declare const module: WebAssembly.Module;\nexport default module;\n';
-    } else if (file.endsWith('.txt')) {
+    if (file.endsWith('.txt')) {
       module = `export default ${JSON.stringify(content.toString('utf-8'))}`;
       declaration = 'declare const string: string;\nexport default string;\n';
     } else {
