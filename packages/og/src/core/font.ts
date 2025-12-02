@@ -6,19 +6,36 @@ import type { MayBePromise } from './types';
 
 export type FontDisplay = 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
 
-/** An interface representing options for {@link loadGoogleFont} function */
-export interface LoadGoogleFontOptions {
-  text?: string;
-
-  /** The font weight to load */
-  weight?: string | number;
-
-  /** The font style to load */
-  style?: FontStyle;
-
-  /** The `font-display` */
-  display?: FontDisplay;
-}
+export type FontSubset =
+  | 'arabic'
+  | 'bengali'
+  | 'chinese-simplified'
+  | 'cyrillic'
+  | 'cyrillic-ext'
+  | 'devanagari'
+  | 'ethiopic'
+  | 'greek'
+  | 'greek-ext'
+  | 'gujarati'
+  | 'gurmukhi'
+  | 'hebrew'
+  | 'japanese'
+  | 'kannada'
+  | 'khmer'
+  | 'korean'
+  | 'lao'
+  | 'latin'
+  | 'latin-ext'
+  | 'malayalam'
+  | 'menu'
+  | 'myanmar'
+  | 'oriya'
+  | 'sinhala'
+  | 'tamil'
+  | 'telugu'
+  | 'thai'
+  | 'tibetan'
+  | 'vietnamese';
 
 /** Default user agent for loading css */
 export const GOOGLE_FONT_CSS_DEFAULT_USER_AGENT =
@@ -87,10 +104,27 @@ class GoogleFontsUtils {
 
 export const googleFonts = new GoogleFontsUtils();
 
+/** An interface representing options for {@link loadGoogleFont} function */
+export interface LoadGoogleFontOptions {
+  /** The font style to load */
+  style?: FontStyle;
+
+  /** The font weight to load */
+  weight?: string | number;
+
+  /** The font subset to load */
+  subset?: FontSubset;
+
+  /** The `font-display` */
+  display?: FontDisplay;
+
+  text?: string;
+}
+
 /** Constructs Google font css url */
 export const constructGoogleFontCssUrl = (
   family: string,
-  { text, weight = 400, style = 'normal', display }: { text?: string; weight?: string | number; style?: FontStyle; display?: FontDisplay } = {},
+  { style = 'normal', weight = 400, subset = 'latin', display, text }: LoadGoogleFontOptions = {},
 ) => {
   if (typeof family !== 'string' || family.trim().length === 0) {
     throw new Error('Not a valid font family name was provided');
@@ -103,7 +137,7 @@ export const constructGoogleFontCssUrl = (
   if (text) {
     params.text = encodeURIComponent(text);
   } else {
-    params.subset = 'latin';
+    params.subset = subset;
   }
 
   if (typeof display === 'string') {
@@ -125,8 +159,8 @@ export const constructGoogleFontCssUrl = (
  *
  * @returns A promise which resolved to {@link ArrayBuffer}
  */
-export const loadGoogleFont = async (family: string, { text, weight = 400, style = 'normal', display }: LoadGoogleFontOptions = {}) => {
-  const cssUrl = constructGoogleFontCssUrl(family, { text, weight, display, style });
+export const loadGoogleFont = async (family: string, options: LoadGoogleFontOptions = {}) => {
+  const cssUrl = constructGoogleFontCssUrl(family, options);
 
   const fromMap = FONT_CACHE_MAP.get(cssUrl);
 
@@ -165,34 +199,16 @@ export const loadGoogleFont = async (family: string, { text, weight = 400, style
   return buffer;
 };
 
-/** Base font options */
 export interface BaseFontOptions {
   weight?: FontWeight;
   style?: FontStyle;
 }
 
-/** Base font class */
-export class BaseFont {
-  protected input;
-
+export interface BaseFont {
   name: string;
   style: FontStyle;
   weight: FontWeight;
-
-  constructor(
-    name: string,
-    input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>) | undefined,
-    { weight = 400, style = 'normal' }: BaseFontOptions = {},
-  ) {
-    this.input = input;
-    this.name = name;
-    this.style = style;
-    this.weight = weight;
-  }
-
-  get data() {
-    return this.input;
-  }
+  get data(): Promise<Buffer | ArrayBuffer>;
 }
 
 /** An interface representing options for {@link CustomFont} */
@@ -201,12 +217,15 @@ export interface CustomFontOptions extends BaseFontOptions {
 }
 
 /** A helper class to load Custom font */
-export class CustomFont extends BaseFont {
+export class CustomFont implements BaseFont {
   protected input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>);
 
   private promise?: Promise<Buffer | ArrayBuffer>;
 
   type: 'custom';
+  name: string;
+  style: FontStyle;
+  weight: FontWeight;
   lang: string | undefined;
 
   /**
@@ -216,11 +235,17 @@ export class CustomFont extends BaseFont {
    * @param input Font data as `ArrayBuffer` or a promise which resolves to `ArrayBuffer`
    * @param options
    */
-  constructor(name: string, input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>), options?: CustomFontOptions) {
-    super(name, input, options);
+  constructor(
+    name: string,
+    input: MayBePromise<Buffer | ArrayBuffer> | (() => MayBePromise<Buffer | ArrayBuffer>),
+    { style = 'normal', weight = 400, lang }: CustomFontOptions = {},
+  ) {
     this.type = 'custom';
+    this.name = name;
+    this.style = style;
+    this.weight = weight;
     this.input = input;
-    this.lang = options?.lang;
+    this.lang = lang;
   }
 
   /**
@@ -240,15 +265,19 @@ export interface GoogleFontOptions extends BaseFontOptions {
 
   /** Loads font only for particular text (for better performance) */
   text?: string;
+
+  subset?: FontSubset;
 }
 
 /** A helper class to load Google font */
-export class GoogleFont extends BaseFont {
-  protected input: Promise<ArrayBuffer> | undefined;
-
+export class GoogleFont implements BaseFont {
   private promise?: Promise<ArrayBuffer>;
 
   type: 'google';
+  name: string;
+  style: FontStyle;
+  weight: FontWeight;
+  subset: FontSubset;
 
   /** The font family name */
   family: string;
@@ -262,20 +291,23 @@ export class GoogleFont extends BaseFont {
    * @param family The name of font family to load
    * @param options The {@link GoogleFontOptions}
    */
-  constructor(family: string, options: GoogleFontOptions = {}) {
-    super(options.name || family, undefined, options);
+  constructor(family: string, { name, style = 'normal', weight = 400, subset = 'latin', text }: GoogleFontOptions = {}) {
     this.type = 'google';
+    this.name = name || family;
+    this.style = style;
+    this.weight = weight;
+    this.subset = subset;
     this.family = family;
-    this.text = options.text;
-    this.input = undefined;
+    this.text = text;
   }
 
   /** A promise which resolves to font data as `ArrayBuffer` */
   get data(): Promise<ArrayBuffer> {
     const fallback = async () =>
       loadGoogleFont(this.family, {
-        weight: this.weight,
         style: this.style,
+        weight: this.weight,
+        subset: this.subset,
         text: this.text,
       });
     this.promise = this.promise?.then(null, fallback) ?? fallback();

@@ -33,6 +33,7 @@ describe('GoogleFont', () => {
     expect(googleFont).property('name').equals('Inclusive Sans');
     expect(googleFont).property('weight').equals(400);
     expect(googleFont).property('style').equals('normal');
+    expect(googleFont).property('subset').equals('latin');
     expect(googleFont).property('data').instanceOf(Promise);
 
     expect(await googleFont.canLoad()).equals(true);

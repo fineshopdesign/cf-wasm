@@ -8,7 +8,7 @@ describe('photonWasmModule', () => {
 });
 
 describe('resize', async () => {
-  it('should resize images', async () => {
+  it('can resize images', async () => {
     const imageUrl = 'https://github.com/fineshopdesign.png';
     const imageBytes = new Uint8Array(await (await fetch(imageUrl)).arrayBuffer());
     const inputImage = PhotonImage.new_from_byteslice(imageBytes);

@@ -1,20 +1,16 @@
 export { cache } from './cache';
 export type { EmojiType } from './emoji';
-export { FetchError, type FetchErrorOptions } from './errors';
+export { FetchError } from './errors';
 export {
-  BaseFont,
-  type BaseFontOptions,
   CustomFont,
   type CustomFontOptions,
   defaultFont,
-  type FontBuffer,
   type FontDisplay,
   GoogleFont,
   type GoogleFontOptions,
   googleFonts,
   loadGoogleFont,
 } from './font';
-export { modules } from './modules';
 export {
   type Font,
   type PngResult,

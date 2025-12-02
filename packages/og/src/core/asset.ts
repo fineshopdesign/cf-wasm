@@ -68,8 +68,8 @@ export async function loadDynamicAsset(
   segment: string,
   emoji?: EmojiType,
 ): Promise<string | Font[]> {
-  /** Get a key based in input */
-  const key = `${languageCode}:${segment}`;
+  /** Get a key from input */
+  const key = JSON.stringify([languageCode, segment]);
   if (ASSET_CACHE_MAP.has(key)) {
     const cache = ASSET_CACHE_MAP.get(key);
     return cache ?? [];

@@ -1,6 +1,7 @@
 import * as resvg from '@cf-wasm/resvg/legacy/others';
 import * as satori from '@cf-wasm/satori/others';
-import { defaultFont, GoogleFont, modules } from './core';
+import { defaultFont, GoogleFont } from './core';
+import { modules } from './core/modules';
 
 // Set modules
 modules.set(resvg, satori);
@@ -14,31 +15,4 @@ defaultFont.set(
   }),
 );
 
-export {
-  CustomFont,
-  type CustomFontOptions,
-  cache,
-  defaultFont,
-  type EmojiType,
-  FetchError,
-  type Font,
-  type FontDisplay,
-  type FontStyle,
-  type FontWeight,
-  GoogleFont,
-  type GoogleFontOptions,
-  googleFonts,
-  ImageResponse,
-  type ImageResponseOptions,
-  type Locale,
-  loadGoogleFont,
-  type PngResult,
-  type RenderOptions,
-  type RenderResvgOptions,
-  type RenderSatoriOptions,
-  type ResvgRenderOptions,
-  render,
-  type SatoriNode,
-  type SatoriOptions,
-  type SvgResult,
-} from './core';
+export * from './core';

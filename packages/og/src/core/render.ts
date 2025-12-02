@@ -206,7 +206,7 @@ export function render(element: ReactNode | VNode, options: RenderOptions = {}) 
          * @see https://github.com/vercel/satori/issues/590
          */
         fonts.map((font) => {
-          const key = `[${font.name}]:[${font.style || ''}]:[${font.weight || ''}]:[${font.lang || ''}]:[${font.data.byteLength}]`;
+          const key = JSON.stringify([font.name, font.style || '', font.weight || '', font.lang || '', font.data.byteLength]);
           const fromMap = SATORI_FONT_CACHE_MAP.get(key);
           if (fromMap) {
             return fromMap;
