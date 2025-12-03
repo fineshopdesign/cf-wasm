@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/satori",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": false,
   "description": "Enlightened library to convert HTML and CSS to SVG.",
   "keywords": [
