@@ -35,6 +35,8 @@ export default defineConfig(() => {
     platform: 'neutral',
     sourcemap: true,
     splitting: true,
+    bundle: true,
+    skipNodeModulesBundle: true,
     shims: true,
     dts: true,
   } satisfies Options;

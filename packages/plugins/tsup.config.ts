@@ -7,7 +7,9 @@ export default defineConfig({
   outDir: 'dist',
   sourcemap: true,
   splitting: true,
+  bundle: true,
+  skipNodeModulesBundle: true,
   shims: true,
-  clean: true,
   dts: true,
+  clean: true,
 });
