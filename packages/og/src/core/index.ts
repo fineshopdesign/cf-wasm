@@ -15,6 +15,7 @@ export {
   type Font,
   type PngResult,
   type RenderOptions,
+  type RenderResult,
   type RenderResvgOptions,
   type RenderSatoriOptions,
   render,

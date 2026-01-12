@@ -15,7 +15,7 @@ export const EMOJI_APIS = {
 /** Represents type of emoji */
 export type EmojiType = keyof typeof EMOJI_APIS;
 
-export function toCodePoint(unicodeSurrogates: string) {
+export function toCodePoint(unicodeSurrogates: string): string {
   const r: string[] = [];
   let c = 0;
   let p = 0;
@@ -38,7 +38,7 @@ export function toCodePoint(unicodeSurrogates: string) {
 const U200D = String.fromCharCode(8205);
 const UFE0Fg = /\uFE0F/g;
 
-export function getIconCode(char: string) {
+export function getIconCode(char: string): string {
   return toCodePoint(char.indexOf(U200D) < 0 ? char.replace(UFE0Fg, '') : char);
 }
 
@@ -54,7 +54,7 @@ export const DEFAULT_EMOJI_TYPE: EmojiType = 'twemoji';
  *
  * @returns The emoji's svg as string
  */
-export async function loadEmoji(code: string, type?: EmojiType) {
+export async function loadEmoji(code: string, type?: EmojiType): Promise<string> {
   const apiType = !type || !EMOJI_APIS[type] ? DEFAULT_EMOJI_TYPE : type;
   const api = EMOJI_APIS[apiType];
 

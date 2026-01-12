@@ -5,6 +5,7 @@ type ReactChild = ReactElement | string | null;
 
 function props(input: { children?: ReactChild | ReactChild[] }) {
   const props = { ...input };
+
   if ('children' in props) {
     const { children } = props;
     if (typeof children === 'undefined' || children === null) {

@@ -1,5 +1,6 @@
 import { detectRuntime } from '@cf-wasm/internals/detect-runtime';
 import type { ReactElement } from 'react';
+import { replaceEntities } from './core/entities';
 import { FetchError } from './core/errors';
 import type { FontBuffer } from './core/font';
 import { modules } from './core/modules';
@@ -7,7 +8,6 @@ import { type Font, type PngResult, type RenderOptions, render, type SvgResult }
 import { type ImageResponseOptions, type RenderAsResponseOptions, renderAsResponse } from './core/response';
 import type { FontWeight } from './core/satori';
 import type { MayBePromise } from './core/types';
-import { replaceEntities } from './core/utils/entities';
 
 /** Make sure modules are set by importing the main module */
 if (!modules.isUsable()) {
@@ -92,6 +92,12 @@ export interface RenderFigmaOptions extends Omit<RenderOptions, 'width' | 'heigh
   loadFonts?: LoadFontsFunction;
 }
 
+export interface RenderFigmaResult {
+  asElement(): Promise<ElementResult>;
+  asSvg(): Promise<SvgResult>;
+  asPng(): Promise<PngResult>;
+}
+
 /**
  * A helper function to parse figma url and return its `fileId` and `nodeId`
  *
@@ -99,14 +105,21 @@ export interface RenderFigmaOptions extends Omit<RenderOptions, 'width' | 'heigh
  *
  * @returns An object containing `fileId` and `nodeId`
  */
-function parseFigmaUrl(figmaUrl: string) {
+function parseFigmaUrl(figmaUrl: string): {
+  fileId: string | null;
+  nodeId: string | null;
+} {
   const regex = /\/file\/([^/]+)\/[^?]+\?[^#]*node-id=([^&#]+)/;
   const match = figmaUrl.match(regex);
-  let fileId = '';
-  let nodeId = '';
+  let fileId: string | null = null;
+  let nodeId: string | null = null;
   if (match) {
-    fileId = match[1] || '';
-    nodeId = match[2] || '';
+    if (match[1]) {
+      fileId = match[1];
+    }
+    if (match[2]) {
+      nodeId = match[2];
+    }
   }
   return { fileId, nodeId };
 }
@@ -298,6 +311,14 @@ async function getFigmaSvg(figmaOptions: FigmaOptions) {
   assertValue(url, "(@cf-wasm/og) [ERROR] 'url' field is required");
   assertValue(token, "(@cf-wasm/og) [ERROR] 'token' field is required");
 
+  if (!fileId) {
+    throw new Error('(@cf-wasm/og) [ERROR] Failed to get file id from url');
+  }
+
+  if (!nodeId) {
+    throw new Error('(@cf-wasm/og) [ERROR] Failed to get node id from url');
+  }
+
   const apiUrl = `https://api.figma.com/v1/images/${fileId}?ids=${nodeId}&svg_outline_text=false&format=svg&svg_include_id=true`;
   const figmaResponse = await fetch(apiUrl, {
     method: 'GET',
@@ -377,7 +398,7 @@ async function loadTextNodeFonts(nodeAttributes: ReturnType<typeof parseTextNode
  *
  * @returns An object containing methods for rendering the Figma template to image
  */
-export function renderFigma(figmaOptions: FigmaOptions, renderOptions?: RenderFigmaOptions) {
+export function renderFigma(figmaOptions: FigmaOptions, renderOptions?: RenderFigmaOptions): RenderFigmaResult {
   const getFigmaData = async (): Promise<ElementResult> => {
     const { template } = figmaOptions;
     const svg = await getFigmaSvg(figmaOptions);
@@ -589,9 +610,9 @@ export class FigmaImageResponse extends Response {
     super(stream(), init);
   }
 
-  async async(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions) {
+  async async(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions): Promise<Response> {
     const { body, init } = renderFigmaAsResponse(figmaOptions, responseOptions);
 
-    new Response(await body(), init);
+    return new Response(await body(), init);
   }
 }

@@ -121,6 +121,11 @@ export interface RenderOptions {
   resvgOptions?: RenderResvgOptions;
 }
 
+export interface RenderResult {
+  asSvg(): Promise<SvgResult>;
+  asPng(): Promise<PngResult>;
+}
+
 /** Default render options */
 export const RENDER_DEFAULT_OPTIONS = {
   width: 1200,
@@ -137,7 +142,7 @@ export const RENDER_DEFAULT_OPTIONS = {
  *
  * @returns An object containing methods for rendering the input element to image
  */
-export function render(element: ReactNode | VNode, options: RenderOptions = {}) {
+export function render(element: ReactNode | VNode, options: RenderOptions = {}): RenderResult {
   const promises: {
     svg?: Promise<SvgResult>;
     png?: Promise<PngResult>;

@@ -115,7 +115,7 @@ class CacheUtils {
    *
    * @returns A promise which resolves to {@link Cache}
    */
-  async open(cacheName?: string) {
+  async open(cacheName?: string): Promise<Cache> {
     if (typeof this.store === 'object') {
       return this.store;
     }

@@ -79,7 +79,7 @@ class GoogleFontsUtils {
    *
    * @returns On success, the css as string
    */
-  async loadCss(cssUrl: string, userAgent = GOOGLE_FONT_CSS_DEFAULT_USER_AGENT) {
+  async loadCss(cssUrl: string, userAgent = GOOGLE_FONT_CSS_DEFAULT_USER_AGENT): Promise<string> {
     let css = await this._cssLoader(cssUrl, userAgent);
     if (typeof css === 'undefined') {
       css = await this._defaultCssLoader(cssUrl, userAgent);
@@ -122,10 +122,10 @@ export interface LoadGoogleFontOptions {
 }
 
 /** Constructs Google font css url */
-export const constructGoogleFontCssUrl = (
+export function constructGoogleFontCssUrl(
   family: string,
   { style = 'normal', weight = 400, subset = 'latin', display, text }: LoadGoogleFontOptions = {},
-) => {
+): string {
   if (typeof family !== 'string' || family.trim().length === 0) {
     throw new Error('Not a valid font family name was provided');
   }
@@ -149,7 +149,7 @@ export const constructGoogleFontCssUrl = (
     .join('&')}`;
 
   return cssUrl;
-};
+}
 
 /**
  * A helper function for loading google fonts as {@link ArrayBuffer}
@@ -159,7 +159,7 @@ export const constructGoogleFontCssUrl = (
  *
  * @returns A promise which resolved to {@link ArrayBuffer}
  */
-export const loadGoogleFont = async (family: string, options: LoadGoogleFontOptions = {}) => {
+export async function loadGoogleFont(family: string, options: LoadGoogleFontOptions = {}): Promise<ArrayBuffer> {
   const cssUrl = constructGoogleFontCssUrl(family, options);
 
   const fromMap = FONT_CACHE_MAP.get(cssUrl);
@@ -197,7 +197,7 @@ export const loadGoogleFont = async (family: string, options: LoadGoogleFontOpti
   FONT_CACHE_MAP.set(cssUrl, buffer);
 
   return buffer;
-};
+}
 
 export interface BaseFontOptions {
   weight?: FontWeight;
@@ -360,7 +360,7 @@ class DefaultFont {
    * @returns A Promise which resolves to ArrayBuffer if default font is set,
    * otherwise undefined
    */
-  async get() {
+  async get(): Promise<Buffer | ArrayBuffer | undefined> {
     let buffer: Buffer | ArrayBuffer | undefined;
 
     if (this._shouldResolve && this._input) {
@@ -387,7 +387,7 @@ class DefaultFont {
    *
    * @returns true if default font is set, otherwise false
    */
-  has() {
+  has(): boolean {
     return Boolean(this._input);
   }
 }

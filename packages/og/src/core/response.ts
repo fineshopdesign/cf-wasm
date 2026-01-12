@@ -36,14 +36,14 @@ export function renderAsResponse(input: () => MayBePromise<[ReactNode | VNode, R
     Object.assign(init, { cf: options.cf });
   }
 
-  const body = async () => {
+  const body = async (): Promise<string | Uint8Array<ArrayBuffer>> => {
     const [element, renderOptions] = await input();
     const renderer = render(element, renderOptions);
     const { image } = isSvg ? await renderer.asSvg() : await renderer.asPng();
     return image;
   };
 
-  const stream = () => {
+  const stream = (): ReadableStream => {
     return new ReadableStream({
       start(controller) {
         body()
@@ -83,7 +83,7 @@ export class ImageResponse extends Response {
     super(stream(), init);
   }
 
-  static async async(element: ReactNode | VNode, options?: ImageResponseOptions) {
+  static async async(element: ReactNode | VNode, options?: ImageResponseOptions): Promise<Response> {
     const { body, init } = renderAsResponse(() => [element, options], options);
 
     return new Response(await body(), init);
