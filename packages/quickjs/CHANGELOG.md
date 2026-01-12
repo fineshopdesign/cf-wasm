@@ -1,5 +1,11 @@
 # @cf-wasm/quickjs
 
+## 0.2.4
+
+### Patch Changes
+
+- [`1b169f8`](https://github.com/fineshopdesign/cf-wasm/commit/1b169f8b405c61a2a83bcd1f0e25064bcf587d94) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use inline modules for `.bin` and `.txt` modules
+
 ## 0.2.3
 
 ### Patch Changes

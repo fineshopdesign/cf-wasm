@@ -1,5 +1,13 @@
 # @cf-wasm/og
 
+## 0.3.4
+
+### Patch Changes
+
+- [`1b169f8`](https://github.com/fineshopdesign/cf-wasm/commit/1b169f8b405c61a2a83bcd1f0e25064bcf587d94) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: use inline modules for `.bin` and `.txt` modules
+
+- [`b8f3b00`](https://github.com/fineshopdesign/cf-wasm/commit/b8f3b0074e82e1685118f01ef35c4ca7ec94b6ab) Thanks [@kumardeo](https://github.com/kumardeo)! - refactor: explicit return type wherever possible
+
 ## 0.3.3
 
 ### Patch Changes
