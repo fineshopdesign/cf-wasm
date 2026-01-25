@@ -1,5 +1,11 @@
 # @cf-wasm/og
 
+## 0.3.5
+
+### Patch Changes
+
+- [`bec4388`](https://github.com/fineshopdesign/cf-wasm/commit/bec4388c962ba6aac808481b20096afe97aabd47) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: add option to use `class` or `data-tw` attribute as `tw` prop when using `html-to-react`
+
 ## 0.3.4
 
 ### Patch Changes
