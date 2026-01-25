@@ -1,49 +1,94 @@
-import { convertHtmlToReact, type ParserOptions } from '@hedgedoc/html-to-react';
-import { createElement, Fragment, type ReactElement } from 'react';
+import { convertHtmlToReact, type ParserOptions as HTMLToReactParserOptions } from '@hedgedoc/html-to-react';
+import { createElement, Fragment, isValidElement, type ReactElement, type ReactNode } from 'react';
 
-type ReactChild = ReactElement | string | null;
+export interface ParserOptions extends HTMLToReactParserOptions {
+  tailwind?: boolean | 'data' | 'class';
+}
 
-function props(input: { children?: ReactChild | ReactChild[] }) {
-  const props = { ...input };
+class Transformer {
+  private options: ParserOptions & { tailwind: boolean | 'data' | 'class' };
 
-  if ('children' in props) {
-    const { children } = props;
-    if (typeof children === 'undefined' || children === null) {
-      delete props.children;
-    } else if (typeof children === 'string') {
-      props.children = children;
-    } else if (Array.isArray(children)) {
-      const filtered = children
-        .filter((child) => typeof child === 'string' || Boolean(child))
-        .map((child) => (typeof child === 'object' && child ? element(child) : child));
+  constructor(options: ParserOptions = {}) {
+    this.options = { tailwind: false, ...options };
+  }
 
-      if (filtered.length === 0) {
+  transform(html: string): ReactElement {
+    return this.wrapper(convertHtmlToReact(html));
+  }
+
+  wrapper(children: (ReactElement | string | null)[]): ReactElement {
+    if (children.length === 1 && isValidElement(children[0])) {
+      return this.element(children[0]);
+    }
+
+    return this.fragment(children);
+  }
+
+  element(element: ReactElement) {
+    return createElement(element.type, typeof element.props === 'object' && element.props ? this.props(element.props) : {});
+  }
+
+  fragment(children: ReactNode): ReactElement {
+    const transformed = this.children(children);
+    return createElement(Fragment, typeof transformed !== 'undefined' ? { children: transformed } : {});
+  }
+
+  props(input: { children?: ReactNode; className?: unknown; tw?: unknown; 'data-tw'?: unknown }) {
+    const props = { ...input };
+
+    if ('children' in props) {
+      const transformed = this.children(props.children);
+      if (typeof transformed === 'undefined') {
         delete props.children;
-      } else if (filtered.length === 1 && typeof filtered[0] === 'string') {
-        props.children = filtered[0];
       } else {
-        props.children = filtered;
+        props.children = transformed;
       }
     }
+
+    if (this.options.tailwind === true || this.options.tailwind === 'class') {
+      if ('className' in props && typeof props.className === 'string') {
+        props.tw = props.className;
+      }
+    } else if (this.options.tailwind === 'data') {
+      if ('data-tw' in props && typeof props['data-tw'] === 'string') {
+        props.tw = props['data-tw'];
+      }
+    }
+
+    return props;
   }
 
-  return props;
-}
+  children(children: ReactNode): ReactNode {
+    if (children === null || typeof children === 'undefined' || typeof children === 'boolean') {
+      return undefined;
+    }
+    if (isValidElement(children)) {
+      return this.element(children);
+    }
+    if (Array.isArray(children)) {
+      const filtered: ReactNode[] = [];
 
-function element(element: ReactElement) {
-  return createElement(element.type, typeof element.props === 'object' && element.props ? props(element.props) : {});
-}
+      for (const child of children) {
+        if (child === null || typeof child === 'undefined' || typeof child === 'boolean') {
+          continue;
+        }
+        if (isValidElement(child)) {
+          filtered.push(this.element(child));
+        } else {
+          filtered.push(child);
+        }
+      }
 
-function fragment(children: ReactChild[]): ReactElement {
-  return createElement(Fragment, { children });
-}
-
-function wrapper(children: ReactChild[]): ReactElement {
-  if (children.length === 1 && typeof children[0] === 'object' && children[0]) {
-    return element({ ...children[0], key: null });
+      if (filtered.length === 0) {
+        return undefined;
+      }
+      if (filtered.length === 1) {
+        return filtered[0];
+      }
+      return filtered;
+    }
+    return children;
   }
-
-  return element(fragment(children));
 }
 
 /**
@@ -54,7 +99,7 @@ function wrapper(children: ReactChild[]): ReactElement {
  *
  * @returns The {@link ReactElement}
  */
-export const htmlToReact = (html: string, options?: ParserOptions): ReactElement => {
+export const htmlToReact = (html: string, options: ParserOptions = {}): ReactElement => {
   if (typeof html !== 'string') {
     throw new TypeError('Argument 1 must be of type string');
   }
@@ -62,7 +107,7 @@ export const htmlToReact = (html: string, options?: ParserOptions): ReactElement
     throw new TypeError('Blank html string cannot be parsed');
   }
 
-  return wrapper(convertHtmlToReact(html, options));
+  return new Transformer(options).transform(html);
 };
 
-export { htmlToReact as t, type ParserOptions };
+export { htmlToReact as t };
