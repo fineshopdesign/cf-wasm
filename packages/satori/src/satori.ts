@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
-import satoriWasm, { init, type SatoriOptions } from 'satori/wasm';
-import type { Yoga } from 'yoga-wasm-web';
+import satoriWasm, { init, type SatoriOptions } from 'satori/standalone';
 
-export type InputParam = (() => Yoga | Promise<Yoga>) | Yoga | Promise<Yoga>;
+export type InitInput = RequestInfo | URL | Response | BufferSource | Buffer | WebAssembly.Module;
 
 export interface VNode {
   type: string;
@@ -14,7 +13,7 @@ export interface VNode {
 }
 
 /** Initializes satori asynchronously */
-export async function initSatori(input: Yoga | Promise<Yoga>) {
+export async function initSatori(input: InitInput | Promise<InitInput>) {
   if (initSatori.initialized) {
     throw new Error('(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.');
   }
@@ -55,4 +54,4 @@ export type {
   Locale,
   SatoriNode,
   SatoriOptions,
-} from 'satori/wasm';
+} from 'satori/standalone';

@@ -109,7 +109,7 @@ function parseFigmaUrl(figmaUrl: string): {
   fileId: string | null;
   nodeId: string | null;
 } {
-  const regex = /\/file\/([^/]+)\/[^?]+\?[^#]*node-id=([^&#]+)/;
+  const regex = /\/(?:file|design)\/([^/]+)\/[^?]+\?[^#]*node-id=([^&#]+)/;
   const match = figmaUrl.match(regex);
   let fileId: string | null = null;
   let nodeId: string | null = null;
@@ -610,7 +610,7 @@ export class FigmaImageResponse extends Response {
     super(stream(), init);
   }
 
-  async async(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions): Promise<Response> {
+  static async async(figmaOptions: FigmaOptions, responseOptions?: FigmaImageResponseOptions): Promise<Response> {
     const { body, init } = renderFigmaAsResponse(figmaOptions, responseOptions);
 
     return new Response(await body(), init);

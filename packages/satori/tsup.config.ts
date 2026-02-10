@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
 import { defineConfig, type Options } from 'tsup';
 
-const YOGA_WASM_LOCATION = fileURLToPath(import.meta.resolve('yoga-wasm-web/dist/yoga.wasm'));
+const YOGA_WASM_LOCATION = path.join(fileURLToPath(import.meta.resolve('satori')), '../../yoga.wasm');
 const YOGA_WASM_DESTINATION = 'src/lib/yoga.wasm';
 
 export default defineConfig(() => {
