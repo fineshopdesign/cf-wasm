@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.3.5
+
+### Patch Changes
+
+- [`f90a969`](https://github.com/fineshopdesign/cf-wasm/commit/f90a9694e713a7827ca4339b3463aa7ac9daf7e6) Thanks [@kumardeo](https://github.com/kumardeo)! - fix: await init
+
 ## 0.3.4
 
 ### Patch Changes
