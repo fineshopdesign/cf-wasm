@@ -22,7 +22,7 @@ export async function initSatori(input: InitInput | Promise<InitInput>) {
   }
   initSatori.initialized = true;
   initSatori.promise = (async () => {
-    init(await input);
+    await init(await input);
     initSatori.ready = true;
   })();
   return initSatori.promise;
