@@ -30,8 +30,8 @@
     "lint": "biome lint ./src",
     "check": "biome check ./src",
     "check:types": "tsc --noEmit",
-    "build": "NODE_ENV=production tsup",
-    "dev": "NODE_ENV=development tsup --watch"
+    "build": "NODE_ENV=production tsdown",
+    "dev": "NODE_ENV=development tsdown --watch"
   },
   "files": [
     "dist"
@@ -103,6 +103,6 @@
     "@types/react": "catalog:default",
     "glob": "catalog:default",
     "react": "catalog:default",
-    "tsup": "catalog:default"
+    "tsdown": "catalog:default"
   }
 }

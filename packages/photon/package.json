@@ -31,8 +31,8 @@
     "check": "biome check ./src",
     "check:types": "tsc --noEmit",
     "crate:download": "rimraf crate && fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
-    "build": "NODE_ENV=production tsup",
-    "dev": "NODE_ENV=development tsup --watch"
+    "build": "NODE_ENV=production tsdown",
+    "dev": "NODE_ENV=development tsdown --watch"
   },
   "files": [
     "dist"
@@ -103,7 +103,7 @@
     "@types/node": "catalog:default",
     "github-files-fetcher": "^1.6.0",
     "glob": "catalog:default",
-    "tsup": "catalog:default",
+    "tsdown": "catalog:default",
     "wasm-pack": "catalog:default"
   }
 }

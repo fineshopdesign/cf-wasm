@@ -5,5 +5,5 @@ const pngWasmModule = new WebAssembly.Module(pngWasmBuffer);
 
 initPng.sync(pngWasmModule);
 
-export { pngWasmModule };
 export * from './png';
+export { pngWasmModule };

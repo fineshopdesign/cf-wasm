@@ -134,4 +134,4 @@ initPng.ensure = async () => {
   return initPng.promise;
 };
 
-export { DecodeResult, wasmDecode, wasmEncode, type InitInput, type InitOutput, type SyncInitInput };
+export { DecodeResult, type InitInput, type InitOutput, type SyncInitInput, wasmDecode, wasmEncode };

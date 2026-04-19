@@ -2,17 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type UserConfig } from 'tsdown';
 
-const RESVG_WASM_LOCATION = fileURLToPath(import.meta.resolve('@resvg/resvg-wasm/index_bg.wasm'));
-const RESVG_WASM_DESTINATION = 'src/lib/resvg.wasm';
-
-const RESVG_WASM_LOCATION_LEGACY = fileURLToPath(import.meta.resolve('@resvg/resvg-wasm-legacy/index_bg.wasm'));
-const RESVG_WASM_DESTINATION_LEGACY = 'src/legacy/lib/resvg.wasm';
+const YOGA_WASM_LOCATION = path.join(fileURLToPath(import.meta.resolve('satori')), '../../yoga.wasm');
+const YOGA_WASM_DESTINATION = 'src/lib/yoga.wasm';
 
 export default defineConfig(() => {
-  fs.copyFileSync(RESVG_WASM_LOCATION, RESVG_WASM_DESTINATION);
-  fs.copyFileSync(RESVG_WASM_LOCATION_LEGACY, RESVG_WASM_DESTINATION_LEGACY);
+  fs.copyFileSync(YOGA_WASM_LOCATION, YOGA_WASM_DESTINATION);
 
   // generate inline modules
   for (const file of glob.sync('src/**/*.{wasm,bin,txt}')) {
@@ -33,29 +29,26 @@ export default defineConfig(() => {
   const commonOptions = {
     outDir: 'dist',
     platform: 'neutral',
+    target: 'es2018',
     sourcemap: true,
-    splitting: true,
-    bundle: true,
-    skipNodeModulesBundle: true,
+    unbundle: true,
+    deps: {
+      skipNodeModulesBundle: true,
+    },
     shims: true,
     dts: true,
-  } satisfies Options;
+    ignoreWatch: ['.turbo'],
+  } satisfies UserConfig;
 
   return [
     {
       ...commonOptions,
-      entry: [
-        'src/edge-light.ts',
-        'src/node.ts',
-        'src/others.ts',
-        'src/workerd.ts',
-        'src/legacy/edge-light.ts',
-        'src/legacy/node.ts',
-        'src/legacy/others.ts',
-        'src/legacy/workerd.ts',
-      ],
+      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/lib/**/*.{js,d.js}'],
       format: ['esm'],
-      external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      deps: {
+        ...commonOptions.deps,
+        neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      },
       clean: true,
       async onSuccess() {
         // Copy assets
@@ -75,8 +68,8 @@ export default defineConfig(() => {
     },
     {
       ...commonOptions,
-      entry: ['src/node.ts', 'src/others.ts', 'src/legacy/node.ts', 'src/legacy/others.ts'],
+      entry: ['src/node.ts', 'src/others.ts'],
       format: ['cjs'],
     },
-  ];
+  ] satisfies UserConfig[];
 });
