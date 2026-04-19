@@ -2,20 +2,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type UserConfig } from 'tsdown';
 
-const LIB_VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
-const LIB_OUT_DIR = './src/lib';
+const RESVG_WASM_LOCATION = fileURLToPath(import.meta.resolve('@resvg/resvg-wasm/index_bg.wasm'));
+const RESVG_WASM_DESTINATION = 'src/lib/resvg.wasm';
+
+const RESVG_WASM_LOCATION_LEGACY = fileURLToPath(import.meta.resolve('@resvg/resvg-wasm-legacy/index_bg.wasm'));
+const RESVG_WASM_DESTINATION_LEGACY = 'src/legacy/lib/resvg.wasm';
 
 export default defineConfig(() => {
-  for (const variant of LIB_VARIANTS) {
-    const wasmModulePath = fileURLToPath(import.meta.resolve(`@jitl/quickjs-wasmfile-${variant.toLowerCase().replace(/_/g, '-')}/wasm`));
-    const wasmModuleSourceMapPath = `${wasmModulePath}.map`;
-    fs.copyFileSync(wasmModulePath, path.join(LIB_OUT_DIR, `${variant}.wasm`));
-    if (fs.existsSync(wasmModuleSourceMapPath)) {
-      fs.copyFileSync(wasmModuleSourceMapPath, path.join(LIB_OUT_DIR, `${variant}.wasm.map.txt`));
-    }
-  }
+  fs.copyFileSync(RESVG_WASM_LOCATION, RESVG_WASM_DESTINATION);
+  fs.copyFileSync(RESVG_WASM_LOCATION_LEGACY, RESVG_WASM_DESTINATION_LEGACY);
 
   // generate inline modules
   for (const file of glob.sync('src/**/*.{wasm,bin,txt}')) {
@@ -36,20 +33,37 @@ export default defineConfig(() => {
   const commonOptions = {
     outDir: 'dist',
     platform: 'neutral',
+    target: 'es2018',
     sourcemap: true,
-    splitting: true,
-    bundle: true,
-    skipNodeModulesBundle: true,
+    unbundle: true,
+    deps: {
+      skipNodeModulesBundle: true,
+    },
     shims: true,
     dts: true,
-  } satisfies Options;
+    ignoreWatch: ['.turbo'],
+  } satisfies UserConfig;
 
   return [
     {
       ...commonOptions,
-      entry: ['src/edge-light.ts', 'src/edge-light-debug.ts', 'src/node.ts', 'src/node-debug.ts', 'src/workerd.ts', 'src/workerd-debug.ts'],
+      entry: [
+        'src/edge-light.ts',
+        'src/node.ts',
+        'src/others.ts',
+        'src/workerd.ts',
+        'src/lib/**/*.{js,d.ts}',
+        'src/legacy/edge-light.ts',
+        'src/legacy/node.ts',
+        'src/legacy/others.ts',
+        'src/legacy/workerd.ts',
+        'src/legacy/lib/**/*.{js,d.ts}',
+      ],
       format: ['esm'],
-      external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      deps: {
+        ...commonOptions.deps,
+        neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      },
       clean: true,
       async onSuccess() {
         // Copy assets
@@ -69,8 +83,8 @@ export default defineConfig(() => {
     },
     {
       ...commonOptions,
-      entry: ['src/node.ts', 'src/node-debug.ts'],
+      entry: ['src/node.ts', 'src/others.ts', 'src/legacy/node.ts', 'src/legacy/others.ts'],
       format: ['cjs'],
     },
-  ];
+  ] satisfies UserConfig[];
 });

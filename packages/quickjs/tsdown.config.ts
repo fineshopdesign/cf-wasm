@@ -1,9 +1,22 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as glob from 'glob';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type UserConfig } from 'tsdown';
+
+const LIB_VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
+const LIB_OUT_DIR = './src/lib';
 
 export default defineConfig(() => {
+  for (const variant of LIB_VARIANTS) {
+    const wasmModulePath = fileURLToPath(import.meta.resolve(`@jitl/quickjs-wasmfile-${variant.toLowerCase().replace(/_/g, '-')}/wasm`));
+    const wasmModuleSourceMapPath = `${wasmModulePath}.map`;
+    fs.copyFileSync(wasmModulePath, path.join(LIB_OUT_DIR, `${variant}.wasm`));
+    if (fs.existsSync(wasmModuleSourceMapPath)) {
+      fs.copyFileSync(wasmModuleSourceMapPath, path.join(LIB_OUT_DIR, `${variant}.wasm.map.txt`));
+    }
+  }
+
   // generate inline modules
   for (const file of glob.sync('src/**/*.{wasm,bin,txt}')) {
     const content = fs.readFileSync(file);
@@ -23,20 +36,34 @@ export default defineConfig(() => {
   const commonOptions = {
     outDir: 'dist',
     platform: 'neutral',
+    target: 'es2018',
     sourcemap: true,
-    splitting: true,
-    bundle: true,
-    skipNodeModulesBundle: true,
+    unbundle: true,
+    deps: {
+      skipNodeModulesBundle: true,
+    },
     shims: true,
     dts: true,
-  } satisfies Options;
+    ignoreWatch: ['.turbo'],
+  } satisfies UserConfig;
 
   return [
     {
       ...commonOptions,
-      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/figma.ts', 'src/html-to-react.ts'],
+      entry: [
+        'src/edge-light.ts',
+        'src/edge-light-debug.ts',
+        'src/node.ts',
+        'src/node-debug.ts',
+        'src/workerd.ts',
+        'src/workerd-debug.ts',
+        'src/lib/**/*.{ts,js,d.ts}',
+      ],
       format: ['esm'],
-      external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      deps: {
+        ...commonOptions.deps,
+        neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      },
       clean: true,
       async onSuccess() {
         // Copy assets
@@ -56,8 +83,8 @@ export default defineConfig(() => {
     },
     {
       ...commonOptions,
-      entry: ['src/node.ts', 'src/others.ts', 'src/figma.ts', 'src/html-to-react.ts'],
+      entry: ['src/node.ts', 'src/node-debug.ts'],
       format: ['cjs'],
     },
-  ];
+  ] satisfies UserConfig[];
 });

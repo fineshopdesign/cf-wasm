@@ -2,7 +2,7 @@ import cp from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import * as glob from 'glob';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type UserConfig } from 'tsdown';
 
 const LIB_CRATE_DIR = 'crate';
 const LIB_NAME = 'photon_rs';
@@ -63,20 +63,26 @@ export default defineConfig(() => {
   const commonOptions = {
     outDir: 'dist',
     platform: 'neutral',
+    target: 'es2018',
     sourcemap: true,
-    splitting: true,
-    bundle: true,
-    skipNodeModulesBundle: true,
+    unbundle: true,
+    deps: {
+      skipNodeModulesBundle: true,
+    },
     shims: true,
     dts: true,
-  } satisfies Options;
+    ignoreWatch: ['.turbo'],
+  } satisfies UserConfig;
 
   return [
     {
       ...commonOptions,
-      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts'],
+      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/lib/**/*.{js,d.ts}'],
       format: ['esm'],
-      external: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      deps: {
+        ...commonOptions.deps,
+        neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+      },
       clean: true,
       async onSuccess() {
         // Copy assets
@@ -99,5 +105,5 @@ export default defineConfig(() => {
       entry: ['src/node.ts', 'src/others.ts'],
       format: ['cjs'],
     },
-  ];
+  ] satisfies UserConfig[];
 });

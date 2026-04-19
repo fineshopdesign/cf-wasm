@@ -3,5 +3,5 @@ import { initResvg } from './resvg';
 
 initResvg(resvgWasmModule);
 
-export { resvgWasmModule };
 export * from './resvg';
+export { resvgWasmModule };

@@ -5,5 +5,5 @@ const minifyHTMLWasmModule = new WebAssembly.Module(minifyHTMLWasmBuffer);
 
 initMinifyHTML.sync(minifyHTMLWasmModule);
 
-export { minifyHTMLWasmModule };
 export * from './minify-html';
+export { minifyHTMLWasmModule };

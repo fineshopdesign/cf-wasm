@@ -16,5 +16,5 @@ export async function getQuickJSWASMModule() {
   return singletonPromise;
 }
 
-export { debugSyncWasmModule, debugSyncWasmModuleSourceMap };
 export * from './lib/debug';
+export { debugSyncWasmModule, debugSyncWasmModuleSourceMap };

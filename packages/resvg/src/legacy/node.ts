@@ -5,5 +5,5 @@ const resvgWasmModule = new WebAssembly.Module(resvgWasmBuffer);
 
 initResvg(resvgWasmModule);
 
-export { resvgWasmModule };
 export * from './resvg';
+export { resvgWasmModule };

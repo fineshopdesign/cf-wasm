@@ -1,9 +1,11 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+
+  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit"
   },
+
   "[json]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "biomejs.biome"
@@ -30,39 +32,5 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "markdownlint.config": {
-    "no-trailing-spaces": false
-  },
-  "json.schemas": [
-    {
-      "fileMatch": [".ncurc", ".ncurc.json"],
-      "url": "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json"
-    }
-  ],
-  "yaml.schemas": {
-    "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json": [".ncurc.yml"]
-  },
-  "cSpell.words": [
-    "biomejs",
-    "blobmoji",
-    "buildwasm",
-    "copyfiles",
-    "emscripten",
-    "fastly",
-    "fineshopdesign",
-    "getwasm",
-    "hedgedoc",
-    "Kumar",
-    "lagon",
-    "noto",
-    "O'Dwyer",
-    "openmoji",
-    "postbuild",
-    "quickjs",
-    "resvg",
-    "tsbuildinfo",
-    "tsup",
-    "workerd"
-  ]
+  }
 }

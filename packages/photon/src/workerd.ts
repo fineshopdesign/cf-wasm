@@ -3,5 +3,5 @@ import { initPhoton } from './photon';
 
 initPhoton.sync({ module: photonWasmModule });
 
-export { photonWasmModule };
 export * from './photon';
+export { photonWasmModule };

@@ -12,5 +12,5 @@ export async function getQuickJSWASMModule() {
   return singletonPromise;
 }
 
-export { releaseSyncWasmModule };
 export * from './lib/release';
+export { releaseSyncWasmModule };

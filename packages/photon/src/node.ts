@@ -5,5 +5,5 @@ const photonWasmModule = new WebAssembly.Module(photonWasmBuffer);
 
 initPhoton.sync({ module: photonWasmModule });
 
-export { photonWasmModule };
 export * from './photon';
+export { photonWasmModule };
