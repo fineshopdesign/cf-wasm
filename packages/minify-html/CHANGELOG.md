@@ -1,5 +1,11 @@
 # @cf-wasm/minify-html
 
+## 0.1.4
+
+### Patch Changes
+
+- [#86](https://github.com/fineshopdesign/cf-wasm/pull/86) [`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: migrate to `tsdown` for bundling
+
 ## 0.1.3
 
 ### Patch Changes

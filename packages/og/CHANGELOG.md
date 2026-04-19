@@ -1,5 +1,16 @@
 # @cf-wasm/og
 
+## 0.3.8
+
+### Patch Changes
+
+- [#86](https://github.com/fineshopdesign/cf-wasm/pull/86) [`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: migrate to `tsdown` for bundling
+
+- Updated dependencies [[`2b8ff41`](https://github.com/fineshopdesign/cf-wasm/commit/2b8ff41ec6831cd0588067310f7dfe320d913cfd), [`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164)]:
+  - @cf-wasm/satori@0.3.6
+  - @cf-wasm/internals@0.1.2
+  - @cf-wasm/resvg@0.3.4
+
 ## 0.3.7
 
 ### Patch Changes
