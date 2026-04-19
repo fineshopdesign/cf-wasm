@@ -4,6 +4,14 @@ packages:
   - __tests__
   - __tests__/*
 
+allowBuilds:
+  "@biomejs/biome": true
+  "@parcel/watcher": true
+  esbuild: true
+  sharp: true
+  wasm-pack: true
+  workerd: true
+
 catalog:
   "@types/node": ^25.6.0
   "@types/react": ^19.2.14
@@ -14,10 +22,3 @@ catalog:
   vitest: ^4.1.4
   wasm-pack: ^0.13.1
   wrangler: ^4.83.0
-
-allowBuilds:
-  "@biomejs/biome": true
-  esbuild: true
-  sharp: true
-  wasm-pack: true
-  workerd: true

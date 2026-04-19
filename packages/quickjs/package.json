@@ -118,9 +118,9 @@
     }
   },
   "dependencies": {
-    "@jitl/quickjs-wasmfile-debug-sync": "0.31.0",
-    "@jitl/quickjs-wasmfile-release-sync": "0.31.0",
-    "quickjs-emscripten-core": "0.31.0"
+    "@jitl/quickjs-wasmfile-debug-sync": "0.32.0",
+    "@jitl/quickjs-wasmfile-release-sync": "0.32.0",
+    "quickjs-emscripten-core": "0.32.0"
   },
   "devDependencies": {
     "@types/node": "catalog:default",

@@ -93,10 +93,20 @@
         "types": "./dist/others.d.cts",
         "default": "./dist/others.cjs"
       }
+    },
+    "./jsx": {
+      "import": {
+        "types": "./dist/jsx.d.ts",
+        "default": "./dist/jsx.js"
+      },
+      "require": {
+        "types": "./dist/jsx.d.cts",
+        "default": "./dist/jsx.cjs"
+      }
     }
   },
   "dependencies": {
-    "satori": "^0.19.2"
+    "satori": "0.26.0"
   },
   "devDependencies": {
     "@types/node": "catalog:default",

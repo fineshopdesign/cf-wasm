@@ -43,7 +43,7 @@ export default defineConfig(() => {
   return [
     {
       ...commonOptions,
-      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/lib/**/*.{js,d.js}'],
+      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/jsx.ts', 'src/lib/**/*.{js,d.js}'],
       format: ['esm'],
       deps: {
         ...commonOptions.deps,
@@ -68,7 +68,7 @@ export default defineConfig(() => {
     },
     {
       ...commonOptions,
-      entry: ['src/node.ts', 'src/others.ts'],
+      entry: ['src/node.ts', 'src/others.ts', 'src/jsx.ts'],
       format: ['cjs'],
     },
   ] satisfies UserConfig[];
