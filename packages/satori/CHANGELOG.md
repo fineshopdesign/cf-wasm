@@ -1,5 +1,13 @@
 # @cf-wasm/satori
 
+## 0.3.6
+
+### Patch Changes
+
+- [`2b8ff41`](https://github.com/fineshopdesign/cf-wasm/commit/2b8ff41ec6831cd0588067310f7dfe320d913cfd) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: bump `satori` to `0.26.0`
+
+- [#86](https://github.com/fineshopdesign/cf-wasm/pull/86) [`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: migrate to `tsdown` for bundling
+
 ## 0.3.5
 
 ### Patch Changes
