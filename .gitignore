@@ -27,9 +27,11 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# crate target
+# crate
 packages/photon/crate/target
+packages/photon/crate/Cargo.lock
 packages/png/crate/target
+packages/png/crate/Cargo.lock
 
 # misc
 .DS_Store

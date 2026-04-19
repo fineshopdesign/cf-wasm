@@ -30,7 +30,7 @@
     "lint": "biome lint ./src",
     "check": "biome check ./src",
     "check:types": "tsc --noEmit",
-    "crate:download": "rimraf crate && fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./",
+    "crate:download": "rm -r crate && fetcher --url=https://github.com/silvia-odwyer/photon/tree/master/crate --out=./ && sed -E -i.old '/\\[package.metadata.wasm-pack.profile.release\\]/,/^\\[/ s/wasm-opt[[:space:]]*=[[:space:]]*(false|\\[[^]]*\\])/wasm-opt = [\"-O3\", \"--enable-mutable-globals\"]/g' crate/Cargo.toml",
     "build": "NODE_ENV=production tsdown",
     "dev": "NODE_ENV=development tsdown --watch"
   },

@@ -225,7 +225,7 @@ pub fn resize_img_browser(
     let height = resized_img.height();
 
     canvas.set_width(width);
-    canvas.set_height(width);
+    canvas.set_height(height);
 
     let new_img_data = ImageData::new_with_u8_clamped_array_and_sh(
         Clamped(&mut resized_img.into_bytes()),

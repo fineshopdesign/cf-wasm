@@ -40,6 +40,10 @@ export default defineConfig(() => {
       .replace(
         `if (typeof module_or_path === 'undefined') {\n        module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);\n    }`,
         `//! Needed to remove these lines in order to make it work on node.js\n    // if (typeof module_or_path === 'undefined') {\n    //     module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);\n    // }`,
+      )
+      .replace(
+        `if (module_or_path === undefined) {\n        module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);\n    }`,
+        `//! Needed to remove these lines in order to make it work on node.js\n    // if (typeof module_or_path === 'undefined') {\n    //     module_or_path = new URL('${LIB_NAME}_bg.wasm', import.meta.url);\n    // }`,
       );
     fs.writeFileSync(LIB_JS, modifiedScript, 'utf-8');
   }
