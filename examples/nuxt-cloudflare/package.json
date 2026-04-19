@@ -20,12 +20,13 @@
     "@cf-wasm/resvg": "workspace:*",
     "nuxt": "^4.4.2",
     "vue": "^3.5.32",
-    "vue-router": "^4.6.3"
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
     "h3": "2.0.1-rc.20",
     "nitro-cloudflare-dev": "^0.2.2",
     "nitropack": "^2.13.3",
+    "vite": "^7.3.2",
     "wrangler": "catalog:default"
   }
 }

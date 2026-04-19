@@ -1,10 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cf-wasm-astro-cloudflare-example",
-  "main": "dist/_worker.js/index.js",
-  "compatibility_date": "2025-11-05",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-04-18",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "minify": true,
   "upload_source_maps": true,
   "assets": {
     "binding": "ASSETS",
