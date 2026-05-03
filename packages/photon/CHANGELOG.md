@@ -1,5 +1,16 @@
 # @cf-wasm/photon
 
+## 0.3.5
+
+### Patch Changes
+
+- [#86](https://github.com/fineshopdesign/cf-wasm/pull/86) [`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: migrate to `tsdown` for bundling
+
+- [`b913c6a`](https://github.com/fineshopdesign/cf-wasm/commit/b913c6a8179619f169403b4399751d4640c71766) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: built from commit [`65605f9`](https://github.com/silvia-odwyer/photon/tree/65605f952530b4bc3070d98b393a6a970615c1e9)
+
+- Updated dependencies [[`02a0d2b`](https://github.com/fineshopdesign/cf-wasm/commit/02a0d2b860a9cca08f94e30fd00ea9dc5601a164)]:
+  - @cf-wasm/internals@0.1.2
+
 ## 0.3.4
 
 ### Patch Changes
