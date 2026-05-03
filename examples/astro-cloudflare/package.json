@@ -13,14 +13,14 @@
     "cf:types": "wrangler types ./cloudflare-env.d.ts"
   },
   "dependencies": {
-    "astro": "^6.1.8",
+    "astro": "^6.2.1",
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*"
   },
   "devDependencies": {
-    "@astrojs/cloudflare": "^13.1.10",
+    "@astrojs/cloudflare": "^13.3.0",
     "wrangler": "catalog:default"
   }
 }

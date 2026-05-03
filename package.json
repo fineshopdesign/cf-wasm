@@ -24,10 +24,10 @@
     "version-packages": "changeset version && pnpm run format:write"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.12",
+    "@biomejs/biome": "^2.4.14",
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.31.0",
-    "turbo": "^2.9.6",
+    "turbo": "^2.9.8",
     "typescript": "^5.9.3"
   }
 }

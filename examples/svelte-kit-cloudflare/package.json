@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^7.2.8",
-    "@sveltejs/kit": "^2.57.1",
+    "@sveltejs/kit": "^2.59.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@types/node": "^25.6.0",
-    "svelte": "^5.55.4",
-    "svelte-check": "^4.4.6",
-    "vite": "^8.0.8",
+    "svelte": "^5.55.5",
+    "svelte-check": "^4.4.7",
+    "vite": "^8.0.10",
     "wrangler": "catalog:default"
   }
 }

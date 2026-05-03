@@ -18,14 +18,14 @@
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
-    "nuxt": "^4.4.2",
-    "vue": "^3.5.32",
-    "vue-router": "^5.0.4"
+    "nuxt": "^4.4.4",
+    "vue": "^3.5.33",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "h3": "2.0.1-rc.20",
+    "h3": "2.0.1-rc.21",
     "nitro-cloudflare-dev": "^0.2.2",
-    "nitropack": "^2.13.3",
+    "nitropack": "^2.13.4",
     "vite": "^7.3.2",
     "wrangler": "catalog:default"
   }
