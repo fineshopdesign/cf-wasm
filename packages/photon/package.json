@@ -1,7 +1,6 @@
 {
   "name": "@cf-wasm/photon",
   "version": "0.3.4",
-  "private": false,
   "description": "Photon library for Cloudflare workers, Next.js and Node.js.",
   "keywords": [
     "image-processing",
@@ -25,6 +24,10 @@
   },
   "bugs": {
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "lint": "biome lint ./src",

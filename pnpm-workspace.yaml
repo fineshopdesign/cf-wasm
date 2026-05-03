@@ -22,3 +22,10 @@ catalog:
   vitest: ^4.1.4
   wasm-pack: ^0.14.0
   wrangler: ^4.83.0
+
+engineStrict: true
+strictPeerDependencies: true
+shellEmulator: true
+preferWorkspacePackages: true
+linkWorkspacePackages: true
+enablePrePostScripts: true

@@ -1,7 +1,6 @@
 {
   "name": "@cf-wasm/png",
   "version": "0.3.2",
-  "private": false,
   "description": "A simple wasm png encoder/decoder module for cloudflare workers",
   "keywords": [
     "image",
@@ -22,6 +21,10 @@
   },
   "bugs": {
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "lint": "biome lint ./src",

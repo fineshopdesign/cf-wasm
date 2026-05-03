@@ -1,7 +1,6 @@
 {
   "name": "@cf-wasm/quickjs",
   "version": "0.2.4",
-  "private": false,
   "description": "QuickJS",
   "keywords": [],
   "license": "MIT",
@@ -13,6 +12,10 @@
   },
   "bugs": {
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "lint": "biome lint ./src",

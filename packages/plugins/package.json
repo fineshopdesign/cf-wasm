@@ -1,7 +1,6 @@
 {
   "name": "@cf-wasm/plugins",
   "version": "0.1.9",
-  "private": false,
   "description": "Plugins for cf-wasm",
   "keywords": [],
   "license": "MIT",
@@ -17,6 +16,10 @@
   },
   "bugs": {
     "url": "https://github.com/fineshopdesign/cf-wasm/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "lint": "biome lint ./src",
