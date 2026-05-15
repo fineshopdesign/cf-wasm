@@ -6,6 +6,7 @@
   "author": "Deo Kumar",
   "license": "MIT",
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
+  "type": "module",
   "scripts": {
     "lint": "biome lint .",
     "check": "biome check .",
@@ -20,12 +21,12 @@
     "@cf-wasm/quickjs": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*",
-    "react": "catalog:default",
+    "react": "catalog:",
     "satori-html": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "catalog:default",
-    "@types/react": "catalog:default",
-    "vitest": "catalog:default"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "vitest": "catalog:"
   }
 }

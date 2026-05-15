@@ -112,10 +112,10 @@
     "satori": "0.26.0"
   },
   "devDependencies": {
-    "@types/node": "catalog:default",
-    "@types/react": "catalog:default",
-    "glob": "catalog:default",
-    "react": "catalog:default",
-    "tsdown": "catalog:default"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "glob": "catalog:",
+    "react": "catalog:",
+    "tsdown": "catalog:"
   }
 }

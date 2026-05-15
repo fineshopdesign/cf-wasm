@@ -106,7 +106,7 @@ export async function initPng(input: InitInput | Promise<InitInput>): Promise<In
 }
 
 /** Initializes png synchronously */
-initPng.sync = (input: SyncInitInput): InitOutput => {
+initPng.sync = (input: SyncInitInput | { module: SyncInitInput }): InitOutput => {
   if (initPng.initialized) {
     throw new Error('(@cf-wasm/png): Function already called. The `initPng()` function can be used only once.');
   }

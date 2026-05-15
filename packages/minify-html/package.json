@@ -99,8 +99,8 @@
     "@minify-html/wasm": "0.18.1"
   },
   "devDependencies": {
-    "@types/node": "catalog:default",
-    "glob": "catalog:default",
-    "tsdown": "catalog:default"
+    "@types/node": "catalog:",
+    "glob": "catalog:",
+    "tsdown": "catalog:"
   }
 }

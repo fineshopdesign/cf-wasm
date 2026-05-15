@@ -3,7 +3,7 @@ import { initPng } from './png';
 
 const pngWasmModule = new WebAssembly.Module(pngWasmBuffer);
 
-initPng.sync(pngWasmModule);
+initPng.sync({ module: pngWasmModule });
 
 export * from './png';
 export { pngWasmModule };

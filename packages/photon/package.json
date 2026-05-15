@@ -103,10 +103,9 @@
     "@cf-wasm/internals": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "catalog:default",
+    "@types/node": "catalog:",
     "github-files-fetcher": "^1.6.0",
-    "glob": "catalog:default",
-    "tsdown": "catalog:default",
-    "wasm-pack": "catalog:default"
+    "glob": "catalog:",
+    "tsdown": "catalog:"
   }
 }

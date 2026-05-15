@@ -126,8 +126,8 @@
     "quickjs-emscripten-core": "0.32.0"
   },
   "devDependencies": {
-    "@types/node": "catalog:default",
-    "glob": "catalog:default",
-    "tsdown": "catalog:default"
+    "@types/node": "catalog:",
+    "glob": "catalog:",
+    "tsdown": "catalog:"
   }
 }

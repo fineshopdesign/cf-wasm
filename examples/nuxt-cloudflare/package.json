@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-cloudflare",
+  "name": "@examples/nuxt-cloudflare",
   "type": "module",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "pnpm run build && wrangler dev",
-    "postinstall": "turbo run build --filter='@cf-wasm/plugins' && nuxt prepare",
+    "postinstall": "turbo run build --filter='@examples/nuxt-cloudflare'^... && nuxt prepare",
     "cf:preview": "pnpm run build && wrangler dev",
     "cf:build": "pnpm run build && wrangler deploy --dry-run --outdir=./.workers-build",
     "cf:deploy": "pnpm run build && wrangler deploy",
@@ -18,15 +18,15 @@
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
-    "nuxt": "^4.4.4",
-    "vue": "^3.5.33",
-    "vue-router": "^5.0.6"
+    "nuxt": "^4.4.5",
+    "vue": "^3.5.34",
+    "vue-router": "^5.0.7"
   },
   "devDependencies": {
-    "h3": "2.0.1-rc.21",
+    "h3": "2.0.1-rc.22",
     "nitro-cloudflare-dev": "^0.2.2",
     "nitropack": "^2.13.4",
     "vite": "^7.3.2",
-    "wrangler": "catalog:default"
+    "wrangler": "catalog:"
   }
 }
