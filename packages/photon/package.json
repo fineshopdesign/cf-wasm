@@ -106,6 +106,7 @@
     "@types/node": "catalog:",
     "github-files-fetcher": "^1.6.0",
     "glob": "catalog:",
-    "tsdown": "catalog:"
+    "tsdown": "catalog:",
+    "wasm-pack": "catalog:"
   }
 }

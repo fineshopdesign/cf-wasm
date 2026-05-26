@@ -3,8 +3,9 @@
   "changelog": ["@changesets/changelog-github", { "repo": "fineshopdesign/cf-wasm" }],
   "commit": false,
   "linked": [],
+  "fixed": [],
+  "ignore": ["@cf-wasm-tests/*", "@examples/*"],
   "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": ["@cf-wasm-tests/*", "@examples/*"]
+  "baseBranch": "origin/main",
+  "updateInternalDependencies": "patch"
 }

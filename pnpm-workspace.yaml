@@ -2,7 +2,26 @@ packages:
   - packages/*
   - examples/*
   - __tests__
-  - __tests__/*
+
+engineStrict: true
+strictPeerDependencies: true
+shellEmulator: true
+preferWorkspacePackages: true
+linkWorkspacePackages: true
+enablePrePostScripts: true
+
+minimumReleaseAge: 1440
+
+catalog:
+  "@types/node": ^25.9.1
+  "@types/react": ^19.2.15
+  glob: ^13.0.6
+  react: ^19.2.6
+  tsdown: ^0.21.10
+  vite: ^7.2.2
+  vitest: ^4.1.7
+  wasm-pack: ^0.15.0
+  wrangler: ^4.94.0
 
 allowBuilds:
   "@biomejs/biome": true
@@ -11,21 +30,3 @@ allowBuilds:
   sharp: true
   wasm-pack: true
   workerd: true
-
-catalog:
-  "@types/node": ^25.8.0
-  "@types/react": ^19.2.14
-  glob: ^13.0.6
-  react: ^19.2.6
-  tsdown: ^0.21.10
-  vite: ^7.2.2
-  vitest: ^4.1.6
-  wasm-pack: ^0.14.0
-  wrangler: ^4.91.0
-
-engineStrict: true
-strictPeerDependencies: true
-shellEmulator: true
-preferWorkspacePackages: true
-linkWorkspacePackages: true
-enablePrePostScripts: true
