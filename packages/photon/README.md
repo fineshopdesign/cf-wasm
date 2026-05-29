@@ -3,8 +3,8 @@
 High-performance Rust image processing library (Photon) for Cloudflare workers, Next.js and Node.js.
 
 Powered by [@silvia-odwyer/photon](https://github.com/silvia-odwyer/photon)  
-Built from commit [`65605f9`](https://github.com/silvia-odwyer/photon/tree/65605f952530b4bc3070d98b393a6a970615c1e9)  
-Synced with upstream on `19 April, 2026 (IST)`.
+Built from commit [`50f4a79`](https://github.com/silvia-odwyer/photon/tree/50f4a799adb125d32cc99c2829f0150e73f163aa)  
+Synced with upstream on `30 May, 2026 (IST)`.
 
 ## Installation
 
@@ -15,6 +15,14 @@ pnpm add @cf-wasm/photon          # pnpm
 ```
 
 ## Usage
+
+Because `package.json` includes conditional exports for `node`, `workerd`, and `edge-light`, you can usually import directly from `@cf-wasm/photon` and let the runtime choose the correct entrypoint:
+
+```ts
+import { PhotonImage } from "@cf-wasm/photon";
+```
+
+If you want to be explicit, import from a submodule instead:
 
 - Cloudflare Workers / Pages (Wrangler):
 
@@ -41,7 +49,7 @@ pnpm add @cf-wasm/photon          # pnpm
   ```
 
 > [!WARNING]
-> If you are using it on Cloudflare Workers, it's important to be mindful of worker memory limits (typically `128MB`). If you exceed this limit, consider adding image size checks.
+> Cloudflare Workers have strict memory caps (typically `128MB`). To avoid exceeding those limits, validate input image size or reject oversized images before processing.
 
 ## Examples
 
@@ -60,7 +68,7 @@ export default {
     // url of image to fetch
     const imageUrl = "https://avatars.githubusercontent.com/u/314135";
 
-    // fetch image and get the Uint8Array instance
+    // fetch image and get the bytes
     const inputBytes = await fetch(imageUrl)
       .then((res) => res.arrayBuffer())
       .then((buffer) => new Uint8Array(buffer));
@@ -73,7 +81,7 @@ export default {
       inputImage,
       inputImage.get_width() * 0.5,
       inputImage.get_height() * 0.5,
-      SamplingFilter.Nearest
+      SamplingFilter.Nearest,
     );
 
     // get webp bytes
@@ -87,7 +95,6 @@ export default {
     inputImage.free();
     outputImage.free();
 
-    // return the Response instance
     return new Response(outputBytes, {
       headers: {
         "Content-Type": "image/webp",
@@ -116,7 +123,7 @@ export async function GET(request: NextRequest) {
   // url of image to fetch
   const imageUrl = "https://avatars.githubusercontent.com/u/314135";
 
-  // fetch image and get the Uint8Array instance
+  // fetch image and get the bytes
   const inputBytes = await fetch(imageUrl)
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
@@ -129,7 +136,7 @@ export async function GET(request: NextRequest) {
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    SamplingFilter.Nearest
+    SamplingFilter.Nearest,
   );
 
   // get webp bytes
@@ -143,7 +150,6 @@ export async function GET(request: NextRequest) {
   inputImage.free();
   outputImage.free();
 
-  // return the Response instance
   return new Response(outputBytes, {
     headers: {
       "Content-Type": "image/webp",
@@ -175,7 +181,7 @@ export default async function handler(req: NextRequest) {
   // url of image to fetch
   const imageUrl = "https://avatars.githubusercontent.com/u/314135";
 
-  // fetch image and get the Uint8Array instance
+  // fetch image and get the bytes
   const inputBytes = await fetch(imageUrl)
     .then((res) => res.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
@@ -188,7 +194,7 @@ export default async function handler(req: NextRequest) {
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    SamplingFilter.Nearest
+    SamplingFilter.Nearest,
   );
 
   // get webp bytes
@@ -202,7 +208,6 @@ export default async function handler(req: NextRequest) {
   inputImage.free();
   outputImage.free();
 
-  // return the Response instance
   return new Response(outputBytes, {
     headers: {
       "Content-Type": "image/webp",
@@ -231,7 +236,7 @@ import {
   SamplingFilter,
   resize,
 } from "@cf-wasm/photon/others";
-import { register } from "@deox/worker-rpc/register";
+import { register, withOptions } from "@deox/worker-rpc/register";
 
 const registered = register(async () => {
   // The wasm must be initialized first, you can provide photon wasm binaries from any source
@@ -242,19 +247,19 @@ const registered = register(async () => {
   return {
     resize: async (source: string, format?: "webp" | "png" | "jpeg") => {
       // fetch the source image and get bytes
-      const imagBytes = new Uint8Array(
-        await (await fetch(source)).arrayBuffer()
+      const imageBytes = new Uint8Array(
+        await (await fetch(source)).arrayBuffer(),
       );
 
       // create a PhotonImage instance
-      const inputImage = PhotonImage.new_from_byteslice(imagBytes);
+      const inputImage = PhotonImage.new_from_byteslice(imageBytes);
 
       // resize image using photon
       const outputImage = resize(
         inputImage,
         inputImage.get_width() * 0.5,
         inputImage.get_height() * 0.5,
-        SamplingFilter.Nearest
+        SamplingFilter.Nearest,
       );
 
       let outputBytes: Uint8Array;
@@ -279,8 +284,8 @@ const registered = register(async () => {
       outputImage.free();
       inputImage.free();
 
-      // create a blob url
-      return URL.createObjectURL(new Blob([outputBytes]));
+      // transfer bytes to main thread
+      return withOptions(outputBytes, [outputBytes.buffer]);
     },
   };
 });
@@ -296,15 +301,17 @@ import type { Registered } from "./worker";
 
 const worker = new Worker<Registered>(
   new URL("./worker", import.meta.url),
-  undefined
+  undefined,
 );
 
 const element = document.getElementById("demo_image") as HTMLImageElement;
 
 worker.proxy
   .resize("https://avatars.githubusercontent.com/u/100576030")
-  .then((blobUrl) => {
-    element.src = blobUrl;
+  .then((bytes) => {
+    const url = URL.createObjectURL(new Blob([bytes]));
+
+    element.src = url;
   });
 ```
 

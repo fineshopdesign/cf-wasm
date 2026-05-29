@@ -6,8 +6,6 @@ use crate::{PhotonImage, Rgb};
 use image::Pixel;
 use image::Rgba;
 use image::{GenericImage, GenericImageView};
-use imageproc::drawing::draw_filled_rect_mut;
-use imageproc::rect::Rect;
 use perlin2d::PerlinNoise2D;
 use std::collections::HashMap;
 use std::f64;
@@ -39,51 +37,26 @@ pub fn offset(photon_image: &mut PhotonImage, channel_index: usize, offset: u32)
         panic!("Invalid channel index passed. Channel1 must be equal to 0, 1, or 2.");
     }
 
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
+    let width = photon_image.width as usize;
+    let height = photon_image.height as usize;
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    for x in 0..width - 10 {
-        for y in 0..height - 10 {
-            let px = img.get_pixel(x, y);
+    let max_offset = (width - 10).min(height - 10) as u32;
+    let offset = offset.min(max_offset);
 
-            if x + offset < width - 1 && y + offset < height - 1 {
-                let offset_px = img.get_pixel(x + offset, y + offset);
-                let offset_px_channels = offset_px.channels();
+    for y in 0..height - 10 {
+        for x in 0..width - 10 {
+            let src_idx = ((y + offset as usize) * width + (x + offset as usize)) * 4;
+            let dst_idx = (y * width + x) * 4;
 
-                let px_channels = px.channels();
-
-                let px = match channel_index {
-                    0 => image::Rgba([
-                        offset_px_channels[0],
-                        px_channels[1],
-                        px_channels[2],
-                        255,
-                    ]),
-                    1 => image::Rgba([
-                        px_channels[0],
-                        offset_px_channels[1],
-                        px_channels[2],
-                        255,
-                    ]),
-                    2 => image::Rgba([
-                        px_channels[0],
-                        px_channels[1],
-                        offset_px_channels[2],
-                        255,
-                    ]),
-                    _ => image::Rgba([
-                        px_channels[0],
-                        px_channels[1],
-                        offset_px_channels[2],
-                        255,
-                    ]),
-                };
-                img.put_pixel(x, y, px);
+            match channel_index {
+                0 => buf[dst_idx] = buf[src_idx],
+                1 => buf[dst_idx + 1] = buf[src_idx + 1],
+                2 => buf[dst_idx + 2] = buf[src_idx + 2],
+                _ => buf[dst_idx + 2] = buf[src_idx + 2],
             }
         }
     }
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 /// Adds an offset to the red channel by a certain number of pixels.
@@ -174,28 +147,26 @@ pub fn multiple_offsets(
     if channel_index2 > 2 {
         panic!("Invalid channel index passed. Channel2 must be equal to 0, 1, or 2.");
     }
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let mut px = img.get_pixel(x, y);
+    let width = photon_image.width as usize;
+    let height = photon_image.height as usize;
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-        if x + offset < width - 1 && y + offset < height - 1 {
-            let offset_px = img.get_pixel(x + offset, y);
+    for y in 0..height {
+        for x in 0..width {
+            let dst_idx = (y * width + x) * 4;
 
-            px[channel_index] = offset_px[channel_index];
+            if x + (offset as usize) < width - 1 && y + (offset as usize) < height - 1 {
+                let src_idx = ((y + offset as usize) * width + x) * 4;
+                buf[dst_idx + channel_index] = buf[src_idx + channel_index];
+            }
+
+            if x as i32 - offset as i32 > 0 && y as i32 - offset as i32 > 0 {
+                let src_idx = ((y - offset as usize) * width + x) * 4;
+                buf[dst_idx + channel_index2] = buf[src_idx + channel_index2];
+            }
         }
-
-        if x as i32 - offset as i32 > 0 && y as i32 - offset as i32 > 0 {
-            let offset_px2 = img.get_pixel(x - offset, y);
-
-            px[channel_index2] = offset_px2[channel_index2];
-        }
-
-        img.put_pixel(x, y, px);
     }
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 /// Halftoning effect.
@@ -392,41 +363,26 @@ pub fn primary(img: &mut PhotonImage) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn colorize(photon_image: &mut PhotonImage) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
+    let buf = photon_image.raw_pixels.as_mut_slice();
     let threshold = 220;
+    let threshold_sq = threshold * threshold;
 
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
-        let mut px = img.get_pixel(x, y);
-        let channels = px.channels();
-        let px_as_rgb = Rgb {
-            r: channels[0],
-            g: channels[1],
-            b: channels[2],
-        };
+    // Baseline color for comparison: cyan (0, 255, 255)
+    // Process pixels directly without DynamicImage conversion
+    for px in buf.chunks_mut(4) {
+        let r = px[0] as i32;
+        let g = px[1] as i32;
+        let b = px[2] as i32;
 
-        let baseline_color = Rgb {
-            r: 0,
-            g: 255,
-            b: 255,
-        };
+        // Square distance from cyan (0, 255, 255)
+        let square_dist = (r * r) + ((g - 255) * (g - 255)) + ((b - 255) * (b - 255));
 
-        let square_distance = crate::helpers::square_distance(baseline_color, px_as_rgb);
-
-        let mut r = channels[0] as f32;
-        let mut g = channels[1] as f32;
-        let mut b = channels[2] as f32;
-
-        if square_distance < i32::pow(threshold, 2) {
-            r *= 0.5;
-            g *= 1.25;
-            b *= 0.5;
+        if square_dist < threshold_sq {
+            px[0] = (px[0] as f32 * 0.5) as u8;
+            px[1] = (px[1] as f32 * 1.25).min(255.0) as u8;
+            px[2] = (px[2] as f32 * 0.5) as u8;
         }
-
-        px = image::Rgba([r as u8, g as u8, b as u8, 255]);
-        img.put_pixel(x, y, px);
     }
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 // #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
@@ -494,7 +450,7 @@ pub fn colorize(photon_image: &mut PhotonImage) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn solarize(photon_image: &mut PhotonImage) {
-    let end = photon_image.get_raw_pixels().len();
+    let end = photon_image.raw_pixels.len();
 
     for i in (0..end).step_by(4) {
         let r_val = photon_image.raw_pixels[i];
@@ -584,7 +540,7 @@ pub fn adjust_brightness(photon_image: &mut PhotonImage, brightness: i16) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn inc_brightness(photon_image: &mut PhotonImage, brightness: u8) {
-    let end = photon_image.get_raw_pixels().len() - 4;
+    let end = photon_image.raw_pixels.len() - 4;
 
     for i in (0..end).step_by(4) {
         let r_val = photon_image.raw_pixels[i];
@@ -629,7 +585,7 @@ pub fn inc_brightness(photon_image: &mut PhotonImage, brightness: u8) {
 pub fn dec_brightness(photon_image: &mut PhotonImage, brightness: u8) {
     // println!("{} is brightness", brightness);
 
-    let end = photon_image.get_raw_pixels().len() - 4;
+    let end = photon_image.raw_pixels.len() - 4;
 
     for i in (0..end).step_by(4) {
         photon_image.raw_pixels[i] =
@@ -658,13 +614,8 @@ pub fn dec_brightness(photon_image: &mut PhotonImage, brightness: u8) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn adjust_contrast(photon_image: &mut PhotonImage, contrast: f32) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-
     let clamped_contrast = contrast.clamp(-255.0, 255.0);
 
-    // Some references:
-    // https://math.stackexchange.com/questions/906240/algorithms-to-increase-or-decrease-the-contrast-of-an-image
-    // https://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
     let factor =
         (259.0 * (clamped_contrast + 255.0)) / (255.0 * (259.0 - clamped_contrast));
     let mut lookup_table: Vec<u8> = vec![0; 256];
@@ -675,20 +626,12 @@ pub fn adjust_contrast(photon_image: &mut PhotonImage, contrast: f32) {
         *table = new_val.clamp(0.0, 255.0) as u8;
     }
 
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
-        let mut px = img.get_pixel(x, y);
-        let channels = px.channels();
-
-        px = image::Rgba([
-            lookup_table[channels[0] as usize],
-            lookup_table[channels[1] as usize],
-            lookup_table[channels[2] as usize],
-            255,
-        ]);
-        img.put_pixel(x, y, px);
+    let buf = photon_image.raw_pixels.as_mut_slice();
+    for px in buf.chunks_mut(4) {
+        px[0] = lookup_table[px[0] as usize];
+        px[1] = lookup_table[px[1] as usize];
+        px[2] = lookup_table[px[2] as usize];
     }
-
-    photon_image.raw_pixels = img.into_bytes();
 }
 
 /// Tint an image by adding an offset to averaged RGB channel values.
@@ -716,57 +659,53 @@ pub fn tint(
     g_offset: u32,
     b_offset: u32,
 ) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
-        let mut px = img.get_pixel(x, y);
-        let channels = px.channels();
-        let (r_val, g_val, b_val) =
-            (channels[0] as u32, channels[1] as u32, channels[2] as u32);
+    for px in buf.chunks_mut(4) {
+        let r_val = px[0] as u32;
+        let g_val = px[1] as u32;
+        let b_val = px[2] as u32;
 
-        let new_r_val = if r_val + r_offset < 255 {
+        px[0] = if r_val + r_offset < 255 {
             r_val as u8 + r_offset as u8
         } else {
             255
         };
-        let new_g_val = if g_val + g_offset < 255 {
+        px[1] = if g_val + g_offset < 255 {
             g_val as u8 + g_offset as u8
         } else {
             255
         };
-        let new_b_val = if b_val + b_offset < 255 {
+        px[2] = if b_val + b_offset < 255 {
             b_val as u8 + b_offset as u8
         } else {
             255
         };
-
-        px = image::Rgba([new_r_val, new_g_val, new_b_val, 255]);
-
-        img.put_pixel(x, y, px);
     }
-
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 fn draw_horizontal_strips(photon_image: &mut PhotonImage, num_strips: u8, color: Rgb) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
+    let width = photon_image.width as usize;
+    let height = photon_image.height as usize;
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    let total_strips = (num_strips * 2) - 1;
-    let height_strip = height / total_strips as u32;
-    let mut y_pos: u32 = 0;
-    for i in 1..num_strips {
-        draw_filled_rect_mut(
-            &mut img,
-            Rect::at(0, (y_pos + height_strip) as i32).of_size(width, height_strip),
-            Rgba([color.r, color.g, color.b, 255u8]),
-        );
-        y_pos = i as u32 * (height_strip * 2);
+    let total_strips = (num_strips as usize * 2) - 1;
+    let height_strip = height / total_strips;
+
+    for i in 1..num_strips as usize {
+        let y_start = i * height_strip;
+        let y_end = y_start + height_strip;
+
+        for y in y_start..y_end {
+            for x in 0..width {
+                let pixel_idx = (y * width + x) * 4;
+                buf[pixel_idx] = color.r;
+                buf[pixel_idx + 1] = color.g;
+                buf[pixel_idx + 2] = color.b;
+                // Alpha channel (index + 3) remains unchanged
+            }
+        }
     }
-
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 /// Horizontal strips. Divide an image into a series of equal-height strips, for an artistic effect.
@@ -824,23 +763,27 @@ pub fn color_horizontal_strips(
 }
 
 fn draw_vertical_strips(photon_image: &mut PhotonImage, num_strips: u8, color: Rgb) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
+    let width = photon_image.width as usize;
+    let height = photon_image.height as usize;
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    let total_strips = (num_strips * 2) - 1;
-    let width_strip = width / total_strips as u32;
-    let mut x_pos: u32 = 0;
-    for i in 1..num_strips {
-        draw_filled_rect_mut(
-            &mut img,
-            Rect::at((x_pos + width_strip) as i32, 0).of_size(width_strip, height),
-            Rgba([color.r, color.g, color.b, 255u8]),
-        );
-        x_pos = i as u32 * (width_strip * 2);
+    let total_strips = (num_strips as usize * 2) - 1;
+    let width_strip = width / total_strips;
+
+    for i in 1..num_strips as usize {
+        let x_start = i * width_strip;
+        let x_end = x_start + width_strip;
+
+        for y in 0..height {
+            for x in x_start..x_end {
+                let pixel_idx = (y * width + x) * 4;
+                buf[pixel_idx] = color.r;
+                buf[pixel_idx + 1] = color.g;
+                buf[pixel_idx + 2] = color.b;
+                // Alpha channel (index + 3) remains unchanged
+            }
+        }
     }
-
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 /// Vertical strips. Divide an image into a series of equal-width strips, for an artistic effect.
@@ -1018,17 +961,20 @@ pub fn oil(photon_image: &mut PhotonImage, radius: i32, intensity: f64) {
 ///
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn frosted_glass(photon_image: &mut PhotonImage) {
-    let img_orig_buf = photon_image.get_raw_pixels();
     let width = photon_image.get_width();
     let height = photon_image.get_height();
-    let end = img_orig_buf.len();
+    let len = photon_image.raw_pixels.len();
 
-    let mut img_buf = Vec::<u8>::new();
-    Vec::resize(&mut img_buf, end, 0_u8);
+    // Pre-allocate and initialize scratch buffer to avoid cloning the original pixel data.
+    // The algorithm writes all bytes, so initialization is safe.
+    let mut img_buf = vec![0u8; len];
 
     let perlin = PerlinNoise2D::new(2, 10.0, 10.0, 10.0, 1.0, (100.0, 100.0), 0.5, 101);
 
-    for pixel in (0..end).step_by(4) {
+    // Read from original raw_pixels, write to pre-allocated scratch buffer
+    let orig_pixels = &photon_image.raw_pixels;
+
+    for pixel in (0..len).step_by(4) {
         let x = (pixel / 4) / width as usize;
         let y = (pixel / 4) % width as usize;
 
@@ -1043,16 +989,17 @@ pub fn frosted_glass(photon_image: &mut PhotonImage) {
         let y_new = y_new as usize;
 
         let pixel_new = (x_new * width as usize + y_new) * 4;
-        if pixel_new > end {
+        if pixel_new > len {
             continue;
         }
-        img_buf[pixel] = img_orig_buf[pixel_new];
-        img_buf[pixel + 1] = img_orig_buf[pixel_new + 1];
-        img_buf[pixel + 2] = img_orig_buf[pixel_new + 2];
-        img_buf[pixel + 3] = img_orig_buf[pixel_new + 3];
+        img_buf[pixel] = orig_pixels[pixel_new];
+        img_buf[pixel + 1] = orig_pixels[pixel_new + 1];
+        img_buf[pixel + 2] = orig_pixels[pixel_new + 2];
+        img_buf[pixel + 3] = orig_pixels[pixel_new + 3];
     }
 
-    photon_image.raw_pixels = img_buf;
+    // Swap buffers - original raw_pixels is replaced by the processed scratch buffer
+    std::mem::swap(&mut photon_image.raw_pixels, &mut img_buf);
 }
 
 /// Pixelize an image.
@@ -1246,6 +1193,90 @@ pub fn dither(photon_image: &mut PhotonImage, depth: u32) {
     }
 }
 
+/// Bayer ordered dithering LUT
+static BAYER_8X8: [[u8; 8]; 8] = [
+    [0, 32, 8, 40, 2, 34, 10, 42],
+    [48, 16, 56, 24, 50, 18, 58, 26],
+    [12, 44, 4, 36, 14, 46, 6, 38],
+    [60, 28, 52, 20, 62, 30, 54, 22],
+    [3, 35, 11, 43, 1, 33, 9, 41],
+    [51, 19, 59, 27, 49, 17, 57, 25],
+    [15, 47, 7, 39, 13, 45, 5, 37],
+    [63, 31, 55, 23, 61, 29, 53, 21],
+];
+
+/// Apply Bayer ordered dithering to an image.
+///
+/// Ordered dithering quantizes each pixel's colour channels independently by
+/// comparing the channel value (plus a spatially-varying threshold from the
+/// 8×8 Bayer matrix) against the nearest quantization level.  Unlike
+/// Floyd-Steinberg error diffusion, every pixel is processed in isolation,
+/// making this algorithm branch-free and cache-friendly.
+///
+/// # Arguments
+/// * `photon_image` - A mutable reference to the [`PhotonImage`] to process.
+/// * `bit_depth`    - Target bits per channel (clamped to 1–8).  
+///                    `1` → 2 levels (pure black/white per channel),  
+///                    `4` → 16 levels, `8` → no quantization.
+/// * `spread`       - Dithering spread in the range `[0.0, 1.0]`.  
+///                    `1.0` is the canonical Bayer threshold; lower values
+///                    reduce the visible halftone pattern for a subtler look.
+///
+/// # Example
+///
+/// ```no_run
+/// use photon_rs::effects::bayer_dither;
+/// use photon_rs::native::open_image;
+///
+/// let mut img = open_image("img.jpg").expect("File should open");
+/// // 2-bit depth, full Bayer spread — strong ordered dither
+/// bayer_dither(&mut img, 2, 1.0);
+/// ```
+#[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
+pub fn bayer_dither(photon_image: &mut PhotonImage, bit_depth: u32, spread: f32) {
+    let depth = bit_depth.clamp(1, 8);
+    let spread = spread.clamp(0.0, 1.0);
+
+    let levels = (1u32 << depth) as f32;
+    let step = 255.0_f32 / (levels - 1.0);
+    let inv_step = 1.0_f32 / step;
+
+    // `half_spread` shifts the threshold so that the Bayer bias is centred
+    // around zero: threshold values map from [-127.5*spread, +127.5*spread].
+    // Multiplying by `spread` here means the user can dial down the dithering
+    // without any extra work in the pixel loop.
+    let half_spread = 127.5_f32 * spread;
+
+    let width = photon_image.get_width() as usize;
+    let buf = photon_image.raw_pixels.as_mut_slice();
+    let end = buf.len();
+
+    let mut x: usize = 0;
+    let mut y: usize = 0;
+
+    for i in (0..end).step_by(4) {
+        // BAYER_8X8 stores values in [0, 63]; scale to a signed bias in [-half_spread, +half_spread].
+        let raw_threshold = BAYER_8X8[y & 7][x & 7] as f32; // 0.0 – 63.0
+        let bias = (raw_threshold / 63.0 - 0.5) * 2.0 * half_spread;
+
+        let r = buf[i] as f32;
+        let g = buf[i + 1] as f32;
+        let b = buf[i + 2] as f32;
+
+        buf[i] = (((r + bias) * inv_step + 0.5).floor() * step).clamp(0.0, 255.0) as u8;
+        buf[i + 1] =
+            (((g + bias) * inv_step + 0.5).floor() * step).clamp(0.0, 255.0) as u8;
+        buf[i + 2] =
+            (((b + bias) * inv_step + 0.5).floor() * step).clamp(0.0, 255.0) as u8;
+
+        x += 1;
+        if x == width {
+            x = 0;
+            y += 1;
+        }
+    }
+}
+
 fn create_gradient_map(color_a: Rgb, color_b: Rgb) -> Vec<Rgb> {
     let mut gradient_map = vec![Rgb::new(0, 0, 0); 256];
 
@@ -1279,5 +1310,64 @@ pub fn duotone(photon_image: &mut PhotonImage, color_a: Rgb, color_b: Rgb) {
         px[0] = mapped_luma.r;
         px[1] = mapped_luma.g;
         px[2] = mapped_luma.b;
+    }
+}
+
+/// Apply a radial vignette effect to an image.
+///
+/// # Example
+///
+/// ```no_run
+/// use photon_rs::effects::vignette;
+/// use photon_rs::native::open_image;
+///
+/// let mut img = open_image("img.jpg").expect("File should open");
+/// // Moderate vignette — corners darken by ~60 %
+/// vignette(&mut img, 0.6);
+/// ```
+#[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
+pub fn vignette(photon_image: &mut PhotonImage, intensity: f32) {
+    let intensity = intensity.clamp(0.0, 1.0);
+
+    if intensity == 0.0 {
+        return;
+    }
+
+    let width = photon_image.get_width() as usize;
+    let height = photon_image.get_height() as usize;
+
+    let cx = (width / 2) as i64;
+    let cy = (height / 2) as i64;
+
+    let corner_dx = cx;
+    let corner_dy = cy;
+    let max_dist_sq = (corner_dx * corner_dx + corner_dy * corner_dy) as f32;
+
+    if max_dist_sq == 0.0 {
+        return;
+    }
+    let inv_max_dist_sq = intensity / max_dist_sq;
+
+    let buf = photon_image.raw_pixels.as_mut_slice();
+
+    let mut x: usize = 0;
+    let mut y: usize = 0;
+
+    let end = buf.len();
+    for i in (0..end).step_by(4) {
+        let dx = x as i64 - cx;
+        let dy = y as i64 - cy;
+        let dist_sq = (dx * dx + dy * dy) as f32;
+
+        let factor = (1.0_f32 - dist_sq * inv_max_dist_sq).clamp(0.0, 1.0);
+
+        buf[i] = (buf[i] as f32 * factor) as u8;
+        buf[i + 1] = (buf[i + 1] as f32 * factor) as u8;
+        buf[i + 2] = (buf[i + 2] as f32 * factor) as u8;
+        x += 1;
+        if x == width {
+            x = 0;
+            y += 1;
+        }
     }
 }
