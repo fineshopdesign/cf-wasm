@@ -18,8 +18,8 @@
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "nuxt": "^4.4.6",
-    "vue": "^3.5.34",
-    "vue-router": "^5.0.7"
+    "vue": "^3.5.35",
+    "vue-router": "^5.1.0"
   },
   "devDependencies": {
     "h3": "2.0.1-rc.22",

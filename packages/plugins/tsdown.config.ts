@@ -11,7 +11,6 @@ export default defineConfig({
   deps: {
     skipNodeModulesBundle: true,
   },
-  shims: true,
   dts: true,
   clean: true,
   ignoreWatch: ['.turbo'],

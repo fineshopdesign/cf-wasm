@@ -35,7 +35,6 @@ export default defineConfig(() => {
     deps: {
       skipNodeModulesBundle: true,
     },
-    shims: true,
     dts: true,
     ignoreWatch: ['.turbo'],
   } satisfies UserConfig;
@@ -70,6 +69,8 @@ export default defineConfig(() => {
       ...commonOptions,
       entry: ['src/node.ts', 'src/others.ts', 'src/jsx.ts'],
       format: ['cjs'],
+      platform: 'node',
+      target: 'node18',
     },
   ] satisfies UserConfig[];
 });
