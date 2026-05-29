@@ -2,7 +2,6 @@
 
 use crate::helpers;
 use crate::PhotonImage;
-use image::DynamicImage::ImageRgba8;
 use image::{GenericImage, GenericImageView, Pixel};
 use std::cmp::min;
 
@@ -12,11 +11,9 @@ use wasm_bindgen::prelude::*;
 type Kernel = [f32; 9];
 
 fn conv(photon_image: &mut PhotonImage, kernel: Kernel) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
-    img = ImageRgba8(img.to_rgba8());
+    let img = helpers::dyn_image_from_raw(photon_image);
 
     let mut filtered_img = img.filter3x3(&kernel);
-    filtered_img = ImageRgba8(filtered_img.to_rgba8());
 
     if filtered_img.pixels().all(|p| p.2[3] == 0) {
         for x in 0..GenericImageView::width(&img) - 1 {
@@ -169,12 +166,8 @@ pub fn box_blur(photon_image: &mut PhotonImage) {
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn gaussian_blur(photon_image: &mut PhotonImage, radius: i32) {
     // construct pixel data
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let mut src = img.into_bytes();
-
     let width = photon_image.get_width();
     let height = photon_image.get_height();
-    let mut target: Vec<u8> = src.clone();
 
     // Clamp radius value when it exceeds width or height.
     // Divide by 2 since maximal radius must satisfy these conditions:
@@ -186,6 +179,9 @@ pub fn gaussian_blur(photon_image: &mut PhotonImage, radius: i32) {
     // Subtract 1 because the inequalies are strict.
     let radius = min(width as i32 / 2 - 1, radius);
     let radius = min(height as i32 / 2 - 1, radius);
+
+    let mut src = std::mem::take(&mut photon_image.raw_pixels);
+    let mut target = vec![0u8; src.len()];
 
     let bxs = boxes_for_gauss(radius as f32, 3);
     box_blur_inner(&mut src, &mut target, width, height, (bxs[0] - 1) / 2);
@@ -634,23 +630,35 @@ pub fn sobel_vertical(photon_image: &mut PhotonImage) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn sobel_global(photon_image: &mut PhotonImage) {
-    let mut sobel_x = photon_image.clone();
-    let sobel_y = photon_image;
+    let original_pixels = std::mem::take(&mut photon_image.raw_pixels);
+    let len = original_pixels.len();
 
-    sobel_horizontal(&mut sobel_x);
-    sobel_vertical(sobel_y);
+    let mut buf_x = vec![0u8; len];
+    let mut buf_y = vec![0u8; len];
+    let mut tmp = vec![0u8; len];
 
-    let sob_x_values = sobel_x.get_raw_pixels();
-    let sob_y_values = sobel_y.get_raw_pixels();
+    // Horizontal pass
+    tmp.copy_from_slice(&original_pixels);
+    std::mem::swap(&mut tmp, &mut photon_image.raw_pixels);
+    sobel_horizontal(photon_image);
+    // After swap: photon_image.raw_pixels has filtered result, tmp has original
+    buf_x.copy_from_slice(&photon_image.raw_pixels);
 
-    let mut sob_xy_values = vec![];
+    // Vertical pass
+    std::mem::swap(&mut tmp, &mut photon_image.raw_pixels);
+    sobel_vertical(photon_image);
+    // After swap: photon_image.raw_pixels has filtered result, tmp has original
+    buf_y.copy_from_slice(&photon_image.raw_pixels);
 
-    for i in 0..(sob_x_values.len()) {
-        let kx = (sob_x_values[i]) as u32;
-        let ky = (sob_y_values[i]) as u32; // this could panic if for some reason the sobel_y doesn't have the same size as the sobel_x
-        let kxy_2 = kx * kx + ky * ky; // u8 * u8 is u16 and we sum two so we need u32
-        sob_xy_values.push((kxy_2 as f64).sqrt() as u8); // f64::max is bigger than u32::max so no problem with conversion
+    // Restore original pixels
+    std::mem::swap(&mut tmp, &mut photon_image.raw_pixels);
+    drop(tmp);
+
+    // Compute Sobel magnitude
+    for i in 0..len {
+        let kx = buf_x[i] as u32;
+        let ky = buf_y[i] as u32;
+        let kxy_2 = kx * kx + ky * ky;
+        photon_image.raw_pixels[i] = (kxy_2 as f64).sqrt() as u8;
     }
-
-    sobel_y.raw_pixels = sob_xy_values;
 }

@@ -363,9 +363,391 @@ export function alter_red_channel(photon_image: PhotonImage, amt: number): void;
 export function alter_two_channels(img: PhotonImage, channel1: number, amt1: number, channel2: number, amt2: number): void;
 
 /**
+ * Remove chromatic aberration (purple and green fringing)
+ * Common in high-contrast edges from lens imperfections
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `purple_amount` - Purple fringing removal amount (0 to 100)
+ * * `green_amount` - Green fringing removal amount (0 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::corrections::apply_chromatic_aberration;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_chromatic_aberration(&mut img, 50.0, 30.0); // Remove purple and green fringing
+ * ```
+ */
+export function apply_chromatic_aberration(photon_image: PhotonImage, purple_amount: number, green_amount: number): void;
+
+/**
+ * Apply clarity (local contrast / midtone contrast)
+ * Uses unsharp mask with large radius on luminance channel
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `amount` - Clarity amount (-100 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_clarity;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_clarity(&mut img, 25.0); // Increase clarity
+ * ```
+ */
+export function apply_clarity(photon_image: PhotonImage, amount: number): void;
+
+/**
+ * Apply 3-way color grading (shadows/midtones/highlights)
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `shadow_hue` - Shadow hue adjustment (0-360 degrees)
+ * * `shadow_sat` - Shadow saturation adjustment (-100 to 100)
+ * * `shadow_lum` - Shadow luminance adjustment (-100 to 100)
+ * * `midtone_hue` - Midtone hue adjustment (0-360 degrees)
+ * * `midtone_sat` - Midtone saturation adjustment (-100 to 100)
+ * * `midtone_lum` - Midtone luminance adjustment (-100 to 100)
+ * * `highlight_hue` - Highlight hue adjustment (0-360 degrees)
+ * * `highlight_sat` - Highlight saturation adjustment (-100 to 100)
+ * * `highlight_lum` - Highlight luminance adjustment (-100 to 100)
+ * * `blending` - Blending factor (0 to 100)
+ * * `balance` - Balance between shadows and highlights (-100 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_color_grading;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_color_grading(&mut img, 200.0, 20.0, -10.0, 0.0, 0.0, 0.0, 30.0, 15.0, 5.0, 50.0, 0.0);
+ * ```
+ */
+export function apply_color_grading(photon_image: PhotonImage, shadow_hue: number, shadow_sat: number, shadow_lum: number, midtone_hue: number, midtone_sat: number, midtone_lum: number, highlight_hue: number, highlight_sat: number, highlight_lum: number, blending: number, balance: number): void;
+
+/**
+ * Apply dehaze effect (atmospheric haze removal)
+ * Uses dark channel prior algorithm for haze removal
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `amount` - Dehaze amount (-100 to 100, positive removes haze, negative adds haze)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_dehaze;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_dehaze(&mut img, 50.0); // Remove haze
+ * ```
+ */
+export function apply_dehaze(photon_image: PhotonImage, amount: number): void;
+
+/**
+ * Apply exposure compensation in linear space (scene-referred)
+ *
+ * Exposure is applied as a multiplier in linear space before gamma encoding.
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `ev` - Exposure value in EV (stops). Range: -5.0 to +5.0
+ *          Each +1 EV doubles the light, -1 EV halves it
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_exposure;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_exposure(&mut img, 1.5); // Brighten by 1.5 stops
+ * ```
+ */
+export function apply_exposure(photon_image: PhotonImage, ev: number): void;
+
+/**
  * Apply a gradient to an image.
  */
 export function apply_gradient(image: PhotonImage): void;
+
+/**
+ * Apply lens distortion correction (barrel/pincushion) with optional vignette removal
+ * Uses bilinear interpolation for smooth results
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `distortion` - Distortion amount (-100 to 100, negative for barrel, positive for pincushion)
+ * * `vignette` - Vignette correction amount (0 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::corrections::apply_lens_correction;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_lens_correction(&mut img, -20.0, 30.0); // Correct barrel distortion and vignette
+ * ```
+ */
+export function apply_lens_correction(photon_image: PhotonImage, distortion: number, vignette: number): void;
+
+/**
+ * Apply noise reduction (default: bilateral filtering)
+ *
+ * Convenience function that calls bilateral filtering
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `luminance` - Luminance noise reduction (0 to 100)
+ * * `color` - Color noise reduction (0 to 100)
+ * * `detail` - Detail preservation (0 to 100, higher = preserve more detail)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_noise_reduction;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_noise_reduction(&mut img, 40.0, 50.0, 50.0);
+ * ```
+ */
+export function apply_noise_reduction(photon_image: PhotonImage, luminance: number, color: number, detail: number): void;
+
+/**
+ * Apply noise reduction using bilateral filtering (edge-preserving)
+ *
+ * Reduces noise while preserving edges
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `luminance` - Luminance noise reduction (0 to 100)
+ * * `color` - Color noise reduction (0 to 100)
+ * * `detail` - Detail preservation (0 to 100, higher = preserve more detail)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_noise_reduction_bilateral;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_noise_reduction_bilateral(&mut img, 40.0, 50.0, 50.0);
+ * ```
+ */
+export function apply_noise_reduction_bilateral(photon_image: PhotonImage, luminance: number, color: number, detail: number): void;
+
+/**
+ * Apply noise reduction using median filter
+ *
+ * Effective for salt-and-pepper noise, preserves edges well
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `radius` - Filter radius (1 to 3, typically 1-2)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_noise_reduction_median;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_noise_reduction_median(&mut img, 2);
+ * ```
+ */
+export function apply_noise_reduction_median(photon_image: PhotonImage, radius: number): void;
+
+/**
+ * Apply noise reduction using non-local means algorithm
+ *
+ * Advanced algorithm that compares similar patches across the image
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `strength` - Noise reduction strength (0 to 100)
+ * * `patch_size` - Patch size for comparison (3 or 5)
+ * * `search_radius` - Search radius for similar patches (5 to 15)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_noise_reduction_nlm;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_noise_reduction_nlm(&mut img, 50.0, 3, 10);
+ * ```
+ */
+export function apply_noise_reduction_nlm(photon_image: PhotonImage, strength: number, patch_size: number, search_radius: number): void;
+
+/**
+ * Apply noise reduction using wavelet denoising
+ *
+ * Uses wavelet transform to separate signal from noise, then reconstructs with reduced noise
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `strength` - Noise reduction strength (0 to 100)
+ * * `threshold` - Wavelet threshold (0 to 100, higher = more aggressive)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_noise_reduction_wavelets;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_noise_reduction_wavelets(&mut img, 50.0, 30.0);
+ * ```
+ */
+export function apply_noise_reduction_wavelets(photon_image: PhotonImage, strength: number, threshold: number): void;
+
+/**
+ * Apply unsharp mask sharpening
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `amount` - Sharpening strength (0 to 150, typical 50-150)
+ * * `radius` - Edge detection radius in pixels (0.5 to 3.0, typical 0.8-1.5)
+ * * `threshold` - Minimum brightness difference to sharpen (0 to 255, typical 0-5)
+ * * `masking` - Edge masking (0 to 100, 0 = sharpen everywhere, 100 = edges only)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_sharpening;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_sharpening(&mut img, 100.0, 1.0, 2.0, 50.0);
+ * ```
+ */
+export function apply_sharpening(photon_image: PhotonImage, amount: number, radius: number, threshold: number, masking: number): void;
+
+/**
+ * Apply texture enhancement (medium-frequency detail enhancement)
+ * Similar to clarity but uses smaller radius for medium-frequency details
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `amount` - Texture amount (-100 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_texture;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_texture(&mut img, 30.0); // Increase texture
+ * ```
+ */
+export function apply_texture(photon_image: PhotonImage, amount: number): void;
+
+/**
+ * Apply tone curve lookup table
+ * Applies a tone curve to the image's luminance while preserving color relationships
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `lookup_table` - A Vec<u8> containing 256 values representing the tone curve mapping.
+ *                    Each index represents an input value, and the value at that index is the output.
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_tone_curve;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * // Create a lookup table (e.g., linear curve: [0, 1, 2, ..., 255])
+ * let mut lut = Vec::new();
+ * for i in 0..256 {
+ *     lut.push(i as u8);
+ * }
+ * apply_tone_curve(&mut img, lut);
+ * ```
+ */
+export function apply_tone_curve(photon_image: PhotonImage, lookup_table: Uint8Array): void;
+
+/**
+ * Apply tone zone adjustments (darks, shadows, highlights, whites)
+ * Uses luminance-based masking
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `darks` - Darks adjustment (-100 to 100)
+ * * `shadows` - Shadows adjustment (-100 to 100)
+ * * `highlights` - Highlights adjustment (-100 to 100)
+ * * `whites` - Whites adjustment (-100 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_tone_zones;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_tone_zones(&mut img, 10, 20, -10, 5); // Adjust tone zones
+ * ```
+ */
+export function apply_tone_zones(photon_image: PhotonImage, darks: number, shadows: number, highlights: number, whites: number): void;
+
+/**
+ * Apply vibrance adjustment
+ * Vibrance boosts less-saturated colors more and protects skin tones
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `amount` - Vibrance amount (-100 to 100)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_vibrance;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_vibrance(&mut img, 30.0); // Increase vibrance
+ * ```
+ */
+export function apply_vibrance(photon_image: PhotonImage, amount: number): void;
+
+/**
+ * Apply vignette effect (edge darkening or lightening)
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `strength` - Vignette strength (-100 to 100, positive darkens edges, negative lightens)
+ * * `radius` - Vignette radius (0 to 100, percentage of image where vignette starts)
+ * * `softness` - Vignette softness (0 to 100, controls falloff curve)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_vignette;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_vignette(&mut img, 50.0, 30.0, 50.0); // Darken edges
+ * ```
+ */
+export function apply_vignette(photon_image: PhotonImage, strength: number, radius: number, softness: number): void;
+
+/**
+ * Apply white balance using Bradford chromatic adaptation
+ *
+ * Converts from the current illuminant to D65 (standard daylight).
+ *
+ * # Arguments
+ * * `photon_image` - A PhotonImage to process
+ * * `temperature` - Color temperature shift (-100 to 100, where 0 = 6500K/D65)
+ *                   Negative = warmer (lower Kelvin), Positive = cooler (higher Kelvin)
+ * * `tint` - Green-magenta axis (-100 to 100, where negative = green, positive = magenta)
+ *
+ * # Example
+ * ```no_run
+ * use photon_rs::adjustments::apply_white_balance;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * apply_white_balance(&mut img, -20.0, 5.0); // Warm up the image slightly with magenta tint
+ * ```
+ */
+export function apply_white_balance(photon_image: PhotonImage, temperature: number, tint: number): void;
 
 /**
  * Convert an image to grayscale by setting a pixel's 3 RGB values to the Blue channel's value.
@@ -394,6 +776,37 @@ export function base64_to_image(base64: string): PhotonImage;
  * Convert a base64 string to a Vec of u8s.
  */
 export function base64_to_vec(base64: string): Uint8Array;
+
+/**
+ * Apply Bayer ordered dithering to an image.
+ *
+ * Ordered dithering quantizes each pixel's colour channels independently by
+ * comparing the channel value (plus a spatially-varying threshold from the
+ * 8×8 Bayer matrix) against the nearest quantization level.  Unlike
+ * Floyd-Steinberg error diffusion, every pixel is processed in isolation,
+ * making this algorithm branch-free and cache-friendly.
+ *
+ * # Arguments
+ * * `photon_image` - A mutable reference to the [`PhotonImage`] to process.
+ * * `bit_depth`    - Target bits per channel (clamped to 1–8).
+ *                    `1` → 2 levels (pure black/white per channel),
+ *                    `4` → 16 levels, `8` → no quantization.
+ * * `spread`       - Dithering spread in the range `[0.0, 1.0]`.
+ *                    `1.0` is the canonical Bayer threshold; lower values
+ *                    reduce the visible halftone pattern for a subtler look.
+ *
+ * # Example
+ *
+ * ```no_run
+ * use photon_rs::effects::bayer_dither;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * // 2-bit depth, full Bayer spread — strong ordered dither
+ * bayer_dither(&mut img, 2, 1.0);
+ * ```
+ */
+export function bayer_dither(photon_image: PhotonImage, bit_depth: number, spread: number): void;
 
 /**
  * Blend two images together.
@@ -457,6 +870,31 @@ export function box_blur(photon_image: PhotonImage): void;
  * ```
  */
 export function cali(img: PhotonImage): void;
+
+/**
+ * Apply a cinematic film look to an image.
+ *
+ * # Example
+ *
+ * ```no_run
+ * use photon_rs::filters::cinematic;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * cinematic(&mut img);
+ * ```
+ *
+ * The same effect is also available through the generic dispatcher:
+ *
+ * ```no_run
+ * use photon_rs::filters::filter;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * filter(&mut img, "cinematic");
+ * ```
+ */
+export function cinematic(img: PhotonImage): void;
 
 /**
  * Horizontal strips. Divide an image into a series of equal-width strips, for an artistic effect. Sepcify a color as well.
@@ -1107,6 +1545,36 @@ export function edge_one(photon_image: PhotonImage): void;
  * ```
  */
 export function emboss(photon_image: PhotonImage): void;
+
+/**
+ * Apply a cinematic film grain effect to an image.
+ *
+ * Simulates analog photographic grain by adding spatially-varying noise that is weighted by each
+ * pixel's perceptual luminance: grain is strongest in the midtones and naturally falls off toward the
+ * shadows and highlights matching the characteristic response of real photographic emulsions.
+ *
+ * # Arguments
+ * * `photon_image` - A mutable reference to the [`PhotonImage`] to process.
+ * * `intensity`    - Grain strength in the range `[0.0, 1.0]`.
+ *                    `0.1` – `0.3` is a realistic film look; `1.0` is extreme.
+ * * `monochrome`   - When `true`, a single noise sample is shared across R, G and B (silver-halide style, one PRNG call per pixel).
+ *                    When `false`, each channel gets an independent sample, producing the subtle colour fringing of
+ *                    multi-layer film stocks (three PRNG calls per pixel).
+ *
+ * * `seed`         - Initial PRNG seed. Use a fixed value for reproducible results or any non-zero runtime value for variation.
+ *                    Supplying `0` falls back to an internal safe constant.
+ *
+ * # Example
+ *
+ * ```no_run
+ * use photon_rs::noise::film_grain;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * film_grain(&mut img, 0.15, true, 42);
+ * ```
+ */
+export function film_grain(photon_image: PhotonImage, intensity: number, monochrome: boolean, seed: number): void;
 
 /**
  * Apply a filter to an image. Over 20 filters are available.
@@ -2991,6 +3459,22 @@ export function to_raw_pixels(imgdata: ImageData): Uint8Array;
 export function vertical_strips(photon_image: PhotonImage, num_strips: number): void;
 
 /**
+ * Apply a radial vignette effect to an image.
+ *
+ * # Example
+ *
+ * ```no_run
+ * use photon_rs::effects::vignette;
+ * use photon_rs::native::open_image;
+ *
+ * let mut img = open_image("img.jpg").expect("File should open");
+ * // Moderate vignette — corners darken by ~60 %
+ * vignette(&mut img, 0.6);
+ * ```
+ */
+export function vignette(photon_image: PhotonImage, intensity: number): void;
+
+/**
  * Add a watermark to an image.
  *
  * # Arguments
@@ -3016,28 +3500,122 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly apply_chromatic_aberration: (a: number, b: number, c: number) => void;
+    readonly apply_lens_correction: (a: number, b: number, c: number) => void;
+    readonly box_blur: (a: number) => void;
+    readonly detect_135_deg_lines: (a: number) => void;
+    readonly detect_45_deg_lines: (a: number) => void;
+    readonly detect_horizontal_lines: (a: number) => void;
+    readonly detect_vertical_lines: (a: number) => void;
+    readonly edge_detection: (a: number) => void;
+    readonly edge_one: (a: number) => void;
+    readonly emboss: (a: number) => void;
+    readonly gaussian_blur: (a: number, b: number) => void;
+    readonly identity: (a: number) => void;
+    readonly laplace: (a: number) => void;
+    readonly noise_reduction: (a: number) => void;
+    readonly prewitt_horizontal: (a: number) => void;
+    readonly sharpen: (a: number) => void;
+    readonly sobel_global: (a: number) => void;
+    readonly sobel_horizontal: (a: number) => void;
+    readonly sobel_vertical: (a: number) => void;
+    readonly alter_blue_channel: (a: number, b: number) => void;
+    readonly alter_channel: (a: number, b: number, c: number) => void;
+    readonly alter_channels: (a: number, b: number, c: number, d: number) => void;
+    readonly alter_green_channel: (a: number, b: number) => void;
+    readonly alter_red_channel: (a: number, b: number) => void;
+    readonly alter_two_channels: (a: number, b: number, c: number, d: number, e: number) => void;
+    readonly invert: (a: number) => void;
+    readonly remove_blue_channel: (a: number, b: number) => void;
+    readonly remove_channel: (a: number, b: number, c: number) => void;
+    readonly remove_green_channel: (a: number, b: number) => void;
+    readonly remove_red_channel: (a: number, b: number) => void;
+    readonly selective_color_convert: (a: number, b: number, c: number, d: number) => void;
+    readonly selective_desaturate: (a: number, b: number, c: number) => void;
+    readonly selective_greyscale: (a: number, b: number) => void;
+    readonly selective_hue_rotate: (a: number, b: number, c: number) => void;
+    readonly selective_lighten: (a: number, b: number, c: number) => void;
+    readonly selective_saturate: (a: number, b: number, c: number) => void;
+    readonly swap_channels: (a: number, b: number, c: number) => void;
     readonly apply_gradient: (a: number) => void;
     readonly blend: (a: number, b: number, c: number, d: number) => void;
     readonly create_gradient: (a: number, b: number) => number;
     readonly watermark: (a: number, b: number, c: bigint, d: bigint) => void;
+    readonly adjust_brightness: (a: number, b: number) => void;
+    readonly adjust_contrast: (a: number, b: number) => void;
+    readonly bayer_dither: (a: number, b: number, c: number) => void;
+    readonly color_horizontal_strips: (a: number, b: number, c: number) => void;
+    readonly color_vertical_strips: (a: number, b: number, c: number) => void;
+    readonly colorize: (a: number) => void;
+    readonly dec_brightness: (a: number, b: number) => void;
+    readonly dither: (a: number, b: number) => void;
+    readonly duotone: (a: number, b: number, c: number) => void;
+    readonly frosted_glass: (a: number) => void;
+    readonly halftone: (a: number) => void;
+    readonly horizontal_strips: (a: number, b: number) => void;
+    readonly inc_brightness: (a: number, b: number) => void;
+    readonly multiple_offsets: (a: number, b: number, c: number, d: number) => void;
+    readonly normalize: (a: number) => void;
+    readonly offset: (a: number, b: number, c: number) => void;
+    readonly offset_blue: (a: number, b: number) => void;
+    readonly offset_green: (a: number, b: number) => void;
+    readonly offset_red: (a: number, b: number) => void;
+    readonly oil: (a: number, b: number, c: number) => void;
+    readonly pixelize: (a: number, b: number) => void;
+    readonly primary: (a: number) => void;
+    readonly solarize: (a: number) => void;
+    readonly solarize_retimg: (a: number) => number;
+    readonly tint: (a: number, b: number, c: number, d: number) => void;
+    readonly vertical_strips: (a: number, b: number) => void;
+    readonly vignette: (a: number, b: number) => void;
+    readonly b_grayscale: (a: number) => void;
     readonly crop: (a: number, b: number, c: number, d: number, e: number) => number;
     readonly crop_img_browser: (a: any, b: number, c: number, d: number, e: number) => any;
+    readonly decompose_max: (a: number) => void;
+    readonly decompose_min: (a: number) => void;
+    readonly desaturate: (a: number) => void;
     readonly fliph: (a: number) => void;
     readonly flipv: (a: number) => void;
+    readonly g_grayscale: (a: number) => void;
+    readonly grayscale: (a: number) => void;
+    readonly grayscale_human_corrected: (a: number) => void;
+    readonly grayscale_shades: (a: number, b: number) => void;
+    readonly monochrome: (a: number, b: number, c: number, d: number) => void;
     readonly padding_bottom: (a: number, b: number, c: number) => number;
     readonly padding_left: (a: number, b: number, c: number) => number;
     readonly padding_right: (a: number, b: number, c: number) => number;
     readonly padding_top: (a: number, b: number, c: number) => number;
     readonly padding_uniform: (a: number, b: number, c: number) => number;
+    readonly r_grayscale: (a: number) => void;
     readonly resample: (a: number, b: number, c: number) => number;
     readonly resize: (a: number, b: number, c: number, d: number) => number;
     readonly resize_img_browser: (a: number, b: number, c: number, d: number) => any;
     readonly rotate: (a: number, b: number) => number;
     readonly seam_carve: (a: number, b: number, c: number) => number;
+    readonly sepia: (a: number) => void;
     readonly shearx: (a: number, b: number) => number;
     readonly sheary: (a: number, b: number) => number;
+    readonly single_channel_grayscale: (a: number, b: number) => void;
+    readonly threshold: (a: number, b: number) => void;
+    readonly apply_clarity: (a: number, b: number) => void;
+    readonly apply_color_grading: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number) => void;
+    readonly apply_dehaze: (a: number, b: number) => void;
+    readonly apply_exposure: (a: number, b: number) => void;
+    readonly apply_noise_reduction: (a: number, b: number, c: number, d: number) => void;
+    readonly apply_noise_reduction_median: (a: number, b: number) => void;
+    readonly apply_noise_reduction_nlm: (a: number, b: number, c: number, d: number) => void;
+    readonly apply_noise_reduction_wavelets: (a: number, b: number, c: number) => void;
+    readonly apply_sharpening: (a: number, b: number, c: number, d: number, e: number) => void;
+    readonly apply_texture: (a: number, b: number) => void;
+    readonly apply_tone_curve: (a: number, b: number, c: number) => void;
+    readonly apply_tone_zones: (a: number, b: number, c: number, d: number, e: number) => void;
+    readonly apply_vibrance: (a: number, b: number) => void;
+    readonly apply_vignette: (a: number, b: number, c: number, d: number) => void;
+    readonly apply_white_balance: (a: number, b: number, c: number) => void;
+    readonly apply_noise_reduction_bilateral: (a: number, b: number, c: number, d: number) => void;
     readonly add_noise_rand: (a: number) => void;
     readonly cali: (a: number) => void;
+    readonly cinematic: (a: number) => void;
     readonly darken_hsl: (a: number, b: number) => void;
     readonly darken_hsluv: (a: number, b: number) => void;
     readonly darken_hsv: (a: number, b: number) => void;
@@ -3047,11 +3625,14 @@ export interface InitOutput {
     readonly desaturate_hsv: (a: number, b: number) => void;
     readonly desaturate_lch: (a: number, b: number) => void;
     readonly dramatic: (a: number) => void;
+    readonly draw_text: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+    readonly draw_text_with_border: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
     readonly duotone_horizon: (a: number) => void;
     readonly duotone_lilac: (a: number) => void;
     readonly duotone_ochre: (a: number) => void;
     readonly duotone_tint: (a: number, b: number) => void;
     readonly duotone_violette: (a: number) => void;
+    readonly film_grain: (a: number, b: number, c: number, d: number) => void;
     readonly filter: (a: number, b: number, c: number) => void;
     readonly firenze: (a: number) => void;
     readonly gamma_correction: (a: number, b: number, c: number, d: number) => void;
@@ -3123,81 +3704,6 @@ export interface InitOutput {
     readonly rgba_get_blue: (a: number) => number;
     readonly rgba_get_green: (a: number) => number;
     readonly rgba_get_red: (a: number) => number;
-    readonly draw_text: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-    readonly draw_text_with_border: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-    readonly alter_blue_channel: (a: number, b: number) => void;
-    readonly alter_channel: (a: number, b: number, c: number) => void;
-    readonly alter_channels: (a: number, b: number, c: number, d: number) => void;
-    readonly alter_green_channel: (a: number, b: number) => void;
-    readonly alter_red_channel: (a: number, b: number) => void;
-    readonly alter_two_channels: (a: number, b: number, c: number, d: number, e: number) => void;
-    readonly b_grayscale: (a: number) => void;
-    readonly decompose_max: (a: number) => void;
-    readonly decompose_min: (a: number) => void;
-    readonly desaturate: (a: number) => void;
-    readonly g_grayscale: (a: number) => void;
-    readonly grayscale: (a: number) => void;
-    readonly grayscale_human_corrected: (a: number) => void;
-    readonly grayscale_shades: (a: number, b: number) => void;
-    readonly invert: (a: number) => void;
-    readonly monochrome: (a: number, b: number, c: number, d: number) => void;
-    readonly r_grayscale: (a: number) => void;
-    readonly remove_blue_channel: (a: number, b: number) => void;
-    readonly remove_channel: (a: number, b: number, c: number) => void;
-    readonly remove_green_channel: (a: number, b: number) => void;
-    readonly remove_red_channel: (a: number, b: number) => void;
-    readonly selective_color_convert: (a: number, b: number, c: number, d: number) => void;
-    readonly selective_desaturate: (a: number, b: number, c: number) => void;
-    readonly selective_greyscale: (a: number, b: number) => void;
-    readonly selective_hue_rotate: (a: number, b: number, c: number) => void;
-    readonly selective_lighten: (a: number, b: number, c: number) => void;
-    readonly selective_saturate: (a: number, b: number, c: number) => void;
-    readonly sepia: (a: number) => void;
-    readonly single_channel_grayscale: (a: number, b: number) => void;
-    readonly swap_channels: (a: number, b: number, c: number) => void;
-    readonly threshold: (a: number, b: number) => void;
-    readonly box_blur: (a: number) => void;
-    readonly detect_135_deg_lines: (a: number) => void;
-    readonly detect_45_deg_lines: (a: number) => void;
-    readonly detect_horizontal_lines: (a: number) => void;
-    readonly detect_vertical_lines: (a: number) => void;
-    readonly edge_detection: (a: number) => void;
-    readonly edge_one: (a: number) => void;
-    readonly emboss: (a: number) => void;
-    readonly gaussian_blur: (a: number, b: number) => void;
-    readonly identity: (a: number) => void;
-    readonly laplace: (a: number) => void;
-    readonly noise_reduction: (a: number) => void;
-    readonly prewitt_horizontal: (a: number) => void;
-    readonly sharpen: (a: number) => void;
-    readonly sobel_global: (a: number) => void;
-    readonly sobel_horizontal: (a: number) => void;
-    readonly sobel_vertical: (a: number) => void;
-    readonly adjust_brightness: (a: number, b: number) => void;
-    readonly adjust_contrast: (a: number, b: number) => void;
-    readonly color_horizontal_strips: (a: number, b: number, c: number) => void;
-    readonly color_vertical_strips: (a: number, b: number, c: number) => void;
-    readonly colorize: (a: number) => void;
-    readonly dec_brightness: (a: number, b: number) => void;
-    readonly dither: (a: number, b: number) => void;
-    readonly duotone: (a: number, b: number, c: number) => void;
-    readonly frosted_glass: (a: number) => void;
-    readonly halftone: (a: number) => void;
-    readonly horizontal_strips: (a: number, b: number) => void;
-    readonly inc_brightness: (a: number, b: number) => void;
-    readonly multiple_offsets: (a: number, b: number, c: number, d: number) => void;
-    readonly normalize: (a: number) => void;
-    readonly offset: (a: number, b: number, c: number) => void;
-    readonly offset_blue: (a: number, b: number) => void;
-    readonly offset_green: (a: number, b: number) => void;
-    readonly offset_red: (a: number, b: number) => void;
-    readonly oil: (a: number, b: number, c: number) => void;
-    readonly pixelize: (a: number, b: number) => void;
-    readonly primary: (a: number) => void;
-    readonly solarize: (a: number) => void;
-    readonly solarize_retimg: (a: number) => number;
-    readonly tint: (a: number, b: number, c: number, d: number) => void;
-    readonly vertical_strips: (a: number, b: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;

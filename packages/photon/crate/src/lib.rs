@@ -72,8 +72,9 @@ pub struct PhotonImage {
     height: u32,
 }
 
+#[cfg(not(feature = "enable_wasm"))]
 impl PhotonImage {
-    /// Get the PhotonImage's pixels as a slice of u8s.
+    /// Get the PhotonImage's pixels as a slice of u8s (no cloning).
     pub fn get_raw_pixels_slice(&self) -> &[u8] {
         &self.raw_pixels
     }
@@ -546,9 +547,11 @@ fn set_panic_hook() {
     console_error_panic_hook::set_once();
 }
 
+pub mod adjustments;
 pub mod channels;
 pub mod colour_spaces;
 pub mod conv;
+pub mod corrections;
 pub mod effects;
 pub mod filters;
 pub mod helpers;

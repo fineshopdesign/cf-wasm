@@ -68,27 +68,30 @@ pub fn blend(
     photon_image2: &PhotonImage,
     blend_mode: &str,
 ) {
-    let img = crate::helpers::dyn_image_from_raw(photon_image);
-    let img2 = crate::helpers::dyn_image_from_raw(photon_image2);
-
-    let (width, height) = img.dimensions();
-    let (width2, height2) = img2.dimensions();
+    let (width, height) = (photon_image.width, photon_image.height);
+    let (width2, height2) = (photon_image2.width, photon_image2.height);
 
     if width > width2 || height > height2 {
         panic!("First image parameter must be smaller than second image parameter. To fix, swap img and img2 params.");
     }
-    let mut img = img.to_rgba8();
-    let img2 = img2.to_rgba8();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let pixel = img.get_pixel(x, y);
-        let pixel_img2 = img2.get_pixel(x, y);
+    let src_pixels = photon_image.raw_pixels.as_slice();
+    let src2_pixels = photon_image2.raw_pixels.as_slice();
+    let mut dst_pixels = photon_image.raw_pixels.clone();
 
-        let px_data = pixel.channels();
-        let px_data2 = pixel_img2.channels();
-
-        // let rgb_color: Rgba = Rgba::new(px_data[0] as f32, px_data[1] as f32, px_data[2] as f32, 255.0);
-        // let color: LinSrgba = LinSrgba::from_color(&rgb_color).into_format();
+    for i in (0..width as usize * height as usize * 4).step_by(4) {
+        let px_data = [
+            src_pixels[i],
+            src_pixels[i + 1],
+            src_pixels[i + 2],
+            src_pixels[i + 3],
+        ];
+        let px_data2 = [
+            src2_pixels[i],
+            src2_pixels[i + 1],
+            src2_pixels[i + 2],
+            src2_pixels[i + 3],
+        ];
 
         let color = LinSrgba::new(
             px_data[0] as f32 / 255.0,
@@ -107,7 +110,6 @@ pub fn blend(
         .into_linear();
 
         let blended = match blend_mode.to_lowercase().as_str() {
-            // Match a single value
             "overlay" => color.overlay(color2),
             "over" => color2.over(color),
             "atop" => color2.atop(color),
@@ -127,19 +129,12 @@ pub fn blend(
         };
         let components = blended.into_components();
 
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([
-                (components.0 * 255.0) as u8,
-                (components.1 * 255.0) as u8,
-                (components.2 * 255.0) as u8,
-                (components.3 * 255.0) as u8,
-            ]),
-        );
+        dst_pixels[i] = (components.0 * 255.0) as u8;
+        dst_pixels[i + 1] = (components.1 * 255.0) as u8;
+        dst_pixels[i + 2] = (components.2 * 255.0) as u8;
+        dst_pixels[i + 3] = (components.3 * 255.0) as u8;
     }
-    let dynimage = ImageRgba8(img);
-    photon_image.raw_pixels = dynimage.into_bytes();
+    photon_image.raw_pixels = dst_pixels;
 }
 
 // #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]

@@ -1,10 +1,5 @@
 //! Add noise to images.
 
-use image::Pixel;
-use image::{GenericImage, GenericImageView};
-
-use crate::helpers;
-use crate::iter::ImageIterator;
 use crate::PhotonImage;
 
 #[cfg(feature = "enable_wasm")]
@@ -37,31 +32,22 @@ use rand::Rng;
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn add_noise_rand(photon_image: &mut PhotonImage) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
     #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
     let mut rng = rand::thread_rng();
 
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
+    for i in (0..buf.len()).step_by(4) {
         #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
         let offset = rng.gen_range(0, 150);
 
         #[cfg(all(target_arch = "wasm64", not(target_os = "wasi")))]
         let offset = (random() * 150.0) as u8;
 
-        let px =
-            img.get_pixel(x, y).map(
-                |ch| {
-                    if ch <= 255 - offset {
-                        ch + offset
-                    } else {
-                        255
-                    }
-                },
-            );
-        img.put_pixel(x, y, px);
+        for c in 0..3 {
+            buf[i + c] = buf[i + c].saturating_add(offset);
+        }
     }
-    photon_image.raw_pixels = img.into_bytes();
 }
 
 /// Add pink-tinted noise to an image.
@@ -83,7 +69,8 @@ pub fn add_noise_rand(photon_image: &mut PhotonImage) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn pink_noise(photon_image: &mut PhotonImage) {
-    let mut img = helpers::dyn_image_from_raw(photon_image);
+    let buf = photon_image.raw_pixels.as_mut_slice();
+
     #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
     let mut rng = rand::thread_rng();
 
@@ -93,8 +80,8 @@ pub fn pink_noise(photon_image: &mut PhotonImage) {
     #[cfg(all(target_arch = "wasm64", not(target_os = "wasi")))]
     let rng_gen = || random();
 
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
-        let ran1: f64 = rng_gen(); // generates a float between 0 and 1
+    for i in (0..buf.len()).step_by(4) {
+        let ran1: f64 = rng_gen();
         let ran2: f64 = rng_gen();
         let ran3: f64 = rng_gen();
 
@@ -102,14 +89,110 @@ pub fn pink_noise(photon_image: &mut PhotonImage) {
         let ran_color2: f64 = 0.6 + ran2 * 0.1;
         let ran_color3: f64 = 0.6 + ran3 * 0.4;
 
-        let mut px = img.get_pixel(x, y);
-        let channels = px.channels();
+        let new_r_val = (buf[i] as f64 * 0.99 * ran_color1) as u8;
+        let new_g_val = (buf[i + 1] as f64 * 0.99 * ran_color2) as u8;
+        let new_b_val = (buf[i + 2] as f64 * 0.99 * ran_color3) as u8;
 
-        let new_r_val = (channels[0] as f64 * 0.99 * ran_color1) as u8;
-        let new_g_val = (channels[1] as f64 * 0.99 * ran_color2) as u8;
-        let new_b_val = (channels[2] as f64 * 0.99 * ran_color3) as u8;
-        px = image::Rgba([new_r_val, new_g_val, new_b_val, 255]);
-        img.put_pixel(x, y, px);
+        buf[i] = new_r_val;
+        buf[i + 1] = new_g_val;
+        buf[i + 2] = new_b_val;
     }
-    photon_image.raw_pixels = img.into_bytes();
+}
+
+/// Inline XorShift32 pseudo-random number generator.
+///
+/// Updates `state` in place and returns the next pseudo-random `u32`.
+/// Three XOR-shift operations produce a full-period, statistically adequate
+/// sequence suitable for visual noise without any external crate dependency.
+#[inline(always)]
+fn xorshift32(state: &mut u32) -> u32 {
+    // This specific triplet (13, 17, 5) is one of the maximal-period
+    *state ^= *state << 13;
+    *state ^= *state >> 17;
+    *state ^= *state << 5;
+    *state
+}
+
+/// Apply a cinematic film grain effect to an image.
+///
+/// Simulates analog photographic grain by adding spatially-varying noise that is weighted by each
+/// pixel's perceptual luminance: grain is strongest in the midtones and naturally falls off toward the
+/// shadows and highlights matching the characteristic response of real photographic emulsions.
+///
+/// # Arguments
+/// * `photon_image` - A mutable reference to the [`PhotonImage`] to process.
+/// * `intensity`    - Grain strength in the range `[0.0, 1.0]`.  
+///                    `0.1` – `0.3` is a realistic film look; `1.0` is extreme.
+/// * `monochrome`   - When `true`, a single noise sample is shared across R, G and B (silver-halide style, one PRNG call per pixel).
+///                    When `false`, each channel gets an independent sample, producing the subtle colour fringing of
+///                    multi-layer film stocks (three PRNG calls per pixel).
+///                    
+/// * `seed`         - Initial PRNG seed. Use a fixed value for reproducible results or any non-zero runtime value for variation.
+///                    Supplying `0` falls back to an internal safe constant.
+///
+/// # Example
+///
+/// ```no_run
+/// use photon_rs::noise::film_grain;
+/// use photon_rs::native::open_image;
+///
+/// let mut img = open_image("img.jpg").expect("File should open");
+/// film_grain(&mut img, 0.15, true, 42);
+/// ```
+#[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
+pub fn film_grain(
+    photon_image: &mut PhotonImage,
+    intensity: f32,
+    monochrome: bool,
+    seed: u32,
+) {
+    let intensity = intensity.clamp(0.0, 1.0);
+
+    // Constraint 3 compliance: XorShift32 is undefined for a zero state.
+    // `0xBAD5EED` is an arbitrary non-zero constant; spelling it out makes the fallback intent obvious during code review.
+    let mut state: u32 = if seed == 0 { 0xBAD5EED } else { seed };
+
+    // Pre-compute the maximum signed grain magnitude in pixel units.
+    // A grain value of `max_grain` corresponds to intensity == 1.0 at the peak midtone weight
+    // the raw PRNG output is normalised to [-1, +1] and then scaled by this factor inside the loop.
+    // 127.5 chosen so that at intensity == 1.0 a fully-lit midtone pixel can swing at most ±127
+    let max_grain = intensity * 127.5_f32;
+    let u32_max_recip = 1.0_f32 / u32::MAX as f32;
+
+    let buf = photon_image.raw_pixels.as_mut_slice();
+    let end = buf.len();
+
+    for i in (0..end).step_by(4) {
+        let r = buf[i] as f32;
+        let g = buf[i + 1] as f32;
+        let b = buf[i + 2] as f32;
+
+        let luma = 0.299 * r + 0.587 * g + 0.114 * b;
+
+        // midtone_weight peaks at 1.0 when luma == 127.5 (50 % grey) and falls linearly to 0.0 at pure
+        //  black (luma == 0) and pure white (luma == 255).
+        let midtone_weight = 1.0_f32 - ((luma / 255.0_f32 - 0.5_f32).abs()) * 2.0_f32;
+
+        let grain_scale = max_grain * midtone_weight;
+        if monochrome {
+            let noise_u32 = xorshift32(&mut state);
+            let grain = (noise_u32 as f32 * u32_max_recip - 0.5) * 2.0 * grain_scale;
+
+            buf[i] = (r + grain).clamp(0.0, 255.0) as u8;
+            buf[i + 1] = (g + grain).clamp(0.0, 255.0) as u8;
+            buf[i + 2] = (b + grain).clamp(0.0, 255.0) as u8;
+        } else {
+            let noise_r = xorshift32(&mut state);
+            let noise_g = xorshift32(&mut state);
+            let noise_b = xorshift32(&mut state);
+
+            let grain_r = (noise_r as f32 * u32_max_recip - 0.5) * 2.0 * grain_scale;
+            let grain_g = (noise_g as f32 * u32_max_recip - 0.5) * 2.0 * grain_scale;
+            let grain_b = (noise_b as f32 * u32_max_recip - 0.5) * 2.0 * grain_scale;
+
+            buf[i] = (r + grain_r).clamp(0.0, 255.0) as u8;
+            buf[i + 1] = (g + grain_g).clamp(0.0, 255.0) as u8;
+            buf[i + 2] = (b + grain_b).clamp(0.0, 255.0) as u8;
+        }
+    }
 }

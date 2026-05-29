@@ -5,7 +5,7 @@ use crate::iter::ImageIterator;
 use crate::{PhotonImage, Rgba};
 use image::imageops::FilterType;
 use image::DynamicImage::ImageRgba8;
-use image::{GenericImageView, ImageBuffer, Pixel, RgbaImage};
+use image::{ImageBuffer, Pixel, RgbaImage};
 use std::cmp::min;
 
 #[cfg(feature = "enable_wasm")]
@@ -40,20 +40,23 @@ pub fn crop(
     x2: u32,
     y2: u32,
 ) -> PhotonImage {
-    let img = helpers::dyn_image_from_raw(photon_image);
+    let img: RgbaImage = ImageBuffer::from_raw(
+        photon_image.width,
+        photon_image.height,
+        photon_image.raw_pixels.clone(),
+    )
+    .unwrap();
 
     let mut cropped_img: RgbaImage = ImageBuffer::new(x2 - x1, y2 - y1);
 
     for (x, y) in ImageIterator::with_dimension(&cropped_img.dimensions()) {
         let px = img.get_pixel(x1 + x, y1 + y);
-        cropped_img.put_pixel(x, y, px);
+        cropped_img.put_pixel(x, y, *px);
     }
-    let dynimage = ImageRgba8(cropped_img);
 
-    let width = dynimage.width();
-    let height = dynimage.height();
-
-    let raw_pixels = dynimage.into_bytes();
+    let width = cropped_img.width();
+    let height = cropped_img.height();
+    let raw_pixels = cropped_img.into_raw();
     PhotonImage {
         raw_pixels,
         width,
@@ -120,7 +123,12 @@ pub fn crop_img_browser(
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn fliph(photon_image: &mut PhotonImage) {
-    let img = helpers::dyn_image_from_raw(photon_image);
+    let img: RgbaImage = ImageBuffer::from_raw(
+        photon_image.width,
+        photon_image.height,
+        photon_image.raw_pixels.clone(),
+    )
+    .unwrap();
 
     let width = img.width();
     let height = img.height();
@@ -128,12 +136,10 @@ pub fn fliph(photon_image: &mut PhotonImage) {
 
     for (x, y) in ImageIterator::new(width, height) {
         let px = img.get_pixel(x, y);
-        flipped_img.put_pixel(width - x - 1, y, px);
+        flipped_img.put_pixel(width - x - 1, y, *px);
     }
 
-    let dynimage = ImageRgba8(flipped_img);
-    let raw_pixels = dynimage.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
+    photon_image.raw_pixels = flipped_img.into_raw();
 }
 
 /// Flip an image vertically.
@@ -153,7 +159,12 @@ pub fn fliph(photon_image: &mut PhotonImage) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn flipv(photon_image: &mut PhotonImage) {
-    let img = helpers::dyn_image_from_raw(photon_image);
+    let img: RgbaImage = ImageBuffer::from_raw(
+        photon_image.width,
+        photon_image.height,
+        photon_image.raw_pixels.clone(),
+    )
+    .unwrap();
 
     let width = img.width();
     let height = img.height();
@@ -162,12 +173,10 @@ pub fn flipv(photon_image: &mut PhotonImage) {
 
     for (x, y) in ImageIterator::new(width, height) {
         let px = img.get_pixel(x, y);
-        flipped_img.put_pixel(x, height - y - 1, px);
+        flipped_img.put_pixel(x, height - y - 1, *px);
     }
 
-    let dynimage = ImageRgba8(flipped_img);
-    let raw_pixels = dynimage.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
+    photon_image.raw_pixels = flipped_img.into_raw();
 }
 
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
@@ -303,12 +312,9 @@ pub fn resize(
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn seam_carve(img: &PhotonImage, width: u32, height: u32) -> PhotonImage {
-    let mut img: RgbaImage = ImageBuffer::from_raw(
-        img.get_width(),
-        img.get_height(),
-        img.raw_pixels.to_vec(),
-    )
-    .unwrap();
+    let mut img: RgbaImage =
+        ImageBuffer::from_raw(img.get_width(), img.get_height(), img.raw_pixels.clone())
+            .unwrap();
     let (w, h) = img.dimensions();
     let (diff_w, diff_h) = (w - w.min(width), h - h.min(height));
 
@@ -356,7 +362,12 @@ pub fn seam_carve(img: &PhotonImage, width: u32, height: u32) -> PhotonImage {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn shearx(photon_img: &PhotonImage, shear: f32) -> PhotonImage {
-    let img = helpers::dyn_image_from_raw(photon_img);
+    let img: RgbaImage = ImageBuffer::from_raw(
+        photon_img.width,
+        photon_img.height,
+        photon_img.raw_pixels.clone(),
+    )
+    .unwrap();
     let src_width = img.width();
     let src_height = img.height();
 
@@ -376,26 +387,24 @@ pub fn shearx(photon_img: &PhotonImage, shear: f32) -> PhotonImage {
         let skewf = skew.fract().abs();
         let mut oleft = image::Rgba([0_u8, 0_u8, 0_u8, 0_u8]);
         for old_x in (0..src_width).rev() {
-            let mut pixel = img.get_pixel(old_x, old_y);
-            let mut left = pixel.map(|val| (val as f32 * skewf) as u8);
+            let pixel_ref = img.get_pixel(old_x, old_y);
+            let mut left = pixel_ref.map(|val| (val as f32 * skewf) as u8);
             if shear >= 0. {
-                left = pixel.map2(&left, |val1, val2| val1 - val2);
+                left = pixel_ref.map2(&left, |val1, val2| val1 - val2);
             }
-            pixel = pixel.map2(&left, |val1, val2| val1 - val2);
-            pixel = pixel.map2(&oleft, |val1, val2| {
+            let new_pixel = pixel_ref.map2(&left, |val1, val2| {
                 min(val1 as u16 + val2 as u16, 255_u16) as u8
             });
             let new_x = (old_x as i32 + skewi) as u32;
-            sheared_image.put_pixel(new_x, old_y, pixel);
+            sheared_image.put_pixel(new_x, old_y, new_pixel);
             oleft = left;
         }
         sheared_image.put_pixel(skewi as u32, old_y, oleft);
     }
 
-    let dynimage = ImageRgba8(sheared_image);
-    let width = dynimage.width();
-    let height = dynimage.height();
-    let raw_pixels = dynimage.into_bytes();
+    let width = sheared_image.width();
+    let height = sheared_image.height();
+    let raw_pixels = sheared_image.into_raw();
 
     PhotonImage::new(raw_pixels, width, height)
 }
@@ -419,7 +428,12 @@ pub fn shearx(photon_img: &PhotonImage, shear: f32) -> PhotonImage {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn sheary(photon_img: &PhotonImage, shear: f32) -> PhotonImage {
-    let img = helpers::dyn_image_from_raw(photon_img);
+    let img: RgbaImage = ImageBuffer::from_raw(
+        photon_img.width,
+        photon_img.height,
+        photon_img.raw_pixels.clone(),
+    )
+    .unwrap();
     let src_width = img.width();
     let src_height = img.height();
 
@@ -439,26 +453,24 @@ pub fn sheary(photon_img: &PhotonImage, shear: f32) -> PhotonImage {
         let skewf = skew.fract().abs();
         let mut oleft = image::Rgba([0_u8, 0_u8, 0_u8, 0_u8]);
         for old_y in (0..src_height).rev() {
-            let mut pixel = img.get_pixel(old_x, old_y);
-            let mut left = pixel.map(|val| (val as f32 * skewf).floor() as u8);
+            let pixel_ref = img.get_pixel(old_x, old_y);
+            let mut left = pixel_ref.map(|val| (val as f32 * skewf).floor() as u8);
             if shear >= 0. {
-                left = pixel.map2(&left, |val1, val2| val1 - val2);
+                left = pixel_ref.map2(&left, |val1, val2| val1 - val2);
             }
-            pixel = pixel.map2(&left, |val1, val2| val1 - val2);
-            pixel = pixel.map2(&oleft, |val1, val2| {
+            let new_pixel = pixel_ref.map2(&left, |val1, val2| {
                 min(val1 as u16 + val2 as u16, 255_u16) as u8
             });
             let new_y = (old_y as i32 + skewi) as u32;
-            sheared_image.put_pixel(old_x, new_y, pixel);
+            sheared_image.put_pixel(old_x, new_y, new_pixel);
             oleft = left;
         }
         sheared_image.put_pixel(old_x, skewi as u32, oleft);
     }
 
-    let dynimage = ImageRgba8(sheared_image);
-    let width = dynimage.width();
-    let height = dynimage.height();
-    let raw_pixels = dynimage.into_bytes();
+    let width = sheared_image.width();
+    let height = sheared_image.height();
+    let raw_pixels = sheared_image.into_raw();
 
     PhotonImage::new(raw_pixels, width, height)
 }
@@ -741,7 +753,11 @@ pub fn rotate(photon_img: &PhotonImage, angle: f32) -> PhotonImage {
     let full_circle_count = angle as i32 / 360;
     let normalized_angle = angle as i32 - full_circle_count * 360;
     if normalized_angle == 0 {
-        return photon_img.clone();
+        return PhotonImage::new(
+            photon_img.raw_pixels.clone(),
+            photon_img.width,
+            photon_img.height,
+        );
     }
 
     // Handle negative angles. -80 describes the same angle as 360 - 80 = 280.
@@ -755,7 +771,7 @@ pub fn rotate(photon_img: &PhotonImage, angle: f32) -> PhotonImage {
     let mut rgba_img: RgbaImage = ImageBuffer::from_raw(
         photon_img.get_width(),
         photon_img.get_height(),
-        photon_img.get_raw_pixels().to_vec(),
+        photon_img.raw_pixels.clone(),
     )
     .unwrap();
     for _ in 0..right_angle_count {

@@ -1,9 +1,6 @@
 //! Image manipulation effects in HSL, HSLuv, LCh and HSV.
 
-use crate::iter::ImageIterator;
-use crate::{helpers, PhotonImage, Rgb};
-use image::GenericImageView;
-use image::Pixel as ImagePixel;
+use crate::{PhotonImage, Rgb};
 use palette::{FromColor, IntoColor};
 use palette::{Hsla, Hsluva, Hsva, Hue, Lcha, Saturate, Shade, Srgba};
 
@@ -91,17 +88,14 @@ pub fn gamma_correction(
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn hsluv(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
-    let mut img = img.to_rgba8();
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let px_data = img.get_pixel(x, y).channels();
+    for pixel in buf.chunks_mut(4) {
         let hsluv_color: Hsluva = Srgba::new(
-            px_data[0] as f32 / 255.0,
-            px_data[1] as f32 / 255.0,
-            px_data[2] as f32 / 255.0,
-            px_data[3] as f32 / 255.0,
+            pixel[0] as f32 / 255.0,
+            pixel[1] as f32 / 255.0,
+            pixel[2] as f32 / 255.0,
+            pixel[3] as f32 / 255.0,
         )
         .into_linear()
         .into_color();
@@ -120,18 +114,11 @@ pub fn hsluv(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 
         let components = final_color.into_components();
 
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([
-                (components.0 * 255.0) as u8,
-                (components.1 * 255.0) as u8,
-                (components.2 * 255.0) as u8,
-                (components.3 * 255.0) as u8,
-            ]),
-        );
+        pixel[0] = (components.0 * 255.0) as u8;
+        pixel[1] = (components.1 * 255.0) as u8;
+        pixel[2] = (components.2 * 255.0) as u8;
+        pixel[3] = (components.3 * 255.0) as u8;
     }
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Image manipulation effects in the LCh colour space
@@ -159,17 +146,14 @@ pub fn hsluv(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn lch(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
-    let mut img = img.to_rgba8();
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let px_data = img.get_pixel(x, y).channels();
+    for pixel in buf.chunks_mut(4) {
         let lch_colour: Lcha = Srgba::new(
-            px_data[0] as f32 / 255.0,
-            px_data[1] as f32 / 255.0,
-            px_data[2] as f32 / 255.0,
-            px_data[3] as f32 / 255.0,
+            pixel[0] as f32 / 255.0,
+            pixel[1] as f32 / 255.0,
+            pixel[2] as f32 / 255.0,
+            pixel[3] as f32 / 255.0,
         )
         .into_linear()
         .into_color();
@@ -188,18 +172,11 @@ pub fn lch(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 
         let components = final_color.into_components();
 
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([
-                (components.0 * 255.0) as u8,
-                (components.1 * 255.0) as u8,
-                (components.2 * 255.0) as u8,
-                (components.3 * 255.0) as u8,
-            ]),
-        );
+        pixel[0] = (components.0 * 255.0) as u8;
+        pixel[1] = (components.1 * 255.0) as u8;
+        pixel[2] = (components.2 * 255.0) as u8;
+        pixel[3] = (components.3 * 255.0) as u8;
     }
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Image manipulation effects in the HSL colour space.
@@ -229,15 +206,14 @@ pub fn lch(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 pub fn hsl(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
     // The function logic is kept separate from other colour spaces for now,
     // since other HSL-specific logic may be implemented here, which isn't available in other colour spaces
-    let mut img = helpers::dyn_image_from_raw(photon_image).to_rgba8();
-    for (x, y) in ImageIterator::with_dimension(&img.dimensions()) {
-        let px_data = img.get_pixel(x, y).channels();
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
+    for pixel in buf.chunks_mut(4) {
         let colour = Srgba::new(
-            px_data[0] as f32 / 255.0,
-            px_data[1] as f32 / 255.0,
-            px_data[2] as f32 / 255.0,
-            px_data[3] as f32 / 255.0,
+            pixel[0] as f32 / 255.0,
+            pixel[1] as f32 / 255.0,
+            pixel[2] as f32 / 255.0,
+            pixel[3] as f32 / 255.0,
         );
 
         let hsl_colour = Hsla::from_color(colour);
@@ -255,19 +231,11 @@ pub fn hsl(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 
         let components = final_color.into_components();
 
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([
-                (components.0 * 255.0) as u8,
-                (components.1 * 255.0) as u8,
-                (components.2 * 255.0) as u8,
-                (components.3 * 255.0) as u8,
-            ]),
-        );
+        pixel[0] = (components.0 * 255.0) as u8;
+        pixel[1] = (components.1 * 255.0) as u8;
+        pixel[2] = (components.2 * 255.0) as u8;
+        pixel[3] = (components.3 * 255.0) as u8;
     }
-
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Image manipulation in the HSV colour space.
@@ -296,18 +264,14 @@ pub fn hsl(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn hsv(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
-    let mut img = img.to_rgba8();
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let px_data = img.get_pixel(x, y).channels();
-
+    for pixel in buf.chunks_mut(4) {
         let color = Srgba::new(
-            px_data[0] as f32 / 255.0,
-            px_data[1] as f32 / 255.0,
-            px_data[2] as f32 / 255.0,
-            px_data[3] as f32 / 255.0,
+            pixel[0] as f32 / 255.0,
+            pixel[1] as f32 / 255.0,
+            pixel[2] as f32 / 255.0,
+            pixel[3] as f32 / 255.0,
         );
 
         let hsv_colour = Hsva::from_color(color);
@@ -323,22 +287,14 @@ pub fn hsv(photon_image: &mut PhotonImage, mode: &str, amt: f32) {
         };
 
         let srgba_new_color = Srgba::from_color(new_color);
-        // let final_color: Srgba = Srgba::from_linear(srgba_new_color).into_format();
 
         let components = srgba_new_color.into_components();
 
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([
-                (components.0 * 255.0) as u8,
-                (components.1 * 255.0) as u8,
-                (components.2 * 255.0) as u8,
-                (components.3 * 255.0) as u8,
-            ]),
-        );
+        pixel[0] = (components.0 * 255.0) as u8;
+        pixel[1] = (components.1 * 255.0) as u8;
+        pixel[2] = (components.2 * 255.0) as u8;
+        pixel[3] = (components.3 * 255.0) as u8;
     }
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Shift hue by a specified number of degrees in the HSL colour space.
@@ -810,9 +766,7 @@ pub fn desaturate_hsluv(img: &mut PhotonImage, level: f32) {
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn mix_with_colour(photon_image: &mut PhotonImage, mix_colour: Rgb, opacity: f32) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
-    let mut img = img.to_rgba8();
+    let buf = photon_image.raw_pixels.as_mut_slice();
 
     // cache (mix_color_value * opacity) and (1 - opacity) so we dont need to calculate them each time during loop.
     let mix_red_offset = mix_colour.r as f32 * opacity;
@@ -820,19 +774,13 @@ pub fn mix_with_colour(photon_image: &mut PhotonImage, mix_colour: Rgb, opacity:
     let mix_blue_offset = mix_colour.b as f32 * opacity;
     let factor = 1.0 - opacity;
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let px = img.get_pixel(x, y);
-        let channels = px.channels();
+    for pixel in buf.chunks_mut(4) {
+        let r_value = mix_red_offset + (pixel[0] as f32) * factor;
+        let g_value = mix_green_offset + (pixel[1] as f32) * factor;
+        let b_value = mix_blue_offset + (pixel[2] as f32) * factor;
 
-        let r_value = mix_red_offset + (channels[0] as f32) * factor;
-        let g_value = mix_green_offset + (channels[1] as f32) * factor;
-        let b_value = mix_blue_offset + (channels[2] as f32) * factor;
-        let alpha = channels[3];
-        img.put_pixel(
-            x,
-            y,
-            image::Rgba([r_value as u8, g_value as u8, b_value as u8, alpha]),
-        );
+        pixel[0] = r_value as u8;
+        pixel[1] = g_value as u8;
+        pixel[2] = b_value as u8;
     }
-    photon_image.raw_pixels = img.to_vec();
 }

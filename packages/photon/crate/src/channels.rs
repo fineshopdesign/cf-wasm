@@ -1,11 +1,5 @@
 //! Channel manipulation.
 
-use image::Pixel as OtherPixel;
-
-use image::{GenericImage, GenericImageView};
-
-use crate::helpers;
-use crate::iter::ImageIterator;
 use crate::{PhotonImage, Rgb};
 use palette::{FromColor, IntoColor};
 use palette::{Hue, Lab, Lch, Saturate, Shade, Srgb, Srgba};
@@ -365,7 +359,7 @@ pub fn swap_channels(img: &mut PhotonImage, mut channel1: usize, mut channel2: u
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn invert(photon_image: &mut PhotonImage) {
-    let end = photon_image.get_raw_pixels().len();
+    let end = photon_image.raw_pixels.len();
 
     for i in (0..end).step_by(4) {
         let r_val = photon_image.raw_pixels[i];
@@ -406,37 +400,26 @@ pub fn selective_hue_rotate(
     ref_color: Rgb,
     degrees: f32,
 ) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
+    let buffer = photon_image.raw_pixels.as_mut_slice();
 
-    let mut img = img.to_rgba8();
-    for (x, y) in ImageIterator::new(width, height) {
-        let px = img.get_pixel(x, y);
+    // Reference colour to compare the current pixel's colour to
+    let ref_lab: Lab = Srgb::new(
+        ref_color.r as f32 / 255.0,
+        ref_color.g as f32 / 255.0,
+        ref_color.b as f32 / 255.0,
+    )
+    .into_color();
 
-        // Reference colour to compare the current pixel's colour to
-        let lab: Lab = Srgb::new(
-            ref_color.r as f32 / 255.0,
-            ref_color.g as f32 / 255.0,
-            ref_color.b as f32 / 255.0,
-        )
-        .into_color();
-        let channels = px.channels();
-        // Convert the current pixel's colour to the l*a*b colour space
-        let r_val: f32 = channels[0] as f32 / 255.0;
-        let g_val: f32 = channels[1] as f32 / 255.0;
-        let b_val: f32 = channels[2] as f32 / 255.0;
+    for px in buffer.chunks_mut(4) {
+        let r_val: f32 = px[0] as f32 / 255.0;
+        let g_val: f32 = px[1] as f32 / 255.0;
+        let b_val: f32 = px[2] as f32 / 255.0;
 
         let px_lab: Lab = Srgb::new(r_val, g_val, b_val).into_color();
 
-        let sim = color_sim(lab, px_lab);
+        let sim = color_sim(ref_lab, px_lab);
         if sim > 0 && sim < 40 {
-            let px_data = img.get_pixel(x, y).channels();
-            let color = Srgba::new(
-                px_data[0] as f32,
-                px_data[1] as f32,
-                px_data[2] as f32,
-                255.0,
-            );
+            let color = Srgba::new(px[0] as f32, px[1] as f32, px[2] as f32, 255.0);
             let hue_rotated_color = Lch::from_color(color).shift_hue(degrees);
 
             let final_color: Srgba =
@@ -444,20 +427,11 @@ pub fn selective_hue_rotate(
 
             let components = final_color.into_components();
 
-            img.put_pixel(
-                x,
-                y,
-                image::Rgba([
-                    (components.0 * 255.0) as u8,
-                    (components.1 * 255.0) as u8,
-                    (components.2 * 255.0) as u8,
-                    255,
-                ]),
-            );
+            px[0] = (components.0 * 255.0) as u8;
+            px[1] = (components.1 * 255.0) as u8;
+            px[2] = (components.2 * 255.0) as u8;
         }
     }
-
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Selectively change pixel colours which are similar to the reference colour provided.
@@ -646,32 +620,26 @@ fn selective(
     ref_color: Rgb,
     amt: f32,
 ) {
-    let img = helpers::dyn_image_from_raw(photon_image);
-    let (width, height) = img.dimensions();
-    let mut img = img.to_rgba8();
+    let buffer = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::new(width, height) {
-        let px = img.get_pixel(x, y);
+    // Reference colour to compare the current pixel's colour to
+    let ref_lab: Lab = Srgb::new(
+        ref_color.r as f32 / 255.0,
+        ref_color.g as f32 / 255.0,
+        ref_color.b as f32 / 255.0,
+    )
+    .into_color();
 
-        // Reference colour to compare the current pixel's colour to
-        let lab: Lab = Srgb::new(
-            ref_color.r as f32 / 255.0,
-            ref_color.g as f32 / 255.0,
-            ref_color.b as f32 / 255.0,
-        )
-        .into_color();
-        let channels = px.channels();
-        // Convert the current pixel's colour to the l*a*b colour space
-        let r_val: f32 = channels[0] as f32 / 255.0;
-        let g_val: f32 = channels[1] as f32 / 255.0;
-        let b_val: f32 = channels[2] as f32 / 255.0;
+    for px in buffer.chunks_mut(4) {
+        let r_val: f32 = px[0] as f32 / 255.0;
+        let g_val: f32 = px[1] as f32 / 255.0;
+        let b_val: f32 = px[2] as f32 / 255.0;
 
         let px_lab: Lab = Srgb::new(r_val, g_val, b_val).into_color();
 
-        let sim = color_sim(lab, px_lab);
+        let sim = color_sim(ref_lab, px_lab);
         if sim > 0 && sim < 40 {
-            let px_data = img.get_pixel(x, y).channels();
-            let lch_colour: Lch = Srgb::new(px_data[0], px_data[1], px_data[2])
+            let lch_colour: Lch = Srgb::new(px[0], px[1], px[2])
                 .into_format()
                 .into_linear()
                 .into_color();
@@ -685,25 +653,15 @@ fn selective(
                 _ => lch_colour.saturate(amt),
             };
 
-            // let final_color: Srgba = Srgba::from_linear(new_color.into_color());
             let final_color = Srgba::from_color(new_color);
 
             let components = final_color.into_components();
 
-            img.put_pixel(
-                x,
-                y,
-                image::Rgba([
-                    (components.0 * 255.0) as u8,
-                    (components.1 * 255.0) as u8,
-                    (components.2 * 255.0) as u8,
-                    255,
-                ]),
-            );
+            px[0] = (components.0 * 255.0) as u8;
+            px[1] = (components.1 * 255.0) as u8;
+            px[2] = (components.2 * 255.0) as u8;
         }
     }
-
-    photon_image.raw_pixels = img.to_vec();
 }
 
 /// Selectively changes a pixel to greyscale if it is *not* visually similar or close to the colour specified.
@@ -730,38 +688,31 @@ fn selective(
 /// ```
 #[cfg_attr(feature = "enable_wasm", wasm_bindgen)]
 pub fn selective_greyscale(mut photon_image: PhotonImage, ref_color: Rgb) {
-    let mut img = helpers::dyn_image_from_raw(&photon_image);
+    let buffer = photon_image.raw_pixels.as_mut_slice();
 
-    for (x, y) in ImageIterator::new(img.width(), img.height()) {
-        let mut px = img.get_pixel(x, y);
+    // Reference colour to compare the current pixel's colour to
+    let ref_lab: Lab = Srgb::new(
+        ref_color.r as f32 / 255.0,
+        ref_color.g as f32 / 255.0,
+        ref_color.b as f32 / 255.0,
+    )
+    .into_color();
 
-        // Reference colour to compare the current pixel's colour to
-        let lab: Lab = Srgb::new(
-            ref_color.r as f32 / 255.0,
-            ref_color.g as f32 / 255.0,
-            ref_color.b as f32 / 255.0,
-        )
-        .into_color();
-        let channels = px.channels();
-        // Convert the current pixel's colour to the l*a*b colour space
-        let r_val: f32 = channels[0] as f32 / 255.0;
-        let g_val: f32 = channels[1] as f32 / 255.0;
-        let b_val: f32 = channels[2] as f32 / 255.0;
+    for px in buffer.chunks_mut(4) {
+        let r_val: f32 = px[0] as f32 / 255.0;
+        let g_val: f32 = px[1] as f32 / 255.0;
+        let b_val: f32 = px[2] as f32 / 255.0;
 
         let px_lab: Lab = Srgb::new(r_val, g_val, b_val).into_color();
 
-        let sim = color_sim(lab, px_lab);
+        let sim = color_sim(ref_lab, px_lab);
         if sim > 30 {
-            let avg = channels[0] as f32 * 0.3
-                + channels[1] as f32 * 0.59
-                + channels[2] as f32 * 0.11;
-            px = image::Rgba([avg as u8, avg as u8, avg as u8, 255]);
+            let avg = px[0] as f32 * 0.3 + px[1] as f32 * 0.59 + px[2] as f32 * 0.11;
+            px[0] = avg as u8;
+            px[1] = avg as u8;
+            px[2] = avg as u8;
         }
-        img.put_pixel(x, y, px);
     }
-
-    let raw_pixels = img.into_bytes();
-    photon_image.raw_pixels = raw_pixels;
 }
 
 /// Get the similarity of two colours in the l*a*b colour space using the CIE76 formula.
