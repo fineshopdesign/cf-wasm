@@ -1,5 +1,11 @@
 # @cf-wasm/photon
 
+## 0.3.6
+
+### Patch Changes
+
+- [#88](https://github.com/fineshopdesign/cf-wasm/pull/88) [`34863a0`](https://github.com/fineshopdesign/cf-wasm/commit/34863a0c66e210d527c9602cd095067404006bf4) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: sync with upstream ([`50f4a79`](https://github.com/silvia-odwyer/photon/tree/50f4a799adb125d32cc99c2829f0150e73f163aa))
+
 ## 0.3.5
 
 ### Patch Changes
