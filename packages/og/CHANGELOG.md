@@ -1,5 +1,13 @@
 # @cf-wasm/og
 
+## 0.4.0
+
+### Minor Changes
+
+- [#90](https://github.com/fineshopdesign/cf-wasm/pull/90) [`6868683`](https://github.com/fineshopdesign/cf-wasm/commit/6868683a33aac0d7cb9c08b8fd19908d39a30de5) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: remove `figma` submodule
+
+  `experimental_FigmaImageResponse` has been removed from `@vercel/og`, so removing from here too.
+
 ## 0.3.8
 
 ### Patch Changes
