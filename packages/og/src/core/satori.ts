@@ -1,4 +1,9 @@
-import type * as satoriModule from '@cf-wasm/satori';
+import type { SatoriOptions, VNode } from '@cf-wasm/satori';
+import type { ReactNode } from 'react';
+import { modules } from './modules';
 
-export type SatoriModule = Omit<typeof satoriModule, 'yogaWasmModule'>;
-export type * from '@cf-wasm/satori';
+export function satori(element: ReactNode | VNode, options: SatoriOptions): Promise<string> {
+  return modules.satori.satori(element, options);
+}
+
+export type { Font, FontStyle, FontWeight, Locale, SatoriNode, SatoriOptions, VNode } from '@cf-wasm/satori';

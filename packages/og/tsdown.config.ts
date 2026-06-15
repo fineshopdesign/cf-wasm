@@ -36,15 +36,7 @@ export default defineConfig(() => {
   return [
     {
       ...commonOptions,
-      entry: [
-        'src/edge-light.ts',
-        'src/node.ts',
-        'src/others.ts',
-        'src/workerd.ts',
-        'src/figma.ts',
-        'src/html-to-react.ts',
-        'src/lib/**/*.{js,d.ts}',
-      ],
+      entry: ['src/edge-light.ts', 'src/node.ts', 'src/others.ts', 'src/workerd.ts', 'src/html-to-react.ts', 'src/lib/**/*.{js,d.ts}'],
       format: ['esm'],
       deps: {
         ...commonOptions.deps,
@@ -69,7 +61,7 @@ export default defineConfig(() => {
     },
     {
       ...commonOptions,
-      entry: ['src/node.ts', 'src/others.ts', 'src/figma.ts', 'src/html-to-react.ts'],
+      entry: ['src/node.ts', 'src/others.ts', 'src/html-to-react.ts'],
       format: ['cjs'],
       platform: 'node',
       target: 'node18',
