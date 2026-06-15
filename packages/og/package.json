@@ -95,16 +95,6 @@
         "default": "./dist/others.cjs"
       }
     },
-    "./figma": {
-      "import": {
-        "types": "./dist/figma.d.ts",
-        "default": "./dist/figma.js"
-      },
-      "require": {
-        "types": "./dist/figma.d.cts",
-        "default": "./dist/figma.cjs"
-      }
-    },
     "./html-to-react": {
       "import": {
         "types": "./dist/html-to-react.d.ts",
@@ -117,7 +107,6 @@
     }
   },
   "dependencies": {
-    "@cf-wasm/internals": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
     "@cf-wasm/satori": "workspace:*",
     "@hedgedoc/html-to-react": "^2.1.1"

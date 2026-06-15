@@ -1,4 +1,8 @@
-import type * as resvgModule from '@cf-wasm/resvg/legacy';
+import type { Resvg, ResvgRenderOptions } from '@cf-wasm/resvg/legacy';
+import { modules } from './modules';
 
-export type ResvgModule = Omit<typeof resvgModule, 'resvgWasmModule'>;
-export type * from '@cf-wasm/resvg/legacy';
+export function createResvg(svg: string | Uint8Array, options?: ResvgRenderOptions): Promise<Resvg> {
+  return modules.resvg.Resvg.async(svg, options);
+}
+
+export type { BBox, RenderedImage, Resvg, ResvgRenderOptions } from '@cf-wasm/resvg/legacy';

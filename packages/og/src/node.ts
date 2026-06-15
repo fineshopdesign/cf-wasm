@@ -1,11 +1,11 @@
-import * as resvg from '@cf-wasm/resvg/legacy/node';
-import * as satori from '@cf-wasm/satori/node';
+import { Resvg } from '@cf-wasm/resvg/legacy/node';
+import { satori } from '@cf-wasm/satori/node';
 import { defaultFont } from './core';
 import { modules } from './core/modules';
 import notoSansFontBuffer from './lib/noto-sans-v27-latin-regular.ttf.bin.inline';
 
 // Set modules
-modules.set(resvg, satori);
+modules.set({ Resvg }, { satori });
 
 // Set default font
 defaultFont.set(notoSansFontBuffer);

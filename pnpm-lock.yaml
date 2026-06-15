@@ -229,9 +229,6 @@ importers:
 
   packages/og:
     dependencies:
-      '@cf-wasm/internals':
-        specifier: workspace:*
-        version: link:../internals
       '@cf-wasm/resvg':
         specifier: workspace:*
         version: link:../resvg

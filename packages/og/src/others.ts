@@ -1,10 +1,10 @@
-import * as resvg from '@cf-wasm/resvg/legacy/others';
-import * as satori from '@cf-wasm/satori/others';
+import { Resvg } from '@cf-wasm/resvg/legacy/others';
+import { satori } from '@cf-wasm/satori/others';
 import { defaultFont, GoogleFont } from './core';
 import { modules } from './core/modules';
 
 // Set modules
-modules.set(resvg, satori);
+modules.set({ Resvg }, { satori });
 
 // Set default font
 defaultFont.set(

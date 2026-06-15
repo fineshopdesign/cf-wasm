@@ -3,9 +3,8 @@ import { loadDynamicAsset } from './asset';
 import type { EmojiType } from './emoji';
 import { CustomFont, defaultFont, type FontBuffer, GoogleFont } from './font';
 import { SATORI_FONT_CACHE_MAP } from './maps';
-import { modules } from './modules';
-import type { ResvgRenderOptions } from './resvg';
-import type { Font as SatoriFont, SatoriOptions, VNode } from './satori';
+import { createResvg, type ResvgRenderOptions } from './resvg';
+import { type Font as SatoriFont, type SatoriOptions, satori, type VNode } from './satori';
 import type { MayBePromise, StringWithSuggestions } from './types';
 
 /** Represents a png result of rendered image */
@@ -243,7 +242,7 @@ export function render(element: ReactNode | VNode, options: RenderOptions = {}):
         fonts: satoriFonts,
         loadAdditionalAsset,
       };
-      const svg = await modules.satori.satori(element, satoriOptions);
+      const svg = await satori(element, satoriOptions);
 
       return {
         image: svg,
@@ -265,7 +264,7 @@ export function render(element: ReactNode | VNode, options: RenderOptions = {}):
   const asPng = async () => {
     const fallback = async (): Promise<PngResult> => {
       const svg = await asSvg();
-      const resvg = await modules.resvg.Resvg.async(svg.image, {
+      const resvg = await createResvg(svg.image, {
         ...renderOptions.resvgOptions,
         fitTo: {
           mode: 'width',

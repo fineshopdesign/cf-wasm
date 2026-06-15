@@ -1,5 +1,13 @@
-import type { ResvgModule } from './resvg';
-import type { SatoriModule } from './satori';
+import type { Resvg } from '@cf-wasm/resvg/legacy';
+import type { satori } from '@cf-wasm/satori';
+
+export interface ResvgModule {
+  Resvg: typeof Resvg;
+}
+
+export interface SatoriModule {
+  satori: typeof satori;
+}
 
 /** Modules */
 class Modules {
