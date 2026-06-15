@@ -1,7 +1,7 @@
 import { type InitInput, initWasm, Resvg as ResvgClass, type ResvgRenderOptions } from '@resvg/resvg-wasm-legacy';
 
 /** Initializes resvg asynchronously */
-export async function initResvg(input: InitInput | Promise<InitInput>) {
+export function initResvg(input: InitInput | Promise<InitInput>): Promise<void> {
   if (initResvg.initialized) {
     throw new Error('(@cf-wasm/resvg/legacy): Function already called. The `initResvg()` function can be used only once.');
   }
@@ -23,7 +23,7 @@ initResvg.initialized = false;
 initResvg.ready = false;
 
 /** Ensures resvg is ready */
-initResvg.ensure = async () => {
+initResvg.ensure = (): Promise<void> => {
   if (!initResvg.promise) {
     throw new Error('(@cf-wasm/resvg/legacy): Function not called. Call `initResvg()` function first.');
   }
@@ -43,7 +43,7 @@ export class Resvg extends ResvgClass {
     super(svg, options);
   }
 
-  public static async async(svg: string | Uint8Array, options?: ResvgRenderOptions) {
+  public static async async(svg: string | Uint8Array, options?: ResvgRenderOptions): Promise<Resvg> {
     await initResvg.ensure();
     return new Resvg(svg, options);
   }
@@ -51,7 +51,7 @@ export class Resvg extends ResvgClass {
   /**
    * @deprecated Use {@link Resvg.async} instead
    */
-  public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions) {
+  public static async create(svg: string | Uint8Array, options?: ResvgRenderOptions): Promise<Resvg> {
     return Resvg.async(svg, options);
   }
 }

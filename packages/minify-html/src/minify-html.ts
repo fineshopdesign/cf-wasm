@@ -58,7 +58,7 @@ function initSync(input: SyncInitInput) {
 }
 
 /** Initializes minify-html asynchronously */
-export async function initMinifyHTML(input: InitInput | Promise<InitInput>): Promise<void> {
+export function initMinifyHTML(input: InitInput | Promise<InitInput>): Promise<void> {
   if (initMinifyHTML.initialized) {
     throw new Error('(@cf-wasm/minify-html): Function already called. The `initMinifyHTML()` function can be used only once.');
   }
@@ -94,7 +94,7 @@ initMinifyHTML.initialized = false;
 initMinifyHTML.ready = false;
 
 /** Ensures minify-html is ready */
-initMinifyHTML.ensure = async () => {
+initMinifyHTML.ensure = (): Promise<void> => {
   if (!initMinifyHTML.promise) {
     throw new Error('(@cf-wasm/minify-html): Function not called. Call `initMinifyHTML()` function first.');
   }
@@ -121,7 +121,7 @@ initMinifyHTML.ensure = async () => {
  * const minified = decoder.decode(minify(code, options)); // minified === "<p>Hello, world!"
  * ```
  */
-export function minify(code: Uint8Array, options: MinifyOptions = {}) {
+export function minify(code: Uint8Array, options: MinifyOptions = {}): Uint8Array {
   if (!initMinifyHTML.ready) {
     if (initMinifyHTML.initialized) {
       throw new Error(
@@ -134,7 +134,7 @@ export function minify(code: Uint8Array, options: MinifyOptions = {}) {
   return wasmMinify(code, options);
 }
 
-minify.async = async (code: Uint8Array, options: MinifyOptions = {}) => {
+minify.async = async (code: Uint8Array, options: MinifyOptions = {}): Promise<Uint8Array> => {
   await initMinifyHTML.ensure();
   return wasmMinify(code, options);
 };

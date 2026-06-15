@@ -2,7 +2,7 @@ import '@cf-wasm/internals/polyfills/image-data';
 import initAsync, { type InitInput, type InitOutput, initSync, type SyncInitInput } from './lib/photon_rs';
 
 /** Initializes photon asynchronously */
-export async function initPhoton(
+export function initPhoton(
   input:
     | {
         module_or_path: InitInput | Promise<InitInput>;
@@ -47,7 +47,7 @@ initPhoton.initialized = false;
 initPhoton.ready = false;
 
 /** Ensures photon is ready */
-initPhoton.ensure = async () => {
+initPhoton.ensure = (): Promise<InitOutput> => {
   if (!initPhoton.promise) {
     throw new Error('(@cf-wasm/photon): Function not called. Call `initPhoton()` function first.');
   }

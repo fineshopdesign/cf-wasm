@@ -61,7 +61,7 @@ export interface EncodeOptions {
   stripAlpha?: boolean;
 }
 
-export function encode(image: Uint8Array, width: number, height: number, options?: EncodeOptions) {
+export function encode(image: Uint8Array, width: number, height: number, options?: EncodeOptions): Uint8Array {
   return wasmEncode(
     image,
     width,
@@ -75,7 +75,14 @@ export function encode(image: Uint8Array, width: number, height: number, options
   );
 }
 
-export function decode(image: Uint8Array) {
+export function decode(image: Uint8Array): {
+  image: Uint8Array<ArrayBuffer>;
+  width: number;
+  height: number;
+  colorType: number;
+  bitDepth: number;
+  lineSize: number;
+} {
   const res = wasmDecode(image) as DecodedImageResult;
 
   return {
@@ -89,7 +96,7 @@ export function decode(image: Uint8Array) {
 }
 
 /** Initializes png asynchronously */
-export async function initPng(input: InitInput | Promise<InitInput>): Promise<InitOutput> {
+export function initPng(input: InitInput | Promise<InitInput>): Promise<InitOutput> {
   if (initPng.initialized) {
     throw new Error('(@cf-wasm/png): Function already called. The `initPng()` function can be used only once.');
   }
@@ -127,7 +134,7 @@ initPng.initialized = false;
 initPng.ready = false;
 
 /** Ensures png is ready */
-initPng.ensure = async () => {
+initPng.ensure = (): Promise<InitOutput> => {
   if (!initPng.promise) {
     throw new Error('(@cf-wasm/png): Function not called. Call `initPng()` function first.');
   }

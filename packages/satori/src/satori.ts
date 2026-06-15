@@ -13,7 +13,7 @@ export interface VNode {
 }
 
 /** Initializes satori asynchronously */
-export async function initSatori(input: InitInput | Promise<InitInput>) {
+export function initSatori(input: InitInput | Promise<InitInput>): Promise<void> {
   if (initSatori.initialized) {
     throw new Error('(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.');
   }
@@ -35,16 +35,16 @@ initSatori.initialized = false;
 initSatori.ready = false;
 
 /** Ensures satori is ready */
-initSatori.ensure = async () => {
+initSatori.ensure = (): Promise<void> => {
   if (!initSatori.promise) {
     throw new Error('(@cf-wasm/satori): Function not called. Call `initSatori()` function first.');
   }
   return initSatori.promise;
 };
 
-export async function satori(element: ReactNode | VNode, options: SatoriOptions) {
+export async function satori(element: ReactNode | VNode, options: SatoriOptions): Promise<string> {
   await initSatori.ensure();
-  return (satoriWasm as (element: ReactNode | VNode, options: SatoriOptions) => Promise<string>)(element, options);
+  return satoriWasm(element as ReactNode, options);
 }
 
 export type {
