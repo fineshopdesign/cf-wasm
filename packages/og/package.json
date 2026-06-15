@@ -13,7 +13,12 @@
     "wasm",
     "cloudflare-workers"
   ],
-  "license": "MPL-2.0",
+  "license": "MIT",
+  "author": {
+    "name": "Deo Kumar",
+    "email": "deo@fineshopdesign.com",
+    "url": "https://github.com/kumardeo"
+  },
   "homepage": "https://github.com/fineshopdesign/cf-wasm/tree/main/packages/og#readme",
   "repository": {
     "type": "git",
