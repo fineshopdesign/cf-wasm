@@ -95,8 +95,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "nitro": "3.0.260522-beta",
-    "rollup": "^4.60.4",
+    "nitro": "3.0.260610-beta",
+    "rollup": "^4.62.0",
     "tsdown": "catalog:",
     "vite": "catalog:"
   }

@@ -17,8 +17,8 @@
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
-    "nuxt": "^4.4.6",
-    "vue": "^3.5.35",
+    "nuxt": "^4.4.8",
+    "vue": "^3.5.38",
     "vue-router": "^5.1.0"
   },
   "devDependencies": {
