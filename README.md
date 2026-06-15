@@ -20,7 +20,7 @@ Compatible with:
 ### [@cf-wasm/og](./packages/og/README.md)
 
 Generate Open Graph Images dynamically from HTML/CSS without a browser.  
-Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
+Powered by [satori](https://github.com/vercel/satori) and [resvg-js](https://github.com/thx/resvg-js).
 
 Compatible with:
 
@@ -64,7 +64,7 @@ Compatible with:
 ### [@cf-wasm/resvg](./packages/resvg/README.md)
 
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.  
-Powered by [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
+Powered by [resvg-js](https://github.com/thx/resvg-js).
 
 Compatible with:
 

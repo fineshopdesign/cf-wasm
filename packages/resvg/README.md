@@ -2,7 +2,7 @@
 
 A high-performance SVG renderer and toolkit, powered by Rust based resvg.
 
-Powered by [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
+Powered by [resvg-js](https://github.com/thx/resvg-js).
 
 ## Installation
 
@@ -52,4 +52,4 @@ await Resvg.async("<svg...</svg>");
 new Resvg("<svg...</svg>");
 ```
 
-For API reference, read official documentation at [@resvg/resvg-wasm](https://github.com/thx/resvg-js/tree/main/wasm).
+For API reference, read official documentation at [resvg-js](https://github.com/thx/resvg-js/tree/main/wasm).

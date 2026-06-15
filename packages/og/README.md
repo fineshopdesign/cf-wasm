@@ -2,7 +2,7 @@
 
 Generate Open Graph Images dynamically from HTML/CSS without a browser.
 
-Powered by [@vercel/og](https://www.npmjs.com/package/@vercel/og).
+Powered by [satori](https://github.com/vercel/satori) and [resvg-js](https://github.com/thx/resvg-js).
 
 > [!WARNING]
 > Breaking changes may be introduced without following semantic versioning.  
