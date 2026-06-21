@@ -2,28 +2,36 @@ import { PhotonImage, resize, SamplingFilter } from '@cf-wasm/photon';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request }) => {
-  const url = new URL(request.url);
-  const paramScale = Number(url.searchParams.get('scale') || '100');
-  const scale = Math.max(1, Math.min(100, Number.isNaN(paramScale) ? 100 : paramScale));
+	const url = new URL(request.url);
+	const paramScale = Number(url.searchParams.get('scale') || '100');
+	const scale = Math.max(
+		1,
+		Math.min(100, Number.isNaN(paramScale) ? 100 : paramScale),
+	);
 
-  const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
+	const imageUrl = 'https://avatars.githubusercontent.com/u/314135';
 
-  const inputBytes = await fetch(imageUrl)
-    .then((res) => res.arrayBuffer())
-    .then((buffer) => new Uint8Array(buffer));
+	const inputBytes = await fetch(imageUrl)
+		.then((res) => res.arrayBuffer())
+		.then((buffer) => new Uint8Array(buffer));
 
-  const inputImage = PhotonImage.new_from_byteslice(inputBytes);
+	const inputImage = PhotonImage.new_from_byteslice(inputBytes);
 
-  const outputImage = resize(inputImage, inputImage.get_width() * (scale / 100), inputImage.get_height() * (scale / 100), SamplingFilter.Nearest);
+	const outputImage = resize(
+		inputImage,
+		inputImage.get_width() * (scale / 100),
+		inputImage.get_height() * (scale / 100),
+		SamplingFilter.Nearest,
+	);
 
-  const outputBytes = outputImage.get_bytes_webp();
+	const outputBytes = outputImage.get_bytes_webp();
 
-  inputImage.free();
-  outputImage.free();
+	inputImage.free();
+	outputImage.free();
 
-  return new Response(outputBytes as Uint8Array<ArrayBuffer>, {
-    headers: {
-      'Content-Type': 'image/webp',
-    },
-  });
+	return new Response(outputBytes as Uint8Array<ArrayBuffer>, {
+		headers: {
+			'Content-Type': 'image/webp',
+		},
+	});
 };

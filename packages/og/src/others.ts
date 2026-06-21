@@ -8,11 +8,11 @@ modules.set({ Resvg }, { satori });
 
 // Set default font
 defaultFont.set(
-  new GoogleFont('Noto Sans', {
-    name: 'sans serif',
-    weight: 400,
-    style: 'normal',
-  }),
+	new GoogleFont('Noto Sans', {
+		name: 'sans serif',
+		weight: 400,
+		style: 'normal',
+	}),
 );
 
 export * from './core';

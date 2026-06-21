@@ -1,31 +1,41 @@
 import type { ReactNode } from 'react';
 import satoriWasm, { init, type SatoriOptions } from 'satori/standalone';
 
-export type InitInput = RequestInfo | URL | Response | BufferSource | Buffer | WebAssembly.Module;
+export type InitInput =
+	| RequestInfo
+	| URL
+	| Response
+	| BufferSource
+	| Buffer
+	| WebAssembly.Module;
 
 export interface VNode {
-  type: string;
-  props: {
-    style?: Record<string, unknown>;
-    children?: string | VNode | VNode[];
-    [prop: string]: unknown;
-  };
+	type: string;
+	props: {
+		style?: Record<string, unknown>;
+		children?: string | VNode | VNode[];
+		[prop: string]: unknown;
+	};
 }
 
 /** Initializes satori asynchronously */
-export function initSatori(input: InitInput | Promise<InitInput>): Promise<void> {
-  if (initSatori.initialized) {
-    throw new Error('(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.');
-  }
-  if (!input) {
-    throw new Error('(@cf-wasm/satori): Argument `input` is not valid.');
-  }
-  initSatori.initialized = true;
-  initSatori.promise = (async () => {
-    await init(await input);
-    initSatori.ready = true;
-  })();
-  return initSatori.promise;
+export function initSatori(
+	input: InitInput | Promise<InitInput>,
+): Promise<void> {
+	if (initSatori.initialized) {
+		throw new Error(
+			'(@cf-wasm/satori): Function already called. The `initSatori()` function can be used only once.',
+		);
+	}
+	if (!input) {
+		throw new Error('(@cf-wasm/satori): Argument `input` is not valid.');
+	}
+	initSatori.initialized = true;
+	initSatori.promise = (async () => {
+		await init(await input);
+		initSatori.ready = true;
+	})();
+	return initSatori.promise;
 }
 
 initSatori.promise = null as Promise<void> | null;
@@ -36,22 +46,27 @@ initSatori.ready = false;
 
 /** Ensures satori is ready */
 initSatori.ensure = (): Promise<void> => {
-  if (!initSatori.promise) {
-    throw new Error('(@cf-wasm/satori): Function not called. Call `initSatori()` function first.');
-  }
-  return initSatori.promise;
+	if (!initSatori.promise) {
+		throw new Error(
+			'(@cf-wasm/satori): Function not called. Call `initSatori()` function first.',
+		);
+	}
+	return initSatori.promise;
 };
 
-export async function satori(element: ReactNode | VNode, options: SatoriOptions): Promise<string> {
-  await initSatori.ensure();
-  return satoriWasm(element as ReactNode, options);
+export async function satori(
+	element: ReactNode | VNode,
+	options: SatoriOptions,
+): Promise<string> {
+	await initSatori.ensure();
+	return satoriWasm(element as ReactNode, options);
 }
 
 export type {
-  Font,
-  FontStyle,
-  FontWeight,
-  Locale,
-  SatoriNode,
-  SatoriOptions,
+	Font,
+	FontStyle,
+	FontWeight,
+	Locale,
+	SatoriNode,
+	SatoriOptions,
 } from 'satori/standalone';

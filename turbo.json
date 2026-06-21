@@ -7,7 +7,17 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "out/**", "dist/**", ".svelte-kit/**", ".vercel/**", ".output/**", ".nuxt/**", ".astro/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "out/**",
+        "dist/**",
+        ".svelte-kit/**",
+        ".vercel/**",
+        ".output/**",
+        ".nuxt/**",
+        ".astro/**"
+      ]
     },
     "lint": {
       "dependsOn": ["^build"]

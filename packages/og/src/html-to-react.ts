@@ -1,94 +1,124 @@
-import { convertHtmlToReact, type ParserOptions as HTMLToReactParserOptions } from '@hedgedoc/html-to-react';
-import { createElement, Fragment, isValidElement, type ReactElement, type ReactNode } from 'react';
+import {
+	convertHtmlToReact,
+	type ParserOptions as HTMLToReactParserOptions,
+} from '@hedgedoc/html-to-react';
+import {
+	createElement,
+	Fragment,
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+} from 'react';
 
 export interface ParserOptions extends HTMLToReactParserOptions {
-  tailwind?: boolean | 'data' | 'class';
+	tailwind?: boolean | 'data' | 'class';
 }
 
 class Transformer {
-  private options: ParserOptions & { tailwind: boolean | 'data' | 'class' };
+	private options: ParserOptions & { tailwind: boolean | 'data' | 'class' };
 
-  constructor(options: ParserOptions = {}) {
-    this.options = { tailwind: false, ...options };
-  }
+	constructor(options: ParserOptions = {}) {
+		this.options = { tailwind: false, ...options };
+	}
 
-  transform(html: string): ReactElement {
-    return this.wrapper(convertHtmlToReact(html));
-  }
+	transform(html: string): ReactElement {
+		return this.wrapper(convertHtmlToReact(html));
+	}
 
-  wrapper(children: (ReactElement | string | null)[]): ReactElement {
-    if (children.length === 1 && isValidElement(children[0])) {
-      return this.element(children[0]);
-    }
+	wrapper(children: (ReactElement | string | null)[]): ReactElement {
+		if (children.length === 1 && isValidElement(children[0])) {
+			return this.element(children[0]);
+		}
 
-    return this.fragment(children);
-  }
+		return this.fragment(children);
+	}
 
-  element(element: ReactElement) {
-    return createElement(element.type, typeof element.props === 'object' && element.props ? this.props(element.props) : {});
-  }
+	element(element: ReactElement) {
+		return createElement(
+			element.type,
+			typeof element.props === 'object' && element.props
+				? this.props(element.props)
+				: {},
+		);
+	}
 
-  fragment(children: ReactNode): ReactElement {
-    const transformed = this.children(children);
-    return createElement(Fragment, typeof transformed !== 'undefined' ? { children: transformed } : {});
-  }
+	fragment(children: ReactNode): ReactElement {
+		const transformed = this.children(children);
+		return createElement(
+			Fragment,
+			typeof transformed !== 'undefined' ? { children: transformed } : {},
+		);
+	}
 
-  props(input: { children?: ReactNode; className?: unknown; tw?: unknown; 'data-tw'?: unknown }) {
-    const props = { ...input };
+	props(input: {
+		children?: ReactNode;
+		className?: unknown;
+		tw?: unknown;
+		'data-tw'?: unknown;
+	}) {
+		const props = { ...input };
 
-    if ('children' in props) {
-      const transformed = this.children(props.children);
-      if (typeof transformed === 'undefined') {
-        delete props.children;
-      } else {
-        props.children = transformed;
-      }
-    }
+		if ('children' in props) {
+			const transformed = this.children(props.children);
+			if (typeof transformed === 'undefined') {
+				delete props.children;
+			} else {
+				props.children = transformed;
+			}
+		}
 
-    if (this.options.tailwind === true || this.options.tailwind === 'class') {
-      if ('className' in props && typeof props.className === 'string') {
-        props.tw = props.className;
-      }
-    } else if (this.options.tailwind === 'data') {
-      if ('data-tw' in props && typeof props['data-tw'] === 'string') {
-        props.tw = props['data-tw'];
-      }
-    }
+		if (this.options.tailwind === true || this.options.tailwind === 'class') {
+			if ('className' in props && typeof props.className === 'string') {
+				props.tw = props.className;
+			}
+		} else if (this.options.tailwind === 'data') {
+			if ('data-tw' in props && typeof props['data-tw'] === 'string') {
+				props.tw = props['data-tw'];
+			}
+		}
 
-    return props;
-  }
+		return props;
+	}
 
-  children(children: ReactNode): ReactNode {
-    if (children === null || typeof children === 'undefined' || typeof children === 'boolean') {
-      return undefined;
-    }
-    if (isValidElement(children)) {
-      return this.element(children);
-    }
-    if (Array.isArray(children)) {
-      const filtered: ReactNode[] = [];
+	children(children: ReactNode): ReactNode {
+		if (
+			children === null ||
+			typeof children === 'undefined' ||
+			typeof children === 'boolean'
+		) {
+			return undefined;
+		}
+		if (isValidElement(children)) {
+			return this.element(children);
+		}
+		if (Array.isArray(children)) {
+			const filtered: ReactNode[] = [];
 
-      for (const child of children) {
-        if (child === null || typeof child === 'undefined' || typeof child === 'boolean') {
-          continue;
-        }
-        if (isValidElement(child)) {
-          filtered.push(this.element(child));
-        } else {
-          filtered.push(child);
-        }
-      }
+			for (const child of children) {
+				if (
+					child === null ||
+					typeof child === 'undefined' ||
+					typeof child === 'boolean'
+				) {
+					continue;
+				}
+				if (isValidElement(child)) {
+					filtered.push(this.element(child));
+				} else {
+					filtered.push(child);
+				}
+			}
 
-      if (filtered.length === 0) {
-        return undefined;
-      }
-      if (filtered.length === 1) {
-        return filtered[0];
-      }
-      return filtered;
-    }
-    return children;
-  }
+			if (filtered.length === 0) {
+				return undefined;
+			}
+			if (filtered.length === 1) {
+				return filtered[0];
+			}
+			return filtered;
+		}
+		return children;
+	}
 }
 
 /**
@@ -99,15 +129,18 @@ class Transformer {
  *
  * @returns The {@link ReactElement}
  */
-export const htmlToReact = (html: string, options: ParserOptions = {}): ReactElement => {
-  if (typeof html !== 'string') {
-    throw new TypeError('Argument 1 must be of type string');
-  }
-  if (html.trim().length === 0) {
-    throw new TypeError('Blank html string cannot be parsed');
-  }
+export const htmlToReact = (
+	html: string,
+	options: ParserOptions = {},
+): ReactElement => {
+	if (typeof html !== 'string') {
+		throw new TypeError('Argument 1 must be of type string');
+	}
+	if (html.trim().length === 0) {
+		throw new TypeError('Blank html string cannot be parsed');
+	}
 
-  return new Transformer(options).transform(html);
+	return new Transformer(options).transform(html);
 };
 
 export { htmlToReact as t };

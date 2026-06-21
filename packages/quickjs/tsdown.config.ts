@@ -8,84 +8,92 @@ const LIB_VARIANTS = ['DEBUG_SYNC', 'RELEASE_SYNC'];
 const LIB_OUT_DIR = './src/lib';
 
 export default defineConfig(() => {
-  for (const variant of LIB_VARIANTS) {
-    const wasmModulePath = fileURLToPath(import.meta.resolve(`@jitl/quickjs-wasmfile-${variant.toLowerCase().replace(/_/g, '-')}/wasm`));
-    const wasmModuleSourceMapPath = `${wasmModulePath}.map`;
-    fs.copyFileSync(wasmModulePath, path.join(LIB_OUT_DIR, `${variant}.wasm`));
-    if (fs.existsSync(wasmModuleSourceMapPath)) {
-      fs.copyFileSync(wasmModuleSourceMapPath, path.join(LIB_OUT_DIR, `${variant}.wasm.map.txt`));
-    }
-  }
+	for (const variant of LIB_VARIANTS) {
+		const wasmModulePath = fileURLToPath(
+			import.meta.resolve(
+				`@jitl/quickjs-wasmfile-${variant.toLowerCase().replace(/_/g, '-')}/wasm`,
+			),
+		);
+		const wasmModuleSourceMapPath = `${wasmModulePath}.map`;
+		fs.copyFileSync(wasmModulePath, path.join(LIB_OUT_DIR, `${variant}.wasm`));
+		if (fs.existsSync(wasmModuleSourceMapPath)) {
+			fs.copyFileSync(
+				wasmModuleSourceMapPath,
+				path.join(LIB_OUT_DIR, `${variant}.wasm.map.txt`),
+			);
+		}
+	}
 
-  // generate inline modules
-  for (const file of glob.sync('src/**/*.{wasm,bin,txt}')) {
-    const content = fs.readFileSync(file);
-    let module: string;
-    let declaration: string;
-    if (file.endsWith('.txt')) {
-      module = `export default ${JSON.stringify(content.toString('utf-8'))}`;
-      declaration = 'declare const string: string;\nexport default string;\n';
-    } else {
-      module = `export default Uint8Array.from(atob("${content.toString('base64')}"), c => c.charCodeAt(0)).buffer;\n`;
-      declaration = 'declare const buffer: ArrayBuffer;\nexport default buffer;\n';
-    }
-    fs.writeFileSync(`${file}.inline.js`, module);
-    fs.writeFileSync(`${file}.inline.d.ts`, declaration);
-  }
+	// generate inline modules
+	for (const file of glob.sync('src/**/*.{wasm,bin,txt}')) {
+		const content = fs.readFileSync(file);
+		let module: string;
+		let declaration: string;
+		if (file.endsWith('.txt')) {
+			module = `export default ${JSON.stringify(content.toString('utf-8'))}`;
+			declaration = 'declare const string: string;\nexport default string;\n';
+		} else {
+			module = `export default Uint8Array.from(atob("${content.toString('base64')}"), c => c.charCodeAt(0)).buffer;\n`;
+			declaration =
+				'declare const buffer: ArrayBuffer;\nexport default buffer;\n';
+		}
+		fs.writeFileSync(`${file}.inline.js`, module);
+		fs.writeFileSync(`${file}.inline.d.ts`, declaration);
+	}
 
-  const commonOptions = {
-    outDir: 'dist',
-    platform: 'neutral',
-    target: 'es2018',
-    sourcemap: true,
-    unbundle: true,
-    deps: {
-      skipNodeModulesBundle: true,
-    },
-    dts: true,
-    ignoreWatch: ['.turbo'],
-  } satisfies UserConfig;
+	const commonOptions = {
+		outDir: 'dist',
+		platform: 'neutral',
+		target: 'es2018',
+		sourcemap: true,
+		unbundle: true,
+		deps: {
+			skipNodeModulesBundle: true,
+		},
+		dts: true,
+		ignoreWatch: ['.turbo'],
+	} satisfies UserConfig;
 
-  return [
-    {
-      ...commonOptions,
-      entry: [
-        'src/edge-light.ts',
-        'src/edge-light-debug.ts',
-        'src/node.ts',
-        'src/node-debug.ts',
-        'src/workerd.ts',
-        'src/workerd-debug.ts',
-        'src/lib/**/*.{ts,js,d.ts}',
-      ],
-      format: ['esm'],
-      deps: {
-        ...commonOptions.deps,
-        neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
-      },
-      clean: true,
-      async onSuccess() {
-        // Copy assets
-        const assets = glob.sync('src/**/*.{wasm,bin,txt}');
-        for (const file of assets) {
-          const destination = path.join('dist', file.replace(/^src[\\/]/, ''));
-          const dir = path.dirname(destination);
-          if (fs.existsSync(destination)) {
-            continue;
-          }
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-          }
-          fs.copyFileSync(file, destination);
-        }
-      },
-    },
-    {
-      ...commonOptions,
-      entry: ['src/node.ts', 'src/node-debug.ts'],
-      format: ['cjs'],
-      platform: 'node',
-      target: 'node18',
-    },
-  ] satisfies UserConfig[];
+	return [
+		{
+			...commonOptions,
+			entry: [
+				'src/edge-light.ts',
+				'src/edge-light-debug.ts',
+				'src/node.ts',
+				'src/node-debug.ts',
+				'src/workerd.ts',
+				'src/workerd-debug.ts',
+				'src/lib/**/*.{ts,js,d.ts}',
+			],
+			format: ['esm'],
+			deps: {
+				...commonOptions.deps,
+				neverBundle: [/\.wasm$/, /\.wasm\?module$/, /\.bin$/, /\.txt$/],
+			},
+			clean: true,
+			async onSuccess() {
+				// Copy assets
+				const assets = glob.sync('src/**/*.{wasm,bin,txt}');
+				for (const file of assets) {
+					const destination = path.join('dist', file.replace(/^src[\\/]/, ''));
+					const dir = path.dirname(destination);
+					if (fs.existsSync(destination)) {
+						continue;
+					}
+					if (!fs.existsSync(dir)) {
+						fs.mkdirSync(dir, { recursive: true });
+					}
+					fs.copyFileSync(file, destination);
+				}
+			},
+		},
+		{
+			...commonOptions,
+			entry: ['src/node.ts', 'src/node-debug.ts'],
+			format: ['cjs'],
+			platform: 'node',
+			target: 'node18',
+		},
+	] satisfies UserConfig[];
 });

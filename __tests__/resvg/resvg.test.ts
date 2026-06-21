@@ -1,4 +1,7 @@
-import { Resvg as ResvgLegacy, resvgWasmModule as resvgWasmModuleLegacy } from '@cf-wasm/resvg/legacy/node';
+import {
+	Resvg as ResvgLegacy,
+	resvgWasmModule as resvgWasmModuleLegacy,
+} from '@cf-wasm/resvg/legacy/node';
 import { Resvg, resvgWasmModule } from '@cf-wasm/resvg/node';
 import { describe, expect, it } from 'vitest';
 
@@ -15,38 +18,38 @@ const svgString = `<?xml version="1.0" encoding="utf-8"?>
 </svg>`;
 
 describe('resvgWasmModule', () => {
-  it('should be an instance of WebAssembly.Module', () => {
-    expect(resvgWasmModuleLegacy).instanceOf(WebAssembly.Module);
-    expect(resvgWasmModule).instanceOf(WebAssembly.Module);
-  });
+	it('should be an instance of WebAssembly.Module', () => {
+		expect(resvgWasmModuleLegacy).instanceOf(WebAssembly.Module);
+		expect(resvgWasmModule).instanceOf(WebAssembly.Module);
+	});
 });
 
 describe('Resvg legacy', () => {
-  it('should convert svg to png', async () => {
-    const resvg = await ResvgLegacy.async(svgString);
-    const rendered = resvg.render();
-    const pixels = rendered.pixels;
-    const bytes = rendered.asPng();
+	it('should convert svg to png', async () => {
+		const resvg = await ResvgLegacy.async(svgString);
+		const rendered = resvg.render();
+		const pixels = rendered.pixels;
+		const bytes = rendered.asPng();
 
-    expect(pixels.byteLength).equals(1048576);
-    expect(bytes.byteLength).equals(13636);
+		expect(pixels.byteLength).equals(1048576);
+		expect(bytes.byteLength).equals(13636);
 
-    rendered.free();
-    resvg.free();
-  });
+		rendered.free();
+		resvg.free();
+	});
 });
 
 describe('Resvg', () => {
-  it('should convert svg to png', async () => {
-    const resvg = await Resvg.async(svgString);
-    const rendered = resvg.render();
-    const pixels = rendered.pixels;
-    const bytes = rendered.asPng();
+	it('should convert svg to png', async () => {
+		const resvg = await Resvg.async(svgString);
+		const rendered = resvg.render();
+		const pixels = rendered.pixels;
+		const bytes = rendered.asPng();
 
-    expect(pixels.byteLength).equals(1048576);
-    expect(bytes.byteLength).equals(13657);
+		expect(pixels.byteLength).equals(1048576);
+		expect(bytes.byteLength).equals(13657);
 
-    rendered.free();
-    resvg.free();
-  });
+		rendered.free();
+		resvg.free();
+	});
 });

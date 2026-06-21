@@ -1,15 +1,22 @@
 import releaseSyncWasmModule from './lib/RELEASE_SYNC.wasm';
-import { newQuickJSWASMModuleFromVariant, newVariant, type QuickJSWASMModule, RELEASE_SYNC } from './lib/release';
+import {
+	newQuickJSWASMModuleFromVariant,
+	newVariant,
+	type QuickJSWASMModule,
+	RELEASE_SYNC,
+} from './lib/release';
 
 export const WorkerdReleaseSyncVariant = newVariant(RELEASE_SYNC, {
-  wasmModule: releaseSyncWasmModule,
+	wasmModule: releaseSyncWasmModule,
 });
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
 export async function getQuickJSWASMModule() {
-  singletonPromise ??= newQuickJSWASMModuleFromVariant(WorkerdReleaseSyncVariant);
-  return singletonPromise;
+	singletonPromise ??= newQuickJSWASMModuleFromVariant(
+		WorkerdReleaseSyncVariant,
+	);
+	return singletonPromise;
 }
 
 export * from './lib/release';

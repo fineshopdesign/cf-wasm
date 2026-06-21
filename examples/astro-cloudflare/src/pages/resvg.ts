@@ -2,7 +2,7 @@ import { Resvg } from '@cf-wasm/resvg/legacy';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
-  const SVG = `<?xml version="1.0" encoding="utf-8"?>
+	const SVG = `<?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect fill="#F8F5FF" x="0" y="0" width="512" height="512"/>
   <g>
@@ -12,17 +12,17 @@ export const GET: APIRoute = async () => {
   </g>
 </svg>`;
 
-  const renderer = await Resvg.async(SVG);
-  const rendered = renderer.render();
+	const renderer = await Resvg.async(SVG);
+	const rendered = renderer.render();
 
-  const result = rendered.asPng();
+	const result = rendered.asPng();
 
-  renderer.free();
-  rendered.free();
+	renderer.free();
+	rendered.free();
 
-  return new Response(result as Uint8Array<ArrayBuffer>, {
-    headers: {
-      'Content-Type': 'image/png',
-    },
-  });
+	return new Response(result as Uint8Array<ArrayBuffer>, {
+		headers: {
+			'Content-Type': 'image/png',
+		},
+	});
 };

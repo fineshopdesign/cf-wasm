@@ -1,11 +1,14 @@
 {
   "$schema": "../node_modules/@changesets/config/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "fineshopdesign/cf-wasm" }],
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "fineshopdesign/cf-wasm" }
+  ],
   "commit": false,
+  "baseBranch": "origin/main",
+  "access": "public",
+  "updateInternalDependencies": "patch",
   "linked": [],
   "fixed": [],
-  "ignore": ["@cf-wasm-tests/*", "@examples/*"],
-  "access": "public",
-  "baseBranch": "origin/main",
-  "updateInternalDependencies": "patch"
+  "ignore": ["@cf-wasm-tests/*", "@examples/*"]
 }

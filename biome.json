@@ -54,8 +54,10 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space",
-    "lineWidth": 150
+    "useEditorconfig": true,
+    "indentStyle": "tab",
+    "indentWidth": 2,
+    "lineWidth": 80
   },
   "javascript": {
     "formatter": {

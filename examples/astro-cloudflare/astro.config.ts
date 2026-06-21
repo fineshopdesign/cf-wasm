@@ -3,18 +3,23 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: cloudflare({
-    imageService: {
-      build: 'compile',
-      runtime: 'passthrough',
-    },
-  }),
+	adapter: cloudflare({
+		imageService: {
+			build: 'compile',
+			runtime: 'passthrough',
+		},
+	}),
 
-  output: 'server',
+	output: 'server',
 
-  vite: {
-    ssr: {
-      external: ['@cf-wasm/og', '@cf-wasm/resvg', '@cf-wasm/satori', '@cf-wasm/photon'],
-    },
-  },
+	vite: {
+		ssr: {
+			external: [
+				'@cf-wasm/og',
+				'@cf-wasm/resvg',
+				'@cf-wasm/satori',
+				'@cf-wasm/photon',
+			],
+		},
+	},
 });
