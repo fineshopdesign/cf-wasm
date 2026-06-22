@@ -30,4 +30,4 @@ jobs:
           close-pr-message: "This PR was closed because it has been inactive for 14 days since being marked as stale."
           exempt-issue-labels: "no stale,help wanted,wip"
           exempt-pr-labels: "no stale,help wanted,wip"
-          repo-token: ${{ secrets.FDBOT_GITHUB_TOKEN }}
+          repo-token: ${{ secrets.AHRIX_BOT_GITHUB_TOKEN }}
