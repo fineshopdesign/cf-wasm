@@ -13,7 +13,7 @@ enablePrePostScripts: true
 minimumReleaseAge: 1440
 
 catalog:
-  "@types/node": ^26.0.0
+  "@types/node": ^26.1.0
   "@types/react": ^19.2.17
   glob: ^13.0.6
   react: ^19.2.7
@@ -21,7 +21,7 @@ catalog:
   vite: ^7.2.2
   vitest: ^4.1.9
   wasm-pack: ^0.15.0
-  wrangler: ^4.103.0
+  wrangler: ^4.107.0
 
 allowBuilds:
   "@biomejs/biome": true

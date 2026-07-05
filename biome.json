@@ -63,10 +63,5 @@
     "formatter": {
       "quoteStyle": "single"
     }
-  },
-  "json": {
-    "parser": {
-      "allowComments": true
-    }
   }
 }
