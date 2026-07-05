@@ -33,7 +33,7 @@ export default defineConfig(() => {
 			module = `export default ${JSON.stringify(content.toString('utf-8'))}`;
 			declaration = 'declare const string: string;\nexport default string;\n';
 		} else {
-			module = `export default Uint8Array.from(atob("${content.toString('base64')}"), c => c.charCodeAt(0)).buffer;\n`;
+			module = `const base64 = "${content.toString('base64')}";\nconst bytes = typeof Uint8Array.fromBase64 === 'function'\n  ? Uint8Array.fromBase64(base64)\n  : Uint8Array.from(atob(base64), c => c.charCodeAt(0));\nexport default bytes.buffer;\n`;
 			declaration =
 				'declare const buffer: ArrayBuffer;\nexport default buffer;\n';
 		}
