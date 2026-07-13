@@ -130,6 +130,7 @@ export {
 	dramatic,
 	draw_text,
 	draw_text_with_border,
+	draw_text_with_color,
 	duotone,
 	duotone_horizon,
 	duotone_lilac,
