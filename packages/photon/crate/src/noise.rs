@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 #[cfg(all(target_family = "wasm", not(target_os = "wasi")))]
 use js_sys::Math::random;
 
-#[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
+#[cfg(not(all(target_family = "wasm", not(target_os = "wasi"))))]
 use rand::Rng;
 
 /// Add randomized noise to an image.
@@ -34,14 +34,14 @@ use rand::Rng;
 pub fn add_noise_rand(photon_image: &mut PhotonImage) {
     let buf = photon_image.raw_pixels.as_mut_slice();
 
-    #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
+    #[cfg(not(all(target_family = "wasm", not(target_os = "wasi"))))]
     let mut rng = rand::thread_rng();
 
     for i in (0..buf.len()).step_by(4) {
-        #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
+        #[cfg(not(all(target_family = "wasm", not(target_os = "wasi"))))]
         let offset = rng.gen_range(0, 150);
 
-        #[cfg(all(target_arch = "wasm64", not(target_os = "wasi")))]
+        #[cfg(all(target_family = "wasm", not(target_os = "wasi")))]
         let offset = (random() * 150.0) as u8;
 
         for c in 0..3 {
@@ -71,13 +71,13 @@ pub fn add_noise_rand(photon_image: &mut PhotonImage) {
 pub fn pink_noise(photon_image: &mut PhotonImage) {
     let buf = photon_image.raw_pixels.as_mut_slice();
 
-    #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
+    #[cfg(not(all(target_family = "wasm", not(target_os = "wasi"))))]
     let mut rng = rand::thread_rng();
 
-    #[cfg(not(all(target_arch = "wasm64", not(target_os = "wasi"))))]
+    #[cfg(not(all(target_family = "wasm", not(target_os = "wasi"))))]
     let mut rng_gen = move || rng.gen();
 
-    #[cfg(all(target_arch = "wasm64", not(target_os = "wasi")))]
+    #[cfg(all(target_family = "wasm", not(target_os = "wasi")))]
     let rng_gen = || random();
 
     for i in (0..buf.len()).step_by(4) {

@@ -3,25 +3,27 @@ packages:
   - examples/*
   - __tests__
 
-engineStrict: true
-strictPeerDependencies: true
 shellEmulator: true
+enablePrePostScripts: true
+engineStrict: true
 preferWorkspacePackages: true
 linkWorkspacePackages: true
-enablePrePostScripts: true
+strictPeerDependencies: true
+autoInstallPeers: false
+dedupePeers: true
 
 minimumReleaseAge: 1440
 
 catalog:
-  "@types/node": ^26.1.0
+  "@types/node": ^26.1.1
   "@types/react": ^19.2.17
   glob: ^13.0.6
   react: ^19.2.7
-  tsdown: ^0.22.3
+  tsdown: ^0.22.5
   vite: ^7.2.2
-  vitest: ^4.1.9
+  vitest: ^4.1.10
   wasm-pack: ^0.15.0
-  wrangler: ^4.107.0
+  wrangler: ^4.110.0
 
 allowBuilds:
   "@biomejs/biome": true
