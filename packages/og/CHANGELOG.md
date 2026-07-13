@@ -1,5 +1,15 @@
 # @cf-wasm/og
 
+## 0.4.1
+
+### Patch Changes
+
+- [#92](https://github.com/fineshopdesign/cf-wasm/pull/92) [`4454184`](https://github.com/fineshopdesign/cf-wasm/commit/445418481932d433064b607523e0f61a1feb523c) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: use `Uint8Array.fromBase64()` when available
+
+- Updated dependencies [[`4454184`](https://github.com/fineshopdesign/cf-wasm/commit/445418481932d433064b607523e0f61a1feb523c)]:
+  - @cf-wasm/satori@0.3.7
+  - @cf-wasm/resvg@0.3.5
+
 ## 0.4.0
 
 ### Minor Changes
