@@ -31,7 +31,7 @@ on:
 
 jobs:
   build:
-    name: ⬣ Build on Node ${{ matrix.node-version }} and ${{ matrix.os }}
+    name: Build on Node ${{ matrix.node-version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
