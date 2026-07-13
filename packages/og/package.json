@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/og",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Generate Open Graph Images dynamically from HTML/CSS without a browser.",
   "keywords": [
     "open-graph-image",

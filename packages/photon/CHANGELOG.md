@@ -1,5 +1,13 @@
 # @cf-wasm/photon
 
+## 0.3.7
+
+### Patch Changes
+
+- [#92](https://github.com/fineshopdesign/cf-wasm/pull/92) [`4454184`](https://github.com/fineshopdesign/cf-wasm/commit/445418481932d433064b607523e0f61a1feb523c) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: use `Uint8Array.fromBase64()` when available
+
+- [#94](https://github.com/fineshopdesign/cf-wasm/pull/94) [`9133c2d`](https://github.com/fineshopdesign/cf-wasm/commit/9133c2dc7c8397e9f535cca791c6a6e46d4c518c) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: sync with upstream ([`1390383`](https://github.com/silvia-odwyer/photon/tree/139038385b0cca7a743a2e5dd451c9e626b6b880))
+
 ## 0.3.6
 
 ### Patch Changes
