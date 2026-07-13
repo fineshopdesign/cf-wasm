@@ -16,13 +16,13 @@ concurrency:
 
 jobs:
   test:
-    name: ⬣, 🔎, 🔨 Run tests
+    name: Run tests
     uses: ./.github/workflows/build-test-reusable.yml
     if: "${{ !contains(github.event.head_commit.message, '[ci] release') }}"
     secrets: inherit
 
   publish:
-    name: 🚀 Changelog PR or Release
+    name: Changelog PR or Release
     needs: [test]
     runs-on: ubuntu-latest
     permissions:
