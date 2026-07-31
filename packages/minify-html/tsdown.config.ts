@@ -43,7 +43,7 @@ export default defineConfig(() => {
 		sourcemap: true,
 		unbundle: true,
 		deps: {
-			skipNodeModulesBundle: true,
+			neverBundle: true,
 		},
 		dts: true,
 		ignoreWatch: ['.turbo'],

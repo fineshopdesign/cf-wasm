@@ -2,9 +2,13 @@
   "name": "@cf-wasm/root",
   "private": true,
   "description": "A collection of WASM packages those work on Cloudflare Workers",
-  "author": "Deo Kumar",
+  "author": {
+    "name": "Deo Kumar",
+    "email": "deo@fineshopdesign.com",
+    "url": "https://github.com/kumardeo"
+  },
   "homepage": "https://github.com/fineshopdesign/cf-wasm",
-  "packageManager": "pnpm@11.11.0",
+  "packageManager": "pnpm@11.18.0",
   "scripts": {
     "format": "biome format --max-diagnostics=100 --log-kind=compact",
     "format:all": "pnpm run format .",
@@ -24,11 +28,11 @@
     "version-packages": "changeset version && pnpm run format:write"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.3",
+    "@biomejs/biome": "^2.5.6",
     "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.31.0",
+    "@changesets/cli": "^2.31.1",
     "@changesets/config": "^3.1.4",
-    "turbo": "^2.10.4",
+    "turbo": "^2.10.7",
     "typescript": "^6.0.3"
   }
 }
