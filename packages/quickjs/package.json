@@ -28,6 +28,7 @@
     "dist"
   ],
   "type": "module",
+  "main": "./dist/workerd.js",
   "module": "./dist/workerd.js",
   "types": "./dist/workerd.d.ts",
   "exports": {
@@ -37,87 +38,63 @@
     "./RELEASE_SYNC.wasm": "./dist/lib/RELEASE_SYNC.wasm",
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node.d.ts",
-          "default": "./dist/node.js"
-        },
-        "require": {
-          "types": "./dist/node.d.cts",
-          "default": "./dist/node.cjs"
-        }
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
       },
       "edge-light": {
         "types": "./dist/edge-light.d.ts",
-        "import": "./dist/edge-light.js"
+        "default": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       },
       "default": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "default": "./dist/workerd.js"
     },
     "./edge-light": {
       "types": "./dist/edge-light.d.ts",
-      "import": "./dist/edge-light.js"
+      "default": "./dist/edge-light.js"
     },
     "./node": {
-      "import": {
-        "types": "./dist/node.d.ts",
-        "default": "./dist/node.js"
-      },
-      "require": {
-        "types": "./dist/node.d.cts",
-        "default": "./dist/node.cjs"
-      }
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
     },
     "./debug": {
       "node": {
-        "import": {
-          "types": "./dist/node-debug.d.ts",
-          "default": "./dist/node-debug.js"
-        },
-        "require": {
-          "types": "./dist/node-debug.d.cts",
-          "default": "./dist/node-debug.cjs"
-        }
+        "types": "./dist/node-debug.d.ts",
+        "default": "./dist/node-debug.js"
       },
       "edge-light": {
         "types": "./dist/edge-light-debug.d.ts",
-        "import": "./dist/edge-light-debug.js"
+        "default": "./dist/edge-light-debug.js"
       },
       "workerd": {
         "types": "./dist/workerd-debug.d.ts",
-        "import": "./dist/workerd-debug.js"
+        "default": "./dist/workerd-debug.js"
       },
       "default": {
         "types": "./dist/workerd-debug.d.ts",
-        "import": "./dist/workerd-debug.js"
+        "default": "./dist/workerd-debug.js"
       }
     },
     "./debug/workerd": {
       "types": "./dist/workerd-debug.d.ts",
-      "import": "./dist/workerd-debug.js"
+      "default": "./dist/workerd-debug.js"
     },
     "./debug/edge-light": {
       "types": "./dist/edge-light-debug.d.ts",
-      "import": "./dist/edge-light-debug.js"
+      "default": "./dist/edge-light-debug.js"
     },
     "./debug/node": {
-      "import": {
-        "types": "./dist/node-debug.d.ts",
-        "default": "./dist/node-debug.js"
-      },
-      "require": {
-        "types": "./dist/node-debug.d.cts",
-        "default": "./dist/node-debug.cjs"
-      }
+      "types": "./dist/node-debug.d.ts",
+      "default": "./dist/node-debug.js"
     }
   },
   "dependencies": {
@@ -127,7 +104,6 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "glob": "catalog:",
     "tsdown": "catalog:"
   }
 }

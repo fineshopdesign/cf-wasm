@@ -11,11 +11,8 @@ catalogs:
       specifier: ^26.1.2
       version: 26.1.2
     '@types/react':
-      specifier: ^19.2.17
-      version: 19.2.17
-    glob:
-      specifier: ^13.0.6
-      version: 13.0.6
+      specifier: ^19.2.18
+      version: 19.2.18
     react:
       specifier: ^19.2.8
       version: 19.2.8
@@ -93,7 +90,7 @@ importers:
         version: 26.1.2
       '@types/react':
         specifier: 'catalog:'
-        version: 19.2.17
+        version: 19.2.18
       vitest:
         specifier: 'catalog:'
         version: 4.1.10(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.44.1)(yaml@2.9.0)
@@ -221,9 +218,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
       tsdown:
         specifier: 'catalog:'
         version: 0.22.14(typescript@6.0.3)
@@ -231,10 +225,10 @@ importers:
   packages/og:
     dependencies:
       '@cf-wasm/resvg':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../resvg
       '@cf-wasm/satori':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../satori
       '@hedgedoc/html-to-react':
         specifier: ^2.1.1
@@ -245,10 +239,7 @@ importers:
         version: 26.1.2
       '@types/react':
         specifier: 'catalog:'
-        version: 19.2.17
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
+        version: 19.2.18
       react:
         specifier: 'catalog:'
         version: 19.2.8
@@ -259,7 +250,7 @@ importers:
   packages/photon:
     dependencies:
       '@cf-wasm/internals':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../internals
     devDependencies:
       '@types/node':
@@ -268,9 +259,6 @@ importers:
       github-files-fetcher:
         specifier: ^1.6.0
         version: 1.6.0
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
       tsdown:
         specifier: 'catalog:'
         version: 0.22.14(typescript@6.0.3)
@@ -281,8 +269,8 @@ importers:
   packages/plugins:
     dependencies:
       magic-string:
-        specifier: ^0.30.21
-        version: 0.30.21
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -305,9 +293,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
       tsdown:
         specifier: 'catalog:'
         version: 0.22.14(typescript@6.0.3)
@@ -330,9 +315,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
       tsdown:
         specifier: 'catalog:'
         version: 0.22.14(typescript@6.0.3)
@@ -349,9 +331,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
       tsdown:
         specifier: 'catalog:'
         version: 0.22.14(typescript@6.0.3)
@@ -367,10 +346,7 @@ importers:
         version: 26.1.2
       '@types/react':
         specifier: 'catalog:'
-        version: 19.2.17
-      glob:
-        specifier: 'catalog:'
-        version: 13.0.6
+        version: 19.2.18
       react:
         specifier: 'catalog:'
         version: 19.2.8
@@ -2473,8 +2449,8 @@ packages:
   '@types/node@26.1.2':
     resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
 
-  '@types/react@19.2.17':
-    resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -8003,7 +7979,7 @@ snapshots:
     dependencies:
       undici-types: 8.3.0
 
-  '@types/react@19.2.17':
+  '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
 

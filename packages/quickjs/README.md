@@ -17,6 +17,14 @@ pnpm add @cf-wasm/quickjs          # pnpm
 
 ## Usage
 
+Because `package.json` includes conditional exports for `node`, `workerd`, and `edge-light`, you can usually import directly from `@cf-wasm/quickjs` and let the runtime choose the correct entrypoint:
+
+```ts
+import { getQuickJSWASMModule } from "@cf-wasm/quickjs";
+```
+
+If you want to be explicit, import from a submodule instead:
+
 - Cloudflare Workers / Pages (Wrangler):
 
   ```ts
@@ -29,7 +37,7 @@ pnpm add @cf-wasm/quickjs          # pnpm
   import { getQuickJSWASMModule } from "@cf-wasm/quickjs/edge-light";
   ```
 
-- Node.js (file base):
+- Node.js (inline):
 
   ```ts
   import { getQuickJSWASMModule } from "@cf-wasm/quickjs/node";
@@ -58,7 +66,7 @@ export default {
       {
         shouldInterrupt: shouldInterruptAfterDeadline(Date.now() + 1000),
         memoryLimitBytes: 1024 * 1024,
-      }
+      },
     );
 
     return Response.json({ result });

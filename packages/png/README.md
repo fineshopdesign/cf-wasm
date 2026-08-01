@@ -14,6 +14,14 @@ pnpm add @cf-wasm/png          # pnpm
 
 ## Usage
 
+Because `package.json` includes conditional exports for `node`, `workerd`, and `edge-light`, you can usually import directly from `@cf-wasm/png` and let the runtime choose the correct entrypoint:
+
+```ts
+import { encode } from "@cf-wasm/png";
+```
+
+If you want to be explicit, import from a submodule instead:
+
 - Cloudflare Workers / Pages (Wrangler):
 
   ```ts
@@ -26,7 +34,7 @@ pnpm add @cf-wasm/png          # pnpm
   import { encode } from "@cf-wasm/png/edge-light";
   ```
 
-- Node.js (file base):
+- Node.js (inline):
 
   ```ts
   import { encode } from "@cf-wasm/png/node";
@@ -43,7 +51,7 @@ const encode: (
   image: Uint8Array,
   width: number,
   height: number,
-  options?: EncodeOptions
+  options?: EncodeOptions,
 ) => Uint8Array;
 ```
 
@@ -93,14 +101,14 @@ export default {
       inputImage,
       inputImage.get_width() * 0.5,
       inputImage.get_height() * 0.5,
-      SamplingFilter.Nearest
+      SamplingFilter.Nearest,
     );
 
     // encode using png
     const outputBytes = encode(
       outputImage.get_raw_pixels(),
       outputImage.get_width(),
-      outputImage.get_height()
+      outputImage.get_height(),
     );
 
     // call free() method to free memory
@@ -150,14 +158,14 @@ export async function GET(request: NextRequest) {
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    SamplingFilter.Nearest
+    SamplingFilter.Nearest,
   );
 
   // encode using png
   const outputBytes = encode(
     outputImage.get_raw_pixels(),
     outputImage.get_width(),
-    outputImage.get_height()
+    outputImage.get_height(),
   );
 
   // call free() method to free memory
@@ -210,14 +218,14 @@ export default async function handler(req: NextRequest) {
     inputImage,
     inputImage.get_width() * 0.5,
     inputImage.get_height() * 0.5,
-    SamplingFilter.Nearest
+    SamplingFilter.Nearest,
   );
 
   // encode using png
   const outputBytes = encode(
     outputImage.get_raw_pixels(),
     outputImage.get_width(),
-    outputImage.get_height()
+    outputImage.get_height(),
   );
 
   // call free() method to free memory

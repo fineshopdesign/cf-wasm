@@ -36,7 +36,7 @@ If you want to be explicit, import from a submodule instead:
   import { PhotonImage } from "@cf-wasm/photon/edge-light";
   ```
 
-- Node.js (file base):
+- Node.js (inline):
 
   ```ts
   import { PhotonImage } from "@cf-wasm/photon/node";

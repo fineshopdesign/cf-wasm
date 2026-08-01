@@ -16,8 +16,7 @@ minimumReleaseAge: 1440
 
 catalog:
   "@types/node": ^26.1.2
-  "@types/react": ^19.2.17
-  glob: ^13.0.6
+  "@types/react": ^19.2.18
   react: ^19.2.8
   tsdown: ^0.22.14
   vite: ^7.2.2

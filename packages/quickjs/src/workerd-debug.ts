@@ -14,7 +14,7 @@ export const WorkerdDebugSyncVariant = newVariant(DEBUG_SYNC, {
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
-export async function getQuickJSWASMModule() {
+export function getQuickJSWASMModule(): Promise<QuickJSWASMModule> {
 	singletonPromise ??= newQuickJSWASMModuleFromVariant(WorkerdDebugSyncVariant);
 	return singletonPromise;
 }

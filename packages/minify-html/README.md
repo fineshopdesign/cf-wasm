@@ -14,6 +14,14 @@ pnpm add @cf-wasm/minify-html          # pnpm
 
 ## Usage
 
+Because `package.json` includes conditional exports for `node`, `workerd`, and `edge-light`, you can usually import directly from `@cf-wasm/minify-html` and let the runtime choose the correct entrypoint:
+
+```ts
+import { minify } from "@cf-wasm/minify-html";
+```
+
+If you want to be explicit, import from a submodule instead:
+
 - Cloudflare Workers / Pages (Wrangler):
 
   ```ts
@@ -26,7 +34,7 @@ pnpm add @cf-wasm/minify-html          # pnpm
   import { minify } from "@cf-wasm/minify-html/edge-light";
   ```
 
-- Node.js (file base):
+- Node.js (inline):
 
   ```ts
   import { minify } from "@cf-wasm/minify-html/node";

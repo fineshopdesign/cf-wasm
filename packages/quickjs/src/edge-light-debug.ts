@@ -14,7 +14,7 @@ export const EdgeLightDebugSyncVariant = newVariant(DEBUG_SYNC, {
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
-export async function getQuickJSWASMModule() {
+export function getQuickJSWASMModule(): Promise<QuickJSWASMModule> {
 	singletonPromise ??= newQuickJSWASMModuleFromVariant(
 		EdgeLightDebugSyncVariant,
 	);
