@@ -1,5 +1,15 @@
 # @cf-wasm/satori
 
+## 0.4.0
+
+### Minor Changes
+
+- [#96](https://github.com/fineshopdesign/cf-wasm/pull/96) [`bf2659a`](https://github.com/fineshopdesign/cf-wasm/commit/bf2659a3414101a16b80aceace4ee550dc6455db) Thanks [@kumardeo](https://github.com/kumardeo)! - feat!: migrate to pure ESM
+
+### Patch Changes
+
+- [`6f5252f`](https://github.com/fineshopdesign/cf-wasm/commit/6f5252f534c3ff15c029114e1ec10b9e132f74f9) Thanks [@kumardeo](https://github.com/kumardeo)! - chore: bump `satori` to `0.29.0`
+
 ## 0.3.7
 
 ### Patch Changes

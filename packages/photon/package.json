@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/photon",
-  "version": "0.3.7",
+  "version": "0.4.0",
   "description": "Photon library for Cloudflare workers, Next.js and Node.js.",
   "keywords": [
     "image-processing",

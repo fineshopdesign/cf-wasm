@@ -1,6 +1,6 @@
 {
   "name": "@cf-wasm/minify-html",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Extremely fast and smart HTML + JS + CSS minifier",
   "keywords": [
     "HTML",
