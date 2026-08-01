@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.2.0
+
+### Minor Changes
+
+- [#96](https://github.com/fineshopdesign/cf-wasm/pull/96) [`bf2659a`](https://github.com/fineshopdesign/cf-wasm/commit/bf2659a3414101a16b80aceace4ee550dc6455db) Thanks [@kumardeo](https://github.com/kumardeo)! - feat!: migrate to pure ESM
+
 ## 0.1.10
 
 ### Patch Changes
