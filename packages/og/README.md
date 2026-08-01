@@ -18,6 +18,14 @@ pnpm add @cf-wasm/og          # pnpm
 
 ## Usage
 
+Because `package.json` includes conditional exports for `node`, `workerd`, and `edge-light`, you can usually import directly from `@cf-wasm/og` and let the runtime choose the correct entrypoint:
+
+```ts
+import { ImageResponse } from "@cf-wasm/og";
+```
+
+If you want to be explicit, import from a submodule instead:
+
 - Cloudflare Workers / Pages (Wrangler):
 
   ```ts
@@ -30,7 +38,7 @@ pnpm add @cf-wasm/og          # pnpm
   import { ImageResponse } from "@cf-wasm/og/edge-light";
   ```
 
-- Node.js (file base):
+- Node.js (inline):
 
   ```ts
   import { ImageResponse } from "@cf-wasm/og/node";
@@ -110,11 +118,11 @@ export default {
           // Using Custom font loader
           new CustomFont("JetBrains Mono", () =>
             fetch(
-              "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf"
-            ).then((res) => res.arrayBuffer())
+              "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf",
+            ).then((res) => res.arrayBuffer()),
           ),
         ],
-      }
+      },
     );
   },
 } satisfies ExportedHandler;
@@ -142,9 +150,9 @@ defaultFont.set(new GoogleFont("Merriweather"));
 defaultFont.set(
   new CustomFont("JetBrains Mono", () =>
     fetch(
-      "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf"
-    ).then((res) => res.arrayBuffer())
-  )
+      "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Regular.ttf",
+    ).then((res) => res.arrayBuffer()),
+  ),
 );
 
 export default {
@@ -261,7 +269,7 @@ export default {
     return await ImageResponse.async(
       <div tw="flex w-full h-full items-center justify-center">
         Hello World!
-      </div>
+      </div>,
     );
   },
 } satisfies ExportedHandler;
@@ -322,7 +330,7 @@ export default {
       {
         fonts: [new GoogleFont("JetBrains Mono")],
         emoji: "fluent",
-      }
+      },
     );
   },
 } satisfies ExportedHandler;
@@ -382,7 +390,7 @@ export async function GET(req: NextRequest) {
     {
       fonts: [new GoogleFont("JetBrains Mono")],
       emoji: "fluent",
-    }
+    },
   );
 }
 ```
@@ -439,7 +447,7 @@ export default async function handler(req: NextRequest) {
     {
       fonts: [new GoogleFont("JetBrains Mono")],
       emoji: "fluent",
-    }
+    },
   );
 }
 ```

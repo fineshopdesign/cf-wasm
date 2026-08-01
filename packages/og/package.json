@@ -42,7 +42,14 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "./dist/edge-light.js",
+    "./dist/node.js",
+    "./dist/others.js",
+    "./dist/workerd.js"
+  ],
   "type": "module",
+  "main": "./dist/workerd.js",
   "module": "./dist/workerd.js",
   "types": "./dist/workerd.d.ts",
   "exports": {
@@ -50,76 +57,55 @@
     "./noto-sans-v27-latin-regular.ttf.bin": "./dist/lib/noto-sans-v27-latin-regular.ttf.bin",
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node.d.ts",
-          "default": "./dist/node.js"
-        },
-        "require": {
-          "types": "./dist/node.d.cts",
-          "default": "./dist/node.cjs"
-        }
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
       },
       "edge-light": {
         "types": "./dist/edge-light.d.ts",
-        "import": "./dist/edge-light.js"
+        "default": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       },
       "default": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "default": "./dist/workerd.js"
     },
     "./edge-light": {
       "types": "./dist/edge-light.d.ts",
-      "import": "./dist/edge-light.js"
+      "default": "./dist/edge-light.js"
     },
     "./node": {
-      "import": {
-        "types": "./dist/node.d.ts",
-        "default": "./dist/node.js"
-      },
-      "require": {
-        "types": "./dist/node.d.cts",
-        "default": "./dist/node.cjs"
-      }
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
     },
     "./others": {
-      "import": {
-        "types": "./dist/others.d.ts",
-        "default": "./dist/others.js"
-      },
-      "require": {
-        "types": "./dist/others.d.cts",
-        "default": "./dist/others.cjs"
-      }
+      "types": "./dist/others.d.ts",
+      "default": "./dist/others.js"
     },
     "./html-to-react": {
-      "import": {
-        "types": "./dist/html-to-react.d.ts",
-        "default": "./dist/html-to-react.js"
-      },
-      "require": {
-        "types": "./dist/html-to-react.d.cts",
-        "default": "./dist/html-to-react.cjs"
-      }
+      "types": "./dist/html-to-react.d.ts",
+      "default": "./dist/html-to-react.js"
+    },
+    "./jsx": {
+      "types": "./dist/jsx.d.ts",
+      "default": "./dist/jsx.js"
     }
   },
   "dependencies": {
-    "@cf-wasm/resvg": "workspace:*",
-    "@cf-wasm/satori": "workspace:*",
+    "@cf-wasm/resvg": "workspace:^",
+    "@cf-wasm/satori": "workspace:^",
     "@hedgedoc/html-to-react": "^2.1.1"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "glob": "catalog:",
     "react": "catalog:",
     "tsdown": "catalog:"
   }

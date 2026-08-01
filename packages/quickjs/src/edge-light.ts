@@ -12,7 +12,7 @@ export const EdgeLightReleaseSyncVariant = newVariant(RELEASE_SYNC, {
 
 let singletonPromise: Promise<QuickJSWASMModule> | undefined;
 
-export async function getQuickJSWASMModule() {
+export function getQuickJSWASMModule(): Promise<QuickJSWASMModule> {
 	singletonPromise ??= newQuickJSWASMModuleFromVariant(
 		EdgeLightReleaseSyncVariant,
 	);

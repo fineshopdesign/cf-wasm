@@ -40,7 +40,14 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "./dist/edge-light.js",
+    "./dist/node.js",
+    "./dist/photon.js",
+    "./dist/workerd.js"
+  ],
   "type": "module",
+  "main": "./dist/workerd.js",
   "module": "./dist/workerd.js",
   "types": "./dist/workerd.d.ts",
   "exports": {
@@ -48,64 +55,45 @@
     "./photon.wasm": "./dist/lib/photon_rs_bg.wasm",
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node.d.ts",
-          "default": "./dist/node.js"
-        },
-        "require": {
-          "types": "./dist/node.d.cts",
-          "default": "./dist/node.cjs"
-        }
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
       },
       "edge-light": {
         "types": "./dist/edge-light.d.ts",
-        "import": "./dist/edge-light.js"
+        "default": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       },
       "default": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "default": "./dist/workerd.js"
     },
     "./edge-light": {
       "types": "./dist/edge-light.d.ts",
-      "import": "./dist/edge-light.js"
+      "default": "./dist/edge-light.js"
     },
     "./node": {
-      "import": {
-        "types": "./dist/node.d.ts",
-        "default": "./dist/node.js"
-      },
-      "require": {
-        "types": "./dist/node.d.cts",
-        "default": "./dist/node.cjs"
-      }
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
     },
     "./others": {
-      "import": {
-        "types": "./dist/others.d.ts",
-        "default": "./dist/others.js"
-      },
-      "require": {
-        "types": "./dist/others.d.cts",
-        "default": "./dist/others.cjs"
-      }
+      "types": "./dist/others.d.ts",
+      "default": "./dist/others.js"
     }
   },
   "dependencies": {
-    "@cf-wasm/internals": "workspace:*"
+    "@cf-wasm/internals": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "github-files-fetcher": "^1.6.0",
-    "glob": "catalog:",
     "tsdown": "catalog:",
     "wasm-pack": "catalog:"
   }

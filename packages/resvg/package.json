@@ -41,7 +41,16 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "./dist/edge-light.js",
+    "./dist/node.js",
+    "./dist/workerd.js",
+    "./dist/legacy/edge-light.js",
+    "./dist/legacy/node.js",
+    "./dist/legacy/workerd.js"
+  ],
   "type": "module",
+  "main": "./dist/workerd.js",
   "module": "./dist/workerd.js",
   "types": "./dist/workerd.d.ts",
   "exports": {
@@ -50,107 +59,71 @@
     "./legacy/resvg.wasm": "./dist/legacy/lib/resvg.wasm",
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node.d.ts",
-          "default": "./dist/node.js"
-        },
-        "require": {
-          "types": "./dist/node.d.cts",
-          "default": "./dist/node.cjs"
-        }
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
       },
       "edge-light": {
         "types": "./dist/edge-light.d.ts",
-        "import": "./dist/edge-light.js"
+        "default": "./dist/edge-light.js"
       },
       "workerd": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       },
       "default": {
         "types": "./dist/workerd.d.ts",
-        "import": "./dist/workerd.js"
+        "default": "./dist/workerd.js"
       }
     },
     "./workerd": {
       "types": "./dist/workerd.d.ts",
-      "import": "./dist/workerd.js"
+      "default": "./dist/workerd.js"
     },
     "./edge-light": {
       "types": "./dist/edge-light.d.ts",
-      "import": "./dist/edge-light.js"
+      "default": "./dist/edge-light.js"
     },
     "./node": {
-      "import": {
-        "types": "./dist/node.d.ts",
-        "default": "./dist/node.js"
-      },
-      "require": {
-        "types": "./dist/node.d.cts",
-        "default": "./dist/node.cjs"
-      }
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
     },
     "./others": {
-      "import": {
-        "types": "./dist/others.d.ts",
-        "default": "./dist/others.js"
-      },
-      "require": {
-        "types": "./dist/others.d.cts",
-        "default": "./dist/others.cjs"
-      }
+      "types": "./dist/others.d.ts",
+      "default": "./dist/others.js"
     },
     "./legacy": {
       "node": {
-        "import": {
-          "types": "./dist/legacy/node.d.ts",
-          "default": "./dist/legacy/node.js"
-        },
-        "require": {
-          "types": "./dist/legacy/node.d.cts",
-          "default": "./dist/legacy/node.cjs"
-        }
+        "types": "./dist/legacy/node.d.ts",
+        "default": "./dist/legacy/node.js"
       },
       "edge-light": {
         "types": "./dist/legacy/edge-light.d.ts",
-        "import": "./dist/legacy/edge-light.js"
+        "default": "./dist/legacy/edge-light.js"
       },
       "workerd": {
         "types": "./dist/legacy/workerd.d.ts",
-        "import": "./dist/legacy/workerd.js"
+        "default": "./dist/legacy/workerd.js"
       },
       "default": {
         "types": "./dist/legacy/workerd.d.ts",
-        "import": "./dist/legacy/workerd.js"
+        "default": "./dist/legacy/workerd.js"
       }
     },
     "./legacy/workerd": {
       "types": "./dist/legacy/workerd.d.ts",
-      "import": "./dist/legacy/workerd.js"
+      "default": "./dist/legacy/workerd.js"
     },
     "./legacy/edge-light": {
       "types": "./dist/legacy/edge-light.d.ts",
-      "import": "./dist/legacy/edge-light.js"
+      "default": "./dist/legacy/edge-light.js"
     },
     "./legacy/node": {
-      "import": {
-        "types": "./dist/legacy/node.d.ts",
-        "default": "./dist/legacy/node.js"
-      },
-      "require": {
-        "types": "./dist/legacy/node.d.cts",
-        "default": "./dist/legacy/node.cjs"
-      }
+      "types": "./dist/legacy/node.d.ts",
+      "default": "./dist/legacy/node.js"
     },
     "./legacy/others": {
-      "import": {
-        "types": "./dist/legacy/others.d.ts",
-        "default": "./dist/legacy/others.js"
-      },
-      "require": {
-        "types": "./dist/legacy/others.d.cts",
-        "default": "./dist/legacy/others.cjs"
-      }
+      "types": "./dist/legacy/others.d.ts",
+      "default": "./dist/legacy/others.js"
     }
   },
   "dependencies": {
@@ -159,7 +132,6 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "glob": "catalog:",
     "tsdown": "catalog:"
   }
 }

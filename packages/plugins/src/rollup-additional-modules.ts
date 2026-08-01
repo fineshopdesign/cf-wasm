@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative } from 'node:path';
 import MagicString from 'magic-string';
-import type { Plugin } from 'rollup';
+import type { Plugin, SourceMapInput } from 'rollup';
 import { inlineModuleRenderers, nodeModuleRenderers } from './renderers';
 import {
 	type AdditionalModulesBaseOptions,
@@ -238,7 +238,7 @@ export default function additionalModules(
 			if (replaced.hasChanged()) {
 				return {
 					code: replaced.toString(),
-					map: final.generateMap({ includeContent: true }),
+					map: final.generateMap({ includeContent: true }) as SourceMapInput,
 				};
 			}
 		},

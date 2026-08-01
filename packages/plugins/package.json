@@ -33,50 +33,26 @@
     "dist"
   ],
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
     },
     "./nitro-additional-modules": {
-      "import": {
-        "types": "./dist/nitro-additional-modules.d.ts",
-        "default": "./dist/nitro-additional-modules.js"
-      },
-      "require": {
-        "types": "./dist/nitro-additional-modules.d.cts",
-        "default": "./dist/nitro-additional-modules.cjs"
-      }
+      "types": "./dist/nitro-additional-modules.d.mts",
+      "default": "./dist/nitro-additional-modules.mjs"
     },
     "./rollup-additional-modules": {
-      "import": {
-        "types": "./dist/rollup-additional-modules.d.ts",
-        "default": "./dist/rollup-additional-modules.js"
-      },
-      "require": {
-        "types": "./dist/rollup-additional-modules.d.cts",
-        "default": "./dist/rollup-additional-modules.cjs"
-      }
+      "types": "./dist/rollup-additional-modules.d.mts",
+      "default": "./dist/rollup-additional-modules.mjs"
     },
     "./vite-additional-modules": {
-      "import": {
-        "types": "./dist/vite-additional-modules.d.ts",
-        "default": "./dist/vite-additional-modules.js"
-      },
-      "require": {
-        "types": "./dist/vite-additional-modules.d.cts",
-        "default": "./dist/vite-additional-modules.cjs"
-      }
+      "types": "./dist/vite-additional-modules.d.mts",
+      "default": "./dist/vite-additional-modules.mjs"
     }
   },
   "peerDependencies": {
@@ -92,7 +68,7 @@
     }
   },
   "dependencies": {
-    "magic-string": "^0.30.21"
+    "magic-string": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
