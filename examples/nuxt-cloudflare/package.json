@@ -17,12 +17,12 @@
     "@cf-wasm/photon": "workspace:*",
     "@cf-wasm/plugins": "workspace:*",
     "@cf-wasm/resvg": "workspace:*",
-    "nuxt": "^4.5.1",
-    "vue": "^3.5.40",
-    "vue-router": "^5.2.0"
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.42",
+    "vue-router": "^5.3.1"
   },
   "devDependencies": {
-    "h3": "2.0.1-rc.26",
+    "h3": "2.0.1-rc.31",
     "nitro-cloudflare-dev": "^0.2.2",
     "nitropack": "^2.13.4",
     "vite": "^7.3.2",

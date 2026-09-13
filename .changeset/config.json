@@ -5,10 +5,10 @@
     { "repo": "fineshopdesign/cf-wasm" }
   ],
   "commit": false,
-  "baseBranch": "origin/main",
-  "access": "public",
-  "updateInternalDependencies": "patch",
-  "linked": [],
   "fixed": [],
-  "ignore": ["@cf-wasm-tests/*", "@examples/*"]
+  "linked": [],
+  "ignore": ["@cf-wasm-tests/*", "@examples/*"],
+  "access": "public",
+  "baseBranch": "origin/main",
+  "updateInternalDependencies": "patch"
 }
