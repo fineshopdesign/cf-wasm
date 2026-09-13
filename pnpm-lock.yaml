@@ -264,9 +264,6 @@ importers:
       '@cf-wasm/resvg':
         specifier: workspace:*
         version: link:../../packages/resvg
-      '@cf-wasm/satori':
-        specifier: workspace:*
-        version: link:../../packages/satori
       astro:
         specifier: ^7.3.2
         version: 7.3.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4)(ioredis@5.10.1)(jiti@2.7.0)(terser@5.44.1)(yaml@2.9.0)
@@ -326,9 +323,6 @@ importers:
       '@cf-wasm/photon':
         specifier: workspace:*
         version: link:../../packages/photon
-      '@cf-wasm/plugins':
-        specifier: workspace:*
-        version: link:../../packages/plugins
       '@cf-wasm/resvg':
         specifier: workspace:*
         version: link:../../packages/resvg

@@ -16,8 +16,7 @@
     "astro": "^7.3.2",
     "@cf-wasm/og": "workspace:*",
     "@cf-wasm/photon": "workspace:*",
-    "@cf-wasm/resvg": "workspace:*",
-    "@cf-wasm/satori": "workspace:*"
+    "@cf-wasm/resvg": "workspace:*"
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^14.3.1",
