@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.4.1
+
+### Patch Changes
+
+- [`fa425bb`](https://github.com/fineshopdesign/cf-wasm/commit/fa425bb9a4bfdcfc97c267a46469140017d5fcd5) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: bump `satori` to `0.33.4`
+
 ## 0.4.0
 
 ### Minor Changes
