@@ -1,5 +1,11 @@
 # @cf-wasm/satori
 
+## 0.4.2
+
+### Patch Changes
+
+- [`742dae7`](https://github.com/fineshopdesign/cf-wasm/commit/742dae71187e3142f3954a751d1a67b0ff91c320) Thanks [@kumardeo](https://github.com/kumardeo)! - fix(satori): temporarily downgrade `satori` to `0.32.0`
+
 ## 0.4.1
 
 ### Patch Changes
