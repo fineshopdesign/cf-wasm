@@ -91,7 +91,7 @@
     }
   },
   "dependencies": {
-    "satori": "0.33.4"
+    "satori": "0.32.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
