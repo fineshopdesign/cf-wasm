@@ -29,16 +29,19 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
+      - name: Use pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install changeset CLI
-        run: npm i -g @changesets/cli@$(node -p "require('./package.json').devDependencies['@changesets/cli']")
+        run: pnpm i -g @changesets/cli@$(node -p "require('./package.json').devDependencies['@changesets/cli']")
 
       - name: Ensure that a changelog is added
-        run: npx changeset status --since=origin/main
+        run: pnpm exec changeset status --since=origin/main
 
   test:
     name: Test PR
