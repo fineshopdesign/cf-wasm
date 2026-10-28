@@ -1,5 +1,11 @@
 # @cf-wasm/plugins
 
+## 0.2.1
+
+### Patch Changes
+
+- [#102](https://github.com/fineshopdesign/cf-wasm/pull/102) [`a38dd55`](https://github.com/fineshopdesign/cf-wasm/commit/a38dd55075bacd81b731feea709e20f38c38441a) Thanks [@kumardeo](https://github.com/kumardeo)! - feat: support Vite 8
+
 ## 0.2.0
 
 ### Minor Changes
