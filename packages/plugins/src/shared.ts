@@ -4,7 +4,7 @@ export const MODULE_TYPES = ['CompiledWasm', 'Data', 'Text'] as const;
 export type ModuleType = (typeof MODULE_TYPES)[number];
 
 export const moduleReferencePattern =
-	'(?:\0|\\0)____CF_WASM:ADDITIONAL_MODULE__:(.*?):__CF_WASM:ADDITIONAL_MODULE____';
+	'(?:\\u0000|\\\\u0000|\\0|\\\\0)____CF_WASM:ADDITIONAL_MODULE__:(.*?):__CF_WASM:ADDITIONAL_MODULE____';
 export const moduleReferenceRE = new RegExp(`^${moduleReferencePattern}$`);
 export const moduleReferenceMatchGlobalRE = new RegExp(
 	moduleReferencePattern,
