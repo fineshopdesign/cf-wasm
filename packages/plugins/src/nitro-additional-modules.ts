@@ -7,7 +7,7 @@ export interface AdditionalModulesOptions
 
 export default function additionalModules(
 	options: AdditionalModulesOptions = {},
-) {
+): NitroModule {
 	return {
 		name: 'cf-wasm:nitro-module:additional-modules',
 		setup({ options: nitroOptions }) {
@@ -23,5 +23,5 @@ export default function additionalModules(
 				}),
 			];
 		},
-	} satisfies NitroModule;
+	};
 }

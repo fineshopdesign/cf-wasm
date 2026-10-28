@@ -11,11 +11,11 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.4.1",
+      "version": "12.16.1",
       "onFail": "download"
     }
   },
-  "packageManager": "pnpm@12.4.1",
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "format": "biome format --max-diagnostics=100 --log-kind=compact",
     "format:all": "pnpm run format .",

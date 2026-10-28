@@ -46,6 +46,10 @@
       "types": "./dist/nitro-additional-modules.d.mts",
       "default": "./dist/nitro-additional-modules.mjs"
     },
+    "./rolldown-additional-modules": {
+      "types": "./dist/rolldown-additional-modules.d.mts",
+      "default": "./dist/rolldown-additional-modules.mjs"
+    },
     "./rollup-additional-modules": {
       "types": "./dist/rollup-additional-modules.d.mts",
       "default": "./dist/rollup-additional-modules.mjs"
@@ -56,10 +60,14 @@
     }
   },
   "peerDependencies": {
+    "rolldown": "^1.0.0",
     "rollup": "^4.0.0",
-    "vite": "^6.1.0 || ^7.0.0"
+    "vite": "^6.1.0 || ^7.0.0 || ^8.0.0"
   },
   "peerDependenciesMeta": {
+    "rolldown": {
+      "optional": true
+    },
     "rollup": {
       "optional": true
     },
@@ -73,6 +81,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "nitro": "3.0.260903-beta",
+    "rolldown": "^1.0.0",
     "rollup": "^4.63.1",
     "tsdown": "catalog:",
     "vite": "catalog:"
